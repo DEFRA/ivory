@@ -40,6 +40,11 @@
     html: 'This is a new service – your <a class="govuk-link" href="/feedback">feedback</a> will help us to improve it.'
   }) }}
 
+  <!-- Hide the back link if Javascript is not available -->
+  <noscript>
+    <style>#back-link {display: none} </style>
+  </noscript>
+
   {{ govukBackLink({
       text: "Back",
       href: "#",
