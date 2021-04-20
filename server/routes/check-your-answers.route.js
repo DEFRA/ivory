@@ -6,7 +6,7 @@ const { Paths, RedisKeys, Views } = require('../utils/constants')
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.CHECK_YOUR_ANSWERS, {
-      ivoryIntegral: await RedisService.get(request, RedisKeys.IVORY_INTEGRTAL),
+      ivoryIntegral: await RedisService.get(request, RedisKeys.IVORY_INTEGRAL),
       ivoryAdded: await RedisService.get(request, RedisKeys.IVORY_ADDED),
       errorSummaryText: '',
       errorText: false
@@ -19,7 +19,7 @@ const handlers = {
       return h.view(Views.CHECK_YOUR_ANSWERS, {
         ivoryIntegral: await RedisService.get(
           request,
-          RedisKeys.IVORY_INTEGRTAL
+          RedisKeys.IVORY_INTEGRAL
         ),
         ivoryAdded: await RedisService.get(request, RedisKeys.IVORY_ADDED),
         errorSummaryText: 'You must agree to the declaration',
