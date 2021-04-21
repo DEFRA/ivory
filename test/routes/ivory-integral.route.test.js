@@ -5,12 +5,15 @@ const createServer = require('../../server')
 const TestHelper = require('../utils/test-helper')
 const { ServerEvents } = require('../../server/utils/constants')
 
+jest.mock('../../server/services/redis.service')
+const RedisService = require('../../server/services/redis.service')
+
 describe('ivory-integral route', () => {
   let server
   const url = '/ivory-integral'
   const nextUrl = 'check-your-answers'
 
-  const elementIDs = {
+  const elementIds = {
     ivoryIsIntegral: 'ivoryIsIntegral',
     ivoryIsIntegral2: 'ivoryIsIntegral-2',
     ivoryIsIntegral3: 'ivoryIsIntegral-3',
@@ -28,6 +31,10 @@ describe('ivory-integral route', () => {
 
   afterAll(() => {
     server.stop()
+  })
+
+  beforeEach(() => {
+    RedisService.set = jest.fn()
   })
 
   afterEach(() => {
@@ -63,33 +70,32 @@ describe('ivory-integral route', () => {
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
-        elementIDs.ivoryIsIntegral,
+        elementIds.ivoryIsIntegral,
         'The ivory is essential to the design or function of the item',
         'The ivory is essential to the design or function of the item'
       )
       TestHelper.checkRadioOption(
         document,
-        elementIDs.ivoryIsIntegral2,
+        elementIds.ivoryIsIntegral2,
         'You cannot remove the ivory easily or without damaging the item',
         'You cannot remove the ivory easily or without damaging the item'
       )
       TestHelper.checkRadioOption(
         document,
-        elementIDs.ivoryIsIntegral3,
+        elementIds.ivoryIsIntegral3,
         'Both reasons - You cannot remove the ivory easily or without risk of damage and the ivory is essential to the design or function of the item',
         'Both of the above'
       )
     })
 
     it('should have the correct Call to Action button', () => {
-      const element = document.querySelector(`#${elementIDs.continue}`)
+      const element = document.querySelector(`#${elementIds.continue}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Continue')
     })
   })
 
   describe('POST', () => {
-    let response
     let postOptions
 
     beforeEach(() => {
@@ -101,18 +107,31 @@ describe('ivory-integral route', () => {
     })
 
     describe('Success', () => {
-      it('should do store the value in Redis and progress to the next route when the first option has been selected', async () => {
-        postOptions.payload.ivoryIsIntegral =
-          'The ivory is essential to the design or function of the item'
+      it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          'The ivory is essential to the design or function of the item',
+          nextUrl
+        )
+      })
 
-        // TODO Test that value was stored by RedisService - Awaiting merge of PR-29
-        // expect(RedisService.prototype.set).toBeCalledTimes(0)
+      it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          'You cannot remove the ivory easily or without damaging the item',
+          nextUrl
+        )
+      })
 
-        response = await TestHelper.submitPostRequest(server, postOptions)
-
-        // TODO Test that value was stored by RedisService - Awaiting merge of PR-29
-        // expect(RedisService.prototype.set).toBeCalledTimes(1)
-        expect(response.headers.location).toEqual(nextUrl)
+      it('should store the value in Redis and progress to the next route when the third option has been selected', async () => {
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          'Both of the above',
+          nextUrl
+        )
       })
     })
 
@@ -121,7 +140,11 @@ describe('ivory-integral route', () => {
 
       it('should display a validation error message if the user does not select an item', async () => {
         postOptions.payload.ivoryIsIntegral = ''
-        response = await TestHelper.submitPostRequest(server, postOptions, 400)
+        const response = await TestHelper.submitPostRequest(
+          server,
+          postOptions,
+          400
+        )
         await TestHelper.checkValidationError(
           response,
           'ivoryIsIntegral',
@@ -133,3 +156,26 @@ describe('ivory-integral route', () => {
     })
   })
 })
+
+const _checkSelectedRadioAction = async (
+  postOptions,
+  server,
+  selectedOption,
+  nextUrl
+) => {
+  const redisKey = 'ivory-integral'
+  postOptions.payload.ivoryIsIntegral = selectedOption
+
+  expect(RedisService.set).toBeCalledTimes(0)
+
+  const response = await TestHelper.submitPostRequest(server, postOptions)
+
+  expect(RedisService.set).toBeCalledTimes(1)
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    redisKey,
+    selectedOption
+  )
+
+  expect(response.headers.location).toEqual(nextUrl)
+}
