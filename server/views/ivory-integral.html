@@ -1,63 +1,49 @@
-{% extends 'layout.html' %}
+{% extends 'form-layout.html' %}
 
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 
-{% block content %}
+{% block formContent %}
   <div class="govuk-grid-row">
 
-    {% if errorText %}
-      {{ govukErrorSummary({
-        "titleText": "There is a problem",
-        "errorList": [
+    <div class="govuk-grid-column-two-thirds">
+
+      {{ govukRadios({
+        idPrefix: "ivoryIsIntegral",
+        name: "ivoryIsIntegral",
+        fieldset: {
+          legend: {
+            text: "How is the ivory integral to the item?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        errorMessage: fieldErrors['ivoryIsIntegral'],
+        items: [
           {
-            "text": errorSummaryText,
-            "href": "#ivoryIsIntegral"
+            value: "The ivory is essential to the design or function of the item",
+            text: "The ivory is essential to the design or function of the item"
+          },
+          {
+            value: "You cannot remove the ivory easily or without damaging the item",
+            text: "You cannot remove the ivory easily or without damaging the item"
+          },
+          {
+            value: "Both reasons - You cannot remove the ivory easily or without risk of damage and the ivory is essential to the design or function of the item",
+            text: "Both of the above"
           }
         ]
       }) }}
-    {% endif %}
 
-    <div class="govuk-grid-column-two-thirds">
-      <form method="post" novalidate="novalidate">
-
-        {{ govukRadios({
-          idPrefix: "ivoryIsIntegral",
-          name: "ivoryIsIntegral",
-          fieldset: {
-            legend: {
-              text: "How is the ivory integral to the item?",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
-            }
+      {{ govukButton({
+          attributes: {
+            id: "continue"
           },
-          errorMessage: errorText,
-          items: [
-            {
-              value: "The ivory is essential to the design or function of the item",
-              text: "The ivory is essential to the design or function of the item"
-            },
-            {
-              value: "You cannot remove the ivory easily or without damaging the item",
-              text: "You cannot remove the ivory easily or without damaging the item"
-            },
-            {
-              value: "Both reasons - You cannot remove the ivory easily or without risk of damage and the ivory is essential to the design or function of the item",
-              text: "Both of the above"
-            }
-          ]
-        }) }}
-
-        {{ govukButton({
-            attributes: {
-              id: "continue"
-            },
-            text: "Continue"
-          })
-        }}
-      </form>
+          text: "Continue"
+        })
+      }}
     </div>
   </div>
 {% endblock %}

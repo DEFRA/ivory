@@ -1,12 +1,12 @@
 'use strict'
 
+const { Options, Paths, Views, RedisKeys } = require('../utils/constants')
 const RedisService = require('../services/redis.service')
-const { Paths, RedisKeys, Views } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.IVORY_INTEGRAL)
+    return h.view(Views.WHO_OWNS_ITEM)
   },
 
   post: (request, h) => {
@@ -15,23 +15,28 @@ const handlers = {
 
     if (errors.length) {
       return h
-        .view(Views.IVORY_INTEGRAL, {
+        .view(Views.WHO_OWNS_ITEM, {
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    RedisService.set(request, RedisKeys.IVORY_INTEGRAL, payload.ivoryIsIntegral)
-    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
+    RedisService.set(
+      request,
+      RedisKeys.OWNER_APPLICANT,
+      payload.whoOwnsItem === 'I own it' ? Options.YES : Options.NO
+    )
+
+    return h.redirect(Paths.OWNER_DETAILS)
   }
 }
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.ivoryIsIntegral)) {
+  if (Validators.empty(payload.whoOwnsItem)) {
     errors.push({
-      name: 'ivoryIsIntegral',
-      text: 'You must tell us how the ivory is integral to the item'
+      name: 'whoOwnsItem',
+      text: 'Tell us who owns the item'
     })
   }
   return errors
@@ -40,12 +45,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.IVORY_INTEGRAL}`,
+    path: `${Paths.WHO_OWNS_ITEM}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.IVORY_INTEGRAL}`,
+    path: `${Paths.WHO_OWNS_ITEM}`,
     handler: handlers.post
   }
 ]

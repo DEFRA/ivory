@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'form-layout.html' %}
 
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
@@ -6,24 +6,12 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 
-{% block content %}
+{% block formContent %}
   <div class="govuk-grid-row">
-
-    {% if errorText %}
-      {{ govukErrorSummary({
-        "titleText": "There is a problem",
-        "errorList": [
-          {
-            "text": errorSummaryText,
-            "href": "#agree"
-          }
-        ]
-      }) }}
-    {% endif %}
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 class="govuk-heading-l">Check your answers (incomplete)</h1>
+      <h1 id="page-heading" class="govuk-heading-l">Check your answers (incomplete)</h1>
 
       {{ govukSummaryList({
         classes: 'govuk-!-margin-bottom-9',
@@ -61,6 +49,40 @@
                 }
               ]
             }
+          },
+          {
+            key: {
+              text: "Owner details"
+            },
+            value: {
+              text: ownerDetails
+            },
+            actions: {
+              items: [
+                {
+                  href: "who-owns-the-item",
+                  text: "Change",
+                  visuallyHiddenText: "who owns the item"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Applicant details"
+            },
+            value: {
+              text: applicantDetails
+            },
+            actions: {
+              items: [
+                {
+                  href: "who-owns-the-item",
+                  text: "Change",
+                  visuallyHiddenText: "who is applying"
+                }
+              ]
+            }
           }
         ]
       }) }}
@@ -73,28 +95,25 @@
         <li>the information you’ve provided is complete and correct</li>
       </ul>
 
-      <form method="post" novalidate="novalidate">
-        {{ govukCheckboxes({
-          idPrefix: "agree",
-          name: "agree",
-          errorMessage: errorText,
-          items: [
-            {
-              value: "agree",
-              text: "I agree"
-            }
-          ]
-        }) }}
+      {{ govukCheckboxes({
+        idPrefix: "agree",
+        name: "agree",
+        errorMessage: fieldErrors['agree'],
+        items: [
+          {
+            value: "agree",
+            text: "I agree"
+          }
+        ]
+      }) }}
 
-
-        {{ govukButton({
-            attributes: {
-              id: "agree-and-submit"
-            },
-            text: "Agree and submit"
-          })
-        }}
-      </form>
+      {{ govukButton({
+          attributes: {
+            id: "agree-and-submit"
+          },
+          text: "Agree and submit"
+        })
+      }}
     </div>
   </div>
 {% endblock %}

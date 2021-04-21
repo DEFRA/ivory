@@ -1,65 +1,51 @@
-{% extends 'layout.html' %}
+{% extends 'form-layout.html' %}
 
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 
-{% block content %}
+{% block formContent %}
   <div class="govuk-grid-row">
 
-    {% if errorText %}
-      {{ govukErrorSummary({
-        "titleText": "There is a problem",
-        "errorList": [
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukRadios({
+        idPrefix: "yesNoIdk",
+        name: "yesNoIdk",
+        fieldset: {
+          legend: {
+            text: title,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: hintText
+        },
+        errorMessage: fieldErrors['yesNoIdk'],
+        items: [
           {
-            "text": errorSummaryText,
-            "href": "#yesNoIdk"
+            value: "Yes",
+            text: "Yes"
+          },
+          {
+            value: "No",
+            text: "No"
+          },
+          {
+            value: "I dont know",
+            text: "I don't know"
           }
         ]
       }) }}
-    {% endif %}
 
-    <div class="govuk-grid-column-two-thirds">
-      <form method="post" novalidate="novalidate">
-        {{ govukRadios({
-          idPrefix: "yesNoIdk",
-          name: "yesNoIdk",
-          fieldset: {
-            legend: {
-              text: title,
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
-            }
+      {{ govukButton({
+          attributes: {
+            id: "continue"
           },
-          hint: {
-            text: hintText
-          },
-          errorMessage: errorText,
-          items: [
-            {
-              value: "Yes",
-              text: "Yes"
-            },
-            {
-              value: "No",
-              text: "No"
-            },
-            {
-              value: "I dont know",
-              text: "I don't know"
-            }
-          ]
-        }) }}
-
-        {{ govukButton({
-            attributes: {
-              id: "continue"
-            },
-            text: "Continue"
-          })
-        }}
-      </form>
+          text: "Continue"
+        })
+      }}
     </div>
   </div>
 {% endblock %}
