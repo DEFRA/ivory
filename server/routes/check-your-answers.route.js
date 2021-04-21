@@ -14,6 +14,7 @@ const handlers = {
   post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
+
     if (errors.length) {
       return h
         .view(Views.CHECK_YOUR_ANSWERS, {
@@ -21,9 +22,9 @@ const handlers = {
           ...buildErrorSummary(errors)
         })
         .code(400)
-    } else {
-      return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
+
+    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
   }
 }
 

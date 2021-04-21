@@ -11,7 +11,6 @@ const handlers = {
 
   post: (request, h) => {
     const payload = request.payload
-
     const errors = _validateForm(payload)
 
     if (errors.length) {
@@ -20,15 +19,15 @@ const handlers = {
           ...buildErrorSummary(errors)
         })
         .code(400)
-    } else {
-      RedisService.set(
-        request,
-        RedisKeys.OWNER_APPLICANT,
-        payload.whoOwnsItem === 'I own it' ? Options.YES : Options.NO
-      )
-
-      return h.redirect(Paths.OWNER_DETAILS)
     }
+
+    RedisService.set(
+      request,
+      RedisKeys.OWNER_APPLICANT,
+      payload.whoOwnsItem === 'I own it' ? Options.YES : Options.NO
+    )
+
+    return h.redirect(Paths.OWNER_DETAILS)
   }
 }
 

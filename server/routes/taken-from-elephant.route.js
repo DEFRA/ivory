@@ -22,12 +22,18 @@ const handlers = {
           ...buildErrorSummary(errors)
         })
         .code(400)
-    } else if (payload.yesNoIdk === 'No') {
+    }
+
+    if (payload.yesNoIdk === 'No') {
       RedisService.set(request, RedisKeys.IVORY_ADDED, 'yes-pre-1975')
       return h.redirect(Paths.CHECK_YOUR_ANSWERS)
-    } else if (payload.yesNoIdk === 'I dont know') {
+    }
+
+    if (payload.yesNoIdk === 'I dont know') {
       return 'Best find out then!'
-    } else if (payload.yesNoIdk === 'Yes') {
+    }
+
+    if (payload.yesNoIdk === 'Yes') {
       return 'Those poor elephants, you are not selling that!'
     }
   }

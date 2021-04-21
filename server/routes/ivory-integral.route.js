@@ -14,20 +14,15 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      console.log(errors)
       return h
         .view(Views.IVORY_INTEGRAL, {
           ...buildErrorSummary(errors)
         })
         .code(400)
-    } else {
-      RedisService.set(
-        request,
-        RedisKeys.IVORY_INTEGRAL,
-        payload.ivoryIsIntegral
-      )
-      return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
+
+    RedisService.set(request, RedisKeys.IVORY_INTEGRAL, payload.ivoryIsIntegral)
+    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
   }
 }
 

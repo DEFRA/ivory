@@ -24,7 +24,6 @@ const handlers = {
     )
 
     const payload = request.payload
-
     const errors = _validateForm(payload, ownerApplicant)
 
     if (errors.length) {
@@ -36,39 +35,39 @@ const handlers = {
           ...buildErrorSummary(errors)
         })
         .code(400)
-    } else {
-      if (ownerApplicant === Options.YES) {
-        RedisService.set(
-          request,
-          RedisKeys.OWNER_NAME,
-          payload.businessName ?? payload.name
-        )
-        RedisService.set(
-          request,
-          RedisKeys.OWNER_EMAIL_ADDRESS,
-          payload.emailAddress
-        )
-        RedisService.set(request, RedisKeys.APPLICANT_NAME, payload.name)
-        RedisService.set(
-          request,
-          RedisKeys.APPLICANT_EMAIL_ADDRESS,
-          payload.emailAddress
-        )
-      } else {
-        RedisService.set(request, RedisKeys.OWNER_NAME, payload.name)
-        RedisService.set(
-          request,
-          RedisKeys.OWNER_EMAIL_ADDRESS,
-          payload.emailAddress
-        )
-      }
+    }
 
-      return h.redirect(
-        ownerApplicant === Options.YES
-          ? Paths.CHECK_YOUR_ANSWERS
-          : Paths.APPLICANT_DETAILS
+    if (ownerApplicant === Options.YES) {
+      RedisService.set(
+        request,
+        RedisKeys.OWNER_NAME,
+        payload.businessName ?? payload.name
+      )
+      RedisService.set(
+        request,
+        RedisKeys.OWNER_EMAIL_ADDRESS,
+        payload.emailAddress
+      )
+      RedisService.set(request, RedisKeys.APPLICANT_NAME, payload.name)
+      RedisService.set(
+        request,
+        RedisKeys.APPLICANT_EMAIL_ADDRESS,
+        payload.emailAddress
+      )
+    } else {
+      RedisService.set(request, RedisKeys.OWNER_NAME, payload.name)
+      RedisService.set(
+        request,
+        RedisKeys.OWNER_EMAIL_ADDRESS,
+        payload.emailAddress
       )
     }
+
+    return h.redirect(
+      ownerApplicant === Options.YES
+        ? Paths.CHECK_YOUR_ANSWERS
+        : Paths.APPLICANT_DETAILS
+    )
   }
 }
 
