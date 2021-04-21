@@ -8,7 +8,7 @@ const { ServerEvents } = require('../../server/utils/constants')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-describe('ivory-integral route', () => {
+describe('/ivory-integral route', () => {
   let server
   const url = '/ivory-integral'
   const nextUrl = 'check-your-answers'
