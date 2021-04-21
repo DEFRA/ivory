@@ -7,6 +7,7 @@
     "start": "node index.js",
     "build:css": "bin/build-css",
     "build": "bin/build",
+    "debug": "nodemon --inspect index.js",
     "docker": "npm run docker:build && npm run docker:run",
     "docker:build": "docker build --no-cache -t ivory/ivory .",
     "docker:run": "docker run -p \"3000:3000\" ivory/ivory",
