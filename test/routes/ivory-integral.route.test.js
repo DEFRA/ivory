@@ -34,7 +34,7 @@ describe('/ivory-integral route', () => {
   })
 
   beforeEach(() => {
-    RedisService.set = jest.fn()
+    _createMocks()
   })
 
   afterEach(() => {
@@ -158,6 +158,10 @@ describe('/ivory-integral route', () => {
     })
   })
 })
+
+const _createMocks = () => {
+  RedisService.set = jest.fn()
+}
 
 const _checkSelectedRadioAction = async (
   postOptions,
