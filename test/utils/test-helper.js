@@ -9,7 +9,7 @@ const elementIds = {
 
 module.exports = class TestHelper {
   /**
-   * Retrives the HTML document contained within an HTTP response object
+   * Retreives the HTML document contained within an HTTP response object
    * @param response - The HTTP response object containing the document
    * @returns A JSDOM document object containing HTML content
    */
