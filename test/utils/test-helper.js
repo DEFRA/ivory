@@ -3,7 +3,7 @@
 const jsdom = require('jsdom')
 const { JSDOM } = jsdom
 
-const elementIDs = {
+const elementIds = {
   backLink: 'back-link'
 }
 
@@ -79,7 +79,7 @@ module.exports = class TestHelper {
    * @param expectToExist - Flag to indicate whether or not the back link is expected
    */
   static checkBackLink (document, expectToExist = true) {
-    const element = document.querySelector(`#${elementIDs.backLink}`)
+    const element = document.querySelector(`#${elementIds.backLink}`)
     if (expectToExist) {
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Back')
