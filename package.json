@@ -11,7 +11,7 @@
     "docker:build": "docker build --no-cache -t ivory/ivory .",
     "docker:run": "docker run -p \"3000:3000\" ivory/ivory",
     "lint": "standard",
-    "unit-test": "npx jest --runInBand --verbose",
+    "unit-test": "jest --runInBand --verbose",
     "test": "npm run lint && npm run unit-test",
     "postinstall": "npm run build"
   },
