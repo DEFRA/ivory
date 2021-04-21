@@ -11,7 +11,7 @@
     "docker:build": "docker build --no-cache -t ivory/ivory .",
     "docker:run": "docker run -p \"3000:3000\" ivory/ivory",
     "lint": "standard",
-    "unit-test": "jest --runInBand --verbose",
+    "unit-test": "npx jest --runInBand --verbose",
     "test": "npm run lint && npm run unit-test",
     "postinstall": "npm run build"
   },
@@ -47,6 +47,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "jest": "^26.6.3",
     "jest-junit": "^12.0.0",
     "jsdom": "^16.5.3",
     "nock": "^13.0.11",
