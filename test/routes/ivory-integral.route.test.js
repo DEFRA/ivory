@@ -74,12 +74,14 @@ describe('/ivory-integral route', () => {
         'The ivory is essential to the design or function of the item',
         'The ivory is essential to the design or function of the item'
       )
+
       TestHelper.checkRadioOption(
         document,
         elementIds.ivoryIsIntegral2,
         'You cannot remove the ivory easily or without damaging the item',
         'You cannot remove the ivory easily or without damaging the item'
       )
+
       TestHelper.checkRadioOption(
         document,
         elementIds.ivoryIsIntegral3,
