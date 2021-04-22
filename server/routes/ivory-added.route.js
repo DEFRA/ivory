@@ -25,7 +25,7 @@ const handlers = {
     }
 
     if (payload.yesNoIdk === 'No') {
-      RedisService.set(request, RedisKeys.IVORY_ADDED, 'no')
+      RedisService.set(request, RedisKeys.IVORY_ADDED, 'No')
       return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
 

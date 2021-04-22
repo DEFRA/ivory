@@ -1,6 +1,12 @@
 module.exports = {
   collectCoverage: true,
-  collectCoverageFrom: ['**/*.js', '!**/*.test.js', '!**/*.config.js', '!gulpfile.js'],
+  collectCoverageFrom: [
+    '**/*.js',
+    '!**/check-your-answers.*.js',
+    '!**/*.test.js',
+    '!**/*.config.js',
+    '!gulpfile.js'
+  ],
   coverageDirectory: 'test-output',
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/',
