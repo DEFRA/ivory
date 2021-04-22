@@ -138,8 +138,6 @@ describe('/ivory-integral route', () => {
     })
 
     describe('Failure', () => {
-      const VALIDATION_SUMMARY_HEADING = 'There is a problem'
-
       it('should display a validation error message if the user does not select an item', async () => {
         postOptions.payload.ivoryIsIntegral = ''
         const response = await TestHelper.submitPostRequest(
@@ -151,7 +149,6 @@ describe('/ivory-integral route', () => {
           response,
           'ivoryIsIntegral',
           'ivoryIsIntegral-error',
-          VALIDATION_SUMMARY_HEADING,
           'You must tell us how the ivory is integral to the item'
         )
       })

@@ -112,8 +112,6 @@ describe('/taken-from-elephant route', () => {
     })
 
     describe('Failure', () => {
-      const VALIDATION_SUMMARY_HEADING = 'There is a problem'
-
       it('should display a validation error message if the user does not select an item', async () => {
         postOptions.payload.yesNoIdk = ''
         const response = await TestHelper.submitPostRequest(
@@ -125,7 +123,6 @@ describe('/taken-from-elephant route', () => {
           response,
           'yesNoIdk',
           'yesNoIdk-error',
-          VALIDATION_SUMMARY_HEADING,
           'You must tell us if the replacement ivory was taken from an elephant on or after 1 January 1975'
         )
       })

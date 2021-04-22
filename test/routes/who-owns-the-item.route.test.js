@@ -119,8 +119,6 @@ describe('/ivory-integral route', () => {
     })
 
     describe('Failure', () => {
-      const VALIDATION_SUMMARY_HEADING = 'There is a problem'
-
       it('should display a validation error message if the user does not select an item', async () => {
         postOptions.payload.whoOwnsItem = ''
         const response = await TestHelper.submitPostRequest(
@@ -132,7 +130,6 @@ describe('/ivory-integral route', () => {
           response,
           'whoOwnsItem',
           'whoOwnsItem-error',
-          VALIDATION_SUMMARY_HEADING,
           'Tell us who owns the item'
         )
       })

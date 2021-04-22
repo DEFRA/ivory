@@ -114,8 +114,6 @@ describe('/ivory-added route', () => {
     })
 
     describe('Failure', () => {
-      const VALIDATION_SUMMARY_HEADING = 'There is a problem'
-
       it('should display a validation error message if the user does not select an item', async () => {
         postOptions.payload.yesNoIdk = ''
         const response = await TestHelper.submitPostRequest(
@@ -127,7 +125,6 @@ describe('/ivory-added route', () => {
           response,
           'yesNoIdk',
           'yesNoIdk-error',
-          VALIDATION_SUMMARY_HEADING,
           'You must tell us if any ivory has been added to the item since it was made'
         )
       })

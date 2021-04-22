@@ -7,6 +7,8 @@ const elementIds = {
   backLink: 'back-link'
 }
 
+const DEFAULT_VALIDATION_SUMMARY_HEADING = 'There is a problem'
+
 module.exports = class TestHelper {
   /**
    * Retreives the HTML document contained within an HTTP response object
@@ -147,9 +149,9 @@ module.exports = class TestHelper {
     response,
     fieldAnchor,
     fieldErrorId,
-    summaryHeading,
     expectedValidationMessage,
     expectedFieldValidationMessage = expectedValidationMessage,
+    summaryHeading = DEFAULT_VALIDATION_SUMMARY_HEADING,
     isUsingHrefs = true
   ) {
     const document = await TestHelper.getDocument(response)
