@@ -69,8 +69,6 @@ describe('/taken-from-elephant route', () => {
     })
 
     it('should NOT have hint text', () => {
-      // const element = document.querySelector(`#${elementIds.yesNoIdkHint}`)
-      // expect(element).toBeFalsy()
       const element = document.querySelector(`#${elementIds.yesNoIdkHint}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('')
