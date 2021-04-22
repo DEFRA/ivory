@@ -35,7 +35,8 @@ const RedisKeys = {
   IVORY_INTEGRAL: 'ivory-integral',
   OWNER_APPLICANT: 'owner-applicant',
   OWNER_EMAIL_ADDRESS: 'owner.emailAddress',
-  OWNER_NAME: 'owner.name'
+  OWNER_NAME: 'owner.name',
+  OWNER_INTERNATIONAL_ADDRESS: 'owner.internationalAddress'
 }
 
 module.exports = Object.freeze({
