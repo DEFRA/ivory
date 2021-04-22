@@ -2,6 +2,7 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     '**/*.js',
+    '!index.js',
     '!**/check-your-answers.*.js',
     '!**/*.test.js',
     '!**/*.config.js',
