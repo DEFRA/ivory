@@ -11,6 +11,7 @@ const schema = joi.object().keys({
     .default(envs[0]),
   port: joi.number().default(3000),
   serviceName: joi.string().default('No service name in .env'),
+  logLevel: joi.string(),
   redisHost: joi.string().default('127.0.0.1'),
   redisPort: joi.number().default(6379),
   serviceApiEnabled: joi
@@ -27,6 +28,7 @@ const config = {
   env: process.env.NODE_ENV,
   port: process.env.PORT,
   serviceName: process.env.SERVICE_NAME,
+  logLevel: process.env.LOG_LEVEL || 'warn',
   redisHost: process.env.REDIS_HOST,
   redisPort: process.env.REDIS_PORT,
   serviceApiEnabled: process.env.SERVICE_API_ENABLED,

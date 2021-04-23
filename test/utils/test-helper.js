@@ -135,6 +135,40 @@ module.exports = class TestHelper {
     expect(TestHelper.getTextContent(elementLabel)).toEqual(expectedLabel)
   }
 
+  static checkFormField (document, fieldName, expectedLabel, expectedHint) {
+    let element = document.querySelector(`#${fieldName}`)
+    expect(element).toBeTruthy()
+
+    element = document.querySelector(`[for="${fieldName}"]`)
+    expect(element).toBeTruthy()
+    expect(TestHelper.getTextContent(element)).toEqual(expectedLabel)
+
+    if (expectedHint) {
+      element = document.querySelector(`#${fieldName}-hint`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(expectedHint)
+    }
+  }
+
+  static async checkFormFieldValidation (
+    postOptions,
+    server,
+    fieldName,
+    expectedValidationMessage
+  ) {
+    const response = await TestHelper.submitPostRequest(
+      server,
+      postOptions,
+      400
+    )
+    return TestHelper.checkValidationError(
+      response,
+      fieldName,
+      `${fieldName}-error`,
+      expectedValidationMessage
+    )
+  }
+
   /**
    * Submits a HTTP POST request to the test server, checks the response code and returns the HTTP response.
    * @param response - The HTTP response object containing the document
