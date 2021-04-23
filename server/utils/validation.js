@@ -1,5 +1,7 @@
 'use strict'
 
+const { postcodeValidator } = require('postcode-validator')
+
 const VALIDATION_SUMMARY_HEADING = 'There is a problem'
 
 /**
@@ -23,9 +25,19 @@ const empty = value => {
   return !value || value.toString().trim().length === 0
 }
 
+/**
+ * Performs validation, checks whether or not the incoming value is a valid UK postcode.
+ * @param {*} value The value to be validated.
+ * @returns True if the value is a postcode, otherwise false.
+ */
+const postcode = value => {
+  return !value || postcodeValidator(value.toString().trim(), 'GB')
+}
+
 const Validators = {
   email,
-  empty
+  empty,
+  postcode
 }
 
 /**

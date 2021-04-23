@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'form-layout.html' %}
 
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
@@ -6,64 +6,54 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 
-{% block content %}
+{% block formContent %}
   <div class="govuk-grid-row">
 
-    {% if errorText %}
-        {{ govukErrorSummary({
-        "titleText": "There is a problem",
-        "errorList": [
-            {
-            "text": errorSummaryText,
-            "href": "#postcode"
-            }
-        ]
-        }) }}
-    {% endif %}
-
     <div class="govuk-grid-column-two-thirds">
-        <form method="post">
 
-            {% call govukFieldset({
-                legend: {
-                    text: title,
-                    classes: "govuk-fieldset__legend--l",
-                    isPageHeading: true
-                }
-            }) %}
+          {% call govukFieldset({
+              legend: {
+                  text: title,
+                  classes: "govuk-fieldset__legend--l",
+                  isPageHeading: true
+              }
+          }) %}
 
-            <p>{{ helpText }}</p>
+          <p id="helpText">{{ helpText }}</p>
 
-            {{ govukInput({
-                label: {
-                    text: 'Property name or number'
-                    },
-                hint: {
-                    text: 'For example, The Mill, Flat A or 37b'
+          {{ govukInput({
+              label: {
+                text: 'Property name or number'
                 },
-                id: "nameNumber",
-                name: "nameNumber",
-                autocomplete: "address-line1"
-            }) }}
+              hint: {
+                  text: 'For example, The Mill, Flat A or 37b'
+              },
+              id: "nameNumber",
+              name: "nameNumber",
+              autocomplete: "address-line1"
+          }) }}
 
-            {{ govukInput({
-                label: {
+          {{ govukInput({
+              label: {
                 text: "Postcode"
-                },
-                classes: "govuk-input--width-10",
-                id: "postcode",
-                name: "postcode",
-                errorMessage: errorText,
-                autocomplete: "postal-code"
-            }) }}
+              },
+              classes: "govuk-input--width-10",
+              id: "postcode",
+              name: "postcode",
+              errorMessage: fieldErrors['postcode'],
+              autocomplete: "postal-code"
+          }) }}
 
-            {% endcall %}
+          {% endcall %}
 
-            {{ govukButton({
-                text: "Find address"
-            }) }}
-        </form>
-        <p class="govuk-body"><a href="address-international">The address is outside the UK</a></p>
+          {{ govukButton({
+              attributes: {
+                id: "findAddress"
+              },
+              text:  "Find address"
+          }) }}
+
+        <p class="govuk-body"><a id="outsideUkLink" href="address-international">The address is outside the UK</a></p>
     </div>
   </div>
 {% endblock %}
