@@ -1,6 +1,5 @@
 {% extends 'form-layout.html' %}
 
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -24,7 +23,10 @@
         }) }}
 
         {{ govukButton({
-          text: "Confirm and continue"
+            attributes: {
+              id: "confirmAndContinue"
+            },
+            text:  "Confirm and continue"
         }) }}
     </div>
   </div>
