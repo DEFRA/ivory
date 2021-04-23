@@ -65,7 +65,7 @@ const handlers = {
 
     return h.redirect(
       ownerApplicant === Options.YES
-        ? Paths.CHECK_YOUR_ANSWERS
+        ? Paths.OWNER_ADDRESS_FIND
         : Paths.APPLICANT_DETAILS
     )
   }
