@@ -15,25 +15,32 @@ module.exports = class AddressService {
 
     let searchResults = json && json.results ? json.results : []
 
-    let pageNumber = 0
-    while (searchResults.length < parseInt(json.header.totalresults)) {
-      pageNumber++
-      const additionalJson = await AddressService._queryAddressEndpoint(
-        postcode,
-        pageNumber
-      )
-      const additionalSearchResults =
-        additionalJson && additionalJson.results ? additionalJson.results : []
+    if (json && json.header && json.header.totalresults) {
+      let pageNumber = 0
+      while (searchResults.length < parseInt(json.header.totalresults)) {
+        pageNumber++
+        const additionalJson = await AddressService._queryAddressEndpoint(
+          postcode,
+          pageNumber
+        )
+        const additionalSearchResults =
+          additionalJson && additionalJson.results ? additionalJson.results : []
 
-      searchResults = searchResults.concat(additionalSearchResults)
-    }
+        searchResults = searchResults.concat(additionalSearchResults)
+      }
 
-    if (nameOrNumber) {
-      searchResults = searchResults.filter(
-        searchResult =>
-          searchResult.Address.BuildingName === nameOrNumber ||
-          searchResult.Address.BuildingNumber === nameOrNumber
-      )
+      if (nameOrNumber) {
+        searchResults = searchResults.filter(searchResult => {
+          const buildingName = searchResult.Address.BuildingName
+            ? searchResult.Address.BuildingName.toUpperCase()
+            : ''
+
+          return (
+            buildingName === nameOrNumber.toUpperCase() ||
+            searchResult.Address.BuildingNumber === nameOrNumber
+          )
+        })
+      }
     }
 
     return searchResults

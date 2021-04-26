@@ -1,11 +1,12 @@
 'use strict'
 
-const { Paths, Views } = require('../../../utils/constants')
+const { Paths, RedisKeys, Views } = require('../../../utils/constants')
+const RedisService = require('../../../services/redis.service')
 
 const handlers = {
-  get: (request, h) => {
+  get: async (request, h) => {
     return h.view(Views.ADDRESS_CONFIRM, {
-      ..._getContext()
+      ...(await _getContext(request))
     })
   },
   post: async (request, h) => {
@@ -13,20 +14,15 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
-  // if (completedBy === 'owner') {
-  //   return {
-  //     title: 'What is your address?',
-  //     helpText:
-  //       'If your business is the legal owner of the item, give your business address.'
-  //   }
-  // } else {
-  //   return {
-  //     title: 'What is the owner’s address?',
-  //     helpText:
-  //       'If the legal owner of the item is a business, give the business address.'
-  //   }
-  // }
+const _getContext = async request => {
+  const address = JSON.parse(
+    await RedisService.get(request, RedisKeys.ADDRESS_FIND)
+  )
+
+  return {
+    title: 'Choose your address',
+    address
+  }
 }
 
 module.exports = [

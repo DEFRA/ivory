@@ -9,51 +9,19 @@
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
+      <h1 id="pageHeading" class="govuk-heading-l">Confirm your address</h1>
 
-      CONFIRM ADDRESS
-          {# {% call govukFieldset({
-              legend: {
-                  text: title,
-                  classes: "govuk-fieldset__legend--l",
-                  isPageHeading: true
-              }
-          }) %}
+        <p id="address" class="govuk-body">{{ address.AddressLine }}</p>
 
-          <p id="helpText">{{ helpText }}</p>
+        <p><a id="editTheAddress" href="/user-details/owner/address-enter" class="govuk-link">Edit the address</a></p>
 
-          {{ govukInput({
-              label: {
-                text: 'Property name or number'
-                },
-              hint: {
-                  text: 'For example, The Mill, Flat A or 37b'
-              },
-              id: "nameNumber",
-              name: "nameNumber",
-              autocomplete: "address-line1"
-          }) }}
+        {{ govukButton({
+            attributes: {
+              id: "confirmAndContinue"
+            },
+            text:  "Confirm and continue"
+        }) }}
 
-          {{ govukInput({
-              label: {
-                text: "Postcode"
-              },
-              classes: "govuk-input--width-10",
-              id: "postcode",
-              name: "postcode",
-              errorMessage: fieldErrors['postcode'],
-              autocomplete: "postal-code"
-          }) }}
-
-          {% endcall %}
-
-          {{ govukButton({
-              attributes: {
-                id: "findAddress"
-              },
-              text:  "Find address"
-          }) }}
-
-        <p class="govuk-body"><a id="outsideUkLink" href="address-international">The address is outside the UK</a></p> #}
     </div>
   </div>
 {% endblock %}

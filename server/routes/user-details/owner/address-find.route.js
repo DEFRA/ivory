@@ -40,7 +40,7 @@ const handlers = {
       await RedisService.set(
         request,
         RedisKeys.ADDRESS_FIND,
-        JSON.stringify(searchResults)
+        JSON.stringify(searchResults[0].Address)
       )
       return h.redirect(Paths.OWNER_ADDRESS_CONFIRM)
     }
