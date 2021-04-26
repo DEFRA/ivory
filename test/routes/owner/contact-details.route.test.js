@@ -11,7 +11,7 @@ const RedisService = require('../../../server/services/redis.service')
 describe('/contact-details route', () => {
   let server
   const url = '/user-details/owner/contact-details'
-  const nextUrl = '/check-your-answers'
+  const nextUrl = '/user-details/owner/address-find'
   const nextUrlNonOwnerApplicant = '/user-details/applicant/contact-details'
 
   const elementIds = {

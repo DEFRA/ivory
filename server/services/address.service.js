@@ -6,13 +6,43 @@ const { readFileSync } = require('fs')
 const { resolve } = require('path')
 const https = require('https')
 
+const PAGE_SIZE = 100
+const POSTCODE_SEARCH_ENDPOINT = '/ws/rest/DEFRA/v1/address/postcodes'
+
 module.exports = class AddressService {
-  static async addressSearch (nameNumber, postcode) {
+  static async addressSearch (nameOrNumber, postcode) {
+    const json = await AddressService._queryAddressEndpoint(postcode)
+
+    let searchResults = json && json.results ? json.results : []
+
+    let pageNumber = 0
+    while (searchResults.length < parseInt(json.header.totalresults)) {
+      pageNumber++
+      const additionalJson = await AddressService._queryAddressEndpoint(
+        postcode,
+        pageNumber
+      )
+      const additionalSearchResults =
+        additionalJson && additionalJson.results ? additionalJson.results : []
+
+      searchResults = searchResults.concat(additionalSearchResults)
+    }
+
+    if (nameOrNumber) {
+      searchResults = searchResults.filter(
+        searchResult =>
+          searchResult.Address.BuildingName === nameOrNumber ||
+          searchResult.Address.BuildingNumber === nameOrNumber
+      )
+    }
+
+    return searchResults
+  }
+
+  static async _queryAddressEndpoint (postcode, pageNumber = 0) {
     const authOptions = {
       passphrase: config.addressLookupPassphrase,
-      pfx: readFileSync(
-        resolve(config.addressLookupPfxCert)
-      ),
+      pfx: readFileSync(resolve(config.addressLookupPfxCert)),
       keepAlive: false
     }
     const tlsConfiguredAgent = new https.Agent(authOptions)
@@ -21,12 +51,14 @@ module.exports = class AddressService {
       agent: tlsConfiguredAgent
     }
 
-    const response = await fetch(`${config.addressLookupUrl}/ws/rest/DEFRA/v1/address/postcodes?postcode=${postcode}`, searchOptions)
-    const json = await response.json()
+    const offset = pageNumber * PAGE_SIZE
+    const querystringParams = `postcode=${postcode}&offset=${offset}&maxresults=${PAGE_SIZE}`
 
-    if (nameNumber) {
-      // Filter the results
-    }
-    return json
+    const response = await fetch(
+      `${config.addressLookupUrl}${POSTCODE_SEARCH_ENDPOINT}?${querystringParams}`,
+      searchOptions
+    )
+
+    return response.json()
   }
 }

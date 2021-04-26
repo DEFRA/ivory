@@ -25,26 +25,22 @@ const handlers = {
         .code(400)
     }
 
-    const searchResult = await AddressService.addressSearch(
+    const searchResults = await AddressService.addressSearch(
       payload.nameNumber,
       payload.postcode
     )
-    console.log(searchResult)
-    const resultSize = searchResult.results ? searchResult.results.length : 0
+    const resultSize = searchResults.length
 
-    console.log('result size:', resultSize)
-
-    // TODO add these routes
     if (resultSize === 0 || resultSize > 50) {
-      return h.redirect(Paths.OWNER_ENTER_ADDRESS)
+      return h.redirect(Paths.OWNER_ADDRESS_ENTER)
     }
 
     if (resultSize === 1) {
-      return h.redirect(Paths.OWNER_CONFIRM_ADDRESS)
+      return h.redirect(Paths.OWNER_ADDRESS_CONFIRM)
     }
 
     if (resultSize > 1) {
-      return h.redirect(Paths.OWNER_CHOOSE_ADDRESS)
+      return h.redirect(Paths.OWNER_ADDRESS_CHOOSE)
     }
 
     return h.view(Views.ADDRESS_FIND)
