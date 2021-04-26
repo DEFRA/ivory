@@ -8,11 +8,19 @@ const { ServerEvents } = require('../../../server/utils/constants')
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
-describe('/address-enter route', () => {
+jest.mock('../../../server/services/address.service')
+const AddressService = require('../../../server/services/address.service')
+
+const {
+  singleAddress,
+  multipleAddresses
+} = require('../../mock-data/addresses')
+
+describe('/address-find route', () => {
   let server
   const url = '/user-details/owner/address-find'
-  // const nextUrlSingleAddress = '/user-details/owner/address-confirm'
-  // const nextUrlMultipleAddresses = '/user-details/owner/address-choose'
+  const nextUrlSingleAddress = '/user-details/owner/address-confirm'
+  const nextUrlMultipleAddresses = '/user-details/owner/address-choose'
 
   const elementIds = {
     pageHeading: 'pageHeading',
@@ -111,7 +119,7 @@ describe('/address-enter route', () => {
     })
   })
 
-  describe.skip('POST', () => {
+  describe('POST', () => {
     let postOptions
 
     beforeEach(() => {
@@ -123,29 +131,56 @@ describe('/address-enter route', () => {
     })
 
     describe('Success: Owner-applicant', () => {
-      beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('yes')
+      const redisKey = 'address-find'
+
+      it('should store the value in Redis and progress to the next route when a single address is returned by the search', async () => {
+        AddressService.addressSearch = jest.fn().mockReturnValue(singleAddress)
+
+        postOptions.payload = {
+          postcode: 'SW1A 1AA'
+        }
+        const response = await TestHelper.submitPostRequest(
+          server,
+          postOptions,
+          302
+        )
+        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKey,
+          JSON.stringify(singleAddress)
+        )
+
+        expect(response.headers.location).toEqual(nextUrlSingleAddress)
       })
 
-      it('should store the value in Redis and progress to the next route when all fields have been entered correctly', async () => {
-        // postOptions.payload = {
-        //   name: 'some-value',
-        //   emailAddress: 'some-email@somewhere.com',
-        //   confirmEmailAddress: 'some-email@somewhere.com'
-        // }
-        // const response = await TestHelper.submitPostRequest(
-        //   server,
-        //   postOptions,
-        //   302
-        // )
-        // expect(RedisService.set).toBeCalledTimes(4)
-        // expect(response.headers.location).toEqual(nextUrl)
+      it('should store the value in Redis and progress to the next route when multiple addresses are returned by the search', async () => {
+        AddressService.addressSearch = jest
+          .fn()
+          .mockReturnValue(multipleAddresses)
+
+        postOptions.payload = {
+          postcode: 'CF10 4GA'
+        }
+        const response = await TestHelper.submitPostRequest(
+          server,
+          postOptions,
+          302
+        )
+        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKey,
+          JSON.stringify(multipleAddresses)
+        )
+
+        expect(response.headers.location).toEqual(nextUrlMultipleAddresses)
       })
     })
 
     describe.skip('Failure: Owner-applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('yes')
+        // RedisService.get = jest.fn().mockReturnValue('yes')
       })
 
       it('should display a validation error message if the user does not enter the full name', async () => {
