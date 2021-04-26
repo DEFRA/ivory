@@ -1,15 +1,15 @@
 'use strict'
 
-const { Paths, Views } = require('../../../utils/constants')
+const { Paths, RedisKeys, Views } = require('../../../utils/constants')
+const RedisService = require('../../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
 
-const resultSize = 100 // Temporary to be used until hooked up properly
 const notOnList = false // Temporary to be used until hooked up properly
 
 const handlers = {
-  get: (request, h) => {
+  get: async (request, h) => {
     return h.view(Views.ADDRESS_ENTER, {
-      ..._getContext()
+      ...(await _getContext(request))
     })
   },
   post: async (request, h) => {
@@ -29,7 +29,12 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
+const _getContext = async request => {
+  const addresses = JSON.parse(
+    await RedisService.get(request, RedisKeys.ADDRESS_FIND)
+  )
+  const resultSize = (addresses.length)
+
   if (notOnList === true) {
     return {
       title: 'Enter your address',
@@ -43,7 +48,11 @@ const _getContext = () => {
   } else if (resultSize === 1) {
     return {
       title: 'Edit your address',
-      helpText: 'If your business owns the item, give your business address.'
+      helpText: 'If your business owns the item, give your business address.',
+      buildingStreet: `${addresses[0].Address.BuildingNumber} ${addresses[0].Address.Street}`,
+      locality: addresses[0].Address.Locality,
+      town: addresses[0].Address.Town,
+      postcode: addresses[0].Address.Postcode
     }
   } else if (resultSize > 50) {
     return {
