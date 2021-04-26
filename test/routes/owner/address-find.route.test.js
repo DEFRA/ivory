@@ -60,8 +60,6 @@ describe('/address-find route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockReturnValue('yes')
-
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
 

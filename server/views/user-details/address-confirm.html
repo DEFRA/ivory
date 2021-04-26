@@ -1,9 +1,6 @@
 {% extends 'form-layout.html' %}
 
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
 
 {% block formContent %}
   <div class="govuk-grid-row">
@@ -11,16 +8,16 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 id="pageHeading" class="govuk-heading-l">Confirm your address</h1>
 
-        <p id="address" class="govuk-body">{{ address.AddressLine }}</p>
+      <p id="address" class="govuk-body">{{ address.AddressLine }}</p>
 
-        <p><a id="editTheAddress" href="/user-details/owner/address-enter" class="govuk-link">Edit the address</a></p>
+      <p><a id="editTheAddress" href="/user-details/owner/address-enter" class="govuk-link">Edit the address</a></p>
 
-        {{ govukButton({
-            attributes: {
-              id: "confirmAndContinue"
-            },
-            text:  "Confirm and continue"
-        }) }}
+      {{ govukButton({
+          attributes: {
+            id: "confirmAndContinue"
+          },
+          text:  "Confirm and continue"
+      }) }}
 
     </div>
   </div>

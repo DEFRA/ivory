@@ -40,6 +40,7 @@ const RedisKeys = {
   APPLICANT_NAME: 'applicant.name',
   IVORY_ADDED: 'ivory-added',
   IVORY_INTEGRAL: 'ivory-integral',
+  OWNER_ADDRESS: 'owner-address',
   OWNER_APPLICANT: 'owner-applicant',
   OWNER_EMAIL_ADDRESS: 'owner.emailAddress',
   OWNER_NAME: 'owner.name',

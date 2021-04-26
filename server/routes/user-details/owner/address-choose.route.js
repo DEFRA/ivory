@@ -25,7 +25,9 @@ const handlers = {
         .code(400)
     }
 
-    return h.view(Views.CHECK_YOUR_ANSWERS)
+    RedisService.set(request, RedisKeys.OWNER_ADDRESS, payload.address)
+
+    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
   }
 }
 

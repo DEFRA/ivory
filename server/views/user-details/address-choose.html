@@ -23,6 +23,8 @@
         items: addresses
       }) }}
 
+      <p class="govuk-body"><a id="addressNotOnList" href="address-enter">The address is not on the list</a></p>
+
       {{ govukButton({
           attributes: {
             id: "continue"
@@ -30,6 +32,7 @@
           text: "Continue"
         })
       }}
+
     </div>
   </div>
 {% endblock %}

@@ -36,6 +36,7 @@ const _getContext = async request => {
       request,
       RedisKeys.OWNER_NAME
     )} ${await RedisService.get(request, RedisKeys.OWNER_EMAIL_ADDRESS)}`,
+    ownerAddress: `${await RedisService.get(request, RedisKeys.OWNER_ADDRESS)}`,
     applicantDetails: `${await RedisService.get(
       request,
       RedisKeys.APPLICANT_NAME
