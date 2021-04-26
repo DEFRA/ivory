@@ -24,7 +24,7 @@ const handlers = {
         })
         .code(400)
     } else {
-      return h.view(Views.ADDRESS_OUTSIDE_UK)
+      return h.view(Views.CHECK_YOUR_ANSWERS)
     }
   }
 }

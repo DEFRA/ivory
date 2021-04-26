@@ -8,12 +8,8 @@ const { buildErrorSummary, Validators } = require('../../../utils/validation')
 
 const handlers = {
   get: async (request, h) => {
-    const addresses = JSON.parse(
-      await RedisService.get(request, RedisKeys.ADDRESS_FIND)
-    )
-
     return h.view(Views.ADDRESS_CHOOSE, {
-      ..._getContext(addresses)
+      ...(await _getContext(request))
     })
   },
   post: async (request, h) => {
@@ -23,17 +19,21 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.ADDRESS_CHOOSE, {
-          ..._getContext(),
+          ...(await _getContext(request)),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    return h.view(Views.ADDRESS_OUTSIDE_UK)
+    return h.view(Views.CHECK_YOUR_ANSWERS)
   }
 }
 
-const _getContext = addresses => {
+const _getContext = async request => {
+  const addresses = JSON.parse(
+    await RedisService.get(request, RedisKeys.ADDRESS_FIND)
+  )
+
   const items = addresses.map(item => {
     return {
       value: item.Address.AddressLine,
@@ -52,7 +52,7 @@ const _validateForm = payload => {
 
   if (Validators.empty(payload.address)) {
     errors.push({
-      name: 'postcode',
+      name: 'address',
       text: 'You must choose an address'
     })
   }

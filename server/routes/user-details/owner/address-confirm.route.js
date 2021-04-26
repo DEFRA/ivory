@@ -9,7 +9,7 @@ const handlers = {
     })
   },
   post: async (request, h) => {
-    return h.view(Views.ADDRESS_OUTSIDE_UK)
+    return h.view(Views.CHECK_YOUR_ANSWERS)
   }
 }
 

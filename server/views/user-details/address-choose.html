@@ -10,8 +10,8 @@
     <div class="govuk-grid-column-two-thirds">
 
       {{ govukRadios({
-        idPrefix: "chooseAddress",
-        name: "chooseAddress",
+        idPrefix: "address",
+        name: "address",
         fieldset: {
           legend: {
             text: title,
@@ -19,7 +19,7 @@
             classes: "govuk-fieldset__legend--l"
           }
         },
-        errorMessage: fieldErrors['chooseAddress'],
+        errorMessage: fieldErrors['address'],
         items: addresses
       }) }}
 
