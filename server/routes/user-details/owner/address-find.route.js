@@ -1,7 +1,8 @@
 'use strict'
 
-const { Paths, Views } = require('../../../utils/constants')
+const { Paths, RedisKeys, Views } = require('../../../utils/constants')
 const AddressService = require('../../../services/address.service')
+const RedisService = require('../../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
 
 const completedBy = 'owner' // Temporary until previous page built then will use value saved in Redis. Use 'owner' or '3rdParty'
@@ -36,14 +37,22 @@ const handlers = {
     }
 
     if (resultSize === 1) {
+      await RedisService.set(
+        request,
+        RedisKeys.ADDRESS_FIND,
+        JSON.stringify(searchResults)
+      )
       return h.redirect(Paths.OWNER_ADDRESS_CONFIRM)
     }
 
     if (resultSize > 1) {
+      await RedisService.set(
+        request,
+        RedisKeys.ADDRESS_FIND,
+        JSON.stringify(searchResults)
+      )
       return h.redirect(Paths.OWNER_ADDRESS_CHOOSE)
     }
-
-    return h.view(Views.ADDRESS_FIND)
   }
 }
 

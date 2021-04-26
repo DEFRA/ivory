@@ -1,12 +1,19 @@
 'use strict'
 
-const { Paths, Views } = require('../../../utils/constants')
+const { Paths, Views, RedisKeys } = require('../../../utils/constants')
+const RedisService = require('../../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
 
+// const completedBy = 'owner' // Temporary until previous page built then will use value saved in Redis. Use 'owner' or '3rdParty'
+
 const handlers = {
-  get: (request, h) => {
+  get: async (request, h) => {
+    const addresses = JSON.parse(
+      await RedisService.get(request, RedisKeys.ADDRESS_FIND)
+    )
+
     return h.view(Views.ADDRESS_CHOOSE, {
-      ..._getContext()
+      ..._getContext(addresses)
     })
   },
   post: async (request, h) => {
@@ -26,20 +33,18 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
-  // if (completedBy === 'owner') {
-  //   return {
-  //     title: 'What is your address?',
-  //     helpText:
-  //       'If your business is the legal owner of the item, give your business address.'
-  //   }
-  // } else {
-  //   return {
-  //     title: 'What is the owner’s address?',
-  //     helpText:
-  //       'If the legal owner of the item is a business, give the business address.'
-  //   }
-  // }
+const _getContext = addresses => {
+  const items = addresses.map(item => {
+    return {
+      value: item.Address.AddressLine,
+      text: item.Address.AddressLine
+    }
+  })
+
+  return {
+    title: 'Choose your address',
+    addresses: items
+  }
 }
 
 const _validateForm = payload => {
