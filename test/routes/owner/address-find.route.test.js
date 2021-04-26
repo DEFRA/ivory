@@ -178,78 +178,28 @@ describe('/address-find route', () => {
       })
     })
 
-    describe.skip('Failure: Owner-applicant', () => {
-      beforeEach(() => {
-        // RedisService.get = jest.fn().mockReturnValue('yes')
+    describe('Failure: Owner-applicant', () => {
+      it('should display a validation error message if the user does not enter the full name', async () => {
+        postOptions.payload = {
+          postcode: ''
+        }
+        await TestHelper.checkFormFieldValidation(
+          postOptions,
+          server,
+          elementIds.postcode,
+          'Enter your postcode'
+        )
       })
 
       it('should display a validation error message if the user does not enter the full name', async () => {
         postOptions.payload = {
-          name: '',
-          emailAddress: 'some-email@somewhere.com',
-          confirmEmailAddress: 'some-email@somewhere.com'
+          postcode: 'INVALID_FORMAT'
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
           server,
-          elementIds.name,
-          'Enter your full name'
-        )
-      })
-
-      it('should display a validation error message if the user does not enter the email address', async () => {
-        postOptions.payload = {
-          name: 'some-value',
-          emailAddress: '',
-          confirmEmailAddress: 'some-email@somewhere.com'
-        }
-        await TestHelper.checkFormFieldValidation(
-          postOptions,
-          server,
-          elementIds.emailAddress,
-          'Enter your email address'
-        )
-      })
-
-      it('should display a validation error message if the user does not enter an email address in a valid format', async () => {
-        postOptions.payload = {
-          name: 'some-value',
-          emailAddress: 'invalid-email@',
-          confirmEmailAddress: 'some-email@somewhere.com'
-        }
-        await TestHelper.checkFormFieldValidation(
-          postOptions,
-          server,
-          elementIds.emailAddress,
-          'Enter an email address in the correct format, like name@example.com'
-        )
-      })
-
-      it('should display a validation error message if the user does not confirm their email address', async () => {
-        postOptions.payload = {
-          name: 'some-value',
-          emailAddress: 'some-email@somewhere.com',
-          confirmEmailAddress: ''
-        }
-        await TestHelper.checkFormFieldValidation(
-          postOptions,
-          server,
-          elementIds.confirmEmailAddress,
-          'You must confirm your email address'
-        )
-      })
-
-      it('should display a validation error message if the email addresses do not match', async () => {
-        postOptions.payload = {
-          name: 'some-value',
-          emailAddress: 'some-email@somewhere.com',
-          confirmEmailAddress: 'some-other-email@somewhere.com'
-        }
-        await TestHelper.checkFormFieldValidation(
-          postOptions,
-          server,
-          elementIds.confirmEmailAddress,
-          'This confirmation does not match your email address'
+          elementIds.postcode,
+          'Enter a UK postcode in the correct format'
         )
       })
     })

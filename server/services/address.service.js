@@ -43,8 +43,6 @@ module.exports = class AddressService {
       }
     }
 
-    console.log(searchResults)
-
     return searchResults
   }
 
