@@ -15,7 +15,7 @@ describe('/contact-details route', () => {
   const nextUrlNonOwnerApplicant = '/user-details/applicant/contact-details'
 
   const elementIds = {
-    pageHeading: 'page-heading',
+    pageHeading: 'pageHeading',
     name: 'name',
     ownerApplicant: {
       businessName: 'businessName'
@@ -167,7 +167,7 @@ describe('/contact-details route', () => {
     })
   })
 
-  describe('POST: Owner applicant', () => {
+  describe('POST', () => {
     let postOptions
 
     beforeEach(() => {

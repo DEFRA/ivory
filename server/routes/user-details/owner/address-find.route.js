@@ -27,9 +27,15 @@ const handlers = {
     }
 
     const searchResults = await AddressService.addressSearch(
-      payload.nameNumber,
+      payload.nameOrNumber,
       payload.postcode
     )
+    await RedisService.set(
+      request,
+      RedisKeys.ADDRESS_FIND,
+      JSON.stringify(searchResults)
+    )
+
     const resultSize = searchResults.length
 
     if (resultSize === 0 || resultSize > 50) {
@@ -37,20 +43,10 @@ const handlers = {
     }
 
     if (resultSize === 1) {
-      await RedisService.set(
-        request,
-        RedisKeys.ADDRESS_FIND,
-        JSON.stringify(searchResults[0].Address)
-      )
       return h.redirect(Paths.OWNER_ADDRESS_CONFIRM)
     }
 
     if (resultSize > 1) {
-      await RedisService.set(
-        request,
-        RedisKeys.ADDRESS_FIND,
-        JSON.stringify(searchResults)
-      )
       return h.redirect(Paths.OWNER_ADDRESS_CHOOSE)
     }
   }

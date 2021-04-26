@@ -15,13 +15,13 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  const address = JSON.parse(
+  const addresses = JSON.parse(
     await RedisService.get(request, RedisKeys.ADDRESS_FIND)
   )
 
   return {
     title: 'Choose your address',
-    address
+    address: addresses[0].Address
   }
 }
 

@@ -11,10 +11,13 @@
     <div class="govuk-grid-column-two-thirds">
 
           {% call govukFieldset({
+              attributes: {
+                id: "pageHeading"
+              },
               legend: {
-                  text: title,
-                  classes: "govuk-fieldset__legend--l",
-                  isPageHeading: true
+                text: title,
+                classes: "govuk-fieldset__legend--l",
+                isPageHeading: true
               }
           }) %}
 
@@ -23,12 +26,12 @@
           {{ govukInput({
               label: {
                 text: 'Property name or number'
-                },
-              hint: {
-                  text: 'For example, The Mill, Flat A or 37b'
               },
-              id: "nameNumber",
-              name: "nameNumber",
+              hint: {
+                text: 'For example, The Mill, Flat A or 37b'
+              },
+              id: "nameOrNumber",
+              name: "nameOrNumber",
               autocomplete: "address-line1"
           }) }}
 
