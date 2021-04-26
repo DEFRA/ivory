@@ -10,7 +10,7 @@ const handlers = {
     })
   },
   post: async (request, h) => {
-    return h.view(Views.CHECK_YOUR_ANSWERS)
+    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
   }
 }
 
