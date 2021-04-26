@@ -3,6 +3,7 @@
 const { Paths, RedisKeys, Views } = require('../../../utils/constants')
 const RedisService = require('../../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
+const { title } = require('case')
 
 const notOnList = false // Temporary to be used until hooked up properly
 
@@ -49,9 +50,9 @@ const _getContext = async request => {
     return {
       title: 'Edit your address',
       helpText: 'If your business owns the item, give your business address.',
-      buildingStreet: `${addresses[0].Address.BuildingNumber} ${addresses[0].Address.Street}`,
-      locality: addresses[0].Address.Locality,
-      town: addresses[0].Address.Town,
+      buildingStreet: `${title(addresses[0].Address.BuildingNumber)} ${title(addresses[0].Address.Street)}`,
+      locality: title(addresses[0].Address.Locality),
+      town: title(addresses[0].Address.Town),
       postcode: addresses[0].Address.Postcode
     }
   } else if (resultSize > 50) {
