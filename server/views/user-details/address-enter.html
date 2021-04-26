@@ -1,0 +1,73 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+        {% call govukFieldset({
+          legend: {
+            text: title,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+        }) %}
+
+        <p id="helpText">{{ helpText }}</p>
+
+        {{ govukInput({
+          label: {
+            html: 'Building and street <span class="govuk-visually-hidden">line 1 of 2</span>'
+          },
+          id: "addressLine1",
+          name: "addressLine1",
+          errorMessage: fieldErrors['addressLine1'],
+          autocomplete: "address-line1"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            html: '<span class="govuk-visually-hidden">Building and street line 2 of 2</span>'
+          },
+          id: "addressLine2",
+          name: "addressLine2",
+          autocomplete: "address-line2"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Town or city"
+          },
+          classes: "govuk-!-width-two-thirds",
+          id: "addressTown",
+          name: "addressTown",
+          errorMessage: fieldErrors['addressTown'],
+          autocomplete: "address-level2"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Postcode"
+          },
+          classes: "govuk-input--width-10",
+          id: "postcode",
+          name: "postcode",
+          errorMessage: fieldErrors['postcode'],
+          autocomplete: "postal-code"
+        }) }}
+
+      {% endcall %}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text:  "Continue"
+      }) }}
+    </div>
+  </div>
+{% endblock %}
