@@ -8,21 +8,16 @@ const { ServerEvents } = require('../../../server/utils/constants')
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
-jest.mock('../../../server/services/address.service')
-const AddressService = require('../../../server/services/address.service')
-
-const { singleAddress } = require('../../mock-data/addresses')
-
-describe('/address-confirm route', () => {
+describe('/address-international route', () => {
   let server
-  const url = '/user-details/owner/address-confirm'
+  const url = '/user-details/owner/address-international'
   const nextUrl = '/check-your-answers'
 
   const elementIds = {
     pageHeading: 'pageHeading',
-    address: 'address',
-    editTheAddress: 'editTheAddress',
-    confirmAndContinue: 'confirmAndContinue'
+    helpText: 'helpText',
+    internationalAddress: 'internationalAddress',
+    continue: 'continue'
   }
 
   let document
@@ -53,10 +48,6 @@ describe('/address-confirm route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest
-        .fn()
-        .mockReturnValue(JSON.stringify(singleAddress))
-
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
 
@@ -68,33 +59,19 @@ describe('/address-confirm route', () => {
       TestHelper.checkBackLink(document)
     })
 
-    it('should have the correct page title', () => {
-      const element = document.querySelector(`#${elementIds.pageHeading}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Confirm your address')
-    })
-
-    it('should show the selected address', () => {
-      const element = document.querySelector(`#${elementIds.address}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        singleAddress[0].Address.AddressLine
+    it('should have the "Enter your address" form field', () => {
+      TestHelper.checkFormField(
+        document,
+        elementIds.internationalAddress,
+        'Enter your address',
+        'If your business owns the item, give your business address.'
       )
-    })
-
-    it('should have the correct "Edit the address" link', () => {
-      const element = document.querySelector(`#${elementIds.editTheAddress}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Edit the address')
-      expect(element.href).toEqual('/user-details/owner/address-enter')
     })
 
     it('should have the correct Call to Action button', () => {
-      const element = document.querySelector(
-        `#${elementIds.confirmAndContinue}`
-      )
+      const element = document.querySelector(`#${elementIds.continue}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Confirm and continue')
+      expect(TestHelper.getTextContent(element)).toEqual('Continue')
     })
   })
 
@@ -110,12 +87,12 @@ describe('/address-confirm route', () => {
     })
 
     describe('Success: Owner-applicant', () => {
-      const redisKey = 'owner-address'
+      const redisKey = 'owner.internationalAddress'
+      const internationalAddress = 'SOME ADDRESS'
 
-      it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
-        AddressService.addressSearch = jest.fn().mockReturnValue(singleAddress)
+      it('should store the address in Redis and progress to the next route when the address is entered by the search', async () => {
         postOptions.payload = {
-          address: singleAddress[0].Address.AddressLine
+          internationalAddress
         }
 
         expect(RedisService.set).toBeCalledTimes(0)
@@ -125,14 +102,28 @@ describe('/address-confirm route', () => {
           postOptions,
           302
         )
-
         expect(RedisService.set).toBeCalledTimes(1)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKey,
-          singleAddress[0].Address.AddressLine
+          internationalAddress
         )
+
         expect(response.headers.location).toEqual(nextUrl)
+      })
+    })
+
+    describe('Failure: Owner-applicant', () => {
+      it('should display a validation error message if the user does not enter the address', async () => {
+        postOptions.payload = {
+          postcode: ''
+        }
+        await TestHelper.checkFormFieldValidation(
+          postOptions,
+          server,
+          elementIds.internationalAddress,
+          'Enter the address'
+        )
       })
     })
   })

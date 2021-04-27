@@ -83,20 +83,20 @@ describe('/address-choose route', () => {
       TestHelper.checkRadioOption(
         document,
         elementIds.address,
-        'BBC CYMRU WALES, HEOL PORTH TEIGR, CARDIFF, CF10 4GA',
-        'BBC CYMRU WALES, HEOL PORTH TEIGR, CARDIFF, CF10 4GA'
+        multipleAddresses[0].Address.AddressLine,
+        multipleAddresses[0].Address.AddressLine
       )
       TestHelper.checkRadioOption(
         document,
         elementIds.address2,
-        'LOOKOUT CAFE BAR, HEOL PORTH TEIGR, CARDIFF, CF10 4GA',
-        'LOOKOUT CAFE BAR, HEOL PORTH TEIGR, CARDIFF, CF10 4GA'
+        multipleAddresses[1].Address.AddressLine,
+        multipleAddresses[1].Address.AddressLine
       )
       TestHelper.checkRadioOption(
         document,
         elementIds.address3,
-        'WORLD OF BOATS, HEOL PORTH TEIGR, CARDIFF, CF10 4GA',
-        'WORLD OF BOATS, HEOL PORTH TEIGR, CARDIFF, CF10 4GA'
+        multipleAddresses[2].Address.AddressLine,
+        multipleAddresses[2].Address.AddressLine
       )
     })
 
@@ -135,6 +135,9 @@ describe('/address-choose route', () => {
         postOptions.payload = {
           address: singleAddress[0].Address.AddressLine
         }
+
+        expect(RedisService.set).toBeCalledTimes(0)
+
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,

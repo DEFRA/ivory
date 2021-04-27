@@ -24,7 +24,7 @@ const schema = joi.object().keys({
     .bool()
     .valid(true, false)
     .default(false),
-  addressLookupUrl: joi.string(),
+  addressLookupUrl: joi.string().default('http://some-url'),
   addressLookupPassphrase: joi.string(),
   addressLookupPfxCert: joi.string(),
   cookieValidationPassword: joi.string()

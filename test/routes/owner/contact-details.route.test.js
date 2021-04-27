@@ -190,6 +190,8 @@ describe('/contact-details route', () => {
           confirmEmailAddress: 'some-email@somewhere.com'
         }
 
+        expect(RedisService.set).toBeCalledTimes(0)
+
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -213,6 +215,8 @@ describe('/contact-details route', () => {
           emailAddress: 'some-email@somewhere.com',
           confirmEmailAddress: 'some-email@somewhere.com'
         }
+
+        expect(RedisService.set).toBeCalledTimes(0)
 
         const response = await TestHelper.submitPostRequest(
           server,

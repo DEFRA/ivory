@@ -10,6 +10,14 @@ const handlers = {
     })
   },
   post: async (request, h) => {
+    const context = await _getContext(request)
+
+    RedisService.set(
+      request,
+      RedisKeys.OWNER_ADDRESS,
+      context.address.AddressLine
+    )
+
     return h.redirect(Paths.CHECK_YOUR_ANSWERS)
   }
 }
@@ -20,7 +28,7 @@ const _getContext = async request => {
   )
 
   return {
-    title: 'Choose your address',
+    pageHeading: 'Confirm your address',
     address: addresses[0].Address
   }
 }

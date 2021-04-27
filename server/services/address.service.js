@@ -3,25 +3,29 @@
 const config = require('../utils/config')
 const fetch = require('node-fetch')
 const { readFileSync } = require('fs')
-const { resolve } = require('path')
 const https = require('https')
 
 const PAGE_SIZE = 100
 const POSTCODE_SEARCH_ENDPOINT = '/ws/rest/DEFRA/v1/address/postcodes'
 
 module.exports = class AddressService {
-  static async addressSearch (nameOrNumber, postcode) {
-    const json = await AddressService._queryAddressEndpoint(postcode)
+  static async addressSearch (nameOrNumber, postcode, pageSize = PAGE_SIZE) {
+    let pageNumber = 0
+    const json = await AddressService._queryAddressEndpoint(
+      postcode,
+      pageNumber,
+      pageSize
+    )
 
     let searchResults = json && json.results ? json.results : []
 
     if (json && json.header && json.header.totalresults) {
-      let pageNumber = 0
       while (searchResults.length < parseInt(json.header.totalresults)) {
         pageNumber++
         const additionalJson = await AddressService._queryAddressEndpoint(
           postcode,
-          pageNumber
+          pageNumber,
+          pageSize
         )
         const additionalSearchResults =
           additionalJson && additionalJson.results ? additionalJson.results : []
@@ -46,10 +50,10 @@ module.exports = class AddressService {
     return searchResults
   }
 
-  static async _queryAddressEndpoint (postcode, pageNumber = 0) {
+  static async _queryAddressEndpoint (postcode, pageNumber, pageSize) {
     const authOptions = {
       passphrase: config.addressLookupPassphrase,
-      pfx: readFileSync(resolve(config.addressLookupPfxCert)),
+      pfx: readFileSync(config.addressLookupPfxCert),
       keepAlive: false
     }
     const tlsConfiguredAgent = new https.Agent(authOptions)
@@ -58,13 +62,13 @@ module.exports = class AddressService {
       agent: tlsConfiguredAgent
     }
 
-    const offset = pageNumber * PAGE_SIZE
-    const querystringParams = `postcode=${postcode}&offset=${offset}&maxresults=${PAGE_SIZE}`
+    const offset = pageNumber * pageSize
+    const querystringParams = `postcode=${postcode}&offset=${offset}&maxresults=${pageSize}`
 
-    const response = await fetch(
-      `${config.addressLookupUrl}${POSTCODE_SEARCH_ENDPOINT}?${querystringParams}`,
-      searchOptions
-    )
+    const url = `${config.addressLookupUrl}${POSTCODE_SEARCH_ENDPOINT}?${querystringParams}`
+    console.log(`Fetching URL: [${url}]`)
+
+    const response = await fetch(url, searchOptions)
 
     return response.json()
   }
