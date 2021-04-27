@@ -73,7 +73,7 @@ const _validateForm = payload => {
     })
   }
 
-  if (Validators.empty(payload.addressTown)) {
+  if (Validators.empty(payload.addressTownOrCity)) {
     errors.push({
       name: 'addressTown',
       text: 'Enter a town or city'

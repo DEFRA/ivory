@@ -9,12 +9,16 @@
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
+
         {% call govukFieldset({
-          legend: {
-            text: title,
-            classes: "govuk-fieldset__legend--l",
-            isPageHeading: true
-          }
+            attributes: {
+              id: "pageHeading"
+            },
+            legend: {
+              text: title,
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+            }
         }) %}
 
         <p id="helpText">{{ helpText }}</p>
@@ -45,10 +49,10 @@
             text: "Town or city"
           },
           classes: "govuk-!-width-two-thirds",
-          id: "addressTown",
-          name: "addressTown",
+          id: "addressTownOrCity",
+          name: "addressTownOrCity",
           value: town,
-          errorMessage: fieldErrors['addressTown'],
+          errorMessage: fieldErrors['addressTownOrCity'],
           autocomplete: "address-level2"
         }) }}
 
