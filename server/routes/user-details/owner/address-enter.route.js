@@ -25,7 +25,7 @@ const handlers = {
         })
         .code(400)
     } else {
-      return h.view(Views.CHECK_YOUR_ANSWERS)
+      return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
   }
 }
@@ -77,7 +77,7 @@ const _validateForm = payload => {
 
   if (Validators.empty(payload.addressTownOrCity)) {
     errors.push({
-      name: 'addressTown',
+      name: 'addressTownOrCity',
       text: 'Enter a town or city'
     })
   }
