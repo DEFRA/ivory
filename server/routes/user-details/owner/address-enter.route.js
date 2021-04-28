@@ -5,8 +5,6 @@ const RedisService = require('../../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
 const { title } = require('case')
 
-const notOnList = false // Temporary to be used until hooked up properly
-
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.ADDRESS_ENTER, {
@@ -36,7 +34,7 @@ const _getContext = async request => {
   )
   const resultSize = (addresses.length)
 
-  if (notOnList === true) {
+  if (resultSize > 1 && resultSize <= 50) {
     return {
       title: 'Enter your address',
       helpText: 'If your business owns the item, give your business address.'
