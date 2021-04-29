@@ -42,8 +42,7 @@ const handlers = {
 const _getContext = () => {
   return {
     title:
-      'Has any replacement ivory been added to the item since it was made?',
-    hintText: 'This could have been to repair or restore damaged ivory.'
+      'Has any ivory been added to the item since 1 January 1975 to repair or restore it?'
   }
 }
 
@@ -53,7 +52,7 @@ const _validateForm = payload => {
     errors.push({
       name: 'yesNoIdk',
       text:
-        'You must tell us if any ivory has been added to the item since it was made'
+        'You must tell us if any ivory has been added to the item since 1 January 1975'
     })
   }
   return errors
