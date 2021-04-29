@@ -26,6 +26,16 @@ const empty = value => {
 }
 
 /**
+ * Performs validation, checks whether or not the incoming value exceeds the maximum allowed length.
+ * @param {*} value The value to be validated.
+ * @param {*} characterLimit The maximum allowed number of characters.
+ * @returns True if the value is too long, otherwise false.
+ */
+const maxLength = (value, characterLimit) => {
+  return value && value.toString().trim().length > characterLimit
+}
+
+/**
  * Performs validation, checks whether or not the incoming value is a valid UK postcode.
  * @param {*} value The value to be validated.
  * @returns True if the value is a postcode, otherwise false.
@@ -37,6 +47,7 @@ const postcode = value => {
 const Validators = {
   email,
   empty,
+  maxLength,
   postcode
 }
 

@@ -32,6 +32,7 @@
               },
               id: "nameOrNumber",
               name: "nameOrNumber",
+              value: nameOrNumber,
               autocomplete: "address-line1"
           }) }}
 
@@ -42,6 +43,7 @@
               classes: "govuk-input--width-10",
               id: "postcode",
               name: "postcode",
+              value: postcode,
               errorMessage: fieldErrors['postcode'],
               autocomplete: "postal-code"
           }) }}
@@ -52,7 +54,7 @@
               attributes: {
                 id: "findAddress"
               },
-              text:  "Find address"
+              text: "Find address"
           }) }}
 
         <p class="govuk-body"><a id="outsideUkLink" href="address-international">The address is outside the UK</a></p>

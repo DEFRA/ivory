@@ -9,6 +9,7 @@ const handlers = {
       ...(await _getContext(request))
     })
   },
+
   post: async (request, h) => {
     const context = await _getContext(request)
 

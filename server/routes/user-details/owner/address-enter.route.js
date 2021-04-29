@@ -1,16 +1,19 @@
 'use strict'
 
+const { title } = require('case')
+
 const { Paths, RedisKeys, Views } = require('../../../utils/constants')
 const RedisService = require('../../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
-const { title } = require('case')
+const { addPayloadToContext } = require('../../../utils/general')
 
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.ADDRESS_ENTER, {
-      ...(await _getContext(request))
+      ...(await _getContext(request, true))
     })
   },
+
   post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
@@ -18,49 +21,49 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.ADDRESS_ENTER, {
-          ..._getContext(),
+          ...(await _getContext(request, false)),
           ...buildErrorSummary(errors)
         })
         .code(400)
-    } else {
-      return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
+
+    _updateAddressFieldCasing(payload)
+    const address = _concatenateAddressFields(payload)
+
+    RedisService.set(request, RedisKeys.OWNER_ADDRESS, address)
+
+    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
   }
 }
 
-const _getContext = async request => {
+const _getContext = async (request, isGet) => {
+  const context = {}
+
   const addresses = JSON.parse(
     await RedisService.get(request, RedisKeys.ADDRESS_FIND)
   )
-  const resultSize = (addresses.length)
+
+  const resultSize = addresses.length
 
   if (resultSize > 1 && resultSize <= 50) {
-    return {
-      title: 'Enter your address',
-      helpText: 'If your business owns the item, give your business address.'
-    }
+    context.title = 'Enter your address'
   } else if (resultSize === 0) {
-    return {
-      title: 'No results, you will need to enter the address',
-      helpText: 'If your business owns the item, give your business address.'
-    }
+    context.title = 'No results, you will need to enter the address'
   } else if (resultSize === 1) {
-    return {
-      title: 'Edit your address',
-      helpText: 'If your business owns the item, give your business address.',
-      buildingStreet: addresses[0].Address.SubBuildingName
-        ? title(addresses[0].Address.SubBuildingName)
-        : `${title(addresses[0].Address.BuildingNumber)} ${title(addresses[0].Address.Street)}`,
-      locality: title(addresses[0].Address.Locality),
-      town: title(addresses[0].Address.Town),
-      postcode: addresses[0].Address.Postcode
+    context.title = 'Edit your address'
+    if (isGet) {
+      Object.assign(context, _getAddressFieldsFromAddress(addresses[0].Address))
     }
   } else if (resultSize > 50) {
-    return {
-      title: 'Too many results, you will need to enter the address',
-      helpText: 'If your business owns the item, give your business address.'
-    }
+    context.title = 'Too many results, you will need to enter the address'
   }
+
+  context.helpText =
+    'If your business owns the item, give your business address.'
+
+  addPayloadToContext(request, context)
+
+  return context
 }
 
 const _validateForm = payload => {
@@ -73,9 +76,9 @@ const _validateForm = payload => {
     })
   }
 
-  if (Validators.empty(payload.addressTownOrCity)) {
+  if (Validators.empty(payload.townOrCity)) {
     errors.push({
-      name: 'addressTownOrCity',
+      name: 'townOrCity',
       text: 'Enter a town or city'
     })
   }
@@ -95,6 +98,29 @@ const _validateForm = payload => {
   }
 
   return errors
+}
+
+const _getAddressFieldsFromAddress = address => {
+  return {
+    addressLine1: address.SubBuildingName
+      ? title(address.SubBuildingName)
+      : `${title(address.BuildingNumber)} ${title(address.Street)}`,
+    addressLine2: title(address.Locality),
+    townOrCity: title(address.Town),
+    postcode: address.Postcode
+  }
+}
+const _updateAddressFieldCasing = payload => {
+  for (const key in payload) {
+    payload[key] =
+      key === 'postcode' ? payload[key].toUpperCase() : title(payload[key])
+  }
+}
+
+const _concatenateAddressFields = payload => {
+  return Object.keys(payload)
+    .map(key => payload[key])
+    .join(', ')
 }
 
 module.exports = [

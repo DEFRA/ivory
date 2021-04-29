@@ -20,7 +20,7 @@ describe('/address-enter route', () => {
     helpText: 'helpText',
     addressLine1: 'addressLine1',
     addressLine2: 'addressLine2',
-    addressTownOrCity: 'addressTownOrCity',
+    townOrCity: 'townOrCity',
     postcode: 'postcode',
     continue: 'continue'
   }
@@ -69,7 +69,9 @@ describe('/address-enter route', () => {
     })
 
     it('should have the correct page title for 1 address returned', () => {
-      const element = document.querySelector(`#${elementIds.pageHeading} > legend > h1`)
+      const element = document.querySelector(
+        `#${elementIds.pageHeading} > legend > h1`
+      )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Edit your address')
     })
@@ -77,12 +79,16 @@ describe('/address-enter route', () => {
     it('should have the correct help text for 1 address returned', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('If your business owns the item, give your business address.')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'If your business owns the item, give your business address.'
+      )
     })
-    // Not sure how to get this to work
+
+    // TODO Not sure how to get this to work
     it.skip('addressLine1 should be pre-populated with test data', () => {
       const element = document.querySelector(`#${elementIds.addressLine1}`)
       expect(element).toBeTruthy()
+      console.log(element)
       expect(TestHelper.getTextContent(element)).toEqual('Buckingham Palace')
     })
 
@@ -112,7 +118,7 @@ describe('/address-enter route', () => {
       it('should redirect to the correct page', async () => {
         postOptions.payload = {
           addressLine1: 'A Big House',
-          addressTownOrCity: 'London',
+          townOrCity: 'London',
           postcode: 'SW1A 1AA'
         }
         const response = await TestHelper.submitPostRequest(server, postOptions)
@@ -125,7 +131,7 @@ describe('/address-enter route', () => {
       it('should display a validation error message if the user does not enter address line 1', async () => {
         postOptions.payload = {
           addressLine1: '',
-          addressTownOrCity: 'London',
+          townOrCity: 'London',
           postcode: 'SW1A 1AA'
         }
         await TestHelper.checkFormFieldValidation(
@@ -139,13 +145,13 @@ describe('/address-enter route', () => {
       it('should display a validation error message if the user does not enter a town or city', async () => {
         postOptions.payload = {
           addressLine1: 'The Big House',
-          addressTownOrCity: '',
+          townOrCity: '',
           postcode: 'SW1A 1AA'
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
           server,
-          elementIds.addressTownOrCity,
+          elementIds.townOrCity,
           'Enter a town or city'
         )
       })
@@ -153,7 +159,7 @@ describe('/address-enter route', () => {
       it('should display a validation error message if the user does not enter the postcode', async () => {
         postOptions.payload = {
           addressLine1: '1 The Big House',
-          addressTownOrCity: 'London',
+          townOrCity: 'London',
           postcode: ''
         }
         await TestHelper.checkFormFieldValidation(
@@ -167,7 +173,7 @@ describe('/address-enter route', () => {
       it('should display a validation error message if the user enters a postcode in an invalid format', async () => {
         postOptions.payload = {
           addressLine1: '1 The Big House',
-          addressTownOrCity: 'London',
+          townOrCity: 'London',
           postcode: 'INVALID_FORMAT'
         }
         await TestHelper.checkFormFieldValidation(

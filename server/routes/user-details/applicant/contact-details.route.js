@@ -3,6 +3,7 @@
 const RedisService = require('../../../services/redis.service')
 const { Paths, RedisKeys, Views } = require('../../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
+const { addPayloadToContext } = require('../../../utils/general')
 
 const title = 'Your contact details'
 
@@ -38,11 +39,8 @@ const handlers = {
 const _getContext = request => {
   const context = { title, applicant: true }
 
-  if (request && request.payload) {
-    context.name = request.payload.name
-    context.emailAddress = request.payload.emailAddress
-    context.confirmEmailAddress = request.payload.confirmEmailAddress
-  }
+  addPayloadToContext(request, context)
+
   return context
 }
 

@@ -4,13 +4,14 @@ const { Paths, RedisKeys, Views } = require('../../../utils/constants')
 const AddressService = require('../../../services/address.service')
 const RedisService = require('../../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
+const { addPayloadToContext } = require('../../../utils/general')
 
 const completedBy = 'owner' // Temporary until previous page built then will use value saved in Redis. Use 'owner' or '3rdParty'
 
 const handlers = {
   get: (request, h) => {
     return h.view(Views.ADDRESS_FIND, {
-      ..._getContext()
+      ..._getContext(request)
     })
   },
   post: async (request, h) => {
@@ -20,7 +21,7 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.ADDRESS_FIND, {
-          ..._getContext(),
+          ..._getContext(request),
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -52,20 +53,26 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
+const _getContext = request => {
+  let context
+
   if (completedBy === 'owner') {
-    return {
+    context = {
       title: 'What is your address?',
       helpText:
         'If your business is the legal owner of the item, give your business address.'
     }
   } else {
-    return {
+    context = {
       title: 'What is the owner’s address?',
       helpText:
         'If the legal owner of the item is a business, give the business address.'
     }
   }
+
+  addPayloadToContext(request, context)
+
+  return context
 }
 
 const _validateForm = payload => {

@@ -1,9 +1,11 @@
 'use strict'
 
-const config = require('../utils/config')
+const https = require('https')
 const fetch = require('node-fetch')
 const { readFileSync } = require('fs')
-const https = require('https')
+const { title } = require('case')
+
+const config = require('../utils/config')
 
 const PAGE_SIZE = 100
 const POSTCODE_SEARCH_ENDPOINT = '/ws/rest/DEFRA/v1/address/postcodes'
@@ -47,6 +49,8 @@ module.exports = class AddressService {
       }
     }
 
+    _convertResultsToTitleCase(searchResults)
+
     return searchResults
   }
 
@@ -72,4 +76,22 @@ module.exports = class AddressService {
 
     return response.json()
   }
+}
+
+const _convertResultsToTitleCase = searchResults => {
+  for (const result of searchResults) {
+    result.Address.AddressLine = title(result.Address.AddressLine)
+
+    _convertPostcodeToUpperCase(result.Address)
+  }
+}
+
+const _convertPostcodeToUpperCase = address => {
+  const postcode = address.Postcode
+  address.AddressLine = address.AddressLine.substring(
+    0,
+    address.AddressLine.length - postcode.length
+  )
+
+  address.AddressLine += postcode
 }
