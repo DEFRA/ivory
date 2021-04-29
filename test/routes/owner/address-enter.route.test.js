@@ -84,12 +84,26 @@ describe('/address-enter route', () => {
       )
     })
 
-    // TODO Not sure how to get this to work
-    it.skip('addressLine1 should be pre-populated with test data', () => {
-      const element = document.querySelector(`#${elementIds.addressLine1}`)
+    it('"Building and street" fields should be pre-populated with test data', () => {
+      let element = document.querySelector(`#${elementIds.addressLine1}`)
       expect(element).toBeTruthy()
-      console.log(element)
-      expect(TestHelper.getTextContent(element)).toEqual('Buckingham Palace')
+      expect(element.value).toEqual('Buckingham Palace')
+
+      element = document.querySelector(`#${elementIds.addressLine2}`)
+      expect(element).toBeTruthy()
+      expect(element.value).toEqual('Westminster')
+    })
+
+    it('"Town or City" should be pre-populated with test data', () => {
+      const element = document.querySelector(`#${elementIds.townOrCity}`)
+      expect(element).toBeTruthy()
+      expect(element.value).toEqual('London')
+    })
+
+    it('"Postcode" should be pre-populated with test data', () => {
+      const element = document.querySelector(`#${elementIds.postcode}`)
+      expect(element).toBeTruthy()
+      expect(element.value).toEqual('SW1A 1AA')
     })
 
     it('should have the correct Call to Action button', () => {

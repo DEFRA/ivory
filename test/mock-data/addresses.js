@@ -1,8 +1,9 @@
 const singleAddress = [
   {
     Address: {
-      AddressLine: 'BUCKINGHAM PALACE, LONDON, SW1A 1AA',
+      AddressLine: 'BUCKINGHAM PALACE, WESTMINSTER, LONDON, SW1A 1AA',
       SubBuildingName: 'BUCKINGHAM PALACE',
+      Locality: 'WESTMINSTER',
       Town: 'LONDON',
       County: 'CITY OF WESTMINSTER',
       Postcode: 'SW1A 1AA',
