@@ -64,15 +64,7 @@ describe('/ivory-added route', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Has any replacement ivory been added to the item since it was made?'
-      )
-    })
-
-    it('should have the correct hint text', () => {
-      const element = document.querySelector(`#${elementIds.yesNoIdkHint}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'This could have been to repair or restore damaged ivory.'
+        'Has any ivory been added to the item since 1 January 1975 to repair or restore it?'
       )
     })
 
@@ -125,7 +117,7 @@ describe('/ivory-added route', () => {
           response,
           'yesNoIdk',
           'yesNoIdk-error',
-          'You must tell us if any ivory has been added to the item since it was made'
+          'You must tell us if any ivory has been added to the item since 1 January 1975'
         )
       })
     })
