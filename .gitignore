@@ -5,3 +5,4 @@ server/public/build
 lcov.info
 .env
 test-output
+*.pfx
