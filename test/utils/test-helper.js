@@ -135,9 +135,21 @@ module.exports = class TestHelper {
     expect(TestHelper.getTextContent(elementLabel)).toEqual(expectedLabel)
   }
 
-  static checkFormField (document, fieldName, expectedLabel, expectedHint) {
+  static checkFormField (
+    document,
+    fieldName,
+    expectedLabel,
+    expectedHint,
+    expectedValue
+  ) {
     let element = document.querySelector(`#${fieldName}`)
     expect(element).toBeTruthy()
+
+    if (expectedValue === '') {
+      expect(TestHelper.getFormFieldValue(element)).toBeNull()
+    } else if (expectedValue) {
+      expect(TestHelper.getFormFieldValue(element)).toEqual(expectedValue)
+    }
 
     element = document.querySelector(`[for="${fieldName}"]`)
     expect(element).toBeTruthy()
@@ -221,5 +233,9 @@ module.exports = class TestHelper {
    */
   static getTextContent (element) {
     return element && element.textContent ? element.textContent.trim() : null
+  }
+
+  static getFormFieldValue (element) {
+    return element && element.value ? element.value.trim() : null
   }
 }

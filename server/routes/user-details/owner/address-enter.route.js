@@ -45,15 +45,15 @@ const _getContext = async (request, isGet) => {
 
   const resultSize = addresses.length
 
-  if (resultSize > 1 && resultSize <= 50) {
-    context.title = 'Enter your address'
-  } else if (resultSize === 0) {
+  if (resultSize === 0) {
     context.title = 'No results, you will need to enter the address'
   } else if (resultSize === 1) {
     context.title = 'Edit your address'
     if (isGet) {
       Object.assign(context, _getAddressFieldsFromAddress(addresses[0].Address))
     }
+  } else if (resultSize > 1 && resultSize <= 50) {
+    context.title = 'Enter your address'
   } else if (resultSize > 50) {
     context.title = 'Too many results, you will need to enter the address'
   }
