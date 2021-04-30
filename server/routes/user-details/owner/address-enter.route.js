@@ -1,11 +1,12 @@
 'use strict'
 
-const { title } = require('case')
-
 const { Paths, RedisKeys, Views } = require('../../../utils/constants')
 const RedisService = require('../../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
-const { addPayloadToContext } = require('../../../utils/general')
+const {
+  addPayloadToContext,
+  convertToTitleCase
+} = require('../../../utils/general')
 
 const handlers = {
   get: async (request, h) => {
@@ -103,17 +104,21 @@ const _validateForm = payload => {
 const _getAddressFieldsFromAddress = address => {
   return {
     addressLine1: address.SubBuildingName
-      ? title(address.SubBuildingName)
-      : `${title(address.BuildingNumber)} ${title(address.Street)}`,
-    addressLine2: title(address.Locality),
-    townOrCity: title(address.Town),
+      ? convertToTitleCase(address.SubBuildingName)
+      : `${convertToTitleCase(address.BuildingNumber)} ${convertToTitleCase(
+          address.Street
+        )}`,
+    addressLine2: convertToTitleCase(address.Locality),
+    townOrCity: convertToTitleCase(address.Town),
     postcode: address.Postcode
   }
 }
 const _updateAddressFieldCasing = payload => {
   for (const key in payload) {
     payload[key] =
-      key === 'postcode' ? payload[key].toUpperCase() : title(payload[key])
+      key === 'postcode'
+        ? payload[key].toUpperCase()
+        : convertToTitleCase(payload[key])
   }
 }
 
