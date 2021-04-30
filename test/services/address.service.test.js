@@ -21,6 +21,9 @@ describe('Address service', () => {
     it('should return muiltiple addresses if no name/number entered', async () => {
       const results = await AddressService.addressSearch('', 'TQ12 5JE')
       expect(results.length).toEqual(multipleAddresses.length)
+      expect(results[0].Address.AddressLine).toEqual(
+        '5, Fluder Crescent, Kingskerswell, Newton Abbot, TQ12 5JE'
+      )
     })
 
     it('should return a single addresses if a name/number is entered', async () => {
