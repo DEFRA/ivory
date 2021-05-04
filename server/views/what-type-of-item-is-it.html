@@ -1,0 +1,78 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      {{ govukRadios({
+        idPrefix: "whatTypeOfItemIsIt",
+        name: "whatTypeOfItemIsIt",
+        fieldset: {
+          legend: {
+            text: "What is your ivory item?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        errorMessage: fieldErrors['whatTypeOfItemIsIt'],
+        items: [
+          {
+            value: "Musical instrument made before 1975 with less than 20% ivory",
+            text: "Musical instrument made before 1975 with less than 20% ivory",
+            hint: {
+              text: "Any replacement ivory must have been harvested before 1 January 1975."
+            }
+          },
+          {
+            value: "Item made before 3 March 1947 with less than 10% ivory",
+            text: "Item made before 3 March 1947 with less than 10% ivory",
+            hint: {
+              text: "The ivory must be integral to the item. Any replacement ivory must have been harvested before 1 January 1975."
+            }
+          },
+          {
+            value: "Portrait miniature made before 1918 with a surface area less than 320 square centimetres",
+            text: "Portrait miniature made before 1918 with a surface area less than 320 square centimetres",
+            hint: {
+              text: "Any replacement ivory must have been harvested before 1 January 1975."
+            }
+          },
+          {
+            value: "Item to be sold or hired out to a qualifying museum",
+            text: "Item to be sold or hired out to a qualifying museum",
+            hint: {
+              text: "This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum."
+            }
+          },
+          {
+            value: "Item made before 1918 that has outstandingly high artistic, cultural or historical value",
+            text: "Item made before 1918 that has outstandingly high artistic, cultural or historical value",
+            hint: {
+              text: "Any replacement ivory must have been harvested before 1 January 1975."
+            }
+          }
+        ]
+      }) }}
+
+      {{ govukDetails({
+        id: "needMoreHelp",
+        summaryText: "I need more help to work this out",
+        html: 'Use our eligibility checker to <a id="eligibilityChecker" href="#" class="govuk-link">check if you can sell or hire out your item</a>.'
+      }) }}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text: "Continue"
+        })
+      }}
+
+    </div>
+  </div>
+{% endblock %}
