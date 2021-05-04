@@ -116,13 +116,31 @@ describe('/address-international route', () => {
     describe('Failure: Owner-applicant', () => {
       it('should display a validation error message if the user does not enter the address', async () => {
         postOptions.payload = {
-          postcode: ''
+          internationalAddress: ''
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
           server,
           elementIds.internationalAddress,
           'Enter the address'
+        )
+      })
+
+      it('should display a validation error message if address is too long', async () => {
+        const fiftyCharacters =
+          'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+        let internationalAddress = 'X'
+        for (let i = 0; i < 4000 / 50; i++) {
+          internationalAddress = internationalAddress += fiftyCharacters
+        }
+        postOptions.payload = {
+          internationalAddress
+        }
+        await TestHelper.checkFormFieldValidation(
+          postOptions,
+          server,
+          elementIds.internationalAddress,
+          'Enter a shorter address with no more than 4000 characters'
         )
       })
     })
