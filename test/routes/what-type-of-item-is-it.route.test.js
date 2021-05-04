@@ -45,7 +45,7 @@ describe('/what-type-of-item-is-it route', () => {
     jest.clearAllMocks()
   })
 
-  describe('GET: Owner applicant', () => {
+  describe('GET', () => {
     const getOptions = {
       method: 'GET',
       url
@@ -181,7 +181,7 @@ describe('/what-type-of-item-is-it route', () => {
         )
       })
 
-      it('should store the value in Redis and progress to the next route when the forth option has been selected', async () => {
+      it('should store the value in Redis and progress to the next route when the fourth option has been selected', async () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
@@ -190,7 +190,7 @@ describe('/what-type-of-item-is-it route', () => {
         )
       })
 
-      it('should store the value in Redis and progress to the next route when the fith option has been selected', async () => {
+      it('should store the value in Redis and progress to the next route when the fifth option has been selected', async () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
@@ -202,7 +202,7 @@ describe('/what-type-of-item-is-it route', () => {
 
     describe('Failure', () => {
       it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.ivoryIsIntegral = ''
+        postOptions.payload.whatTypeOfItemIsIt = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
