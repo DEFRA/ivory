@@ -121,9 +121,10 @@ module.exports = class TestHelper {
     elementName,
     expectedValue,
     expectedLabel,
-    expectedCheckedValue = false
+    expectedCheckedValue = false,
+    expectedHint
   ) {
-    const element = document.querySelector(`#${elementName}`)
+    let element = document.querySelector(`#${elementName}`)
     expect(element).toBeTruthy()
     expect(element.value).toEqual(expectedValue)
     expectedCheckedValue
@@ -133,6 +134,12 @@ module.exports = class TestHelper {
     const elementLabel = document.querySelector(`label[for="${elementName}"]`)
     expect(elementLabel).toBeTruthy()
     expect(TestHelper.getTextContent(elementLabel)).toEqual(expectedLabel)
+
+    if (expectedHint) {
+      element = document.querySelector(`#${elementName}-item-hint`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(expectedHint)
+    }
   }
 
   static checkFormField (

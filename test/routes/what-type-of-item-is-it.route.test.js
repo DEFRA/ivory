@@ -19,11 +19,6 @@ describe('/what-type-of-item-is-it route', () => {
     whatTypeOfItemIsIt3: 'whatTypeOfItemIsIt-3',
     whatTypeOfItemIsIt4: 'whatTypeOfItemIsIt-4',
     whatTypeOfItemIsIt5: 'whatTypeOfItemIsIt-5',
-    whatTypeOfItemIsItHint: 'whatTypeOfItemIsIt-item-hint',
-    whatTypeOfItemIsItHint2: 'whatTypeOfItemIsIt-2-item-hint',
-    whatTypeOfItemIsItHint3: 'whatTypeOfItemIsIt-3-item-hint',
-    whatTypeOfItemIsItHint4: 'whatTypeOfItemIsIt-4-item-hint',
-    whatTypeOfItemIsItHint5: 'whatTypeOfItemIsIt-5-item-hint',
     eligibilityChecker: 'eligibilityChecker',
     needMoreHelp: 'needMoreHelp',
     continue: 'continue'
@@ -79,66 +74,46 @@ describe('/what-type-of-item-is-it route', () => {
         document,
         elementIds.whatTypeOfItemIsIt,
         'Musical instrument made before 1975 with less than 20% ivory',
-        'Musical instrument made before 1975 with less than 20% ivory'
+        'Musical instrument made before 1975 with less than 20% ivory',
+        false,
+        'Any replacement ivory must have been harvested before 1 January 1975.'
       )
 
       TestHelper.checkRadioOption(
         document,
         elementIds.whatTypeOfItemIsIt2,
         'Item made before 3 March 1947 with less than 10% ivory',
-        'Item made before 3 March 1947 with less than 10% ivory'
+        'Item made before 3 March 1947 with less than 10% ivory',
+        false,
+        'The ivory must be integral to the item. Any replacement ivory must have been harvested before 1 January 1975.'
       )
 
       TestHelper.checkRadioOption(
         document,
         elementIds.whatTypeOfItemIsIt3,
         'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
-        'Portrait miniature made before 1918 with a surface area less than 320 square centimetres'
+        'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
+        false,
+        'Any replacement ivory must have been harvested before 1 January 1975.'
       )
 
       TestHelper.checkRadioOption(
         document,
         elementIds.whatTypeOfItemIsIt4,
         'Item to be sold or hired out to a qualifying museum',
-        'Item to be sold or hired out to a qualifying museum'
+        'Item to be sold or hired out to a qualifying museum',
+        false,
+        'This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum.'
       )
 
       TestHelper.checkRadioOption(
         document,
         elementIds.whatTypeOfItemIsIt5,
         'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
-        'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
+        'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
+        false,
+        'Any replacement ivory must have been harvested before 1 January 1975.'
       )
-    })
-
-    it('radio 1 should have the correct hint text', () => {
-      const element = document.querySelector(`#${elementIds.whatTypeOfItemIsItHint}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Any replacement ivory must have been harvested before 1 January 1975.')
-    })
-
-    it('radio 2 should have the correct hint text', () => {
-      const element = document.querySelector(`#${elementIds.whatTypeOfItemIsItHint2}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('The ivory must be integral to the item. Any replacement ivory must have been harvested before 1 January 1975.')
-    })
-
-    it('radio 3 should have the correct hint text', () => {
-      const element = document.querySelector(`#${elementIds.whatTypeOfItemIsItHint3}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Any replacement ivory must have been harvested before 1 January 1975.')
-    })
-
-    it('radio 4 should have the correct hint text', () => {
-      const element = document.querySelector(`#${elementIds.whatTypeOfItemIsItHint4}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum.')
-    })
-
-    it('radio 5 should have the correct hint text', () => {
-      const element = document.querySelector(`#${elementIds.whatTypeOfItemIsItHint5}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Any replacement ivory must have been harvested before 1 January 1975.')
     })
 
     it('should have the correct summary text title', () => {
