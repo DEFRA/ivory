@@ -11,6 +11,17 @@ const config = require('../utils/config')
 const PAGE_SIZE = 100
 const POSTCODE_SEARCH_ENDPOINT = '/ws/rest/DEFRA/v1/address/postcodes'
 
+/**
+ * Check if the address lookup certificate is a file or a base64 string.
+ * If it's a string convert it back to binary
+*/
+let addressLookupCert = ''
+if (config.addressLookupPfxCert.toUpperCase().endsWith('.PFX')) {
+  addressLookupCert = readFileSync(config.addressLookupPfxCert)
+} else if (config.addressLookupPfxCert) {
+  addressLookupCert = Buffer.from(config.addressLookupPfxCert, 'base64')
+}
+
 module.exports = class AddressService {
   static async addressSearch (nameOrNumber, postcode, pageSize = PAGE_SIZE) {
     let pageNumber = 0
@@ -58,7 +69,7 @@ module.exports = class AddressService {
   static async _queryAddressEndpoint (postcode, pageNumber, pageSize) {
     const authOptions = {
       passphrase: config.addressLookupPassphrase,
-      pfx: readFileSync(config.addressLookupPfxCert),
+      pfx: addressLookupCert,
       keepAlive: false
     }
     const tlsConfiguredAgent = new https.Agent(authOptions)
