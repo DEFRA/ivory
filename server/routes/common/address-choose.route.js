@@ -68,7 +68,7 @@ const handlers = {
   }
 }
 
-const _getContext = async (request, completedBy) => {
+const _getContext = async (request, addressType) => {
   const addresses = JSON.parse(
     await RedisService.get(request, RedisKeys.ADDRESS_FIND)
   )
@@ -82,7 +82,7 @@ const _getContext = async (request, completedBy) => {
 
   return {
     pageHeading:
-      completedBy === AddressType.OWNER
+      addressType === AddressType.OWNER
         ? 'Choose your address'
         : "Choose the owner's address",
     addresses: items

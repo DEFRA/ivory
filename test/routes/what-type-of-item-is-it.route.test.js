@@ -63,10 +63,12 @@ describe('/what-type-of-item-is-it route', () => {
       TestHelper.checkBackLink(document)
     })
 
-    it('should have the correct page title', () => {
+    it('should have the correct page heading', () => {
       const element = document.querySelector('.govuk-fieldset__heading')
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('What is your ivory item?')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'What is your ivory item?'
+      )
     })
 
     it('should have the correct radio buttons', () => {
@@ -119,19 +121,27 @@ describe('/what-type-of-item-is-it route', () => {
     it('should have the correct summary text title', () => {
       const element = document.querySelector('.govuk-details__summary-text')
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('I need more help to work this out')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'I need more help to work this out'
+      )
     })
 
     it('should have the correct summary text details', () => {
       const element = document.querySelector('.govuk-details__text')
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Use our eligibility checker to check if you can sell or hire out your item.')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'Use our eligibility checker to check if you can sell or hire out your item.'
+      )
     })
 
     it('should have the correct summary text link', () => {
-      const element = document.querySelector(`#${elementIds.eligibilityChecker}`)
+      const element = document.querySelector(
+        `#${elementIds.eligibilityChecker}`
+      )
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('check if you can sell or hire out your item')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'check if you can sell or hire out your item'
+      )
       expect(element.href).toEqual('about:blank#')
     })
 

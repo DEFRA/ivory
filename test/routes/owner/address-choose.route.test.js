@@ -16,7 +16,7 @@ const {
   multipleAddresses
 } = require('../../mock-data/addresses')
 
-describe('/address-choose route', () => {
+describe('/user-details/owner/address-choose route', () => {
   let server
   const url = '/user-details/owner/address-choose'
   const nextUrl = '/check-your-answers'
@@ -73,7 +73,7 @@ describe('/address-choose route', () => {
       TestHelper.checkBackLink(document)
     })
 
-    it('should have the correct page title', () => {
+    it('should have the correct page heading', () => {
       const element = document.querySelector('.govuk-fieldset__heading')
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Choose your address')
@@ -127,7 +127,7 @@ describe('/address-choose route', () => {
       }
     })
 
-    describe('Success: Owner-applicant', () => {
+    describe('Success: Owned by applicant', () => {
       const redisKey = 'owner-address'
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
@@ -154,7 +154,7 @@ describe('/address-choose route', () => {
       })
     })
 
-    describe('Failure: Owner-applicant', () => {
+    describe('Failure: Owned by applicant', () => {
       it('should display a validation error message if the user does not select an address', async () => {
         postOptions.payload = {
           address: ''

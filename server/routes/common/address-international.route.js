@@ -21,11 +21,11 @@ const getAddressType = request =>
     : AddressType.APPLICANT
 
 const handlers = {
-  get: (request, h) => {
+  get: async (request, h) => {
     const addressType = getAddressType(request)
 
     return h.view(Views.ADDRESS_INTERNATIONAL, {
-      ..._getContext(request, addressType)
+      ...(await _getContext(request, addressType))
     })
   },
 
@@ -37,7 +37,7 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.ADDRESS_INTERNATIONAL, {
-          ..._getContext(request, addressType),
+          ...(await _getContext(request, addressType)),
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -81,24 +81,47 @@ const handlers = {
   }
 }
 
-const _getContext = (request, completedBy) => {
+const _getContext = async (request, addressType) => {
   let context
 
-  if (completedBy === AddressType.OWNER) {
-    context = {
-      title: 'Enter your address',
-      hintText: 'If your business owns the item, give your business address.'
-    }
+  const ownedByApplicant = await RedisService.get(
+    request,
+    RedisKeys.OWNED_BY_APPLICANT
+  )
+
+  if (addressType === AddressType.OWNER) {
+    context = _getContextForOwnerAddressType(ownedByApplicant)
   } else {
-    context = {
-      title: 'Enter the owner’s address',
-      hintText: 'If the owner is a business, give the business address.'
-    }
+    context = _getContextForApplicantAddressType()
   }
 
   addPayloadToContext(request, context)
 
   return context
+}
+
+const _getContextForOwnerAddressType = ownedByApplicant => {
+  let context
+  if (ownedByApplicant === Options.YES) {
+    context = {
+      pageHeading: 'Enter your address',
+      hintText: 'If your business owns the item, give your business address.'
+    }
+  } else {
+    context = {
+      pageHeading: "Enter the owner's address",
+      hintText: 'If the owner is a business, give the business address.'
+    }
+  }
+  return context
+}
+
+const _getContextForApplicantAddressType = () => {
+  return {
+    pageHeading: 'Enter your address',
+    hintText:
+      'If your business is helping someone else sell their item, give your business address.'
+  }
 }
 
 const _validateForm = payload => {

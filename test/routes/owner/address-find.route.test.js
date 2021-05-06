@@ -16,7 +16,7 @@ const {
   multipleAddresses
 } = require('../../mock-data/addresses')
 
-describe('/address-find route', () => {
+describe('/user-details/owner/address-find route', () => {
   let server
   const url = '/user-details/owner/address-find'
   const nextUrlEnterAddress = '/user-details/owner/address-enter'
@@ -71,7 +71,7 @@ describe('/address-find route', () => {
       TestHelper.checkBackLink(document)
     })
 
-    it('should have the correct page title', () => {
+    it('should have the correct page heading', () => {
       const element = document.querySelector(
         `#${elementIds.pageHeading} > legend > h1`
       )
@@ -129,7 +129,7 @@ describe('/address-find route', () => {
       }
     })
 
-    describe('Success: Owner-applicant', () => {
+    describe('Success: Owned by applicant', () => {
       const redisKey = 'address-find'
 
       it('should store the address array in Redis and progress to the next route when a single address is returned by the search', async () => {
@@ -225,7 +225,7 @@ describe('/address-find route', () => {
       })
     })
 
-    describe('Failure: Owner-applicant', () => {
+    describe('Failure: Owned by applicant', () => {
       it('should display a validation error message if the user does not enter the postcode', async () => {
         postOptions.payload = {
           postcode: ''

@@ -23,7 +23,7 @@ const elementIds = {
   continue: 'continue'
 }
 
-describe('/address-enter route', () => {
+describe('/user-details/owner/address-enter route', () => {
   let server
   const url = '/user-details/owner/address-enter'
   const nextUrl = '/check-your-answers'
@@ -94,7 +94,7 @@ describe('/address-enter route', () => {
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
-      it('should have the correct page title for 1 address returned', () => {
+      it('should have the correct page heading for 1 address returned', () => {
         const element = document.querySelector(
           `#${elementIds.pageHeading} > legend > h1`
         )
@@ -123,7 +123,7 @@ describe('/address-enter route', () => {
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
-      it('should have the correct page title for 1 address returned', () => {
+      it('should have the correct page heading for 1 address returned', () => {
         const element = document.querySelector(
           `#${elementIds.pageHeading} > legend > h1`
         )
@@ -150,7 +150,7 @@ describe('/address-enter route', () => {
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
-      it('should have the correct page title for 1 address returned', () => {
+      it('should have the correct page heading for 1 address returned', () => {
         const element = document.querySelector(
           `#${elementIds.pageHeading} > legend > h1`
         )
@@ -180,7 +180,7 @@ describe('/address-enter route', () => {
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
-      it('should have the correct page title for 1 address returned', () => {
+      it('should have the correct page heading for 1 address returned', () => {
         const element = document.querySelector(
           `#${elementIds.pageHeading} > legend > h1`
         )

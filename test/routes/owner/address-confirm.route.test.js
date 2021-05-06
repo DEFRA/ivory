@@ -13,7 +13,7 @@ const AddressService = require('../../../server/services/address.service')
 
 const { singleAddress } = require('../../mock-data/addresses')
 
-describe('/address-confirm route', () => {
+describe('/user-details/owner/address-confirm route', () => {
   let server
   const url = '/user-details/owner/address-confirm'
   const nextUrl = '/check-your-answers'
@@ -68,7 +68,7 @@ describe('/address-confirm route', () => {
       TestHelper.checkBackLink(document)
     })
 
-    it('should have the correct page title', () => {
+    it('should have the correct page heading', () => {
       const element = document.querySelector(`#${elementIds.pageHeading}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Confirm your address')
@@ -109,7 +109,7 @@ describe('/address-confirm route', () => {
       }
     })
 
-    describe('Success: Owner-applicant', () => {
+    describe('Success: Owned by applicant', () => {
       const redisKey = 'owner-address'
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {

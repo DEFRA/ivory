@@ -99,13 +99,13 @@ const _getContextForOwnerAddressType = ownedByApplicant => {
   let context
   if (ownedByApplicant === Options.YES) {
     context = {
-      title: 'What is your address?',
+      pageHeading: 'What is your address?',
       helpText:
         'If your business is the legal owner of the item, give your business address.'
     }
   } else {
     context = {
-      title: 'What is the owner’s address?',
+      pageHeading: 'What is the owner’s address?',
       helpText:
         'If the legal owner of the item is a business, give the business address.'
     }
@@ -115,20 +115,20 @@ const _getContextForOwnerAddressType = ownedByApplicant => {
 
 const _getContextForApplicantAddressType = () => {
   return {
-    title: 'What is your address?',
+    pageHeading: 'What is your address?',
     helpText:
       'If your business is helping someone else sell their item, give your business address.'
   }
 }
 
-const _validateForm = (payload, completedBy) => {
+const _validateForm = (payload, addressType) => {
   const errors = []
 
   if (Validators.empty(payload.postcode)) {
     errors.push({
       name: 'postcode',
       text:
-        completedBy === AddressType.OWNER
+        addressType === AddressType.OWNER
           ? 'Enter your postcode'
           : 'Enter the owner’s postcode'
     })
