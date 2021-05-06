@@ -10,8 +10,9 @@ const addPayloadToContext = (request, context = {}) => {
   return context
 }
 
-const convertToTitleCase = value => {
+const convertToCommaSeparatedTitleCase = value => {
   if (value) {
+    value = value.replace(/(\r\n|\r|\n)/g, ', ')
     let words = value.split(' ')
     words = words.map(word => {
       word = word.toLowerCase()
@@ -25,5 +26,5 @@ const convertToTitleCase = value => {
 
 module.exports = {
   addPayloadToContext,
-  convertToTitleCase
+  convertToCommaSeparatedTitleCase
 }

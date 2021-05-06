@@ -147,7 +147,7 @@ const _checkSelectedRadioAction = async (
   selectedOption,
   nextUrl
 ) => {
-  const redisKey = 'owner-applicant'
+  const redisKey = 'owned-by-applicant'
   postOptions.payload.whoOwnsItem = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(0)

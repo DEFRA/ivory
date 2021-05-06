@@ -23,11 +23,11 @@ const handlers = {
 
     RedisService.set(
       request,
-      RedisKeys.OWNER_APPLICANT,
+      RedisKeys.OWNED_BY_APPLICANT,
       payload.whoOwnsItem === 'I own it' ? Options.YES : Options.NO
     )
 
-    return h.redirect(Paths.OWNER_DETAILS)
+    return h.redirect(Paths.OWNER_CONTACT_DETAILS)
   }
 }
 
