@@ -28,6 +28,7 @@ const Paths = {
   OWNER_ADDRESS_INTERNATIONAL: '/user-details/owner/address-international',
   OWNER_CONTACT_DETAILS: '/user-details/owner/contact-details',
   TAKEN_FROM_ELEPHANT: '/taken-from-elephant',
+  WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',
   WHO_OWNS_ITEM: '/who-owns-the-item'
 }
 
@@ -43,6 +44,7 @@ const Views = {
   IVORY_ADDED: 'ivory-added',
   IVORY_INTEGRAL: 'ivory-integral',
   TAKEN_FROM_ELEPHANT: 'taken-from-elephant',
+  WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHO_OWNS_ITEM: 'who-owns-the-item',
   YES_NO_IDK: 'yes-no-idk'
 }
@@ -57,7 +59,8 @@ const RedisKeys = {
   OWNED_BY_APPLICANT: 'owned-by-applicant',
   OWNER_ADDRESS: 'owner.address',
   OWNER_EMAIL_ADDRESS: 'owner.emailAddress',
-  OWNER_NAME: 'owner.name'
+  OWNER_NAME: 'owner.name',
+  WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it'
 }
 
 module.exports = Object.freeze({

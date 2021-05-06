@@ -58,7 +58,7 @@ module.exports = class AddressService {
   static async _queryAddressEndpoint (postcode, pageNumber, pageSize) {
     const authOptions = {
       passphrase: config.addressLookupPassphrase,
-      pfx: readFileSync(config.addressLookupPfxCert),
+      pfx: _getCertificate(),
       keepAlive: false
     }
     const tlsConfiguredAgent = new https.Agent(authOptions)
@@ -97,4 +97,17 @@ const _convertPostcodeToUpperCase = address => {
   )
 
   address.AddressLine += postcode
+}
+
+/**
+ * Check if the address lookup certificate is a file or a base64 string.
+ * If it's a string convert it back to binary
+ * @returns address lookup certificate as binary
+*/
+const _getCertificate = () => {
+  if (config.addressLookupPfxCert) {
+    return config.addressLookupPfxCert.toUpperCase().endsWith('.PFX')
+      ? readFileSync(config.addressLookupPfxCert)
+      : Buffer.from(config.addressLookupPfxCert, 'base64')
+  }
 }

@@ -30,6 +30,7 @@ const handlers = {
 
 const _getContext = async request => {
   return {
+    whatTypeOfItemIsIt: await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT),
     ivoryIntegral: await RedisService.get(request, RedisKeys.IVORY_INTEGRAL),
     ivoryAdded: await RedisService.get(request, RedisKeys.IVORY_ADDED),
 

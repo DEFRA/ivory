@@ -6,17 +6,21 @@ Digital service to support the Ivory Act.
 
 The default values will be used if the environment variables are missing or commented out.
 
-| name                       | description              | required | default   |            valid            | notes |
-| -------------------------- | ------------------------ | :------: | --------- | :-------------------------: | ----- |
-| NODE_ENV                   | Node environment         |    no    |           | development,test,production |       |
-| PORT                       | Port number              |    no    | 3000      |                             |       |
-| SERVICE_NAME               | Name of the service      |    no    |           |       Any text string       |       |
-| COOKIE_VALIDATION_PASSWORD | Cookie encoding password |   yes    |           |       Any text string       |       |
-| REDIS_HOST                 | Redis server IP address  |    no    | 127.0.0.1 |                             |       |
-| REDIS_PORT                 | Redis port number        |    no    | 6379      |                             |       |
-| SERVICE_API_ENABLED        | Enable/disable ivory API |   yes    | false     |         true,false          |       |
-| SERVICE_API_HOST           | Ivory API IP address     |    no    | 127.0.0.1 |                             |       |
-| SERVICE_API_PORT           | Ivory API port number    |    no    | 3010      |                             |       |
+| name                       | description                | required | default         |            valid                   | notes |
+| -------------------------- | -------------------------- | :------: | --------------- | :--------------------------------: | ----- |
+| NODE_ENV                   | Node environment           |    no    |                 |    development,test,production     |       |
+| PORT                       | Port number                |    no    | 3000            |                                    |       |
+| SERVICE_NAME               | Name of the service        |    no    |                 |          Any text string           |       |
+| COOKIE_VALIDATION_PASSWORD | Cookie encoding password   |   yes    |                 |          Any text string           |       |
+| REDIS_HOST                 | Redis server IP address    |    no    | 127.0.0.1       |                                    |       |
+| REDIS_PORT                 | Redis port number          |    no    | 6379            |                                    |       |
+| SERVICE_API_ENABLED        | Enable/disable ivory API   |    no    | false           |            true,false              |       |
+| SERVICE_API_HOST           | Ivory API IP address       |    no    | 127.0.0.1       |                                    |       |
+| SERVICE_API_PORT           | Ivory API port number      |    no    | 3010            |                                    |       |
+| ADDRESS_LOOKUP_ENABLED     | Enable/disable address API |    no    | false           |             true,false             |       |
+| ADDRESS_LOOKUP_URL         | Address lookup URL         |    no    | http://some-url |                                    |       |
+| ADDRESS_LOOKUP_PASSPHRASE  | Address lookup passphrase  |    no    |                 |                                    |       |
+| ADDRESS_LOOKUP_PFX_CERT    | Address lookup certificate |    no    |                 | PFX file location or Base64 string |       |
 
 # Prerequisites
 
@@ -37,6 +41,10 @@ If installing on a Windows machine you may encounter an error when running `$ np
 Now the application is ready to run:
 
 `$ npm start` or `$ node index.js`
+
+### Converting the Address Lookup PFX certificate to a Base64 string
+
+In some instances you may not be able to use a PFX certificate file with your environment. In these cases it is possible to use the script at `/bin/scripts/convertCert.js` to convert your PFX certificate into a Base64 string that can be added to the Environment Variable `ADDRESS_LOOKUP_PFX_CERT` instead of the location of the certificate itself.
 
 ### To run the application in Docker
 
