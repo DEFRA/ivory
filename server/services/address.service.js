@@ -98,7 +98,11 @@ const _convertPostcodeToUpperCase = address => {
 }
 
 const _getCertificate = () => {
-  // Check if the address lookup certificate is a file or a base64 string. If a string convert it back to binary
+  /**
+   * Check if the address lookup certificate is a file or a base64 string.
+   * If it's a string convert it back to binary
+   * @returns address lookup certificate as binary
+  */
   if (config.addressLookupPfxCert) {
     return config.addressLookupPfxCert.toUpperCase().endsWith('.PFX')
       ? readFileSync(config.addressLookupPfxCert)
