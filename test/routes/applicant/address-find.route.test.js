@@ -16,12 +16,12 @@ const {
   multipleAddresses
 } = require('../../mock-data/addresses')
 
-describe('/user-details/owner/address-find route', () => {
+describe('/user-details/applicant/address-find route', () => {
   let server
-  const url = '/user-details/owner/address-find'
-  const nextUrlEnterAddress = '/user-details/owner/address-enter'
-  const nextUrlSingleAddress = '/user-details/owner/address-confirm'
-  const nextUrlMultipleAddresses = '/user-details/owner/address-choose'
+  const url = '/user-details/applicant/address-find'
+  const nextUrlEnterAddress = '/user-details/applicant/address-enter'
+  const nextUrlSingleAddress = '/user-details/applicant/address-confirm'
+  const nextUrlMultipleAddresses = '/user-details/applicant/address-choose'
 
   const elementIds = {
     pageHeading: 'pageHeading',
@@ -53,7 +53,7 @@ describe('/user-details/owner/address-find route', () => {
     jest.clearAllMocks()
   })
 
-  describe('GET: Owned by applicant', () => {
+  describe('GET', () => {
     const getOptions = {
       method: 'GET',
       url
@@ -87,74 +87,7 @@ describe('/user-details/owner/address-find route', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'If your business is the legal owner of the item, give your business address.'
-      )
-    })
-
-    it('should have the "Name or Number" form field', () => {
-      TestHelper.checkFormField(
-        document,
-        elementIds.nameOrNumber,
-        'Property name or number',
-        'For example, The Mill, Flat A or 37b'
-      )
-    })
-
-    it('should have the "Postcode" form field', () => {
-      TestHelper.checkFormField(document, elementIds.postcode, 'Postcode')
-    })
-
-    it('should have the correct Call to Action button', () => {
-      const element = document.querySelector(`#${elementIds.findAddress}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Find address')
-    })
-
-    it('should have the correct "Outside UK" link', () => {
-      const element = document.querySelector(`#${elementIds.outsideUkLink}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'The address is outside the UK'
-      )
-      expect(element.href).toEqual('address-international')
-    })
-  })
-
-  describe('GET: Not owned by applicant', () => {
-    const getOptions = {
-      method: 'GET',
-      url
-    }
-
-    beforeEach(async () => {
-      RedisService.get = jest.fn().mockReturnValue('no')
-
-      document = await TestHelper.submitGetRequest(server, getOptions)
-    })
-
-    it('should have the Beta banner', () => {
-      TestHelper.checkBetaBanner(document)
-    })
-
-    it('should have the Back link', () => {
-      TestHelper.checkBackLink(document)
-    })
-
-    it('should have the correct page heading', () => {
-      const element = document.querySelector(
-        `#${elementIds.pageHeading} > legend > h1`
-      )
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'What is the owner’s address?'
-      )
-    })
-
-    it('should have the correct help text', () => {
-      const element = document.querySelector(`#${elementIds.helpText}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'If the legal owner of the item is a business, give the business address.'
+        'If your business is helping someone else sell their item, give your business address.'
       )
     })
 
@@ -298,7 +231,7 @@ describe('/user-details/owner/address-find route', () => {
       })
     })
 
-    describe('Success: Not owned by applicant', () => {
+    describe('Success', () => {
       const redisKey = 'address-find'
 
       beforeEach(() => {
@@ -398,7 +331,7 @@ describe('/user-details/owner/address-find route', () => {
       })
     })
 
-    describe('Failure: Owned by applicant', () => {
+    describe('Failure', () => {
       it('should display a validation error message if the user does not enter the postcode', async () => {
         postOptions.payload = {
           postcode: ''
@@ -407,7 +340,7 @@ describe('/user-details/owner/address-find route', () => {
           postOptions,
           server,
           elementIds.postcode,
-          'Enter your postcode'
+          "Enter the owner's postcode"
         )
       })
 

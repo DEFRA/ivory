@@ -130,7 +130,7 @@ const _validateForm = (payload, addressType) => {
       text:
         addressType === AddressType.OWNER
           ? 'Enter your postcode'
-          : 'Enter the owner’s postcode'
+          : "Enter the owner's postcode"
     })
   }
 

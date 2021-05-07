@@ -19,7 +19,9 @@ const {
 describe('/user-details/owner/address-choose route', () => {
   let server
   const url = '/user-details/owner/address-choose'
-  const nextUrl = '/check-your-answers'
+  const nextUrlCheckYourAnswers = '/check-your-answers'
+  const nextUrlApplicantContactDetails =
+    '/user-details/applicant/contact-details'
 
   const elementIds = {
     pageHeading: 'pageHeading',
@@ -51,72 +53,145 @@ describe('/user-details/owner/address-choose route', () => {
     jest.clearAllMocks()
   })
 
-  describe('GET: Owner applicant', () => {
+  describe('GET', () => {
     const getOptions = {
       method: 'GET',
       url
     }
+    describe('GET: Owned by applicant', () => {
+      beforeEach(async () => {
+        RedisService.get = jest
+          .fn()
+          .mockReturnValueOnce('yes')
+          .mockReturnValueOnce(JSON.stringify(multipleAddresses))
 
-    beforeEach(async () => {
-      RedisService.get = jest
-        .fn()
-        .mockReturnValue(JSON.stringify(multipleAddresses))
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
 
-      document = await TestHelper.submitGetRequest(server, getOptions)
+      it('should have the Beta banner', () => {
+        TestHelper.checkBetaBanner(document)
+      })
+
+      it('should have the Back link', () => {
+        TestHelper.checkBackLink(document)
+      })
+
+      it('should have the correct page heading', () => {
+        const element = document.querySelector('.govuk-fieldset__heading')
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Choose your address'
+        )
+      })
+
+      it('should have the correct radio buttons', () => {
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.address,
+          multipleAddresses[0].Address.AddressLine,
+          multipleAddresses[0].Address.AddressLine
+        )
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.address2,
+          multipleAddresses[1].Address.AddressLine,
+          multipleAddresses[1].Address.AddressLine
+        )
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.address3,
+          multipleAddresses[2].Address.AddressLine,
+          multipleAddresses[2].Address.AddressLine
+        )
+      })
+
+      it('should have the correct "Address not on the list" link', () => {
+        const element = document.querySelector(
+          `#${elementIds.addressNotOnList}`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'The address is not on the list'
+        )
+        expect(element.href).toEqual('address-enter')
+      })
+
+      it('should have the correct Call to Action button', () => {
+        const element = document.querySelector(`#${elementIds.continue}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      })
     })
 
-    it('should have the Beta banner', () => {
-      TestHelper.checkBetaBanner(document)
-    })
+    describe('GET: Not owned by applicant', () => {
+      beforeEach(async () => {
+        RedisService.get = jest
+          .fn()
+          .mockReturnValueOnce('no')
+          .mockReturnValueOnce(JSON.stringify(multipleAddresses))
 
-    it('should have the Back link', () => {
-      TestHelper.checkBackLink(document)
-    })
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
 
-    it('should have the correct page heading', () => {
-      const element = document.querySelector('.govuk-fieldset__heading')
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Choose your address')
-    })
+      it('should have the Beta banner', () => {
+        TestHelper.checkBetaBanner(document)
+      })
 
-    it('should have the correct radio buttons', () => {
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.address,
-        multipleAddresses[0].Address.AddressLine,
-        multipleAddresses[0].Address.AddressLine
-      )
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.address2,
-        multipleAddresses[1].Address.AddressLine,
-        multipleAddresses[1].Address.AddressLine
-      )
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.address3,
-        multipleAddresses[2].Address.AddressLine,
-        multipleAddresses[2].Address.AddressLine
-      )
-    })
+      it('should have the Back link', () => {
+        TestHelper.checkBackLink(document)
+      })
 
-    it('should have the correct "Address not on the list" link', () => {
-      const element = document.querySelector(`#${elementIds.addressNotOnList}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'The address is not on the list'
-      )
-      expect(element.href).toEqual('address-enter')
-    })
+      it('should have the correct page heading', () => {
+        const element = document.querySelector('.govuk-fieldset__heading')
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          "Choose the owner's address"
+        )
+      })
 
-    it('should have the correct Call to Action button', () => {
-      const element = document.querySelector(`#${elementIds.continue}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      it('should have the correct radio buttons', () => {
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.address,
+          multipleAddresses[0].Address.AddressLine,
+          multipleAddresses[0].Address.AddressLine
+        )
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.address2,
+          multipleAddresses[1].Address.AddressLine,
+          multipleAddresses[1].Address.AddressLine
+        )
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.address3,
+          multipleAddresses[2].Address.AddressLine,
+          multipleAddresses[2].Address.AddressLine
+        )
+      })
+
+      it('should have the correct "Address not on the list" link', () => {
+        const element = document.querySelector(
+          `#${elementIds.addressNotOnList}`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'The address is not on the list'
+        )
+        expect(element.href).toEqual('address-enter')
+      })
+
+      it('should have the correct Call to Action button', () => {
+        const element = document.querySelector(`#${elementIds.continue}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      })
     })
   })
 
   describe('POST', () => {
+    const redisKeyOwnerAddress = 'owner.address'
+    const redisKeyApplicantAddress = 'applicant.address'
     let postOptions
 
     beforeEach(() => {
@@ -128,7 +203,47 @@ describe('/user-details/owner/address-choose route', () => {
     })
 
     describe('Success: Owned by applicant', () => {
-      const redisKey = 'owner-address'
+      beforeEach(() => {
+        RedisService.get = jest.fn().mockReturnValue('yes')
+      })
+
+      it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
+        AddressService.addressSearch = jest.fn().mockReturnValue(singleAddress)
+        postOptions.payload = {
+          address: singleAddress[0].Address.AddressLine
+        }
+
+        expect(RedisService.set).toBeCalledTimes(0)
+
+        const response = await TestHelper.submitPostRequest(
+          server,
+          postOptions,
+          302
+        )
+
+        expect(RedisService.set).toBeCalledTimes(2)
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeyOwnerAddress,
+          singleAddress[0].Address.AddressLine
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeyApplicantAddress,
+          singleAddress[0].Address.AddressLine
+        )
+
+        expect(response.headers.location).toEqual(nextUrlCheckYourAnswers)
+      })
+    })
+
+    describe('Success: Not owned by applicant', () => {
+      beforeEach(() => {
+        RedisService.get = jest
+          .fn()
+          .mockReturnValueOnce('no')
+          .mockReturnValueOnce(JSON.stringify(singleAddress))
+      })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
         AddressService.addressSearch = jest.fn().mockReturnValue(singleAddress)
@@ -147,14 +262,24 @@ describe('/user-details/owner/address-choose route', () => {
         expect(RedisService.set).toBeCalledTimes(1)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
-          redisKey,
+          redisKeyOwnerAddress,
           singleAddress[0].Address.AddressLine
         )
-        expect(response.headers.location).toEqual(nextUrl)
+
+        expect(response.headers.location).toEqual(
+          nextUrlApplicantContactDetails
+        )
       })
     })
 
-    describe('Failure: Owned by applicant', () => {
+    describe('Failure', () => {
+      beforeEach(() => {
+        RedisService.get = jest
+          .fn()
+          .mockReturnValueOnce('no')
+          .mockReturnValueOnce(JSON.stringify(singleAddress))
+      })
+
       it('should display a validation error message if the user does not select an address', async () => {
         postOptions.payload = {
           address: ''

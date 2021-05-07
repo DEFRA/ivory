@@ -69,6 +69,13 @@ const handlers = {
 }
 
 const _getContext = async (request, addressType) => {
+  let context
+
+  const ownedByApplicant = await RedisService.get(
+    request,
+    RedisKeys.OWNED_BY_APPLICANT
+  )
+
   const addresses = JSON.parse(
     await RedisService.get(request, RedisKeys.ADDRESS_FIND)
   )
@@ -80,12 +87,29 @@ const _getContext = async (request, addressType) => {
     }
   })
 
+  if (addressType === AddressType.OWNER) {
+    context = _getContextForOwnerAddressType(ownedByApplicant)
+  } else {
+    context = _getContextForApplicantAddressType()
+  }
+
+  context.addresses = items
+
+  return context
+}
+
+const _getContextForOwnerAddressType = ownedByApplicant => {
   return {
     pageHeading:
-      addressType === AddressType.OWNER
+      ownedByApplicant === Options.YES
         ? 'Choose your address'
-        : "Choose the owner's address",
-    addresses: items
+        : "Choose the owner's address"
+  }
+}
+
+const _getContextForApplicantAddressType = () => {
+  return {
+    pageHeading: 'Choose your address'
   }
 }
 

@@ -45,7 +45,7 @@ describe('user-details/owner/contact-details route', () => {
     jest.clearAllMocks()
   })
 
-  describe('GET: Owner applicant', () => {
+  describe('GET: Owned by applicant', () => {
     const getOptions = {
       method: 'GET',
       url
