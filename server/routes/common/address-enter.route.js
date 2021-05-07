@@ -79,6 +79,11 @@ const handlers = {
 const _getContext = async (request, addressType, isGet) => {
   const context = {}
 
+  const ownedByApplicant = await RedisService.get(
+    request,
+    RedisKeys.OWNED_BY_APPLICANT
+  )
+
   const addresses = JSON.parse(
     await RedisService.get(request, RedisKeys.ADDRESS_FIND)
   )
@@ -88,18 +93,39 @@ const _getContext = async (request, addressType, isGet) => {
   if (resultSize === 0) {
     context.pageHeading = 'No results, you will need to enter the address'
   } else if (resultSize === 1) {
-    context.pageHeading = 'Edit your address'
+    if (addressType === AddressType.OWNER) {
+      context.pageHeading =
+        ownedByApplicant === Options.YES
+          ? 'Edit your address'
+          : "Edit the owner's address"
+    } else {
+      context.pageHeading = 'Edit your address'
+    }
     if (isGet) {
       Object.assign(context, _getAddressFieldsFromAddress(addresses[0].Address))
     }
   } else if (resultSize > 1 && resultSize <= 50) {
-    context.pageHeading = 'Enter your address'
+    if (addressType === AddressType.OWNER) {
+      context.pageHeading =
+        ownedByApplicant === Options.YES
+          ? 'Enter your address'
+          : "Enter the owner's address"
+    } else {
+      context.pageHeading = 'Enter your address'
+    }
   } else if (resultSize > 50) {
     context.pageHeading = 'Too many results, you will need to enter the address'
   }
 
-  context.helpText =
-    'If your business owns the item, give your business address.'
+  if (addressType === AddressType.OWNER) {
+    context.helpText =
+      ownedByApplicant === Options.YES
+        ? 'If your business owns the item, give your business address.'
+        : 'If the owner is a business, give the business address.'
+  } else {
+    context.helpText =
+      'If your business is helping someone else sell their item, give your business address.'
+  }
 
   addPayloadToContext(request, context)
 
