@@ -14,7 +14,7 @@ describe('/user-details/applicant/address-international route', () => {
   const nextUrl = '/check-your-answers'
 
   const elementIds = {
-    pageHeading: 'pageHeading',
+    pageTitle: 'pageTitle',
     helpText: 'helpText',
     internationalAddress: 'internationalAddress',
     continue: 'continue'

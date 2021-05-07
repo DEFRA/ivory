@@ -100,7 +100,7 @@ const _getContext = async (request, addressType) => {
 
 const _getContextForOwnerAddressType = ownedByApplicant => {
   return {
-    pageHeading:
+    pageTitle:
       ownedByApplicant === Options.YES
         ? 'Choose your address'
         : "Choose the owner's address"
@@ -109,7 +109,7 @@ const _getContextForOwnerAddressType = ownedByApplicant => {
 
 const _getContextForApplicantAddressType = () => {
   return {
-    pageHeading: 'Choose your address'
+    pageTitle: 'Choose your address'
   }
 }
 

@@ -21,7 +21,7 @@ describe('/user-details/owner/address-confirm route', () => {
   const nextUrlCheckYourAnswers = '/check-your-answers'
 
   const elementIds = {
-    pageHeading: 'pageHeading',
+    pageTitle: 'pageTitle',
     address: 'address',
     editTheAddress: 'editTheAddress',
     confirmAndContinue: 'confirmAndContinue'
@@ -73,7 +73,7 @@ describe('/user-details/owner/address-confirm route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageHeading}`)
+        const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'Confirm your address'
@@ -125,7 +125,7 @@ describe('/user-details/owner/address-confirm route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageHeading}`)
+        const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           "Confirm the owner's address"

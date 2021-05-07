@@ -99,13 +99,13 @@ const _getContextForOwnerAddressType = ownedByApplicant => {
   let context
   if (ownedByApplicant === Options.YES) {
     context = {
-      pageHeading: 'What is your address?',
+      pageTitle: 'What is your address?',
       helpText:
         'If your business is the legal owner of the item, give your business address.'
     }
   } else {
     context = {
-      pageHeading: 'What is the owner’s address?',
+      pageTitle: 'What is the owner’s address?',
       helpText:
         'If the legal owner of the item is a business, give the business address.'
     }
@@ -115,7 +115,7 @@ const _getContextForOwnerAddressType = ownedByApplicant => {
 
 const _getContextForApplicantAddressType = () => {
   return {
-    pageHeading: 'What is your address?',
+    pageTitle: 'What is your address?',
     helpText:
       'If your business is helping someone else sell their item, give your business address.'
   }

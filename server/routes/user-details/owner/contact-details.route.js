@@ -13,7 +13,7 @@ const handlers = {
     )
 
     return h.view(Views.CONTACT_DETAILS, {
-      pageHeading: _getPageHeading(ownedByApplicant),
+      pageTitle: _getPageHeading(ownedByApplicant),
       ownerApplicant: ownedByApplicant === Options.YES
     })
   },
@@ -30,7 +30,7 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.CONTACT_DETAILS, {
-          pageHeading: _getPageHeading(ownedByApplicant),
+          pageTitle: _getPageHeading(ownedByApplicant),
           ownerApplicant: ownedByApplicant === Options.YES,
           ..._getContext(request),
           ...buildErrorSummary(errors)

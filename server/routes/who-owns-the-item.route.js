@@ -6,7 +6,7 @@ const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.WHO_OWNS_ITEM)
+    return h.view(Views.WHO_OWNS_ITEM, { pageTitle: 'Who owns the item?' })
   },
 
   post: (request, h) => {

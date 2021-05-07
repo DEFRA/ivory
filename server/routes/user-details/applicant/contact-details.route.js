@@ -5,7 +5,7 @@ const { Paths, RedisKeys, Views } = require('../../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
 const { addPayloadToContext } = require('../../../utils/general')
 
-const pageHeading = 'Your contact details'
+const pageTitle = 'Your contact details'
 
 const handlers = {
   get: (request, h) => {
@@ -37,7 +37,7 @@ const handlers = {
 }
 
 const _getContext = request => {
-  const context = { pageHeading, applicant: true }
+  const context = { pageTitle, applicant: true }
 
   addPayloadToContext(request, context)
 

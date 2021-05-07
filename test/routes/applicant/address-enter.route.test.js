@@ -14,7 +14,7 @@ const {
 } = require('../../mock-data/addresses')
 
 const elementIds = {
-  pageHeading: 'pageHeading',
+  pageTitle: 'pageTitle',
   helpText: 'helpText',
   addressLine1: 'addressLine1',
   addressLine2: 'addressLine2',
@@ -91,7 +91,7 @@ describe('/user-details/applicant/address-enter route', () => {
 
       it('should have the correct page heading for no addresses returned', () => {
         const element = document.querySelector(
-          `#${elementIds.pageHeading} > legend > h1`
+          `#${elementIds.pageTitle} > legend > h1`
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
@@ -129,7 +129,7 @@ describe('/user-details/applicant/address-enter route', () => {
 
       it('should have the correct page heading for 1 address returned', () => {
         const element = document.querySelector(
-          `#${elementIds.pageHeading} > legend > h1`
+          `#${elementIds.pageTitle} > legend > h1`
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual('Edit your address')
@@ -165,7 +165,7 @@ describe('/user-details/applicant/address-enter route', () => {
 
       it('should have the correct page heading for multiple addresses returned', () => {
         const element = document.querySelector(
-          `#${elementIds.pageHeading} > legend > h1`
+          `#${elementIds.pageTitle} > legend > h1`
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual('Enter your address')
@@ -208,7 +208,7 @@ describe('/user-details/applicant/address-enter route', () => {
 
       it('should have the correct page heading for too many addresses returned', () => {
         const element = document.querySelector(
-          `#${elementIds.pageHeading} > legend > h1`
+          `#${elementIds.pageTitle} > legend > h1`
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(

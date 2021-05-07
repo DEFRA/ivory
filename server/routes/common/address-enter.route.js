@@ -91,30 +91,30 @@ const _getContext = async (request, addressType, isGet) => {
   const resultSize = addresses.length
 
   if (resultSize === 0) {
-    context.pageHeading = 'No results, you will need to enter the address'
+    context.pageTitle = 'No results, you will need to enter the address'
   } else if (resultSize === 1) {
     if (addressType === AddressType.OWNER) {
-      context.pageHeading =
+      context.pageTitle =
         ownedByApplicant === Options.YES
           ? 'Edit your address'
           : "Edit the owner's address"
     } else {
-      context.pageHeading = 'Edit your address'
+      context.pageTitle = 'Edit your address'
     }
     if (isGet) {
       Object.assign(context, _getAddressFieldsFromAddress(addresses[0].Address))
     }
   } else if (resultSize > 1 && resultSize <= 50) {
     if (addressType === AddressType.OWNER) {
-      context.pageHeading =
+      context.pageTitle =
         ownedByApplicant === Options.YES
           ? 'Enter your address'
           : "Enter the owner's address"
     } else {
-      context.pageHeading = 'Enter your address'
+      context.pageTitle = 'Enter your address'
     }
   } else if (resultSize > 50) {
-    context.pageHeading = 'Too many results, you will need to enter the address'
+    context.pageTitle = 'Too many results, you will need to enter the address'
   }
 
   if (addressType === AddressType.OWNER) {

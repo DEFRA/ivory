@@ -24,7 +24,7 @@ describe('/user-details/owner/address-choose route', () => {
     '/user-details/applicant/contact-details'
 
   const elementIds = {
-    pageHeading: 'pageHeading',
+    pageTitle: 'pageTitle',
     address: 'address',
     address2: 'address-2',
     address3: 'address-3',

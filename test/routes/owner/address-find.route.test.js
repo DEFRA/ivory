@@ -24,7 +24,7 @@ describe('/user-details/owner/address-find route', () => {
   const nextUrlMultipleAddresses = '/user-details/owner/address-choose'
 
   const elementIds = {
-    pageHeading: 'pageHeading',
+    pageTitle: 'pageTitle',
     helpText: 'helpText',
     nameOrNumber: 'nameOrNumber',
     postcode: 'postcode',
@@ -75,7 +75,7 @@ describe('/user-details/owner/address-find route', () => {
 
     it('should have the correct page heading', () => {
       const element = document.querySelector(
-        `#${elementIds.pageHeading} > legend > h1`
+        `#${elementIds.pageTitle} > legend > h1`
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
@@ -142,7 +142,7 @@ describe('/user-details/owner/address-find route', () => {
 
     it('should have the correct page heading', () => {
       const element = document.querySelector(
-        `#${elementIds.pageHeading} > legend > h1`
+        `#${elementIds.pageTitle} > legend > h1`
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(

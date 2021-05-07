@@ -15,7 +15,7 @@ describe('/user-details/owner/address-international route', () => {
   const nextUrlApplicantDetails = '/user-details/applicant/contact-details'
 
   const elementIds = {
-    pageHeading: 'pageHeading',
+    pageTitle: 'pageTitle',
     helpText: 'helpText',
     internationalAddress: 'internationalAddress',
     continue: 'continue'

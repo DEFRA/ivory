@@ -14,7 +14,7 @@ describe('user-details/owner/contact-details route', () => {
   const nextUrl = '/user-details/owner/address-find'
 
   const elementIds = {
-    pageHeading: 'pageHeading',
+    pageTitle: 'pageTitle',
     name: 'name',
     ownerApplicant: {
       businessName: 'businessName'
@@ -66,7 +66,7 @@ describe('user-details/owner/contact-details route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector(`#${elementIds.pageHeading}`)
+      const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Your contact details')
     })
@@ -128,7 +128,7 @@ describe('user-details/owner/contact-details route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector(`#${elementIds.pageHeading}`)
+      const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         "Owner's contact details"

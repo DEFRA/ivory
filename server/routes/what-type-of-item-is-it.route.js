@@ -6,8 +6,11 @@ const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
   get: async (request, h) => {
-    return h.view(Views.WHAT_TYPE_OF_ITEM_IS_IT)
+    return h.view(Views.WHAT_TYPE_OF_ITEM_IS_IT, {
+      ..._getContext()
+    })
   },
+
   post: (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
@@ -15,14 +18,24 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.WHAT_TYPE_OF_ITEM_IS_IT, {
+          ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    RedisService.set(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT, payload.whatTypeOfItemIsIt)
+    RedisService.set(
+      request,
+      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
+      payload.whatTypeOfItemIsIt
+    )
 
     return h.redirect(Paths.CHECK_YOUR_ANSWERS)
+  }
+}
+const _getContext = () => {
+  return {
+    pageTitle: 'What is your ivory item?'
   }
 }
 

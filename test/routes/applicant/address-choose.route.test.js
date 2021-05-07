@@ -22,7 +22,7 @@ describe('/user-details/applicant/address-choose route', () => {
   const nextUrlCheckYourAnswers = '/check-your-answers'
 
   const elementIds = {
-    pageHeading: 'pageHeading',
+    pageTitle: 'pageTitle',
     address: 'address',
     address2: 'address-2',
     address3: 'address-3',
