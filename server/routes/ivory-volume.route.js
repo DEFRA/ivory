@@ -20,7 +20,10 @@ const handlers = {
       return h
         .view(Views.IVORY_VOLUME, {
           ..._getContext(),
+<<<<<<< HEAD
           otherChecked: payload.ivoryVolume === 'Other',
+=======
+>>>>>>> 2501ea5 (Created page for viory volume)
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -50,6 +53,7 @@ const _validateForm = payload => {
   if (Validators.empty(payload.ivoryVolume)) {
     errors.push({
       name: 'ivoryVolume',
+<<<<<<< HEAD
       text: 'You must tell us how you know the item’s ivory volume'
     })
   }
@@ -58,6 +62,9 @@ const _validateForm = payload => {
     errors.push({
       name: 'otherDetail',
       text: 'You must tell us how you know the item’s ivory volume'
+=======
+      text: 'Tell us what type of ivory you want to sell or hire out'
+>>>>>>> 2501ea5 (Created page for viory volume)
     })
   }
 
