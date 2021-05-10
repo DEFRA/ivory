@@ -10,6 +10,7 @@ module.exports = {
   ],
   coverageDirectory: 'test-output',
   coveragePathIgnorePatterns: [
+    '<rootDir>/bin/',
     '<rootDir>/node_modules/',
     '<rootDir>/test-output/',
     '<rootDir>/test/',

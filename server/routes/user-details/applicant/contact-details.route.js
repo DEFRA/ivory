@@ -5,7 +5,7 @@ const { Paths, RedisKeys, Views } = require('../../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
 const { addPayloadToContext } = require('../../../utils/general')
 
-const title = 'Your contact details'
+const pageTitle = 'Your contact details'
 
 const handlers = {
   get: (request, h) => {
@@ -32,12 +32,12 @@ const handlers = {
       payload.emailAddress
     )
 
-    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
+    return h.redirect(Paths.APPLICANT_ADDRESS_FIND)
   }
 }
 
 const _getContext = request => {
-  const context = { title, applicant: true }
+  const context = { pageTitle, applicant: true }
 
   addPayloadToContext(request, context)
 
@@ -85,12 +85,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.APPLICANT_DETAILS}`,
+    path: `${Paths.APPLICANT_CONTACT_DETAILS}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.APPLICANT_DETAILS}`,
+    path: `${Paths.APPLICANT_CONTACT_DETAILS}`,
     handler: handlers.post
   }
 ]

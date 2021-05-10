@@ -8,14 +8,14 @@ const handlers = {
     _setCookieSessionId(h)
 
     return h.view(Views.HOME, {
-      title: 'Hello',
+      pageTitle: 'Hello',
       message: 'Elephants'
     })
   },
 
   post: (request, h) => {
     return h.view(Views.HOME, {
-      title: 'Hello',
+      pageTitle: 'Hello',
       message: 'Elephants'
     })
   }

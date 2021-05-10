@@ -30,18 +30,28 @@ const handlers = {
 
 const _getContext = async request => {
   return {
-    whatTypeOfItemIsIt: await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT),
+    pageTitle: 'Check your answers (incomplete)',
+    whatTypeOfItemIsIt: await RedisService.get(
+      request,
+      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
+    ),
     ivoryIntegral: await RedisService.get(request, RedisKeys.IVORY_INTEGRAL),
     ivoryAdded: await RedisService.get(request, RedisKeys.IVORY_ADDED),
+
     ownerDetails: `${await RedisService.get(
       request,
       RedisKeys.OWNER_NAME
     )} ${await RedisService.get(request, RedisKeys.OWNER_EMAIL_ADDRESS)}`,
     ownerAddress: `${await RedisService.get(request, RedisKeys.OWNER_ADDRESS)}`,
+
     applicantDetails: `${await RedisService.get(
       request,
       RedisKeys.APPLICANT_NAME
-    )} ${await RedisService.get(request, RedisKeys.APPLICANT_EMAIL_ADDRESS)}`
+    )} ${await RedisService.get(request, RedisKeys.APPLICANT_EMAIL_ADDRESS)}`,
+    applicantAddress: `${await RedisService.get(
+      request,
+      RedisKeys.APPLICANT_ADDRESS
+    )}`
   }
 }
 

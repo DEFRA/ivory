@@ -58,7 +58,7 @@ describe('/ivory-integral route', () => {
       TestHelper.checkBackLink(document)
     })
 
-    it('should have the correct page title', () => {
+    it('should have the correct page heading', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Who owns the item?')
@@ -147,7 +147,7 @@ const _checkSelectedRadioAction = async (
   selectedOption,
   nextUrl
 ) => {
-  const redisKey = 'owner-applicant'
+  const redisKey = 'owned-by-applicant'
   postOptions.payload.whoOwnsItem = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(0)

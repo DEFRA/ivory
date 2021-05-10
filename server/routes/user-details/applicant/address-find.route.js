@@ -6,12 +6,12 @@ const { get, post } = require('../../common/address-find.route')
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.OWNER_ADDRESS_FIND}`,
+    path: `${Paths.APPLICANT_ADDRESS_FIND}`,
     handler: get
   },
   {
     method: 'POST',
-    path: `${Paths.OWNER_ADDRESS_FIND}`,
+    path: `${Paths.APPLICANT_ADDRESS_FIND}`,
     handler: post
   }
 ]

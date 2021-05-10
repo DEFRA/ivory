@@ -8,14 +8,13 @@ const { ServerEvents } = require('../../../server/utils/constants')
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
-describe('/contact-details route', () => {
+describe('user-details/owner/contact-details route', () => {
   let server
   const url = '/user-details/owner/contact-details'
   const nextUrl = '/user-details/owner/address-find'
-  const nextUrlNonOwnerApplicant = '/user-details/applicant/contact-details'
 
   const elementIds = {
-    pageHeading: 'pageHeading',
+    pageTitle: 'pageTitle',
     name: 'name',
     ownerApplicant: {
       businessName: 'businessName'
@@ -46,7 +45,7 @@ describe('/contact-details route', () => {
     jest.clearAllMocks()
   })
 
-  describe('GET: Owner applicant', () => {
+  describe('GET: Owned by applicant', () => {
     const getOptions = {
       method: 'GET',
       url
@@ -66,8 +65,8 @@ describe('/contact-details route', () => {
       TestHelper.checkBackLink(document)
     })
 
-    it('should have the correct page title', () => {
-      const element = document.querySelector(`#${elementIds.pageHeading}`)
+    it('should have the correct page heading', () => {
+      const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Your contact details')
     })
@@ -128,8 +127,8 @@ describe('/contact-details route', () => {
       TestHelper.checkBackLink(document)
     })
 
-    it('should have the correct page title', () => {
-      const element = document.querySelector(`#${elementIds.pageHeading}`)
+    it('should have the correct page heading', () => {
+      const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         "Owner's contact details"
@@ -178,7 +177,7 @@ describe('/contact-details route', () => {
       }
     })
 
-    describe('Success: Owner-applicant', () => {
+    describe('Success: Owned by applicant', () => {
       beforeEach(() => {
         RedisService.get = jest.fn().mockReturnValue('yes')
       })
@@ -204,7 +203,7 @@ describe('/contact-details route', () => {
       })
     })
 
-    describe('Success: Non-owner-applicant', () => {
+    describe('Success: Not owned by applicant', () => {
       beforeEach(() => {
         RedisService.get = jest.fn().mockReturnValue('no')
       })
@@ -226,11 +225,11 @@ describe('/contact-details route', () => {
 
         expect(RedisService.set).toBeCalledTimes(2)
 
-        expect(response.headers.location).toEqual(nextUrlNonOwnerApplicant)
+        expect(response.headers.location).toEqual(nextUrl)
       })
     })
 
-    describe('Failure: Owner-applicant', () => {
+    describe('Failure: Owned by applicant', () => {
       beforeEach(() => {
         RedisService.get = jest.fn().mockReturnValue('yes')
       })
@@ -306,7 +305,7 @@ describe('/contact-details route', () => {
       })
     })
 
-    describe('Failure: Non-owner-applicant', () => {
+    describe('Failure: Not owned by applicant', () => {
       beforeEach(() => {
         RedisService.get = jest.fn().mockReturnValue('no')
       })

@@ -11,14 +11,14 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageHeading" class="govuk-heading-l">Check your answers (incomplete)</h1>
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
       {{ govukSummaryList({
         classes: 'govuk-!-margin-bottom-9',
         rows: [
           {
             key: {
-              text: "What is your ivory item?"
+              text: pageTitle
             },
             value: {
               text: whatTypeOfItemIsIt
@@ -83,7 +83,8 @@
                 }
               ]
             }
-          },{
+          },
+          {
             key: {
               text: "Owner address"
             },
@@ -113,6 +114,23 @@
                   href: "who-owns-the-item",
                   text: "Change",
                   visuallyHiddenText: "who is applying"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Applicant address"
+            },
+            value: {
+              text: applicantAddress
+            },
+            actions: {
+              items: [
+                {
+                  href: "who-owns-the-item",
+                  text: "Change",
+                  visuallyHiddenText: "applicant address"
                 }
               ]
             }

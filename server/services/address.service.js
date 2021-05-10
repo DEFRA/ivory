@@ -4,7 +4,7 @@ const https = require('https')
 const fetch = require('node-fetch')
 const { readFileSync } = require('fs')
 
-const { convertToTitleCase } = require('../utils/general')
+const { convertToCommaSeparatedTitleCase } = require('../utils/general')
 
 const config = require('../utils/config')
 
@@ -81,7 +81,9 @@ module.exports = class AddressService {
 
 const _convertResultsToTitleCase = searchResults => {
   for (const result of searchResults) {
-    result.Address.AddressLine = convertToTitleCase(result.Address.AddressLine)
+    result.Address.AddressLine = convertToCommaSeparatedTitleCase(
+      result.Address.AddressLine
+    )
 
     _convertPostcodeToUpperCase(result.Address)
   }

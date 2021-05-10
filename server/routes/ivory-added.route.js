@@ -41,7 +41,7 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    title:
+    pageTitle:
       'Has any ivory been added to the item since 1 January 1975 to repair or restore it?'
   }
 }

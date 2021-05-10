@@ -7,38 +7,38 @@ const { addPayloadToContext } = require('../../../utils/general')
 
 const handlers = {
   get: async (request, h) => {
-    const ownerApplicant = await RedisService.get(
+    const ownedByApplicant = await RedisService.get(
       request,
-      RedisKeys.OWNER_APPLICANT
+      RedisKeys.OWNED_BY_APPLICANT
     )
 
     return h.view(Views.CONTACT_DETAILS, {
-      title: _getTitle(ownerApplicant),
-      ownerApplicant: ownerApplicant === Options.YES
+      pageTitle: _getPageHeading(ownedByApplicant),
+      ownerApplicant: ownedByApplicant === Options.YES
     })
   },
 
   post: async (request, h) => {
-    const ownerApplicant = await RedisService.get(
+    const ownedByApplicant = await RedisService.get(
       request,
-      RedisKeys.OWNER_APPLICANT
+      RedisKeys.OWNED_BY_APPLICANT
     )
 
     const payload = request.payload
-    const errors = _validateForm(payload, ownerApplicant)
+    const errors = _validateForm(payload, ownedByApplicant)
 
     if (errors.length) {
       return h
         .view(Views.CONTACT_DETAILS, {
-          title: _getTitle(ownerApplicant),
-          ownerApplicant: ownerApplicant === Options.YES,
+          pageTitle: _getPageHeading(ownedByApplicant),
+          ownerApplicant: ownedByApplicant === Options.YES,
           ..._getContext(request),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    if (ownerApplicant === Options.YES) {
+    if (ownedByApplicant === Options.YES) {
       RedisService.set(
         request,
         RedisKeys.OWNER_NAME,
@@ -64,16 +64,12 @@ const handlers = {
       )
     }
 
-    return h.redirect(
-      ownerApplicant === Options.YES
-        ? Paths.OWNER_ADDRESS_FIND
-        : Paths.APPLICANT_DETAILS
-    )
+    return h.redirect(Paths.OWNER_ADDRESS_FIND)
   }
 }
 
-const _getTitle = ownerApplicant => {
-  return ownerApplicant === Options.YES
+const _getPageHeading = ownedByApplicant => {
+  return ownedByApplicant === Options.YES
     ? 'Your contact details'
     : "Owner's contact details"
 }
@@ -82,8 +78,8 @@ const _getContext = request => {
   return addPayloadToContext(request)
 }
 
-const _validateForm = (payload, ownerApplicant) => {
-  return ownerApplicant === Options.YES
+const _validateForm = (payload, ownedByApplicant) => {
+  return ownedByApplicant === Options.YES
     ? _validateOwnerApplicant(payload)
     : _validateApplicant(payload)
 }
@@ -167,12 +163,12 @@ const _validateApplicant = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.OWNER_DETAILS}`,
+    path: `${Paths.OWNER_CONTACT_DETAILS}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.OWNER_DETAILS}`,
+    path: `${Paths.OWNER_CONTACT_DETAILS}`,
     handler: handlers.post
   }
 ]

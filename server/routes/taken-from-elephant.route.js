@@ -41,7 +41,7 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    title:
+    pageTitle:
       'Was the replacement ivory taken from the elephant on or after 1 January 1975?'
   }
 }

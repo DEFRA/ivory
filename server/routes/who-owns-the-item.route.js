@@ -6,7 +6,7 @@ const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.WHO_OWNS_ITEM)
+    return h.view(Views.WHO_OWNS_ITEM, { pageTitle: 'Who owns the item?' })
   },
 
   post: (request, h) => {
@@ -23,11 +23,11 @@ const handlers = {
 
     RedisService.set(
       request,
-      RedisKeys.OWNER_APPLICANT,
+      RedisKeys.OWNED_BY_APPLICANT,
       payload.whoOwnsItem === 'I own it' ? Options.YES : Options.NO
     )
 
-    return h.redirect(Paths.OWNER_DETAILS)
+    return h.redirect(Paths.OWNER_CONTACT_DETAILS)
   }
 }
 
