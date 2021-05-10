@@ -1,0 +1,66 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      {% set otherHtml %}
+        {{ govukTextarea({
+          name: "otherDetail",
+          id: "otherDetail",
+          label: {
+            text: "Give details"
+          }
+        }) }}
+      {% endset -%}
+
+      {{ govukRadios({
+        idPrefix: "ivoryVolume",
+        name: "ivoryVolume",
+        fieldset: {
+          legend: {
+            text: pageTitle,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        errorMessage: fieldErrors['ivoryVolume'],
+        items: [
+          {
+            value: "It’s clear from looking at it",
+            text: "It’s clear from looking at it"
+          },
+          {
+            value: "I measured it",
+            text: "I measured it"
+          },
+          {
+            value: "I have written verification from a relevant expert",
+            text: "I have written verification from a relevant expert"
+          },
+          {
+            value: "Other",
+            text: "Other",
+            conditional: {
+              html: otherHtml
+            }
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text: "Continue"
+        })
+      }}
+
+    </div>
+  </div>
+{% endblock %}
