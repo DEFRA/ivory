@@ -1,6 +1,7 @@
 'use strict'
 
 const { Paths, Views, RedisKeys } = require('../utils/constants')
+const PaymentService = require('../services/payment.service')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
@@ -24,7 +25,13 @@ const handlers = {
         .code(400)
     }
 
-    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
+    const response = await PaymentService.makePayment()
+    console.log(response)
+    console.log(response.payment_id)
+
+    await RedisService.set(request, RedisKeys.PAYMENT_ID, response.payment_id)
+
+    return h.redirect(response._links.next_url.href)
   }
 }
 
