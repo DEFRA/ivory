@@ -58,14 +58,9 @@ const RedisKeys = {
   APPLICANT_NAME: 'applicant.name',
   IVORY_ADDED: 'ivory-added',
   IVORY_INTEGRAL: 'ivory-integral',
-<<<<<<< HEAD
   IVORY_VOLUME: 'ivory-volume',
-  OWNER_ADDRESS: 'owner-address',
-  OWNER_APPLICANT: 'owner-applicant',
-=======
   OWNED_BY_APPLICANT: 'owned-by-applicant',
   OWNER_ADDRESS: 'owner.address',
->>>>>>> 3c5051e9c06beb437e63a53e89eeed70c15f6b90
   OWNER_EMAIL_ADDRESS: 'owner.emailAddress',
   OWNER_NAME: 'owner.name',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it'
