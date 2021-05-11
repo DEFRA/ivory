@@ -15,7 +15,9 @@
           id: "otherDetail",
           label: {
             text: "Give details"
-          }
+          },
+          rows: 2,
+          errorMessage: fieldErrors['otherDetail']
         }) }}
       {% endset -%}
 
@@ -46,6 +48,7 @@
           {
             value: "Other",
             text: "Other",
+            checked: otherChecked,
             conditional: {
               html: otherHtml
             }
