@@ -21,9 +21,13 @@ const handlers = {
         .view(Views.IVORY_VOLUME, {
           ..._getContext(),
 <<<<<<< HEAD
+<<<<<<< HEAD
           otherChecked: payload.ivoryVolume === 'Other',
 =======
 >>>>>>> 2501ea5 (Created page for viory volume)
+=======
+          otherChecked: payload.ivoryVolume === 'Other',
+>>>>>>> 401e3ee (Tidied up)
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -54,6 +58,9 @@ const _validateForm = payload => {
     errors.push({
       name: 'ivoryVolume',
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 401e3ee (Tidied up)
       text: 'You must tell us how you know the item’s ivory volume'
     })
   }
@@ -62,9 +69,12 @@ const _validateForm = payload => {
     errors.push({
       name: 'otherDetail',
       text: 'You must tell us how you know the item’s ivory volume'
+<<<<<<< HEAD
 =======
       text: 'Tell us what type of ivory you want to sell or hire out'
 >>>>>>> 2501ea5 (Created page for viory volume)
+=======
+>>>>>>> 401e3ee (Tidied up)
     })
   }
 
