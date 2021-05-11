@@ -111,7 +111,7 @@ describe('/user-details/applicant/address-confirm route', () => {
         const element = document.querySelector(`#${elementIds.editTheAddress}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual('Edit the address')
-        expect(element.href).toEqual('/user-details/owner/address-enter')
+        expect(element.href).toEqual('/user-details/applicant/address-enter')
       })
 
       it('should have the correct Call to Action button', () => {
