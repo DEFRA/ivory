@@ -20,6 +20,7 @@ const handlers = {
       return h
         .view(Views.IVORY_VOLUME, {
           ..._getContext(),
+          otherChecked: payload.ivoryVolume === 'Other',
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -49,7 +50,14 @@ const _validateForm = payload => {
   if (Validators.empty(payload.ivoryVolume)) {
     errors.push({
       name: 'ivoryVolume',
-      text: 'Tell us what type of ivory you want to sell or hire out'
+      text: 'You must tell us how you know the item’s ivory volume'
+    })
+  }
+
+  if (payload.ivoryVolume === 'Other' && Validators.empty(payload.otherDetail)) {
+    errors.push({
+      name: 'otherDetail',
+      text: 'You must tell us how you know the item’s ivory volume'
     })
   }
 
