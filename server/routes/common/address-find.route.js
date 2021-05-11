@@ -19,20 +19,30 @@ const getAddressType = request =>
 
 const handlers = {
   get: async (request, h) => {
+    const ownedByApplicant = await RedisService.get(
+      request,
+      RedisKeys.OWNED_BY_APPLICANT
+    )
+
     return h.view(Views.ADDRESS_FIND, {
-      ...(await _getContext(request, getAddressType(request)))
+      ...(await _getContext(request, getAddressType(request), ownedByApplicant))
     })
   },
 
   post: async (request, h) => {
+    const ownedByApplicant = await RedisService.get(
+      request,
+      RedisKeys.OWNED_BY_APPLICANT
+    )
+
     const addressType = getAddressType(request)
     const payload = request.payload
-    const errors = _validateForm(payload, addressType)
+    const errors = _validateForm(payload, addressType, ownedByApplicant)
 
     if (errors.length) {
       return h
         .view(Views.ADDRESS_FIND, {
-          ...(await _getContext(request, addressType)),
+          ...(await _getContext(request, addressType, ownedByApplicant)),
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -76,13 +86,8 @@ const handlers = {
   }
 }
 
-const _getContext = async (request, addressType) => {
+const _getContext = async (request, addressType, ownedByApplicant) => {
   let context
-
-  const ownedByApplicant = await RedisService.get(
-    request,
-    RedisKeys.OWNED_BY_APPLICANT
-  )
 
   if (addressType === AddressType.OWNER) {
     context = _getContextForOwnerAddressType(ownedByApplicant)
@@ -121,16 +126,22 @@ const _getContextForApplicantAddressType = () => {
   }
 }
 
-const _validateForm = (payload, addressType) => {
+const _validateForm = (payload, addressType, ownedByApplicant) => {
   const errors = []
 
   if (Validators.empty(payload.postcode)) {
-    errors.push({
-      name: 'postcode',
-      text:
-        addressType === AddressType.OWNER
+    let errorMessage
+    if (addressType === AddressType.OWNER) {
+      errorMessage =
+        ownedByApplicant === Options.YES
           ? 'Enter your postcode'
           : "Enter the owner's postcode"
+    } else {
+      errorMessage = 'Enter your postcode'
+    }
+    errors.push({
+      name: 'postcode',
+      text: errorMessage
     })
   }
 
