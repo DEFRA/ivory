@@ -120,7 +120,7 @@ const _getContextForApplicantAddressType = () => {
   return {
     pageTitle: 'Enter your address',
     hintText:
-      'If your business is helping someone else sell their item, give your business address.'
+      'If your business is helping someone else sell their item, give your business address'
   }
 }
 

@@ -8,9 +8,13 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
-      <p id="address" class="govuk-body">{{ address.AddressLine }}</p>
+      {% for address in addressLines %}
+        <p id="address-{{ loop.index }}" class="govuk-body govuk-!-margin-bottom-1">{{ address }}</p>
+      {% endfor %}
 
-      <p><a id="editTheAddress" href="/user-details/owner/address-enter" class="govuk-link">Edit the address</a></p>
+      <p class="govuk-body govuk-!-margin-top-4">
+        <a id="editTheAddress" href="/user-details/owner/address-enter" class="govuk-link">Edit the address</a>
+      </p>
 
       {{ govukButton({
           attributes: {

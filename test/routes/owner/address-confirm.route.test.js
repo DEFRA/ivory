@@ -22,7 +22,10 @@ describe('/user-details/owner/address-confirm route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    address: 'address',
+    address1: 'address-1',
+    address2: 'address-2',
+    address3: 'address-3',
+    address4: 'address-4',
     editTheAddress: 'editTheAddress',
     confirmAndContinue: 'confirmAndContinue'
   }
@@ -81,10 +84,28 @@ describe('/user-details/owner/address-confirm route', () => {
       })
 
       it('should show the selected address', () => {
-        const element = document.querySelector(`#${elementIds.address}`)
+        let element = document.querySelector(`#${elementIds.address1}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          singleAddress[0].Address.AddressLine
+          singleAddress[0].Address.SubBuildingName
+        )
+
+        element = document.querySelector(`#${elementIds.address2}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          singleAddress[0].Address.Locality
+        )
+
+        element = document.querySelector(`#${elementIds.address3}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          singleAddress[0].Address.Town
+        )
+
+        element = document.querySelector(`#${elementIds.address4}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          singleAddress[0].Address.Postcode
         )
       })
 
@@ -133,10 +154,28 @@ describe('/user-details/owner/address-confirm route', () => {
       })
 
       it('should show the selected address', () => {
-        const element = document.querySelector(`#${elementIds.address}`)
+        let element = document.querySelector(`#${elementIds.address1}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          singleAddress[0].Address.AddressLine
+          singleAddress[0].Address.SubBuildingName
+        )
+
+        element = document.querySelector(`#${elementIds.address2}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          singleAddress[0].Address.Locality
+        )
+
+        element = document.querySelector(`#${elementIds.address3}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          singleAddress[0].Address.Town
+        )
+
+        element = document.querySelector(`#${elementIds.address4}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          singleAddress[0].Address.Postcode
         )
       })
 

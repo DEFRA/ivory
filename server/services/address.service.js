@@ -75,7 +75,7 @@ module.exports = class AddressService {
 
     const response = await fetch(url, searchOptions)
 
-    return response.json()
+    return response.status === 200 ? response.json() : []
   }
 }
 
@@ -103,7 +103,7 @@ const _convertPostcodeToUpperCase = address => {
  * Check if the address lookup certificate is a file or a base64 string.
  * If it's a string convert it back to binary
  * @returns address lookup certificate as binary
-*/
+ */
 const _getCertificate = () => {
   if (config.addressLookupPfxCert) {
     return config.addressLookupPfxCert.toUpperCase().endsWith('.PFX')
