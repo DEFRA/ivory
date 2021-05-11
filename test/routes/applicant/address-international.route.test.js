@@ -64,7 +64,7 @@ describe('/user-details/applicant/address-international route', () => {
         document,
         elementIds.internationalAddress,
         'Enter your address',
-        'If your business is helping someone else sell their item, give your business address.'
+        'If your business is helping someone else sell their item, give your business address'
       )
     })
 

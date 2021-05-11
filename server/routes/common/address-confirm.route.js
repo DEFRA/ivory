@@ -82,6 +82,11 @@ const _getContext = async (request, addressType) => {
 
   context.address = addresses[0].Address
 
+  _convertSingleLineAddressToMultipleLines(
+    context,
+    addresses[0].Address.AddressLine
+  )
+
   return context
 }
 
@@ -98,6 +103,11 @@ const _getContextForApplicantAddressType = () => {
   return {
     pageTitle: 'Confirm your address'
   }
+}
+
+const _convertSingleLineAddressToMultipleLines = (context, address) => {
+  context.addressLines = address.split(',')
+  context.addressLines = context.addressLines.map(address => address.trim())
 }
 
 module.exports = {

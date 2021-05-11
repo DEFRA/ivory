@@ -167,9 +167,11 @@ const _validateForm = payload => {
 }
 
 const _getAddressFieldsFromAddress = address => {
+  const buildingName = _getBuildingName(address)
+
   return {
-    addressLine1: address.SubBuildingName
-      ? convertToCommaSeparatedTitleCase(address.SubBuildingName)
+    addressLine1: buildingName
+      ? convertToCommaSeparatedTitleCase(buildingName)
       : `${convertToCommaSeparatedTitleCase(
           address.BuildingNumber
         )} ${convertToCommaSeparatedTitleCase(address.Street)}`,
@@ -191,6 +193,10 @@ const _concatenateAddressFields = payload => {
   return Object.keys(payload)
     .map(key => payload[key])
     .join(', ')
+}
+
+const _getBuildingName = address => {
+  return address.BuildingName || address.SubBuildingName
 }
 
 module.exports = {
