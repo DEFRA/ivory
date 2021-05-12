@@ -407,7 +407,7 @@ describe('/user-details/owner/address-find route', () => {
           postOptions,
           server,
           elementIds.postcode,
-          'Enter your postcode'
+          "Enter the owner's postcode"
         )
       })
 

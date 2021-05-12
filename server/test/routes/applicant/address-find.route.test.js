@@ -340,7 +340,7 @@ describe('/user-details/applicant/address-find route', () => {
           postOptions,
           server,
           elementIds.postcode,
-          "Enter the owner's postcode"
+          'Enter your postcode'
         )
       })
 

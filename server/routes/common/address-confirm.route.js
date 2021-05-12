@@ -95,13 +95,15 @@ const _getContextForOwnerAddressType = ownedByApplicant => {
     pageTitle:
       ownedByApplicant === Options.YES
         ? 'Confirm your address'
-        : "Confirm the owner's address"
+        : "Confirm the owner's address",
+    editAddressUrl: '/user-details/owner/address-enter'
   }
 }
 
 const _getContextForApplicantAddressType = () => {
   return {
-    pageTitle: 'Confirm your address'
+    pageTitle: 'Confirm your address',
+    editAddressUrl: '/user-details/applicant/address-enter'
   }
 }
 
