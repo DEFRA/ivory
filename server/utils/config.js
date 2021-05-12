@@ -11,7 +11,7 @@ const schema = joi.object().keys({
     .default(envs[0]),
   port: joi.number().default(3000),
   serviceName: joi.string().default('No service name in .env'),
-  logLevel: joi.string(),
+  logLevel: joi.string().default('warn'),
   redisHost: joi.string().default('127.0.0.1'),
   redisPort: joi.number().default(6379),
   serviceApiEnabled: joi
@@ -27,7 +27,9 @@ const schema = joi.object().keys({
   addressLookupUrl: joi.string().default('http://some-url'),
   addressLookupPassphrase: joi.string(),
   addressLookupPfxCert: joi.string(),
-  cookieValidationPassword: joi.string()
+  cookieValidationPassword: joi
+    .string()
+    .default('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
 })
 
 // Build config
@@ -35,7 +37,7 @@ const config = {
   env: process.env.NODE_ENV,
   port: process.env.PORT,
   serviceName: process.env.SERVICE_NAME,
-  logLevel: process.env.LOG_LEVEL || 'warn',
+  logLevel: process.env.LOG_LEVEL,
   redisHost: process.env.REDIS_HOST,
   redisPort: process.env.REDIS_PORT,
   serviceApiEnabled: process.env.SERVICE_API_ENABLED,
