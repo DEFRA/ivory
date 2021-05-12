@@ -1,30 +1,29 @@
 'use strict'
 
-const { Paths, Views } = require('../utils/constants')
+const { Paths, RedisKeys, Views } = require('../utils/constants')
+const PaymentService = require('../services/payment.service')
+const RedisService = require('../services/redis.service')
+
+const SUCCESS = 'success'
 
 const handlers = {
   get: async (request, h) => {
-    //     const paymentId = await RedisService.get(request, RedisKeys.PAYMENT_ID)
-    // const paymentId = await h.state.sessionId
-    // console.log(paymentId)
+    const paymentId = await RedisService.get(request, RedisKeys.PAYMENT_ID)
 
-    const paymentId2 = request.state.sessionId
-    console.log(paymentId2)
+    const payment = await PaymentService.lookupPayment(paymentId)
 
-    // console.log(server.state)
-    // return h.view(Views.SERVICE_COMPLETE, {
-    //   ..._getContext()
-    // // })
+    const paymentSucceeded = payment.state.status === SUCCESS
 
     return h.view(Views.SERVICE_COMPLETE, {
-      ..._getContext()
+      ..._getContext(paymentSucceeded)
     })
   }
 }
 
-const _getContext = () => {
+const _getContext = paymentSucceeded => {
   return {
-    pageTitle: 'Service complete'
+    pageTitle: 'Service complete',
+    paymentSucceeded
   }
 }
 

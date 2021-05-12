@@ -23,13 +23,33 @@ module.exports = class PaymentService {
       amount: 25000,
       reference: 'REFERENCE',
       description: 'Tell us you want to sell or hire out ivory',
-      return_url: 'http://localhost:3000/payment-result',
+      return_url: 'http://localhost:3000/service-complete',
       email: 'bob@bobbins.com'
     }
 
     const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(body),
+      headers
+    })
+
+    return response.json()
+  }
+
+  static async lookupPayment (paymentId) {
+    const url = `https://publicapi.payments.service.gov.uk/${PAYMENT_ENDPOINT}/${paymentId}`
+
+    // TODO add to config
+    const apiKey =
+      'api_test_g8su1ibc50012gejidmo88ktsedg8pkekpi4dfo0lhbb917frk5mopsgv0'
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`
+    }
+
+    const response = await fetch(url, {
+      method: 'GET',
       headers
     })
 

@@ -27,7 +27,6 @@ const Paths = {
   OWNER_ADDRESS_FIND: '/user-details/owner/address-find',
   OWNER_ADDRESS_INTERNATIONAL: '/user-details/owner/address-international',
   OWNER_CONTACT_DETAILS: '/user-details/owner/contact-details',
-  PAYMENT_RESULT: '/payment-result',
   SERVICE_COMPLETE: '/service-complete',
   TAKEN_FROM_ELEPHANT: '/taken-from-elephant',
   WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',

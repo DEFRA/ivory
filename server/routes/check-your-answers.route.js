@@ -26,8 +26,6 @@ const handlers = {
     }
 
     const response = await PaymentService.makePayment()
-    console.log(response)
-    console.log(response.payment_id)
 
     await RedisService.set(request, RedisKeys.PAYMENT_ID, response.payment_id)
 
