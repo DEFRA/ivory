@@ -1,6 +1,5 @@
 'use strict'
 
-<<<<<<< HEAD
 const { ItemType, Paths, RedisKeys, Views } = require('../utils/constants')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
@@ -13,35 +12,15 @@ const handlers = {
   },
 
   post: async (request, h) => {
-=======
-const { Paths, RedisKeys, Views } = require('../utils/constants')
-const RedisService = require('../services/redis.service')
-const { buildErrorSummary, Validators } = require('../utils/validation')
-
-const itemType = 'musical' // temporary to deal with dynamic heading until parent page built. Values: 'musical', '10%' or 'other'
-const highValue = false // temporary to deal with dynamic page content until parent page built
-
-const handlers = {
-  get: async (request, h) => {
-    return h.view(Views.IVORY_AGE, {
-      ..._getContext()
-    })
-  },
-  post: (request, h) => {
->>>>>>> a155af9 (created ivory-age page)
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
       return h
         .view(Views.IVORY_AGE, {
-<<<<<<< HEAD
           ...await (_getContext(request)),
           ...await (_getCheckboxes(request)),
-=======
-          ..._getContext(),
-          ..._getCheckboxes(payload),
->>>>>>> a155af9 (created ivory-age page)
+          otherText: (payload.otherDetail) ? payload.otherDetail : '',
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -49,11 +28,7 @@ const handlers = {
 
     RedisService.set(request, RedisKeys.IVORY_AGE, _getIvoryAge(payload))
 
-<<<<<<< HEAD
     if (_getItemType(request) === ItemType.TEN_PERCENT) {
-=======
-    if (itemType === '10%') {
->>>>>>> a155af9 (created ivory-age page)
       return h.redirect(Paths.IVORY_INTEGRAL)
     } else {
       return h.redirect(Paths.CHECK_YOUR_ANSWERS)
@@ -76,24 +51,16 @@ const _getIvoryAge = payload => {
   }
 }
 
-<<<<<<< HEAD
 const _getMadeBefore = itemType => {
   if (itemType === ItemType.MUSICAL) {
     return '1975'
   } else if (itemType === ItemType.TEN_PERCENT) {
-=======
-const _getMadeBefore = () => {
-  if (itemType === 'musical') {
-    return '1975'
-  } else if (itemType === '10%') {
->>>>>>> a155af9 (created ivory-age page)
     return '3 March 1947'
   } else {
     return '1918'
   }
 }
 
-<<<<<<< HEAD
 const _getItemType = async request => {
   return await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
 }
@@ -119,35 +86,6 @@ const _getCheckboxes = async request => {
       checkbox4Checked: ivoryAge.includes(`It’s been in the family since before ${madeBefore}`),
       checkbox5Checked: ivoryAge.includes('I have written verification from a relevant expert'),
       checkbox6Checked: ivoryAge.includes('Other')
-=======
-const _getContext = () => {
-  const madeBefore = _getMadeBefore()
-  if (highValue) {
-    return {
-      pageTitle: `How do you know the item was made before ${madeBefore}?`,
-      checkbox4: `It’s been in the family since before ${madeBefore}`,
-      checkbox6: 'It’s been carbon-dated'
-    }
-  } else {
-    return {
-      pageTitle: `How do you know the item was made before ${madeBefore}?`,
-      checkbox4: `It’s been in the family since before ${madeBefore}`,
-      checkbox6: 'Other'
-    }
-  }
-}
-
-const _getCheckboxes = payload => {
-  const madeBefore = _getMadeBefore()
-  if (payload.ivoryAge) {
-    return {
-      checkbox1Checked: payload.ivoryAge.includes('It has a stamp, serial number or signature to prove its age'),
-      checkbox2Checked: payload.ivoryAge.includes('I have a dated receipt showing when it was bought or repaired'),
-      checkbox3Checked: payload.ivoryAge.includes('I have a dated publication that shows or describes the item'),
-      checkbox4Checked: payload.ivoryAge.includes(`It’s been in the family since before ${madeBefore}`),
-      checkbox5Checked: payload.ivoryAge.includes('I have written verification from a relevant expert'),
-      checkbox6Checked: payload.ivoryAge.includes('Other')
->>>>>>> a155af9 (created ivory-age page)
     }
   }
 }
@@ -160,11 +98,21 @@ const _validateForm = payload => {
       name: 'ivoryAge',
       text: 'You just tell us how you know the item’s age'
     })
-  } else if (payload.ivoryAge.includes('Other') && Validators.empty(payload.otherDetail)) {
-    errors.push({
-      name: 'otherDetail',
-      text: 'You just tell us how you know the item’s age'
-    })
+  } else if (payload.ivoryAge.includes('Other')) {
+    if (Validators.empty(payload.otherDetail)) {
+      errors.push({
+        name: 'otherDetail',
+        text: 'You just tell us how you know the item’s age'
+      })
+    }
+
+    const characterLimit = 4000
+    if (Validators.maxLength(payload.otherDetail, characterLimit)) {
+      errors.push({
+        name: 'otherDetail',
+        text: `Enter no more than ${characterLimit} characters`
+      })
+    }
   }
 
   return errors
