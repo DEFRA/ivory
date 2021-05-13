@@ -4,7 +4,7 @@ const { Paths, RedisKeys, Views } = require('../utils/constants')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
-const musicalInstrument = false // temporary to deal with dynamic heading until it's parent page has been built
+const musicalInstrument = false // temporary to deal with dynamic heading if it's a musical instrument until parent page been built
 
 const handlers = {
   get: async (request, h) => {
@@ -33,9 +33,11 @@ const handlers = {
         .code(400)
     }
 
-    RedisService.set(request, RedisKeys.IVORY_VOLUME, payload.ivoryVolume)
+    RedisService.set(request, RedisKeys.IVORY_VOLUME, (payload.ivoryVolume === 'Other')
+      ? `${payload.ivoryVolume}: ${payload.otherDetail}`
+      : payload.ivoryVolume)
 
-    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
+    return h.redirect(Paths.IVORY_AGE)
   }
 }
 
