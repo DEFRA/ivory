@@ -12,6 +12,7 @@ const handlers = {
       ..._getContext()
     })
   },
+
   post: (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
@@ -35,31 +36,27 @@ const handlers = {
 }
 
 const _getContext = () => {
-  if (musicalInstrument) {
-    return {
-      pageTitle: 'How do you know the item has less than 20% ivory by volume?'
-    }
-  } else {
-    return {
-      pageTitle: 'How do you know the item has less than 10% ivory by volume?'
-    }
+  const percentage = musicalInstrument ? 20 : 10
+  return {
+    pageTitle: `How do you know the item has less than ${percentage}% ivory by volume?`
   }
 }
 
 const _validateForm = payload => {
   const errors = []
+  const errorMessage = 'You must tell us how you know the item’s ivory volume'
 
   if (Validators.empty(payload.ivoryVolume)) {
     errors.push({
       name: 'ivoryVolume',
-      text: 'You must tell us how you know the item’s ivory volume'
+      text: errorMessage
     })
   }
 
   if (payload.ivoryVolume === 'Other' && Validators.empty(payload.otherDetail)) {
     errors.push({
       name: 'otherDetail',
-      text: 'You must tell us how you know the item’s ivory volume'
+      text: errorMessage
     })
   }
 
