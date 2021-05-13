@@ -7,7 +7,7 @@ const { DEFRA_IVORY_SESSION_KEY, ServerEvents } = require('./utils/constants')
 
 const createServer = async () => {
   const server = hapi.server({
-    port: config.port,
+    port: config.servicePort,
     routes: {
       validate: {
         options: {

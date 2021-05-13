@@ -2,29 +2,26 @@
 
 const fetch = require('node-fetch')
 
-// const config = require('../utils/config')
+const config = require('../utils/config')
+const { Paths } = require('../utils/constants')
 
 const PAYMENT_ENDPOINT = 'v1/payments'
 
+const headers = {
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${config.paymentApiKey}`
+}
+
 module.exports = class PaymentService {
-  static async makePayment (amount, reference, description) {
-    const url = `https://publicapi.payments.service.gov.uk/${PAYMENT_ENDPOINT}`
-
-    // TODO add to config
-    const apiKey =
-      'api_test_g8su1ibc50012gejidmo88ktsedg8pkekpi4dfo0lhbb917frk5mopsgv0'
-
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`
-    }
+  static async makePayment (amountInPence, reference, description, email) {
+    const url = `${config.paymentUrl}/${PAYMENT_ENDPOINT}`
 
     const body = {
-      amount: 25000,
-      reference: 'REFERENCE',
-      description: 'Tell us you want to sell or hire out ivory',
-      return_url: 'http://localhost:3000/service-complete',
-      email: 'bob@bobbins.com'
+      amount: amountInPence,
+      reference,
+      description,
+      return_url: `${config.serviceHost}:${config.servicePort}${Paths.SERVICE_COMPLETE}`,
+      email
     }
 
     const response = await fetch(url, {
@@ -37,16 +34,7 @@ module.exports = class PaymentService {
   }
 
   static async lookupPayment (paymentId) {
-    const url = `https://publicapi.payments.service.gov.uk/${PAYMENT_ENDPOINT}/${paymentId}`
-
-    // TODO add to config
-    const apiKey =
-      'api_test_g8su1ibc50012gejidmo88ktsedg8pkekpi4dfo0lhbb917frk5mopsgv0'
-
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`
-    }
+    const url = `${config.paymentUrl}/${PAYMENT_ENDPOINT}/${paymentId}`
 
     const response = await fetch(url, {
       method: 'GET',

@@ -4,20 +4,14 @@
 
 {% block formContent %}
   <div class="govuk-grid-row">
-
-
     <div class="govuk-grid-column-two-thirds">
       {{ govukPanel({
+        attributes: {
+          id: "pageTitle"
+        },
         titleText: "Application complete",
-        html: "Your reference number<br><strong>WILL APPEAR HERE</strong>"
+        html: "Your reference number<br><strong id='referenceNumber'>" + paymentReference + "</strong>"
       }) }}
-
-      {% if paymentSucceeded %}
-        <p>PAYMENT SUCCEEDED</p>
-      {% else %}
-        <p>PAYMENT FAILED</p>
-      {% endif %}
-
     </div>
   </div>
 {% endblock %}

@@ -21,6 +21,7 @@ const Paths = {
   CHECK_YOUR_ANSWERS: '/check-your-answers',
   IVORY_ADDED: '/ivory-added',
   IVORY_INTEGRAL: '/ivory-integral',
+  MAKE_PAYMENT: '/make-payment',
   OWNER_ADDRESS_CHOOSE: '/user-details/owner/address-choose',
   OWNER_ADDRESS_CONFIRM: '/user-details/owner/address-confirm',
   OWNER_ADDRESS_ENTER: '/user-details/owner/address-enter',
@@ -63,6 +64,8 @@ const RedisKeys = {
   OWNER_EMAIL_ADDRESS: 'owner.emailAddress',
   OWNER_NAME: 'owner.name',
   PAYMENT_ID: 'payment-id',
+  PAYMENT_AMOUNT: 'payment-amount',
+  PAYMENT_REFERENCE: 'payment-reference',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it'
 }
 

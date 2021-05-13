@@ -45,14 +45,16 @@
     <style>#back-link {display: none} </style>
   </noscript>
 
-  {{ govukBackLink({
-      text: "Back",
-      href: "#",
-      attributes: {
-          id: "back-link",
-          onclick: "window.history.go(-1); return false;"
-      }
-  }) }}
+  {% if (not hideBackLink) %}
+    {{ govukBackLink({
+        text: "Back",
+        href: "#",
+        attributes: {
+            id: "back-link",
+            onclick: "window.history.go(-1); return false;"
+        }
+    }) }}
+  {% endif %}
 
 {% endblock %}
 

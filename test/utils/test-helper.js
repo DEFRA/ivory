@@ -28,10 +28,16 @@ module.exports = class TestHelper {
    * @param expectedResponseCode - The expected HTTP response code)
    * @returns  A JSDOM document object containing HTML content
    */
-  static async submitGetRequest (server, options, expectedResponseCode = 200) {
+  static async submitGetRequest (
+    server,
+    options,
+    expectedResponseCode = 200,
+    respondWithDocument = true
+  ) {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(expectedResponseCode)
-    return TestHelper.getDocument(response)
+
+    return respondWithDocument ? TestHelper.getDocument(response) : response
   }
 
   /**

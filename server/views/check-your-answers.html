@@ -18,7 +18,7 @@
         rows: [
           {
             key: {
-              text: pageTitle
+              text: "What is your ivory item?" 
             },
             value: {
               text: whatTypeOfItemIsIt
@@ -131,6 +131,23 @@
                   href: "who-owns-the-item",
                   text: "Change",
                   visuallyHiddenText: "applicant address"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Cost"
+            },
+            value: {
+              text: "£" + cost
+            },
+            actions: {
+              items: [
+                {
+                  href: "what-type-of-item-is-it",
+                  text: "Change",
+                  visuallyHiddenText: "application cost"
                 }
               ]
             }

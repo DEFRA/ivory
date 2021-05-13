@@ -1,6 +1,7 @@
 'use strict'
 
 const { Paths, RedisKeys, Views } = require('../utils/constants')
+const config = require('../utils/config')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
@@ -29,6 +30,14 @@ const handlers = {
       RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
       payload.whatTypeOfItemIsIt
     )
+
+    const cost =
+      payload.whatTypeOfItemIsIt !==
+      'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
+        ? config.paymentAmountBandA
+        : config.paymentAmountBandB
+
+    RedisService.set(request, RedisKeys.PAYMENT_AMOUNT, cost)
 
     return h.redirect(Paths.CHECK_YOUR_ANSWERS)
   }

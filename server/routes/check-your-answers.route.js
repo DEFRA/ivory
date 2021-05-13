@@ -1,7 +1,6 @@
 'use strict'
 
 const { Paths, Views, RedisKeys } = require('../utils/constants')
-const PaymentService = require('../services/payment.service')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
@@ -25,11 +24,7 @@ const handlers = {
         .code(400)
     }
 
-    const response = await PaymentService.makePayment()
-
-    await RedisService.set(request, RedisKeys.PAYMENT_ID, response.payment_id)
-
-    return h.redirect(response._links.next_url.href)
+    return h.redirect(Paths.MAKE_PAYMENT)
   }
 }
 
@@ -56,7 +51,9 @@ const _getContext = async request => {
     applicantAddress: `${await RedisService.get(
       request,
       RedisKeys.APPLICANT_ADDRESS
-    )}`
+    )}`,
+    cost:
+      parseInt(await RedisService.get(request, RedisKeys.PAYMENT_AMOUNT)) / 100
   }
 }
 
