@@ -19,6 +19,7 @@ const Paths = {
   APPLICANT_ADDRESS_INTERNATIONAL:
     '/user-details/applicant/address-international',
   CHECK_YOUR_ANSWERS: '/check-your-answers',
+  INTO_OUT_OF_GB: '/into-out-of-gb',
   IVORY_ADDED: '/ivory-added',
   IVORY_INTEGRAL: '/ivory-integral',
   MAKE_PAYMENT: '/make-payment',
@@ -30,7 +31,9 @@ const Paths = {
   OWNER_CONTACT_DETAILS: '/user-details/owner/contact-details',
   SERVICE_COMPLETE: '/service-complete',
   TAKEN_FROM_ELEPHANT: '/taken-from-elephant',
+  UPLOAD_PHOTOS: '/upload-photos',
   WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',
+  WHERE_IS_ITEM: '/where-is-item',
   WHO_OWNS_ITEM: '/who-owns-the-item'
 }
 
@@ -43,11 +46,14 @@ const Views = {
   CHECK_YOUR_ANSWERS: 'check-your-answers',
   CONTACT_DETAILS: 'user-details/contact-details',
   HOME: 'home',
+  INTO_OUT_OF_GB: 'into-out-of-gb',
   IVORY_ADDED: 'ivory-added',
   IVORY_INTEGRAL: 'ivory-integral',
   SERVICE_COMPLETE: 'service-complete',
   TAKEN_FROM_ELEPHANT: 'taken-from-elephant',
+  UPLOAD_PHOTOS: 'upload-photos',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
+  WHERE_IS_ITEM: 'where-is-item',
   WHO_OWNS_ITEM: 'who-owns-the-item',
   YES_NO_IDK: 'yes-no-idk'
 }

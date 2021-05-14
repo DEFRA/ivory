@@ -11,7 +11,7 @@ const RedisService = require('../../../server/services/redis.service')
 describe('/user-details/applicant/address-international route', () => {
   let server
   const url = '/user-details/applicant/address-international'
-  const nextUrl = '/check-your-answers'
+  const nextUrl = '/where-is-item'
 
   const elementIds = {
     pageTitle: 'pageTitle',

@@ -11,7 +11,7 @@ const RedisService = require('../../server/services/redis.service')
 describe('/what-type-of-item-is-it route', () => {
   let server
   const url = '/what-type-of-item-is-it'
-  const nextUrl = '/check-your-answers'
+  const nextUrl = '/upload-photos'
 
   const elementIds = {
     whatTypeOfItemIsIt: 'whatTypeOfItemIsIt',

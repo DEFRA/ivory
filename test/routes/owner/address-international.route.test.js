@@ -11,7 +11,7 @@ const RedisService = require('../../../server/services/redis.service')
 describe('/user-details/owner/address-international route', () => {
   let server
   const url = '/user-details/owner/address-international'
-  const nextUrlCheckYourAnswers = '/check-your-answers'
+  const nextUrlWhereIsItem = '/where-is-item'
   const nextUrlApplicantDetails = '/user-details/applicant/contact-details'
 
   const elementIds = {
@@ -157,7 +157,7 @@ describe('/user-details/owner/address-international route', () => {
           'The Owner Address'
         )
 
-        expect(response.headers.location).toEqual(nextUrlCheckYourAnswers)
+        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
       })
     })
 

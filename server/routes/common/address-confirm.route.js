@@ -52,10 +52,10 @@ const handlers = {
     if (addressType === AddressType.OWNER) {
       route =
         ownedByApplicant === Options.YES
-          ? Paths.CHECK_YOUR_ANSWERS
+          ? Paths.WHERE_IS_ITEM
           : Paths.APPLICANT_CONTACT_DETAILS
     } else {
-      route = Paths.CHECK_YOUR_ANSWERS
+      route = Paths.WHERE_IS_ITEM
     }
 
     return h.redirect(route)

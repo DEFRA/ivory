@@ -18,7 +18,7 @@ describe('/user-details/owner/address-confirm route', () => {
   const url = '/user-details/owner/address-confirm'
   const nextUrlApplicantContactDetails =
     '/user-details/applicant/contact-details'
-  const nextUrlCheckYourAnswers = '/check-your-answers'
+  const nextUrlWhereIsItem = '/where-is-item'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -245,7 +245,7 @@ describe('/user-details/owner/address-confirm route', () => {
           redisKeyApplicantAddress,
           singleAddress[0].Address.AddressLine
         )
-        expect(response.headers.location).toEqual(nextUrlCheckYourAnswers)
+        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
       })
     })
 
