@@ -1,34 +1,25 @@
 'use strict'
 
-const { Paths, RedisKeys, Views } = require('../utils/constants')
+const { ItemType, Paths, RedisKeys, Views } = require('../utils/constants')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
-
-const musicalInstrument = false // temporary to deal with dynamic heading if it's a musical instrument until parent page been built
 
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.IVORY_VOLUME, {
-      ..._getContext()
+      ...await (_getContext(request))
     })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
       return h
         .view(Views.IVORY_VOLUME, {
-          ..._getContext(),
-<<<<<<< HEAD
-<<<<<<< HEAD
+          ...await (_getContext(request)),
           otherChecked: payload.ivoryVolume === 'Other',
-=======
->>>>>>> 2501ea5 (Created page for viory volume)
-=======
-          otherChecked: payload.ivoryVolume === 'Other',
->>>>>>> 401e3ee (Tidied up)
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -42,8 +33,13 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
-  const percentage = musicalInstrument ? 20 : 10
+const _getItemType = async request => {
+  return await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
+}
+
+const _getContext = async request => {
+  const itemType = await _getItemType(request)
+  const percentage = itemType === ItemType.MUSICAL ? 20 : 10
   return {
     pageTitle: `How do you know the item has less than ${percentage}% ivory by volume?`
   }
@@ -56,32 +52,14 @@ const _validateForm = payload => {
   if (Validators.empty(payload.ivoryVolume)) {
     errors.push({
       name: 'ivoryVolume',
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 401e3ee (Tidied up)
-      text: 'You must tell us how you know the item’s ivory volume'
-=======
       text: errorMessage
->>>>>>> ae062a4 (Actioned Duncan's comments)
     })
   }
 
   if (payload.ivoryVolume === 'Other' && Validators.empty(payload.otherDetail)) {
     errors.push({
       name: 'otherDetail',
-<<<<<<< HEAD
-      text: 'You must tell us how you know the item’s ivory volume'
-<<<<<<< HEAD
-=======
-      text: 'Tell us what type of ivory you want to sell or hire out'
->>>>>>> 2501ea5 (Created page for viory volume)
-=======
->>>>>>> 401e3ee (Tidied up)
-=======
       text: errorMessage
->>>>>>> ae062a4 (Actioned Duncan's comments)
     })
   }
 
