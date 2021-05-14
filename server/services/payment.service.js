@@ -20,7 +20,7 @@ module.exports = class PaymentService {
       amount: amountInPence,
       reference,
       description,
-      return_url: `${config.serviceHost}:${config.servicePort}${Paths.SERVICE_COMPLETE}`,
+      return_url: `${config.serviceHost}${Paths.SERVICE_COMPLETE}`,
       email
     }
 
