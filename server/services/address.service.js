@@ -35,24 +35,13 @@ module.exports = class AddressService {
 
         searchResults = searchResults.concat(additionalSearchResults)
       }
-
-      if (nameOrNumber) {
-        searchResults = searchResults.filter(searchResult => {
-          const buildingName = searchResult.Address.BuildingName
-            ? searchResult.Address.BuildingName.toUpperCase()
-            : ''
-
-          return (
-            buildingName === nameOrNumber.toUpperCase() ||
-            searchResult.Address.BuildingNumber === nameOrNumber
-          )
-        })
-      }
     }
 
-    _convertResultsToTitleCase(searchResults)
+    const filteredResults = _filterResults(searchResults, nameOrNumber)
 
-    return searchResults
+    _convertResultsToTitleCase(filteredResults)
+
+    return filteredResults
   }
 
   static async _queryAddressEndpoint (postcode, pageNumber, pageSize) {
@@ -79,6 +68,84 @@ module.exports = class AddressService {
   }
 }
 
+/**
+ * Filters search API search results.
+ * If the nameOrNumber is numeric, the results are filtered based on an exact match on BuildingNumber.
+ * Otherwise, we try filtering based on the user potentially having entered the full
+ * Building Number and Street, rather than just the name/number.
+ * If that fails, we try filtering based on a partial match on the entered name/number based
+ * on either the BuildingNumber, BuildingName or SubBuildingName fields in the address.
+ * @param {*} searchResults
+ * @param {*} nameOrNumber
+ * @returns
+ */
+const _filterResults = (searchResults, nameOrNumber) => {
+  let filteredResults = []
+
+  if (nameOrNumber) {
+    nameOrNumber = _convertToSearchFormat(nameOrNumber)
+
+    if (_isNumeric(nameOrNumber)) {
+      filteredResults = searchResults.filter(
+        searchResult => searchResult.Address.BuildingNumber === nameOrNumber
+      )
+    } else {
+      filteredResults = searchResults.filter(
+        searchResult =>
+          _convertToSearchFormat(
+            `${searchResult.Address.BuildingNumber}${searchResult.Address.Street}`
+          ) === nameOrNumber
+      )
+
+      if (!filteredResults.length) {
+        filteredResults = _getPartialMatches(
+          searchResults,
+          nameOrNumber,
+          'BuildingNumber'
+        )
+      }
+
+      if (!filteredResults.length) {
+        filteredResults = _getPartialMatches(
+          searchResults,
+          nameOrNumber,
+          'BuildingName'
+        )
+      }
+
+      if (!filteredResults.length) {
+        filteredResults = _getPartialMatches(
+          searchResults,
+          nameOrNumber,
+          'SubBuildingName'
+        )
+      }
+    }
+  }
+
+  return filteredResults.length ? filteredResults : searchResults
+}
+
+/**
+ * Filters address search results, does partial matching based on the field
+ * name passed in.
+ * @param {*} searchResults The address search results to be filtered
+ * @param {*} nameOrNumber  The entered nameOrNumber field
+ * @param {*} fieldName     The field name to combine with the Street and be searched
+ * @returns
+ */
+const _getPartialMatches = (searchResults, nameOrNumber, fieldName) => {
+  return searchResults.filter(searchResult =>
+    _convertToSearchFormat(
+      `${searchResult.Address[fieldName]}${searchResult.Address.Street}`
+    ).includes(nameOrNumber)
+  )
+}
+
+/**
+ * Converts an array of address search results to title case (e.g. This String Is Title Case)
+ * @param {*} searchResults The array of address search results to be converted
+ */
 const _convertResultsToTitleCase = searchResults => {
   for (const result of searchResults) {
     result.Address.AddressLine = convertToCommaSeparatedTitleCase(
@@ -100,6 +167,16 @@ const _convertPostcodeToUpperCase = address => {
 }
 
 /**
+ * Converts a value into a searchable format. Performs the following steps:
+ * Converts to upper case and then strips out all non-alphanumeric characters
+ * @param {*} value
+ * @returns
+ */
+const _convertToSearchFormat = value => {
+  return value.toUpperCase().replace(/[^A-Z0-9]/g, '')
+}
+
+/**
  * Check if the address lookup certificate is a file or a base64 string.
  * If it's a string convert it back to binary
  * @returns address lookup certificate as binary
@@ -110,4 +187,13 @@ const _getCertificate = () => {
       ? readFileSync(config.addressLookupPfxCert)
       : Buffer.from(config.addressLookupPfxCert, 'base64')
   }
+}
+
+/**
+ * Helper method used to check whether or not a value is numeric, i.e. only contains characters 0 to 9
+ * @param {*} value The value to check
+ * @returns True if the value is numeric, otherwise false
+ */
+const _isNumeric = value => {
+  return value && value.match(/^[0-9]*$/g)
 }
