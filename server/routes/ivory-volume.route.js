@@ -1,26 +1,24 @@
 'use strict'
 
-const { Paths, RedisKeys, Views } = require('../utils/constants')
+const { ItemType, Paths, RedisKeys, Views } = require('../utils/constants')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
-
-const musicalInstrument = false // temporary to deal with dynamic heading if it's a musical instrument until parent page been built
 
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.IVORY_VOLUME, {
-      ..._getContext()
+      ...await (_getContext(request))
     })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
       return h
         .view(Views.IVORY_VOLUME, {
-          ..._getContext(),
+          ...await (_getContext(request)),
           otherChecked: payload.ivoryVolume === 'Other',
           ...buildErrorSummary(errors)
         })
@@ -35,8 +33,13 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
-  const percentage = musicalInstrument ? 20 : 10
+const _getItemType = async request => {
+  return await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
+}
+
+const _getContext = async request => {
+  const itemType = await _getItemType(request)
+  const percentage = itemType === ItemType.MUSICAL ? 20 : 10
   return {
     pageTitle: `How do you know the item has less than ${percentage}% ivory by volume?`
   }
