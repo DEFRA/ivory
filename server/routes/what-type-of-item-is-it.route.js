@@ -32,8 +32,7 @@ const handlers = {
     )
 
     const cost =
-      payload.whatTypeOfItemIsIt !==
-      'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
+      payload.whatTypeOfItemIsIt !== ItemType.HIGH_VALUE
         ? config.paymentAmountBandA
         : config.paymentAmountBandB
 
