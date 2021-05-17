@@ -8,6 +8,8 @@ const { ItemType, ServerEvents } = require('../../server/utils/constants')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
+const CharacterLimits = require('../mock-data/character-limits')
+
 describe('/ivory-volume route', () => {
   let server
   const url = '/ivory-volume'
@@ -213,6 +215,24 @@ describe('/ivory-volume route', () => {
           'otherDetail',
           'otherDetail-error',
           'You must tell us how you know the item’s ivory volume'
+        )
+      })
+
+      it('should display a validation error message if the other text area > 4000 chars', async () => {
+        postOptions.payload = {
+          ivoryVolume: 'Other',
+          otherDetail: `${CharacterLimits.fourThousandCharacters}X`
+        }
+        const response = await TestHelper.submitPostRequest(
+          server,
+          postOptions,
+          400
+        )
+        await TestHelper.checkValidationError(
+          response,
+          'otherDetail',
+          'otherDetail-error',
+          'Enter no more than 4,000 characters'
         )
       })
     })
