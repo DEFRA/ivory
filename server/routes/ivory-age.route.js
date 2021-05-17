@@ -20,6 +20,7 @@ const handlers = {
         .view(Views.IVORY_AGE, {
           ...await (_getContext(request)),
           ...await (_getCheckboxes(request)),
+          otherText: (payload.otherDetail) ? payload.otherDetail : '',
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -97,11 +98,21 @@ const _validateForm = payload => {
       name: 'ivoryAge',
       text: 'You just tell us how you know the item’s age'
     })
-  } else if (payload.ivoryAge.includes('Other') && Validators.empty(payload.otherDetail)) {
-    errors.push({
-      name: 'otherDetail',
-      text: 'You just tell us how you know the item’s age'
-    })
+  } else if (payload.ivoryAge.includes('Other')) {
+    if (Validators.empty(payload.otherDetail)) {
+      errors.push({
+        name: 'otherDetail',
+        text: 'You just tell us how you know the item’s age'
+      })
+    }
+
+    const characterLimit = 4000
+    if (Validators.maxLength(payload.otherDetail, characterLimit)) {
+      errors.push({
+        name: 'otherDetail',
+        text: `Enter no more than ${characterLimit} characters`
+      })
+    }
   }
 
   return errors
