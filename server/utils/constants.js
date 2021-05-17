@@ -53,7 +53,9 @@ const Views = {
 }
 
 const RedisKeys = {
-  ADDRESS_FIND: 'address-find',
+  ADDRESS_FIND_NAME_OR_NUMBER: 'address-find.nameOrNumber',
+  ADDRESS_FIND_POSTCODE: 'address-find.postcode',
+  ADDRESS_FIND_RESULTS: 'address-find.results',
   APPLICANT_ADDRESS: 'applicant.address',
   APPLICANT_EMAIL_ADDRESS: 'applicant.emailAddress',
   APPLICANT_NAME: 'applicant.name',

@@ -77,7 +77,7 @@ const _getContext = async (request, addressType) => {
   }
 
   const addresses = JSON.parse(
-    await RedisService.get(request, RedisKeys.ADDRESS_FIND)
+    await RedisService.get(request, RedisKeys.ADDRESS_FIND_RESULTS)
   )
 
   context.address = addresses[0].Address

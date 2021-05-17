@@ -9,16 +9,17 @@
 
     <div class="govuk-grid-column-two-thirds">
 
+
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
+      {% if showHelpText %}
+        <p id="helpText1">No results for "{{ nameOrNumber }}".</p>
+        <p id="helpText2">Here are all the results for {{ postcode }}.</p>
+      {% endif %}
+
       {{ govukRadios({
         idPrefix: "address",
         name: "address",
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
         errorMessage: fieldErrors['address'],
         items: addresses
       }) }}

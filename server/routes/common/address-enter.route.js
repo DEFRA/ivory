@@ -85,7 +85,7 @@ const _getContext = async (request, addressType, isGet) => {
   )
 
   const addresses = JSON.parse(
-    await RedisService.get(request, RedisKeys.ADDRESS_FIND)
+    await RedisService.get(request, RedisKeys.ADDRESS_FIND_RESULTS)
   )
 
   const resultSize = addresses.length

@@ -52,9 +52,22 @@ const handlers = {
       payload.nameOrNumber,
       payload.postcode
     )
+
     await RedisService.set(
       request,
-      RedisKeys.ADDRESS_FIND,
+      RedisKeys.ADDRESS_FIND_NAME_OR_NUMBER,
+      payload.nameOrNumber
+    )
+
+    await RedisService.set(
+      request,
+      RedisKeys.ADDRESS_FIND_POSTCODE,
+      payload.postcode
+    )
+
+    await RedisService.set(
+      request,
+      RedisKeys.ADDRESS_FIND_RESULTS,
       JSON.stringify(searchResults)
     )
 
