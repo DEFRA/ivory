@@ -3,11 +3,13 @@
 const RedisService = require('../../services/redis.service')
 const {
   AddressType,
+  CharacterLimits,
   Options,
   Paths,
   RedisKeys,
   Views
 } = require('../../utils/constants')
+const { formatNumberWithCommas } = require('../../utils/general')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const {
@@ -134,11 +136,14 @@ const _validateForm = payload => {
     })
   }
 
-  const characterLimit = 4000
-  if (Validators.maxLength(payload.internationalAddress, characterLimit)) {
+  if (
+    Validators.maxLength(payload.internationalAddress, CharacterLimits.Textarea)
+  ) {
     errors.push({
       name: 'internationalAddress',
-      text: `Enter a shorter address with no more than ${characterLimit} characters`
+      text: `Address must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Textarea
+      )} characters`
     })
   }
 

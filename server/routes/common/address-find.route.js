@@ -2,11 +2,13 @@
 
 const {
   AddressType,
+  CharacterLimits,
   Paths,
   RedisKeys,
   Views,
   Options
 } = require('../../utils/constants')
+const { formatNumberWithCommas } = require('../../utils/general')
 const AddressService = require('../../services/address.service')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
@@ -141,6 +143,15 @@ const _getContextForApplicantAddressType = () => {
 
 const _validateForm = (payload, addressType, ownedByApplicant) => {
   const errors = []
+
+  if (Validators.maxLength(payload.nameOrNumber, CharacterLimits.Input)) {
+    errors.push({
+      name: 'nameOrNumber',
+      text: `Property name or number must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
+    })
+  }
 
   if (Validators.empty(payload.postcode)) {
     let errorMessage

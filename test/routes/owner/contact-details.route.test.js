@@ -8,6 +8,8 @@ const { ServerEvents } = require('../../../server/utils/constants')
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
+const CharacterLimits = require('../../mock-data/character-limits')
+
 describe('user-details/owner/contact-details route', () => {
   let server
   const url = '/user-details/owner/contact-details'
@@ -248,6 +250,20 @@ describe('user-details/owner/contact-details route', () => {
         )
       })
 
+      it('should display a validation error message if the full name is too long', async () => {
+        postOptions.payload = {
+          name: `${CharacterLimits.fourThousandCharacters}X`,
+          emailAddress: 'some-email@somewhere.com',
+          confirmEmailAddress: 'some-email@somewhere.com'
+        }
+        await TestHelper.checkFormFieldValidation(
+          postOptions,
+          server,
+          elementIds.name,
+          'Name must have fewer than 4,000 characters'
+        )
+      })
+
       it('should display a validation error message if the user does not enter the email address', async () => {
         postOptions.payload = {
           name: 'some-value',
@@ -273,6 +289,20 @@ describe('user-details/owner/contact-details route', () => {
           server,
           elementIds.emailAddress,
           'Enter an email address in the correct format, like name@example.com'
+        )
+      })
+
+      it('should display a validation error message if the email address is too long', async () => {
+        postOptions.payload = {
+          name: 'some-value',
+          emailAddress: `${CharacterLimits.fourThousandCharacters}@somewhere.com`,
+          confirmEmailAddress: `${CharacterLimits.fourThousandCharacters}@somewhere.com`
+        }
+        await TestHelper.checkFormFieldValidation(
+          postOptions,
+          server,
+          elementIds.emailAddress,
+          'Email address must have fewer than 4,000 characters'
         )
       })
 
@@ -324,6 +354,20 @@ describe('user-details/owner/contact-details route', () => {
         )
       })
 
+      it('should display a validation error message if the full name is too long', async () => {
+        postOptions.payload = {
+          name: `${CharacterLimits.fourThousandCharacters}X`,
+          emailAddress: 'some-email@somewhere.com',
+          confirmEmailAddress: 'some-email@somewhere.com'
+        }
+        await TestHelper.checkFormFieldValidation(
+          postOptions,
+          server,
+          elementIds.name,
+          'Name must have fewer than 4,000 characters'
+        )
+      })
+
       it('should display a validation error message if the user does not enter the email address', async () => {
         postOptions.payload = {
           name: 'some-value',
@@ -349,6 +393,20 @@ describe('user-details/owner/contact-details route', () => {
           server,
           elementIds.emailAddress,
           'Enter an email address in the correct format, like name@example.com'
+        )
+      })
+
+      it('should display a validation error message if the email address is too long', async () => {
+        postOptions.payload = {
+          name: 'some-value',
+          emailAddress: `${CharacterLimits.fourThousandCharacters}@somewhere.com`,
+          confirmEmailAddress: `${CharacterLimits.fourThousandCharacters}@somewhere.com`
+        }
+        await TestHelper.checkFormFieldValidation(
+          postOptions,
+          server,
+          elementIds.emailAddress,
+          'Email address must have fewer than 4,000 characters'
         )
       })
 

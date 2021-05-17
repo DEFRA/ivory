@@ -5,6 +5,11 @@ const AddressType = {
   APPLICANT: 'applicant'
 }
 
+const CharacterLimits = {
+  Input: 4000,
+  Textarea: 100000
+}
+
 const Options = {
   YES: 'yes',
   NO: 'no'
@@ -73,6 +78,7 @@ const RedisKeys = {
 
 module.exports = Object.freeze({
   AddressType,
+  CharacterLimits,
   Options,
   Paths,
   Views,
