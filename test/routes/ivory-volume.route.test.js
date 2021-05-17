@@ -3,7 +3,7 @@
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
-const { ServerEvents } = require('../../server/utils/constants')
+const { ItemType, ServerEvents } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
@@ -11,12 +11,14 @@ const RedisService = require('../../server/services/redis.service')
 describe('/ivory-volume route', () => {
   let server
   const url = '/ivory-volume'
-  const nextUrl = '/check-your-answers'
+  const nextUrl = '/ivory-age'
 
   const elementIds = {
-    ivoryIsIntegral: 'ivoryIsIntegral',
-    ivoryIsIntegral2: 'ivoryIsIntegral-2',
-    ivoryIsIntegral3: 'ivoryIsIntegral-3',
+    ivoryVolume: 'ivoryVolume',
+    ivoryVolume2: 'ivoryVolume-2',
+    ivoryVolume3: 'ivoryVolume-3',
+    ivoryVolume4: 'ivoryVolume-4',
+    otherDetail: 'otherDetail',
     continue: 'continue'
   }
 
@@ -47,53 +49,88 @@ describe('/ivory-volume route', () => {
       url
     }
 
-    beforeEach(async () => {
-      document = await TestHelper.submitGetRequest(server, getOptions)
+    describe('GET: Not a musical item', () => {
+      beforeEach(async () => {
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the Beta banner', () => {
+        TestHelper.checkBetaBanner(document)
+      })
+
+      it('should have the Back link', () => {
+        TestHelper.checkBackLink(document)
+      })
+
+      it('should have the correct page heading', () => {
+        const element = document.querySelector('.govuk-fieldset__legend')
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'How do you know the item has less than 10% ivory by volume?'
+        )
+      })
+
+      it('should have the correct Call to Action button', () => {
+        const element = document.querySelector(`#${elementIds.continue}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      })
+
+      it('should have the correct radio buttons', () => {
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.ivoryVolume,
+          'It’s clear from looking at it',
+          'It’s clear from looking at it'
+        )
+
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.ivoryVolume2,
+          'I measured it',
+          'I measured it'
+        )
+
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.ivoryVolume3,
+          'I have written verification from a relevant expert',
+          'I have written verification from a relevant expert'
+        )
+
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.ivoryVolume4,
+          'Other',
+          'Other'
+        )
+      })
+
+      it('should have the "Enter your address" form field', () => {
+        TestHelper.checkFormField(
+          document,
+          elementIds.otherDetail,
+          'Give details'
+        )
+      })
     })
 
-    it('should have the Beta banner', () => {
-      TestHelper.checkBetaBanner(document)
-    })
+    describe('GET: Has correct heading for a musical item', () => {
+      beforeEach(async () => {
+        RedisService.get = jest
+          .fn()
+          .mockReturnValueOnce(ItemType.MUSICAL)
 
-    it('should have the Back link', () => {
-      TestHelper.checkBackLink(document)
-    })
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
 
-    it('should have the correct page heading', () => {
-      const element = document.querySelector('.govuk-fieldset__legend')
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'How is the ivory integral to the item?'
-      )
-    })
-
-    it('should have the correct radio buttons', () => {
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.ivoryIsIntegral,
-        'The ivory is essential to the design or function of the item',
-        'The ivory is essential to the design or function of the item'
-      )
-
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.ivoryIsIntegral2,
-        'You cannot remove the ivory easily or without damaging the item',
-        'You cannot remove the ivory easily or without damaging the item'
-      )
-
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.ivoryIsIntegral3,
-        'Both reasons - You cannot remove the ivory easily or without risk of damage and the ivory is essential to the design or function of the item',
-        'Both of the above'
-      )
-    })
-
-    it('should have the correct Call to Action button', () => {
-      const element = document.querySelector(`#${elementIds.continue}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      it('should have the correct page heading', () => {
+        const element = document.querySelector('.govuk-fieldset__legend')
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'How do you know the item has less than 20% ivory by volume?'
+        )
+      })
     })
   })
 
@@ -113,7 +150,7 @@ describe('/ivory-volume route', () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'The ivory is essential to the design or function of the item',
+          'It’s clear from looking at it',
           nextUrl
         )
       })
@@ -122,7 +159,7 @@ describe('/ivory-volume route', () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'You cannot remove the ivory easily or without damaging the item',
+          'I measured it',
           nextUrl
         )
       })
@@ -131,15 +168,26 @@ describe('/ivory-volume route', () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'Both of the above',
+          'I have written verification from a relevant expert',
           nextUrl
+        )
+      })
+
+      it('should store the value in Redis and progress to the next route when the fourth option has been selected & Other text added', async () => {
+        postOptions.payload.otherDetail = 'some text'
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          'Other',
+          nextUrl,
+          'some text'
         )
       })
     })
 
     describe('Failure', () => {
       it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.ivoryIsIntegral = ''
+        postOptions.payload.ivoryVolume = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -147,9 +195,24 @@ describe('/ivory-volume route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'ivoryIsIntegral',
-          'ivoryIsIntegral-error',
-          'You must tell us how the ivory is integral to the item'
+          'ivoryVolume',
+          'ivoryVolume-error',
+          'You must tell us how you know the item’s ivory volume'
+        )
+      })
+
+      it('should display a validation error message if the user selects other and leaves text area empty', async () => {
+        postOptions.payload.ivoryVolume = 'Other'
+        const response = await TestHelper.submitPostRequest(
+          server,
+          postOptions,
+          400
+        )
+        await TestHelper.checkValidationError(
+          response,
+          'otherDetail',
+          'otherDetail-error',
+          'You must tell us how you know the item’s ivory volume'
         )
       })
     })
@@ -164,10 +227,11 @@ const _checkSelectedRadioAction = async (
   postOptions,
   server,
   selectedOption,
-  nextUrl
+  nextUrl,
+  otherText = ''
 ) => {
-  const redisKey = 'ivory-integral'
-  postOptions.payload.ivoryIsIntegral = selectedOption
+  const redisKey = 'ivory-volume'
+  postOptions.payload.ivoryVolume = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(0)
 
@@ -177,7 +241,7 @@ const _checkSelectedRadioAction = async (
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
     redisKey,
-    selectedOption
+    (otherText === '') ? selectedOption : `${selectedOption}: ${otherText}`
   )
 
   expect(response.headers.location).toEqual(nextUrl)
