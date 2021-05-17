@@ -61,12 +61,26 @@ describe('/user-details/applicant/address-international route', () => {
       TestHelper.checkBackLink(document)
     })
 
+    it('should have the correct page heading', () => {
+      const element = document.querySelector(`#${elementIds.pageTitle}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual('Enter your address')
+    })
+
+    it('should have the correct help text', () => {
+      const element = document.querySelector(`#${elementIds.helpText}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'If your business is helping someone else sell their item, give your business address.'
+      )
+    })
+
     it('should have the "Enter your address" form field', () => {
       TestHelper.checkFormField(
         document,
         elementIds.internationalAddress,
-        'Enter your address',
-        'If your business is helping someone else sell their item, give your business address'
+        '',
+        ''
       )
     })
 

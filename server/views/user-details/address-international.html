@@ -8,30 +8,23 @@
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
-        {{ govukTextarea({
-          name: "internationalAddress",
-          id: "internationalAddress",
-          label: {
-            text: pageTitle,
-            classes: "govuk-label--l",
-            isPageHeading: true,
-            attributes: {
-              id: "pageTitle"
-            }
-          },
-          value: internationalAddress,
-          hint: {
-            text: hintText
-          },
-          errorMessage: fieldErrors['internationalAddress']
-        }) }}
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
-        {{ govukButton({
-            attributes: {
-              id: "continue"
-            },
-            text:  "Continue"
-        }) }}
+      <p id="helpText" class="govuk-body">{{ helpText }}</p>
+
+      {{ govukTextarea({
+        name: "internationalAddress",
+        id: "internationalAddress",
+        value: internationalAddress,
+        errorMessage: fieldErrors['internationalAddress']
+      }) }}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text:  "Continue"
+      }) }}
     </div>
   </div>
 {% endblock %}
