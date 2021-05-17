@@ -20,6 +20,7 @@ const handlers = {
         .view(Views.IVORY_VOLUME, {
           ...await (_getContext(request)),
           otherChecked: payload.ivoryVolume === 'Other',
+          otherText: (payload.otherDetail) ? payload.otherDetail : '',
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -56,11 +57,21 @@ const _validateForm = payload => {
     })
   }
 
-  if (payload.ivoryVolume === 'Other' && Validators.empty(payload.otherDetail)) {
-    errors.push({
-      name: 'otherDetail',
-      text: errorMessage
-    })
+  if (payload.ivoryVolume === 'Other') {
+    if (Validators.empty(payload.otherDetail)) {
+      errors.push({
+        name: 'otherDetail',
+        text: errorMessage
+      })
+    }
+
+    const characterLimit = 4000
+    if (Validators.maxLength(payload.otherDetail, characterLimit)) {
+      errors.push({
+        name: 'otherDetail',
+        text: `Enter no more than ${characterLimit} characters`
+      })
+    }
   }
 
   return errors
