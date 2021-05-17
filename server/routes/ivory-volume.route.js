@@ -1,6 +1,12 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views } = require('../utils/constants')
+const {
+  CharacterLimits,
+  ItemType, Paths,
+  RedisKeys,
+  Views
+} = require('../utils/constants')
+const { formatNumberWithCommas } = require('../utils/general')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
@@ -65,11 +71,10 @@ const _validateForm = payload => {
       })
     }
 
-    const characterLimit = 4000
-    if (Validators.maxLength(payload.otherDetail, characterLimit)) {
+    if (Validators.maxLength(payload.otherDetail, CharacterLimits.Input)) {
       errors.push({
         name: 'otherDetail',
-        text: `Enter no more than ${characterLimit} characters`
+        text: `Enter no more than ${formatNumberWithCommas(CharacterLimits.Input)} characters`
       })
     }
   }
