@@ -165,13 +165,20 @@ module.exports = class TestHelper {
     }
 
     element = document.querySelector(`[for="${fieldName}"]`)
-    expect(element).toBeTruthy()
-    expect(TestHelper.getTextContent(element)).toEqual(expectedLabel)
 
+    if (expectedLabel) {
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(expectedLabel)
+    } else {
+      expect(element).toBeFalsy()
+    }
+
+    element = document.querySelector(`#${fieldName}-hint`)
     if (expectedHint) {
-      element = document.querySelector(`#${fieldName}-hint`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(expectedHint)
+    } else {
+      expect(element).toBeFalsy()
     }
   }
 

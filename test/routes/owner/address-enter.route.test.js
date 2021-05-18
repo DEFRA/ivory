@@ -8,6 +8,8 @@ const { ServerEvents } = require('../../../server/utils/constants')
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
+const CharacterLimits = require('../../mock-data/character-limits')
+
 const {
   singleAddress,
   multipleAddresses
@@ -515,6 +517,35 @@ describe('/user-details/owner/address-enter route', () => {
         )
       })
 
+      it('should display a validation error message if Address Line 1 is too long', async () => {
+        postOptions.payload = {
+          addressLine1: `${CharacterLimits.fourThousandCharacters}X`,
+          townOrCity: 'London',
+          postcode: 'SW1A 1AA'
+        }
+        await TestHelper.checkFormFieldValidation(
+          postOptions,
+          server,
+          elementIds.addressLine1,
+          'Building and street information must have fewer than 4,000 characters'
+        )
+      })
+
+      it('should display a validation error message if Address Line 2 is too long', async () => {
+        postOptions.payload = {
+          addressLine1: 'The Big House',
+          addressLine2: `${CharacterLimits.fourThousandCharacters}X`,
+          townOrCity: 'London',
+          postcode: 'SW1A 1AA'
+        }
+        await TestHelper.checkFormFieldValidation(
+          postOptions,
+          server,
+          elementIds.addressLine2,
+          'Field must have fewer than 4,000 characters'
+        )
+      })
+
       it('should display a validation error message if the user does not enter a town or city', async () => {
         postOptions.payload = {
           addressLine1: 'The Big House',
@@ -526,6 +557,21 @@ describe('/user-details/owner/address-enter route', () => {
           server,
           elementIds.townOrCity,
           'Enter a town or city'
+        )
+      })
+
+      it('should display a validation error message if Town or City is too long', async () => {
+        postOptions.payload = {
+          addressLine1: 'The Big House',
+          addressLine2: '',
+          townOrCity: `${CharacterLimits.fourThousandCharacters}X`,
+          postcode: 'SW1A 1AA'
+        }
+        await TestHelper.checkFormFieldValidation(
+          postOptions,
+          server,
+          elementIds.townOrCity,
+          'Town or city must have fewer than 4,000 characters'
         )
       })
 

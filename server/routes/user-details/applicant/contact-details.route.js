@@ -1,7 +1,13 @@
 'use strict'
 
 const RedisService = require('../../../services/redis.service')
-const { Paths, RedisKeys, Views } = require('../../../utils/constants')
+const {
+  CharacterLimits,
+  Paths,
+  RedisKeys,
+  Views
+} = require('../../../utils/constants')
+const { formatNumberWithCommas } = require('../../../utils/general')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
 const { addPayloadToContext } = require('../../../utils/general')
 
@@ -52,6 +58,22 @@ const _validateForm = payload => {
       name: 'name',
       text: 'Enter your full name'
     })
+  } else if (Validators.maxLength(payload.name, CharacterLimits.Input)) {
+    errors.push({
+      name: 'name',
+      text: `Name must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
+    })
+  }
+
+  if (Validators.maxLength(payload.businessName, CharacterLimits.Input)) {
+    errors.push({
+      name: 'businessName',
+      text: `Business name must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
+    })
   }
 
   if (Validators.empty(payload.emailAddress)) {
@@ -64,6 +86,15 @@ const _validateForm = payload => {
       name: 'emailAddress',
       text:
         'Enter an email address in the correct format, like name@example.com'
+    })
+  } else if (
+    Validators.maxLength(payload.emailAddress, CharacterLimits.Input)
+  ) {
+    errors.push({
+      name: 'emailAddress',
+      text: `Email address must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
     })
   }
 

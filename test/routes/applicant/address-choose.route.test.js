@@ -23,6 +23,8 @@ describe('/user-details/applicant/address-choose route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
+    helpText1: 'helpText1',
+    helpText2: 'helpText2',
     address: 'address',
     address2: 'address-2',
     address3: 'address-3',
@@ -30,7 +32,15 @@ describe('/user-details/applicant/address-choose route', () => {
     continue: 'continue'
   }
 
+  const nameOrNumber = '123'
+  const postcode = 'AB12 3CD'
+
   let document
+
+  const getOptions = {
+    method: 'GET',
+    url
+  }
 
   beforeAll(async done => {
     server = await createServer()
@@ -52,15 +62,13 @@ describe('/user-details/applicant/address-choose route', () => {
   })
 
   describe('GET', () => {
-    const getOptions = {
-      method: 'GET',
-      url
-    }
-
     beforeEach(async () => {
       RedisService.get = jest
         .fn()
-        .mockReturnValue(JSON.stringify(multipleAddresses))
+        .mockReturnValueOnce('no')
+        .mockReturnValueOnce(JSON.stringify(multipleAddresses))
+        .mockReturnValueOnce(nameOrNumber)
+        .mockReturnValueOnce(postcode)
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -74,9 +82,23 @@ describe('/user-details/applicant/address-choose route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector('.govuk-fieldset__heading')
+      const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Choose your address')
+    })
+
+    it('should have the help text if name/number and postcode were entered', () => {
+      let element = document.querySelector(`#${elementIds.helpText1}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        `No results for "${nameOrNumber}".`
+      )
+
+      element = document.querySelector(`#${elementIds.helpText2}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        `Here are all the results for ${postcode}.`
+      )
     })
 
     it('should have the correct radio buttons', () => {
@@ -113,6 +135,29 @@ describe('/user-details/applicant/address-choose route', () => {
       const element = document.querySelector(`#${elementIds.continue}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Continue')
+    })
+  })
+
+  describe('GET: Hidden help text', () => {
+    beforeEach(async () => {
+      const nameOrNumber = undefined
+
+      RedisService.get = jest
+        .fn()
+        .mockReturnValueOnce('no')
+        .mockReturnValueOnce(JSON.stringify(multipleAddresses))
+        .mockReturnValueOnce(nameOrNumber)
+        .mockReturnValueOnce(postcode)
+
+      document = await TestHelper.submitGetRequest(server, getOptions)
+    })
+
+    it('should have hidden help text if the name/number was not entered', () => {
+      let element = document.querySelector(`#${elementIds.helpText1}`)
+      expect(element).toBeFalsy()
+
+      element = document.querySelector(`#${elementIds.helpText2}`)
+      expect(element).toBeFalsy()
     })
   })
 

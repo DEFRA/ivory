@@ -8,6 +8,8 @@ const { ServerEvents } = require('../../../server/utils/constants')
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
+const CharacterLimits = require('../../mock-data/character-limits')
+
 describe('/user-details/applicant/address-international route', () => {
   let server
   const url = '/user-details/applicant/address-international'
@@ -59,12 +61,26 @@ describe('/user-details/applicant/address-international route', () => {
       TestHelper.checkBackLink(document)
     })
 
+    it('should have the correct page heading', () => {
+      const element = document.querySelector(`#${elementIds.pageTitle}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual('Enter your address')
+    })
+
+    it('should have the correct help text', () => {
+      const element = document.querySelector(`#${elementIds.helpText}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'If your business is helping someone else sell their item, give your business address.'
+      )
+    })
+
     it('should have the "Enter your address" form field', () => {
       TestHelper.checkFormField(
         document,
         elementIds.internationalAddress,
-        'Enter your address',
-        'If your business is helping someone else sell their item, give your business address'
+        '',
+        ''
       )
     })
 
@@ -130,20 +146,14 @@ describe('/user-details/applicant/address-international route', () => {
       })
 
       it('should display a validation error message if address is too long', async () => {
-        const fiftyCharacters =
-          'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-        let internationalAddress = 'X'
-        for (let i = 0; i < 4000 / 50; i++) {
-          internationalAddress = internationalAddress += fiftyCharacters
-        }
         postOptions.payload = {
-          internationalAddress
+          internationalAddress: `${CharacterLimits.oneHundredThousandCharacters}X`
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
           server,
           elementIds.internationalAddress,
-          'Enter a shorter address with no more than 4000 characters'
+          'Address must have fewer than 100,000 characters'
         )
       })
     })

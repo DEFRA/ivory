@@ -3,11 +3,13 @@
 const RedisService = require('../../services/redis.service')
 const {
   AddressType,
+  CharacterLimits,
   Options,
   Paths,
   RedisKeys,
   Views
 } = require('../../utils/constants')
+const { formatNumberWithCommas } = require('../../utils/general')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const {
@@ -105,12 +107,12 @@ const _getContextForOwnerAddressType = ownedByApplicant => {
   if (ownedByApplicant === Options.YES) {
     context = {
       pageTitle: 'Enter your address',
-      hintText: 'If your business owns the item, give your business address.'
+      helpText: 'If your business owns the item, give your business address.'
     }
   } else {
     context = {
       pageTitle: "Enter the owner's address",
-      hintText: 'If the owner is a business, give the business address.'
+      helpText: 'If the owner is a business, give the business address.'
     }
   }
   return context
@@ -119,8 +121,8 @@ const _getContextForOwnerAddressType = ownedByApplicant => {
 const _getContextForApplicantAddressType = () => {
   return {
     pageTitle: 'Enter your address',
-    hintText:
-      'If your business is helping someone else sell their item, give your business address'
+    helpText:
+      'If your business is helping someone else sell their item, give your business address.'
   }
 }
 
@@ -134,11 +136,14 @@ const _validateForm = payload => {
     })
   }
 
-  const characterLimit = 4000
-  if (Validators.maxLength(payload.internationalAddress, characterLimit)) {
+  if (
+    Validators.maxLength(payload.internationalAddress, CharacterLimits.Textarea)
+  ) {
     errors.push({
       name: 'internationalAddress',
-      text: `Enter a shorter address with no more than ${characterLimit} characters`
+      text: `Address must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Textarea
+      )} characters`
     })
   }
 

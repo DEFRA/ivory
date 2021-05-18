@@ -2,11 +2,13 @@
 
 const {
   AddressType,
+  CharacterLimits,
   Paths,
   RedisKeys,
   Views,
   Options
 } = require('../../utils/constants')
+const { formatNumberWithCommas } = require('../../utils/general')
 const AddressService = require('../../services/address.service')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
@@ -52,9 +54,22 @@ const handlers = {
       payload.nameOrNumber,
       payload.postcode
     )
+
     await RedisService.set(
       request,
-      RedisKeys.ADDRESS_FIND,
+      RedisKeys.ADDRESS_FIND_NAME_OR_NUMBER,
+      payload.nameOrNumber
+    )
+
+    await RedisService.set(
+      request,
+      RedisKeys.ADDRESS_FIND_POSTCODE,
+      payload.postcode
+    )
+
+    await RedisService.set(
+      request,
+      RedisKeys.ADDRESS_FIND_RESULTS,
       JSON.stringify(searchResults)
     )
 
@@ -128,6 +143,15 @@ const _getContextForApplicantAddressType = () => {
 
 const _validateForm = (payload, addressType, ownedByApplicant) => {
   const errors = []
+
+  if (Validators.maxLength(payload.nameOrNumber, CharacterLimits.Input)) {
+    errors.push({
+      name: 'nameOrNumber',
+      text: `Property name or number must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
+    })
+  }
 
   if (Validators.empty(payload.postcode)) {
     let errorMessage

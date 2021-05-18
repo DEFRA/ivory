@@ -24,7 +24,12 @@ const convertToCommaSeparatedTitleCase = value => {
   }
 }
 
+const formatNumberWithCommas = num => {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
+
 module.exports = {
   addPayloadToContext,
-  convertToCommaSeparatedTitleCase
+  convertToCommaSeparatedTitleCase,
+  formatNumberWithCommas
 }

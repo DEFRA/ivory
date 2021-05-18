@@ -77,7 +77,7 @@ const _getContext = async (request, addressType) => {
   )
 
   const addresses = JSON.parse(
-    await RedisService.get(request, RedisKeys.ADDRESS_FIND)
+    await RedisService.get(request, RedisKeys.ADDRESS_FIND_RESULTS)
   )
 
   const items = addresses.map(item => {
@@ -95,6 +95,8 @@ const _getContext = async (request, addressType) => {
 
   context.addresses = items
 
+  await _addBuildingNameOrNumberAndPostcodeToContext(request, context)
+
   return context
 }
 
@@ -111,6 +113,25 @@ const _getContextForApplicantAddressType = () => {
   return {
     pageTitle: 'Choose your address'
   }
+}
+
+const _addBuildingNameOrNumberAndPostcodeToContext = async (
+  request,
+  context
+) => {
+  const nameOrNumber = await RedisService.get(
+    request,
+    RedisKeys.ADDRESS_FIND_NAME_OR_NUMBER
+  )
+
+  const postcode = await RedisService.get(
+    request,
+    RedisKeys.ADDRESS_FIND_POSTCODE
+  )
+
+  context.showHelpText = nameOrNumber && postcode
+  context.nameOrNumber = nameOrNumber
+  context.postcode = postcode
 }
 
 const _validateForm = payload => {

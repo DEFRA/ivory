@@ -32,6 +32,12 @@ describe('/user-details/applicant/address-find route', () => {
     outsideUkLink: 'outsideUkLink'
   }
 
+  const redisKeys = {
+    Results: 'address-find.results',
+    NameOrNumber: 'address-find.nameOrNumber',
+    Postcode: 'address-find.postcode'
+  }
+
   let document
 
   beforeAll(async done => {
@@ -122,6 +128,7 @@ describe('/user-details/applicant/address-find route', () => {
 
   describe('POST', () => {
     let postOptions
+    const nameOrNumber = '123'
 
     beforeEach(() => {
       postOptions = {
@@ -131,179 +138,116 @@ describe('/user-details/applicant/address-find route', () => {
       }
     })
 
-    describe('Success: Owned by applicant', () => {
-      const redisKey = 'address-find'
-
-      beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('yes')
-      })
-
-      it('should store the address array in Redis and progress to the next route when a single address is returned by the search', async () => {
-        AddressService.addressSearch = jest.fn().mockReturnValue(singleAddress)
-
-        postOptions.payload = {
-          postcode: 'SW1A 1AA'
-        }
-        const response = await TestHelper.submitPostRequest(
-          server,
-          postOptions,
-          302
-        )
-        expect(RedisService.set).toBeCalledTimes(1)
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKey,
-          JSON.stringify(singleAddress)
-        )
-
-        expect(response.headers.location).toEqual(nextUrlSingleAddress)
-      })
-
-      it('should store the address array in Redis and progress to the next route when multiple addresses are returned by the search', async () => {
-        AddressService.addressSearch = jest
-          .fn()
-          .mockReturnValue(multipleAddresses)
-
-        postOptions.payload = {
-          postcode: 'CF10 4GA'
-        }
-        const response = await TestHelper.submitPostRequest(
-          server,
-          postOptions,
-          302
-        )
-        expect(RedisService.set).toBeCalledTimes(1)
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKey,
-          JSON.stringify(multipleAddresses)
-        )
-
-        expect(response.headers.location).toEqual(nextUrlMultipleAddresses)
-      })
-
-      it('should store an empty address array in Redis and progress to the next route when no addresses are returned by the search', async () => {
-        AddressService.addressSearch = jest.fn().mockReturnValue([])
-
-        postOptions.payload = {
-          postcode: 'CF10 4GA'
-        }
-        const response = await TestHelper.submitPostRequest(
-          server,
-          postOptions,
-          302
-        )
-        expect(RedisService.set).toBeCalledTimes(1)
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKey,
-          JSON.stringify([])
-        )
-
-        expect(response.headers.location).toEqual(nextUrlEnterAddress)
-      })
-
-      it('should store the address array in Redis and progress to the next route when too many addresses are returned by the search', async () => {
-        const addressLimit = 51
-        const addresses = []
-        for (let i = 0; i < addressLimit; i++) {
-          addresses.push(singleAddress[0])
-        }
-
-        AddressService.addressSearch = jest.fn().mockReturnValue(addresses)
-
-        postOptions.payload = {
-          postcode: 'CF10 4GA'
-        }
-        const response = await TestHelper.submitPostRequest(
-          server,
-          postOptions,
-          302
-        )
-        expect(RedisService.set).toBeCalledTimes(1)
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKey,
-          JSON.stringify(addresses)
-        )
-
-        expect(response.headers.location).toEqual(nextUrlEnterAddress)
-      })
-    })
-
     describe('Success', () => {
-      const redisKey = 'address-find'
-
       beforeEach(() => {
         RedisService.get = jest.fn().mockReturnValue('no')
       })
 
-      it('should store the address array in Redis and progress to the next route when a single address is returned by the search', async () => {
+      it('should store the query terms and address array in Redis and progress to the next route when a single address is returned by the search', async () => {
         AddressService.addressSearch = jest.fn().mockReturnValue(singleAddress)
 
+        const postcode = 'SW1A 1AA'
         postOptions.payload = {
-          postcode: 'SW1A 1AA'
+          nameOrNumber,
+          postcode
         }
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
           302
         )
-        expect(RedisService.set).toBeCalledTimes(1)
+
+        expect(RedisService.set).toBeCalledTimes(3)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
-          redisKey,
+          redisKeys.Results,
           JSON.stringify(singleAddress)
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeys.NameOrNumber,
+          nameOrNumber
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeys.Postcode,
+          postcode
         )
 
         expect(response.headers.location).toEqual(nextUrlSingleAddress)
       })
 
-      it('should store the address array in Redis and progress to the next route when multiple addresses are returned by the search', async () => {
+      it('should store the query terms and address array in Redis and progress to the next route when multiple addresses are returned by the search', async () => {
         AddressService.addressSearch = jest
           .fn()
           .mockReturnValue(multipleAddresses)
 
+        const postcode = 'CF10 4GA'
         postOptions.payload = {
-          postcode: 'CF10 4GA'
+          nameOrNumber,
+          postcode
         }
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
           302
         )
-        expect(RedisService.set).toBeCalledTimes(1)
+
+        expect(RedisService.set).toBeCalledTimes(3)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
-          redisKey,
+          redisKeys.Results,
           JSON.stringify(multipleAddresses)
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeys.NameOrNumber,
+          nameOrNumber
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeys.Postcode,
+          postcode
         )
 
         expect(response.headers.location).toEqual(nextUrlMultipleAddresses)
       })
 
-      it('should store an empty address array in Redis and progress to the next route when no addresses are returned by the search', async () => {
+      it('should store an empty query terms and address array in Redis and progress to the next route when no addresses are returned by the search', async () => {
         AddressService.addressSearch = jest.fn().mockReturnValue([])
 
+        const postcode = 'CF10 4GA'
         postOptions.payload = {
-          postcode: 'CF10 4GA'
+          nameOrNumber,
+          postcode
         }
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
           302
         )
-        expect(RedisService.set).toBeCalledTimes(1)
+
+        expect(RedisService.set).toBeCalledTimes(3)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
-          redisKey,
+          redisKeys.Results,
           JSON.stringify([])
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeys.NameOrNumber,
+          nameOrNumber
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeys.Postcode,
+          postcode
         )
 
         expect(response.headers.location).toEqual(nextUrlEnterAddress)
       })
 
-      it('should store the address array in Redis and progress to the next route when too many addresses are returned by the search', async () => {
+      it('should store the query terms and address array in Redis and progress to the next route when too many addresses are returned by the search', async () => {
         const addressLimit = 51
         const addresses = []
         for (let i = 0; i < addressLimit; i++) {
@@ -312,19 +256,32 @@ describe('/user-details/applicant/address-find route', () => {
 
         AddressService.addressSearch = jest.fn().mockReturnValue(addresses)
 
+        const postcode = 'CF10 4GA'
         postOptions.payload = {
-          postcode: 'CF10 4GA'
+          nameOrNumber,
+          postcode
         }
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
           302
         )
-        expect(RedisService.set).toBeCalledTimes(1)
+
+        expect(RedisService.set).toBeCalledTimes(3)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
-          redisKey,
+          redisKeys.Results,
           JSON.stringify(addresses)
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeys.NameOrNumber,
+          nameOrNumber
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeys.Postcode,
+          postcode
         )
 
         expect(response.headers.location).toEqual(nextUrlEnterAddress)

@@ -2,11 +2,13 @@
 
 const {
   AddressType,
+  CharacterLimits,
   Options,
   Paths,
   RedisKeys,
   Views
 } = require('../../utils/constants')
+const { formatNumberWithCommas } = require('../../utils/general')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const {
@@ -85,7 +87,7 @@ const _getContext = async (request, addressType, isGet) => {
   )
 
   const addresses = JSON.parse(
-    await RedisService.get(request, RedisKeys.ADDRESS_FIND)
+    await RedisService.get(request, RedisKeys.ADDRESS_FIND_RESULTS)
   )
 
   const resultSize = addresses.length
@@ -140,12 +142,37 @@ const _validateForm = payload => {
       name: 'addressLine1',
       text: 'Enter the building and street information'
     })
+  } else if (
+    Validators.maxLength(payload.addressLine1, CharacterLimits.Input)
+  ) {
+    errors.push({
+      name: 'addressLine1',
+      text: `Building and street information must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
+    })
+  }
+
+  if (Validators.maxLength(payload.addressLine2, CharacterLimits.Input)) {
+    errors.push({
+      name: 'addressLine2',
+      text: `Field must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
+    })
   }
 
   if (Validators.empty(payload.townOrCity)) {
     errors.push({
       name: 'townOrCity',
       text: 'Enter a town or city'
+    })
+  } else if (Validators.maxLength(payload.townOrCity, CharacterLimits.Input)) {
+    errors.push({
+      name: 'townOrCity',
+      text: `Town or city must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
     })
   }
 
