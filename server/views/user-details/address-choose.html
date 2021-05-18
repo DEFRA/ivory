@@ -9,12 +9,11 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
       {% if showHelpText %}
-        <p id="helpText1">No results for "{{ nameOrNumber }}".</p>
-        <p id="helpText2">Here are all the results for {{ postcode }}.</p>
+        <p id="helpText1" class="govuk-body">No results for "{{ nameOrNumber }}".</p>
+        <p id="helpText2" class="govuk-body">Here are all the results for {{ postcode }}.</p>
       {% endif %}
 
       {{ govukRadios({
