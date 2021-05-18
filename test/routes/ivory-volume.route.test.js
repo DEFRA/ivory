@@ -108,7 +108,7 @@ describe('/ivory-volume route', () => {
         )
       })
 
-      it('should have the "Enter your address" form field', () => {
+      it('should have the other detail form field', () => {
         TestHelper.checkFormField(
           document,
           elementIds.otherDetail,
@@ -121,7 +121,7 @@ describe('/ivory-volume route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce(ItemType.MUSICAL)
+          .mockReturnValue(ItemType.MUSICAL)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })

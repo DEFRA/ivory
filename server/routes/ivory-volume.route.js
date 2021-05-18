@@ -2,7 +2,8 @@
 
 const {
   CharacterLimits,
-  ItemType, Paths,
+  ItemType,
+  Paths,
   RedisKeys,
   Views
 } = require('../utils/constants')
