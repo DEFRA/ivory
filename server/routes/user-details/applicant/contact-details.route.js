@@ -18,7 +18,7 @@ const handlers = {
     return h.view(Views.CONTACT_DETAILS, { ..._getContext(request) })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
@@ -31,8 +31,8 @@ const handlers = {
         .code(400)
     }
 
-    RedisService.set(request, RedisKeys.APPLICANT_NAME, payload.name)
-    RedisService.set(
+    await RedisService.set(request, RedisKeys.APPLICANT_NAME, payload.name)
+    await RedisService.set(
       request,
       RedisKeys.APPLICANT_EMAIL_ADDRESS,
       payload.emailAddress

@@ -53,7 +53,7 @@ const handlers = {
       payload.internationalAddress
     )
 
-    RedisService.set(
+    await RedisService.set(
       request,
       addressType === AddressType.OWNER
         ? RedisKeys.OWNER_ADDRESS
@@ -62,7 +62,7 @@ const handlers = {
     )
 
     if (ownedByApplicant === Options.YES) {
-      RedisService.set(
+      await RedisService.set(
         request,
         RedisKeys.APPLICANT_ADDRESS,
         payload.internationalAddress

@@ -12,7 +12,7 @@ const handlers = {
     })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
@@ -25,7 +25,7 @@ const handlers = {
         .code(400)
     }
 
-    RedisService.set(
+    await RedisService.set(
       request,
       RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
       payload.whatTypeOfItemIsIt
@@ -36,7 +36,7 @@ const handlers = {
         ? config.paymentAmountBandA
         : config.paymentAmountBandB
 
-    RedisService.set(request, RedisKeys.PAYMENT_AMOUNT, cost)
+    await RedisService.set(request, RedisKeys.PAYMENT_AMOUNT, cost)
 
     return h.redirect(Paths.DESCRIBE_THE_ITEM)
   }
@@ -50,35 +50,40 @@ const _getContext = () => {
         value: ItemType.MUSICAL,
         text: ItemType.MUSICAL,
         hint: {
-          text: 'Any replacement ivory must have been harvested before 1 January 1975.'
+          text:
+            'Any replacement ivory must have been harvested before 1 January 1975.'
         }
       },
       {
         value: ItemType.TEN_PERCENT,
         text: ItemType.TEN_PERCENT,
         hint: {
-          text: 'The ivory must be integral to the item. Any replacement ivory must have been harvested before 1 January 1975.'
+          text:
+            'The ivory must be integral to the item. Any replacement ivory must have been harvested before 1 January 1975.'
         }
       },
       {
         value: ItemType.MINIATURE,
         text: ItemType.MINIATURE,
         hint: {
-          text: 'Any replacement ivory must have been harvested before 1 January 1975.'
+          text:
+            'Any replacement ivory must have been harvested before 1 January 1975.'
         }
       },
       {
         value: ItemType.MUSEUM,
         text: ItemType.MUSEUM,
         hint: {
-          text: 'This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum.'
+          text:
+            'This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum.'
         }
       },
       {
         value: ItemType.HIGH_VALUE,
         text: ItemType.HIGH_VALUE,
         hint: {
-          text: 'Any replacement ivory must have been harvested before 1 January 1975.'
+          text:
+            'Any replacement ivory must have been harvested before 1 January 1975.'
         }
       }
     ]

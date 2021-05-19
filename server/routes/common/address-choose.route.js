@@ -42,16 +42,20 @@ const handlers = {
       RedisKeys.OWNED_BY_APPLICANT
     )
 
-    RedisService.set(
+    await RedisService.set(
       request,
       addressType === AddressType.OWNER
         ? RedisKeys.OWNER_ADDRESS
         : RedisKeys.APPLICANT_ADDRESS,
-      payload.address
+      payload.address.replace('&amp;', '&')
     )
 
     if (ownedByApplicant === Options.YES) {
-      RedisService.set(request, RedisKeys.APPLICANT_ADDRESS, payload.address)
+      await RedisService.set(
+        request,
+        RedisKeys.APPLICANT_ADDRESS,
+        payload.address
+      )
     }
 
     let route

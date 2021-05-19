@@ -33,7 +33,7 @@ const handlers = {
         .code(400)
     }
 
-    RedisService.set(request, RedisKeys.IVORY_AGE, _getIvoryAge(payload))
+    await RedisService.set(request, RedisKeys.IVORY_AGE, _getIvoryAge(payload))
 
     if ((await _getItemType(request)) === ItemType.TEN_PERCENT) {
       return h.redirect(Paths.IVORY_INTEGRAL)

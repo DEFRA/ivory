@@ -9,7 +9,7 @@ const handlers = {
     return h.view(Views.WHO_OWNS_ITEM, { pageTitle: 'Who owns the item?' })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
@@ -21,7 +21,7 @@ const handlers = {
         .code(400)
     }
 
-    RedisService.set(
+    await RedisService.set(
       request,
       RedisKeys.OWNED_BY_APPLICANT,
       payload.whoOwnsItem === 'I own it' ? Options.YES : Options.NO
