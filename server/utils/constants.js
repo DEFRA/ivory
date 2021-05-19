@@ -29,8 +29,8 @@ const Paths = {
   APPLICANT_CONTACT_DETAILS: '/user-details/applicant/contact-details',
   APPLICANT_ADDRESS_ENTER: '/user-details/applicant/address-enter',
   APPLICANT_ADDRESS_FIND: '/user-details/applicant/address-find',
-  APPLICANT_ADDRESS_INTERNATIONAL:
-    '/user-details/applicant/address-international',
+  APPLICANT_ADDRESS_INTERNATIONAL: '/user-details/applicant/address-international',
+  CAN_CONTINUE: '/can-continue',
   CHECK_YOUR_ANSWERS: '/check-your-answers',
   IVORY_ADDED: '/ivory-added',
   IVORY_AGE: '/ivory-age',
@@ -55,6 +55,7 @@ const Views = {
   ADDRESS_ENTER: 'user-details/address-enter',
   ADDRESS_FIND: 'user-details/address-find',
   ADDRESS_INTERNATIONAL: 'user-details/address-international',
+  CAN_CONTINUE: 'can-continue',
   CHECK_YOUR_ANSWERS: 'check-your-answers',
   CONTACT_DETAILS: 'user-details/contact-details',
   HOME: 'home',
