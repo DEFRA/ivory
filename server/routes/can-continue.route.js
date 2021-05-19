@@ -6,7 +6,7 @@ const { ItemType, Paths, RedisKeys, Views } = require('../utils/constants')
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.CAN_CONTINUE, {
-      ...await (_getContext(request))
+      ...(await _getContext(request))
     })
   },
 
