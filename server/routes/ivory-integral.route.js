@@ -22,7 +22,7 @@ const handlers = {
     }
 
     RedisService.set(request, RedisKeys.IVORY_INTEGRAL, payload.ivoryIsIntegral)
-    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
+    return h.redirect(Paths.UPLOAD_PHOTOS)
   }
 }
 

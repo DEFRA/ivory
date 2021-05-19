@@ -38,10 +38,10 @@ const handlers = {
     // return h.redirect(Paths.PROVE_ITEM_MADE_BEFORE_X)
 
     // If museum
-    return h.redirect(Paths.UPLOAD_PHOTOS)
+    // return h.redirect(Paths.UPLOAD_PHOTOS)
 
     // ELSE
-    // return h.redirect(Paths.PROVE_ITEM_LESS_THAN_X%)
+    return h.redirect(Paths.IVORY_VOLUME)
   }
 }
 
