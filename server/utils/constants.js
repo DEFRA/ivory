@@ -24,6 +24,7 @@ const Paths = {
   APPLICANT_ADDRESS_INTERNATIONAL:
     '/user-details/applicant/address-international',
   CHECK_YOUR_ANSWERS: '/check-your-answers',
+  DESCRIBE_THE_ITEM: '/describe-the-item',
   INTO_OUT_OF_GB: '/into-out-of-gb',
   IVORY_ADDED: '/ivory-added',
   IVORY_INTEGRAL: '/ivory-integral',
@@ -50,6 +51,7 @@ const Views = {
   ADDRESS_INTERNATIONAL: 'user-details/address-international',
   CHECK_YOUR_ANSWERS: 'check-your-answers',
   CONTACT_DETAILS: 'user-details/contact-details',
+  DESCRIBE_THE_ITEM: 'describe-the-item',
   HOME: 'home',
   INTO_OUT_OF_GB: 'into-out-of-gb',
   IVORY_ADDED: 'ivory-added',

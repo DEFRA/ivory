@@ -39,9 +39,10 @@ const handlers = {
 
     RedisService.set(request, RedisKeys.PAYMENT_AMOUNT, cost)
 
-    return h.redirect(Paths.UPLOAD_PHOTOS)
+    return h.redirect(Paths.DESCRIBE_THE_ITEM)
   }
 }
+
 const _getContext = () => {
   return {
     pageTitle: 'What is your ivory item?'
