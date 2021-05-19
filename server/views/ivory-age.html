@@ -1,0 +1,88 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if checkbox6 == 'Other' %}
+        {% set otherHtml %}
+          {{ govukTextarea({
+            name: "otherDetail",
+            id: "otherDetail",
+            label: {
+              text: "Give details"
+            },
+            value: otherText,
+            rows: 2,
+            errorMessage: fieldErrors['otherDetail']
+          }) }}
+        {% endset -%}
+      {% endif %}
+
+      {{ govukCheckboxes({
+        idPrefix: "ivoryAge",
+        name: "ivoryAge",
+        fieldset: {
+          legend: {
+            text: pageTitle,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: "Select all that apply"
+        },
+        errorMessage: fieldErrors['ivoryAge'],
+        items: [
+        {
+          value: "It has a stamp, serial number or signature to prove its age",
+          text: "It has a stamp, serial number or signature to prove its age",
+          checked: checkbox1Checked
+        },
+        {
+          value: "I have a dated receipt showing when it was bought or repaired",
+          text: 'I have a dated receipt showing when it was bought or repaired',
+          checked: checkbox2Checked
+        },
+        {
+          value: "I have a dated publication that shows or describes the item",
+          text: "I have a dated publication that shows or describes the item",
+          checked: checkbox3Checked
+        },
+        {
+          value: checkbox4,
+          text: checkbox4,
+          checked: checkbox4Checked
+        },
+        {
+          value: "I have written verification from a relevant expert",
+          text: "I have written verification from a relevant expert",
+          checked: checkbox5Checked
+        },
+        {
+          value: checkbox6,
+          text: checkbox6,
+          checked: checkbox6Checked,
+          conditional: {
+            html: otherHtml
+          }
+        }
+      ]
+      }) }}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text: "Continue"
+        })
+      }}
+
+    </div>
+  </div>
+{% endblock %}

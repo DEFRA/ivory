@@ -1,7 +1,7 @@
 'use strict'
 
-const { Paths, RedisKeys, Views } = require('../utils/constants')
 const config = require('../utils/config')
+const { ItemType, Paths, RedisKeys, Views } = require('../utils/constants')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
@@ -32,8 +32,7 @@ const handlers = {
     )
 
     const cost =
-      payload.whatTypeOfItemIsIt !==
-      'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
+      payload.whatTypeOfItemIsIt !== ItemType.HIGH_VALUE
         ? config.paymentAmountBandA
         : config.paymentAmountBandB
 
@@ -45,7 +44,44 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'What is your ivory item?'
+    pageTitle: 'What is your ivory item?',
+    items: [
+      {
+        value: ItemType.MUSICAL,
+        text: ItemType.MUSICAL,
+        hint: {
+          text: 'Any replacement ivory must have been harvested before 1 January 1975.'
+        }
+      },
+      {
+        value: ItemType.TEN_PERCENT,
+        text: ItemType.TEN_PERCENT,
+        hint: {
+          text: 'The ivory must be integral to the item. Any replacement ivory must have been harvested before 1 January 1975.'
+        }
+      },
+      {
+        value: ItemType.MINIATURE,
+        text: ItemType.MINIATURE,
+        hint: {
+          text: 'Any replacement ivory must have been harvested before 1 January 1975.'
+        }
+      },
+      {
+        value: ItemType.MUSEUM,
+        text: ItemType.MUSEUM,
+        hint: {
+          text: 'This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum.'
+        }
+      },
+      {
+        value: ItemType.HIGH_VALUE,
+        text: ItemType.HIGH_VALUE,
+        hint: {
+          text: 'Any replacement ivory must have been harvested before 1 January 1975.'
+        }
+      }
+    ]
   }
 }
 
