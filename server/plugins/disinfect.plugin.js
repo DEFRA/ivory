@@ -6,6 +6,6 @@ module.exports = {
   options: {
     disinfectQuery: true,
     disinfectParams: true,
-    disinfectPayload: true
+    disinfectPayload: false
   }
 }

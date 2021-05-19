@@ -47,7 +47,7 @@ const handlers = {
       addressType === AddressType.OWNER
         ? RedisKeys.OWNER_ADDRESS
         : RedisKeys.APPLICANT_ADDRESS,
-      payload.address.replace('&amp;', '&')
+      payload.address
     )
 
     if (ownedByApplicant === Options.YES) {
