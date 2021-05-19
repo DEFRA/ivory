@@ -38,7 +38,7 @@ const handlers = {
 
     RedisService.set(request, RedisKeys.PAYMENT_AMOUNT, cost)
 
-    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
+    return h.redirect(Paths.CAN_CONTINUE)
   }
 }
 const _getContext = () => {
