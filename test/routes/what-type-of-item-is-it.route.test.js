@@ -11,7 +11,7 @@ const RedisService = require('../../server/services/redis.service')
 describe('/what-type-of-item-is-it route', () => {
   let server
   const url = '/what-type-of-item-is-it'
-  const nextUrl = '/upload-photos'
+  const nextUrlDescribeTheItem = '/describe-the-item'
 
   const elementIds = {
     whatTypeOfItemIsIt: 'whatTypeOfItemIsIt',
@@ -169,7 +169,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Musical instrument made before 1975 with less than 20% ivory',
-          nextUrl,
+          nextUrlDescribeTheItem,
           2000
         )
       })
@@ -179,7 +179,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Item made before 3 March 1947 with less than 10% ivory',
-          nextUrl,
+          nextUrlDescribeTheItem,
           2000
         )
       })
@@ -189,7 +189,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
-          nextUrl,
+          nextUrlDescribeTheItem,
           2000
         )
       })
@@ -199,7 +199,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Item to be sold or hired out to a qualifying museum',
-          nextUrl,
+          nextUrlDescribeTheItem,
           2000
         )
       })
@@ -209,7 +209,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
-          nextUrl,
+          nextUrlDescribeTheItem,
           25000
         )
       })

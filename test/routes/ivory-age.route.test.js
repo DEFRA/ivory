@@ -13,7 +13,7 @@ const CharacterLimits = require('../mock-data/character-limits')
 describe('/ivory-age route', () => {
   let server
   const url = '/ivory-age'
-  const nextUrl = '/check-your-answers'
+  const nextUrlUploadPhotos = '/upload-photos'
   const nextUrl10percent = '/ivory-integral'
 
   const elementIds = {
@@ -56,9 +56,7 @@ describe('/ivory-age route', () => {
 
     describe('GET: Item is a musical instrument', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockReturnValue(ItemType.MUSICAL)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.MUSICAL)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -140,9 +138,7 @@ describe('/ivory-age route', () => {
 
     describe('GET: Item has < 10% ivory', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockReturnValue(ItemType.TEN_PERCENT)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.TEN_PERCENT)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -174,9 +170,7 @@ describe('/ivory-age route', () => {
 
     describe('GET: Has correct details for a portrait miniature', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockReturnValue(ItemType.MINIATURE)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.MINIATURE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -208,9 +202,7 @@ describe('/ivory-age route', () => {
 
     describe('GET: Has correct details for S2 (item of outstandingly high value)', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockReturnValue(ItemType.HIGH_VALUE)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.HIGH_VALUE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -254,9 +246,7 @@ describe('/ivory-age route', () => {
 
     describe('Success: Item is a musical instrument', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockReturnValue(ItemType.MUSICAL)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.MUSICAL)
       })
 
       it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
@@ -264,7 +254,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'It has a stamp, serial number or signature to prove its age',
-          nextUrl
+          nextUrlUploadPhotos
         )
       })
 
@@ -273,7 +263,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'I have a dated receipt showing when it was bought or repaired',
-          nextUrl
+          nextUrlUploadPhotos
         )
       })
 
@@ -282,7 +272,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'I have a dated publication that shows or describes the item',
-          nextUrl
+          nextUrlUploadPhotos
         )
       })
 
@@ -291,7 +281,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'It’s been in the family since before 1975',
-          nextUrl
+          nextUrlUploadPhotos
         )
       })
 
@@ -300,7 +290,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'I have written verification from a relevant expert',
-          nextUrl
+          nextUrlUploadPhotos
         )
       })
 
@@ -310,7 +300,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'Other',
-          nextUrl,
+          nextUrlUploadPhotos,
           'some text'
         )
       })
@@ -318,9 +308,7 @@ describe('/ivory-age route', () => {
 
     describe('Success: Item has < 10% ivory', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockReturnValue(ItemType.TEN_PERCENT)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.TEN_PERCENT)
       })
 
       it('should store the value in Redis and progress to the next route when the fourth option has been selected', async () => {
@@ -335,9 +323,7 @@ describe('/ivory-age route', () => {
 
     describe('Success: Item of outstandingly high value', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockReturnValue(ItemType.HIGH_VALUE)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.HIGH_VALUE)
       })
 
       it('should store the value in Redis and progress to the next route when the fourth option has been selected', async () => {
@@ -345,7 +331,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'It’s been in the family since before 1918',
-          nextUrl
+          nextUrlUploadPhotos
         )
       })
 
@@ -354,16 +340,14 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'It’s been carbon-dated',
-          nextUrl
+          nextUrlUploadPhotos
         )
       })
     })
 
     describe('Failure', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockReturnValue(ItemType.TEN_PERCENT)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.TEN_PERCENT)
       })
 
       it('should display a validation error message if the user does not check a box', async () => {
@@ -439,7 +423,7 @@ const _checkSelectedCheckboxAction = async (
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
     redisKey,
-    (otherText === '') ? selectedOption : `${selectedOption}: ${otherText}`
+    otherText === '' ? selectedOption : `${selectedOption}: ${otherText}`
   )
 
   expect(response.headers.location).toEqual(nextUrl)

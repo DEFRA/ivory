@@ -11,7 +11,7 @@ const RedisService = require('../../server/services/redis.service')
 describe('/ivory-integral route', () => {
   let server
   const url = '/ivory-integral'
-  const nextUrl = '/check-your-answers'
+  const nextUrlUploadPhotos = '/upload-photos'
 
   const elementIds = {
     ivoryIsIntegral: 'ivoryIsIntegral',
@@ -114,7 +114,7 @@ describe('/ivory-integral route', () => {
           postOptions,
           server,
           'The ivory is essential to the design or function of the item',
-          nextUrl
+          nextUrlUploadPhotos
         )
       })
 
@@ -123,7 +123,7 @@ describe('/ivory-integral route', () => {
           postOptions,
           server,
           'You cannot remove the ivory easily or without damaging the item',
-          nextUrl
+          nextUrlUploadPhotos
         )
       })
 
@@ -132,7 +132,7 @@ describe('/ivory-integral route', () => {
           postOptions,
           server,
           'Both of the above',
-          nextUrl
+          nextUrlUploadPhotos
         )
       })
     })
