@@ -30,7 +30,7 @@ describe('/user-details/owner/address-enter route', () => {
   const url = '/user-details/owner/address-enter'
   const nextUrlApplicantContactDetails =
     '/user-details/applicant/contact-details'
-  const nextUrlCheckYourAnswers = '/check-your-answers'
+  const nextUrlWhereIsItem = '/where-is-item'
 
   let document
 
@@ -453,7 +453,7 @@ describe('/user-details/owner/address-enter route', () => {
           'A Big House, London, SW1A 1AA'
         )
 
-        expect(response.headers.location).toEqual(nextUrlCheckYourAnswers)
+        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
       })
     })
 

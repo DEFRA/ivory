@@ -14,7 +14,7 @@ const { buildErrorSummary, Validators } = require('../utils/validation')
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.IVORY_AGE, {
-      ...await (_getContext(request))
+      ...(await _getContext(request))
     })
   },
 
@@ -25,20 +25,20 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.IVORY_AGE, {
-          ...await (_getContext(request)),
-          ...await (_getCheckboxes(request)),
-          otherText: (payload.otherDetail) ? payload.otherDetail : '',
+          ...(await _getContext(request)),
+          ...(await _getCheckboxes(request)),
+          otherText: payload.otherDetail ? payload.otherDetail : '',
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    RedisService.set(request, RedisKeys.IVORY_AGE, _getIvoryAge(payload))
+    await RedisService.set(request, RedisKeys.IVORY_AGE, _getIvoryAge(payload))
 
-    if (await _getItemType(request) === ItemType.TEN_PERCENT) {
+    if ((await _getItemType(request)) === ItemType.TEN_PERCENT) {
       return h.redirect(Paths.IVORY_INTEGRAL)
     } else {
-      return h.redirect(Paths.CHECK_YOUR_ANSWERS)
+      return h.redirect(Paths.UPLOAD_PHOTOS)
     }
   }
 }
@@ -78,7 +78,8 @@ const _getContext = async request => {
   return {
     pageTitle: `How do you know the item was made before ${madeBefore}?`,
     checkbox4: `It’s been in the family since before ${madeBefore}`,
-    checkbox6: (itemType === ItemType.HIGH_VALUE) ? 'It’s been carbon-dated' : 'Other'
+    checkbox6:
+      itemType === ItemType.HIGH_VALUE ? 'It’s been carbon-dated' : 'Other'
   }
 }
 
@@ -87,11 +88,21 @@ const _getCheckboxes = async request => {
   const ivoryAge = request.payload.ivoryAge
   if (ivoryAge) {
     return {
-      checkbox1Checked: ivoryAge.includes('It has a stamp, serial number or signature to prove its age'),
-      checkbox2Checked: ivoryAge.includes('I have a dated receipt showing when it was bought or repaired'),
-      checkbox3Checked: ivoryAge.includes('I have a dated publication that shows or describes the item'),
-      checkbox4Checked: ivoryAge.includes(`It’s been in the family since before ${madeBefore}`),
-      checkbox5Checked: ivoryAge.includes('I have written verification from a relevant expert'),
+      checkbox1Checked: ivoryAge.includes(
+        'It has a stamp, serial number or signature to prove its age'
+      ),
+      checkbox2Checked: ivoryAge.includes(
+        'I have a dated receipt showing when it was bought or repaired'
+      ),
+      checkbox3Checked: ivoryAge.includes(
+        'I have a dated publication that shows or describes the item'
+      ),
+      checkbox4Checked: ivoryAge.includes(
+        `It’s been in the family since before ${madeBefore}`
+      ),
+      checkbox5Checked: ivoryAge.includes(
+        'I have written verification from a relevant expert'
+      ),
       checkbox6Checked: ivoryAge.includes('Other')
     }
   }
@@ -116,7 +127,9 @@ const _validateForm = payload => {
     if (Validators.maxLength(payload.otherDetail, CharacterLimits.Input)) {
       errors.push({
         name: 'otherDetail',
-        text: `Enter no more than ${formatNumberWithCommas(CharacterLimits.Input)} characters`
+        text: `Enter no more than ${formatNumberWithCommas(
+          CharacterLimits.Input
+        )} characters`
       })
     }
   }

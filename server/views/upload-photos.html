@@ -4,25 +4,12 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block formContent %}
+
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
 
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
-
-      {% if showHelpText %}
-        <p id="helpText1" class="govuk-body">No results for "{{ nameOrNumber }}".</p>
-        <p id="helpText2" class="govuk-body">Here are all the results for {{ postcode }}.</p>
-      {% endif %}
-
-      {{ govukRadios({
-        idPrefix: "address",
-        name: "address",
-        errorMessage: fieldErrors['address'],
-        items: addresses
-      }) }}
-
-      <p class="govuk-body"><a id="addressNotOnList" href="address-enter">The address is not on the list</a></p>
 
       {{ govukButton({
           attributes: {

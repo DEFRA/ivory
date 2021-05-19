@@ -32,7 +32,7 @@ const handlers = {
       RedisKeys.OWNED_BY_APPLICANT
     )
 
-    RedisService.set(
+    await RedisService.set(
       request,
       addressType === AddressType.OWNER
         ? RedisKeys.OWNER_ADDRESS
@@ -41,7 +41,7 @@ const handlers = {
     )
 
     if (ownedByApplicant === Options.YES) {
-      RedisService.set(
+      await RedisService.set(
         request,
         RedisKeys.APPLICANT_ADDRESS,
         context.address.AddressLine
@@ -52,10 +52,10 @@ const handlers = {
     if (addressType === AddressType.OWNER) {
       route =
         ownedByApplicant === Options.YES
-          ? Paths.CHECK_YOUR_ANSWERS
+          ? Paths.WHERE_IS_ITEM
           : Paths.APPLICANT_CONTACT_DETAILS
     } else {
-      route = Paths.CHECK_YOUR_ANSWERS
+      route = Paths.WHERE_IS_ITEM
     }
 
     return h.redirect(route)

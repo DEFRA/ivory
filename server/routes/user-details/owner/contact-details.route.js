@@ -47,25 +47,25 @@ const handlers = {
     }
 
     if (ownedByApplicant === Options.YES) {
-      RedisService.set(
+      await RedisService.set(
         request,
         RedisKeys.OWNER_NAME,
         payload.businessName ?? payload.name
       )
-      RedisService.set(
+      await RedisService.set(
         request,
         RedisKeys.OWNER_EMAIL_ADDRESS,
         payload.emailAddress
       )
-      RedisService.set(request, RedisKeys.APPLICANT_NAME, payload.name)
-      RedisService.set(
+      await RedisService.set(request, RedisKeys.APPLICANT_NAME, payload.name)
+      await RedisService.set(
         request,
         RedisKeys.APPLICANT_EMAIL_ADDRESS,
         payload.emailAddress
       )
     } else {
-      RedisService.set(request, RedisKeys.OWNER_NAME, payload.name)
-      RedisService.set(
+      await RedisService.set(request, RedisKeys.OWNER_NAME, payload.name)
+      await RedisService.set(
         request,
         RedisKeys.OWNER_EMAIL_ADDRESS,
         payload.emailAddress

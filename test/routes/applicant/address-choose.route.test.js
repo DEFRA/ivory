@@ -19,7 +19,7 @@ const {
 describe('/user-details/applicant/address-choose route', () => {
   let server
   const url = '/user-details/applicant/address-choose'
-  const nextUrlCheckYourAnswers = '/check-your-answers'
+  const nextUrlWhereIsItem = '/where-is-item'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -202,7 +202,7 @@ describe('/user-details/applicant/address-choose route', () => {
           singleAddress[0].Address.AddressLine
         )
 
-        expect(response.headers.location).toEqual(nextUrlCheckYourAnswers)
+        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
       })
     })
 

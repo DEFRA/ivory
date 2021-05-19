@@ -28,7 +28,7 @@ const elementIds = {
 describe('/user-details/applicant/address-enter route', () => {
   let server
   const url = '/user-details/applicant/address-enter'
-  const nextUrlCheckYourAnswers = '/check-your-answers'
+  const nextUrlWhereIsItem = '/where-is-item'
 
   let document
 
@@ -280,7 +280,7 @@ describe('/user-details/applicant/address-enter route', () => {
           'A Big House, London, SW1A 1AA'
         )
 
-        expect(response.headers.location).toEqual(nextUrlCheckYourAnswers)
+        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
       })
     })
 

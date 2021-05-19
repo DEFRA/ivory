@@ -9,7 +9,7 @@ const handlers = {
     return h.view(Views.IVORY_INTEGRAL)
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
@@ -21,8 +21,12 @@ const handlers = {
         .code(400)
     }
 
-    RedisService.set(request, RedisKeys.IVORY_INTEGRAL, payload.ivoryIsIntegral)
-    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
+    await RedisService.set(
+      request,
+      RedisKeys.IVORY_INTEGRAL,
+      payload.ivoryIsIntegral
+    )
+    return h.redirect(Paths.UPLOAD_PHOTOS)
   }
 }
 

@@ -16,7 +16,7 @@ const { singleAddress } = require('../../mock-data/addresses')
 describe('/user-details/applicant/address-confirm route', () => {
   let server
   const url = '/user-details/applicant/address-confirm'
-  const nextUrlCheckYourAnswers = '/check-your-answers'
+  const nextUrlWhereIsItem = '/where-is-item'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -167,7 +167,7 @@ describe('/user-details/applicant/address-confirm route', () => {
           redisKeyApplicantAddress,
           singleAddress[0].Address.AddressLine
         )
-        expect(response.headers.location).toEqual(nextUrlCheckYourAnswers)
+        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
       })
     })
   })

@@ -19,7 +19,8 @@ const {
 describe('/user-details/owner/address-choose route', () => {
   let server
   const url = '/user-details/owner/address-choose'
-  const nextUrlCheckYourAnswers = '/check-your-answers'
+  const nextUrlWhereIsItem = '/where-is-item'
+
   const nextUrlApplicantContactDetails =
     '/user-details/applicant/contact-details'
 
@@ -317,7 +318,7 @@ describe('/user-details/owner/address-choose route', () => {
           singleAddress[0].Address.AddressLine
         )
 
-        expect(response.headers.location).toEqual(nextUrlCheckYourAnswers)
+        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
       })
     })
 

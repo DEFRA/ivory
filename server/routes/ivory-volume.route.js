@@ -14,7 +14,7 @@ const { buildErrorSummary, Validators } = require('../utils/validation')
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.IVORY_VOLUME, {
-      ...await (_getContext(request))
+      ...(await _getContext(request))
     })
   },
 
@@ -25,17 +25,21 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.IVORY_VOLUME, {
-          ...await (_getContext(request)),
+          ...(await _getContext(request)),
           otherChecked: payload.ivoryVolume === 'Other',
-          otherText: (payload.otherDetail) ? payload.otherDetail : '',
+          otherText: payload.otherDetail ? payload.otherDetail : '',
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    RedisService.set(request, RedisKeys.IVORY_VOLUME, (payload.ivoryVolume === 'Other')
-      ? `${payload.ivoryVolume}: ${payload.otherDetail}`
-      : payload.ivoryVolume)
+    await RedisService.set(
+      request,
+      RedisKeys.IVORY_VOLUME,
+      payload.ivoryVolume === 'Other'
+        ? `${payload.ivoryVolume}: ${payload.otherDetail}`
+        : payload.ivoryVolume
+    )
 
     return h.redirect(Paths.IVORY_AGE)
   }
@@ -75,7 +79,9 @@ const _validateForm = payload => {
     if (Validators.maxLength(payload.otherDetail, CharacterLimits.Input)) {
       errors.push({
         name: 'otherDetail',
-        text: `Enter no more than ${formatNumberWithCommas(CharacterLimits.Input)} characters`
+        text: `Enter no more than ${formatNumberWithCommas(
+          CharacterLimits.Input
+        )} characters`
       })
     }
   }
