@@ -18,9 +18,11 @@ const Options = {
 const ItemType = {
   MUSICAL: 'Musical instrument made before 1975 with less than 20% ivory',
   TEN_PERCENT: 'Item made before 3 March 1947 with less than 10% ivory',
-  MINIATURE: 'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
+  MINIATURE:
+    'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
   MUSEUM: 'Item to be sold or hired out to a qualifying museum',
-  HIGH_VALUE: 'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
+  HIGH_VALUE:
+    'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
 }
 
 const Paths = {
@@ -50,7 +52,8 @@ const Paths = {
   UPLOAD_PHOTOS: '/upload-photos',
   WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',
   WHERE_IS_ITEM: '/where-is-item',
-  WHO_OWNS_ITEM: '/who-owns-the-item'
+  WHO_OWNS_ITEM: '/who-owns-the-item',
+  WHY_IS_ITEM_RMI: '/why-is-item-rmi'
 }
 
 const Views = {
@@ -74,7 +77,8 @@ const Views = {
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHERE_IS_ITEM: 'where-is-item',
   WHO_OWNS_ITEM: 'who-owns-the-item',
-  YES_NO_IDK: 'yes-no-idk'
+  YES_NO_IDK: 'yes-no-idk',
+  WHY_IS_ITEM_RMI: 'why-is-item-rmi'
 }
 
 const RedisKeys = {

@@ -40,7 +40,7 @@ const handlers = {
     switch (itemType) {
       // RMI?
       case ItemType.HIGH_VALUE:
-        return h.redirect(Paths.PROVE_ITEM_IS_RMI)
+        return h.redirect(Paths.WHY_IS_ITEM_RMI)
       case ItemType.MINIATURE:
         return h.redirect(Paths.IVORY_AGE)
       case ItemType.MUSEUM:
@@ -48,17 +48,6 @@ const handlers = {
       default:
         return h.redirect(Paths.IVORY_VOLUME)
     }
-    // If RMI
-    // return h.redirect(Paths.PROVE_ITEM_IS_RMI)
-
-    // If Portrait miniature
-    // return h.redirect(Paths.PROVE_ITEM_MADE_BEFORE_X)
-
-    // If museum
-    // return h.redirect(Paths.UPLOAD_PHOTOS)
-
-    // ELSE
-    // return h.redirect(Paths.IVORY_VOLUME)
   }
 }
 
