@@ -14,9 +14,14 @@ describe('/ivory-volume route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
+    listHeading: 'listHeading',
+    listItem1: 'listItem-1',
+    listItem2: 'listItem-2',
+    listItem3: 'listItem-3',
     additionalStep1: 'additionalStep-1',
     additionalStep2: 'additionalStep-2',
     finalParagraph: 'finalParagraph',
+    cancelLink: 'cancelLink',
     continue: 'continue'
   }
 
@@ -68,6 +73,38 @@ describe('/ivory-volume route', () => {
         )
       })
 
+      it('should have the correct list heading', () => {
+        const element = document.querySelector(`#${elementIds.listHeading}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'You’ll need to:'
+        )
+      })
+
+      it('should have the correct list item', () => {
+        const element = document.querySelector(`#${elementIds.listItem1}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'describe the item and how it meets the exemption criteria'
+        )
+      })
+
+      it('should have the correct list item', () => {
+        const element = document.querySelector(`#${elementIds.listItem2}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'upload some photos of it'
+        )
+      })
+
+      it('should have the correct list item', () => {
+        const element = document.querySelector(`#${elementIds.listItem3}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'provide contact details'
+        )
+      })
+
       it('should have the correct list item', () => {
         const element = document.querySelector(`#${elementIds.additionalStep1}`)
         expect(element).toBeTruthy()
@@ -88,6 +125,13 @@ describe('/ivory-volume route', () => {
         const element = document.querySelector(`#${elementIds.continue}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      })
+
+      it('should have the correct "Cancel" link', () => {
+        const element = document.querySelector(`#${elementIds.cancelLink}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Cancel')
+        expect(element.href).toEqual('/')
       })
     })
 

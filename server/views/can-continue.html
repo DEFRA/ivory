@@ -10,12 +10,12 @@
 
       <h1 class="govuk-heading-l" id="pageTitle">{{ pageTitle }}</h1>
 
-        <p class="govuk-body">You’ll need to:</p>
+        <p class="govuk-body" id="listHeading">You’ll need to:</p>
 
         <ul class="govuk-list govuk-list--bullet">
-          <li>describe the item and how it meets the exemption criteria</li>
-          <li>upload some photos of it</li>
-          <li>provide contact details</li>
+          <li id="listItem-1">describe the item and how it meets the exemption criteria</li>
+          <li id="listItem-2">upload some photos of it</li>
+          <li id="listItem-3">provide contact details</li>
           {% for additionalStep in additionalSteps %}
             <li id="additionalStep-{{ loop.index }}">{{ additionalStep }}</li>
           {% endfor %}
@@ -31,7 +31,7 @@
         })
       }}
 
-      <p class="govuk-body"><a class="govuk-link" href="/">Cancel</p>
+      <p class="govuk-body"><a id="cancelLink" class="govuk-link" href="/">Cancel</a></p>
     </div>
   </div>
 {% endblock %}
