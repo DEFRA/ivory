@@ -14,8 +14,8 @@ describe('/ivory-volume route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    li1: 'li1',
-    li2: 'li2',
+    additionalStep1: 'additionalStep-1',
+    additionalStep2: 'additionalStep-2',
     finalParagraph: 'finalParagraph',
     continue: 'continue'
   }
@@ -69,7 +69,7 @@ describe('/ivory-volume route', () => {
       })
 
       it('should have the correct list item', () => {
-        const element = document.querySelector(`#${elementIds.li1}`)
+        const element = document.querySelector(`#${elementIds.additionalStep1}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'pay an administration fee of £20'
@@ -109,7 +109,7 @@ describe('/ivory-volume route', () => {
       })
 
       it('should have the correct list item', () => {
-        const element = document.querySelector(`#${elementIds.li1}`)
+        const element = document.querySelector(`#${elementIds.additionalStep1}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'pay a non-refundable administration fee of £250'
@@ -117,7 +117,7 @@ describe('/ivory-volume route', () => {
       })
 
       it('should have the correct list item', () => {
-        const element = document.querySelector(`#${elementIds.li2}`)
+        const element = document.querySelector(`#${elementIds.additionalStep2}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'wait 30 days for your application to be approved by an expert'

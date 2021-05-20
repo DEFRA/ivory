@@ -16,7 +16,9 @@
           <li>describe the item and how it meets the exemption criteria</li>
           <li>upload some photos of it</li>
           <li>provide contact details</li>
-          {{ unorderedList | safe}}
+          {% for additionalStep in additionalSteps %}
+            <li id="additionalStep-{{ loop.index }}">{{ additionalStep }}</li>
+          {% endfor %}
         </ul>
 
         <p class="govuk-body" id="finalParagraph">{{ finalParagraph }}</p>

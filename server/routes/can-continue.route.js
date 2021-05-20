@@ -23,14 +23,18 @@ const _getContext = async request => {
   if ((await _getItemType(request)) === ItemType.HIGH_VALUE) {
     return {
       pageTitle: 'You must now apply for an exemption certificate',
-      unorderedList: '<li id="li1">pay a non-refundable administration fee of £250</li>' +
-                      '<li id="li2">wait 30 days for your application to be approved by an expert</li>',
+      additionalSteps: [
+        'pay a non-refundable administration fee of £250',
+        'wait 30 days for your application to be approved by an expert'
+      ],
       finalParagraph: 'If your application is successful, we will send you an exemption certificate so you can sell or hire out your item.'
     }
   } else {
     return {
       pageTitle: 'You must now make a self-assessment to sell or hire out your item',
-      unorderedList: '<li id="li1">pay an administration fee of £20</li>',
+      additionalSteps: [
+        'pay an administration fee of £20'
+      ],
       finalParagraph: 'As soon as you successfully make the payment, you’ll be able to sell the item or hire it out.'
     }
   }
