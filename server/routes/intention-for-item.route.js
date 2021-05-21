@@ -1,12 +1,12 @@
 'use strict'
 
 const RedisService = require('../services/redis.service')
-const { Options, Paths, RedisKeys, Views } = require('../utils/constants')
+const { Paths, RedisKeys, SaleIntention, Views } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
   get: async (request, h) => {
-    return h.view(Views.WHERE_IS_ITEM, {
+    return h.view(Views.INTENTION_FOR_ITEM, {
       ...(await _getContext(request))
     })
   },
@@ -17,7 +17,7 @@ const handlers = {
 
     if (errors.length) {
       return h
-        .view(Views.WHERE_IS_ITEM, {
+        .view(Views.INTENTION_FOR_ITEM, {
           ...(await _getContext(request)),
           ...buildErrorSummary(errors)
         })
@@ -26,25 +26,29 @@ const handlers = {
 
     await RedisService.set(
       request,
-      RedisKeys.WHERE_IS_ITEM,
-      payload.whereIsItem
+      RedisKeys.INTENTION_FOR_ITEM,
+      payload.intentionForItem
     )
 
-    return h.redirect(Paths.SALE_INTENTION)
+    return h.redirect(Paths.WHERE_IS_ITEM)
   }
 }
 
 const _getContext = () => {
   return {
-    pageTitle: 'Is the item currently in Great Britain?',
+    pageTitle: 'What do you intend to do with the item?',
     items: [
       {
-        value: Options.YES,
-        text: Options.YES
+        value: SaleIntention.SELL,
+        text: SaleIntention.SELL
       },
       {
-        value: Options.NO,
-        text: Options.NO
+        value: SaleIntention.HIRE,
+        text: SaleIntention.HIRE
+      },
+      {
+        value: SaleIntention.NOT_SURE_YET,
+        text: SaleIntention.NOT_SURE_YET
       }
     ]
   }
@@ -53,10 +57,10 @@ const _getContext = () => {
 const _validateForm = payload => {
   const errors = []
 
-  if (Validators.empty(payload.whereIsItem)) {
+  if (Validators.empty(payload.intentionForItem)) {
     errors.push({
-      name: 'whereIsItem',
-      text: 'You must tell us if the item is currently in Great Britain'
+      name: 'intentionForItem',
+      text: 'You must tell us what you intend to do with the item'
     })
   }
 
@@ -66,12 +70,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.WHERE_IS_ITEM}`,
+    path: `${Paths.INTENTION_FOR_ITEM}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.WHERE_IS_ITEM}`,
+    path: `${Paths.INTENTION_FOR_ITEM}`,
     handler: handlers.post
   }
 ]

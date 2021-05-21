@@ -18,7 +18,7 @@ describe('/user-details/owner/address-confirm route', () => {
   const url = '/user-details/owner/address-confirm'
   const nextUrlApplicantContactDetails =
     '/user-details/applicant/contact-details'
-  const nextUrlWhereIsItem = '/where-is-item'
+  const nextUrlIntentionForItem = '/intention-for-item'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -61,7 +61,7 @@ describe('/user-details/owner/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('yes')
+          .mockReturnValueOnce('Yes')
           .mockReturnValueOnce(JSON.stringify(singleAddress))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -131,7 +131,7 @@ describe('/user-details/owner/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('no')
+          .mockReturnValueOnce('No')
           .mockReturnValueOnce(JSON.stringify(singleAddress))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -215,9 +215,9 @@ describe('/user-details/owner/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('yes')
+          .mockReturnValueOnce('Yes')
           .mockReturnValueOnce(JSON.stringify(singleAddress))
-          .mockReturnValueOnce('yes')
+          .mockReturnValueOnce('Yes')
       })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
@@ -245,7 +245,7 @@ describe('/user-details/owner/address-confirm route', () => {
           redisKeyApplicantAddress,
           singleAddress[0].Address.AddressLine
         )
-        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
+        expect(response.headers.location).toEqual(nextUrlIntentionForItem)
       })
     })
 
@@ -253,9 +253,9 @@ describe('/user-details/owner/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('no')
+          .mockReturnValueOnce('No')
           .mockReturnValueOnce(JSON.stringify(singleAddress))
-          .mockReturnValueOnce('no')
+          .mockReturnValueOnce('No')
       })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {

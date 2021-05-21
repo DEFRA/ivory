@@ -19,7 +19,7 @@ const {
 describe('/user-details/applicant/address-choose route', () => {
   let server
   const url = '/user-details/applicant/address-choose'
-  const nextUrlWhereIsItem = '/where-is-item'
+  const nextUrl = '/intention-for-item'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -65,7 +65,7 @@ describe('/user-details/applicant/address-choose route', () => {
     beforeEach(async () => {
       RedisService.get = jest
         .fn()
-        .mockReturnValueOnce('no')
+        .mockReturnValueOnce('No')
         .mockReturnValueOnce(JSON.stringify(multipleAddresses))
         .mockReturnValueOnce(nameOrNumber)
         .mockReturnValueOnce(postcode)
@@ -144,7 +144,7 @@ describe('/user-details/applicant/address-choose route', () => {
 
       RedisService.get = jest
         .fn()
-        .mockReturnValueOnce('no')
+        .mockReturnValueOnce('No')
         .mockReturnValueOnce(JSON.stringify(multipleAddresses))
         .mockReturnValueOnce(nameOrNumber)
         .mockReturnValueOnce(postcode)
@@ -177,7 +177,7 @@ describe('/user-details/applicant/address-choose route', () => {
       beforeEach(() => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('no')
+          .mockReturnValueOnce('No')
           .mockReturnValueOnce(JSON.stringify(singleAddress))
       })
 
@@ -202,7 +202,7 @@ describe('/user-details/applicant/address-choose route', () => {
           singleAddress[0].Address.AddressLine
         )
 
-        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
+        expect(response.headers.location).toEqual(nextUrl)
       })
     })
 
@@ -210,7 +210,7 @@ describe('/user-details/applicant/address-choose route', () => {
       beforeEach(() => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('yes')
+          .mockReturnValueOnce('Yes')
           .mockReturnValueOnce(JSON.stringify(singleAddress))
       })
 

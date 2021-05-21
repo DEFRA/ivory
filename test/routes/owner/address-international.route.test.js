@@ -13,7 +13,7 @@ const CharacterLimits = require('../../mock-data/character-limits')
 describe('/user-details/owner/address-international route', () => {
   let server
   const url = '/user-details/owner/address-international'
-  const nextUrlWhereIsItem = '/where-is-item'
+  const nextUrlIntentionForItem = '/intention-for-item'
   const nextUrlApplicantDetails = '/user-details/applicant/contact-details'
 
   const elementIds = {
@@ -51,7 +51,7 @@ describe('/user-details/owner/address-international route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockReturnValue('yes')
+      RedisService.get = jest.fn().mockReturnValue('Yes')
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -101,7 +101,7 @@ describe('/user-details/owner/address-international route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockReturnValue('no')
+      RedisService.get = jest.fn().mockReturnValue('No')
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -146,7 +146,7 @@ describe('/user-details/owner/address-international route', () => {
 
     describe('Success: Owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('yes')
+        RedisService.get = jest.fn().mockReturnValue('Yes')
       })
 
       it('should store the address in Redis and progress to the next route when the address is entered by the search', async () => {
@@ -173,13 +173,13 @@ describe('/user-details/owner/address-international route', () => {
           'The Owner Address'
         )
 
-        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
+        expect(response.headers.location).toEqual(nextUrlIntentionForItem)
       })
     })
 
     describe('Success: Not owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('no')
+        RedisService.get = jest.fn().mockReturnValue('No')
       })
 
       it('should store the address in Redis and progress to the next route when the address is entered by the search', async () => {

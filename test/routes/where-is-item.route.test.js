@@ -8,14 +8,17 @@ const { ServerEvents } = require('../../server/utils/constants')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-describe('/ivory-integral route', () => {
+describe('/where-is-item route', () => {
   let server
-  const url = '/who-owns-the-item'
-  const nextUrl = '/user-details/owner/contact-details'
+  const url = '/where-is-item'
+  const nextUrl = '/sale-intention'
 
   const elementIds = {
-    ivoryIsIntegral: 'whoOwnsItem',
-    ivoryIsIntegral2: 'whoOwnsItem-2',
+    pageTitle: 'pageTitle',
+    helpText: 'helpText',
+    whereIsItem: 'whereIsItem',
+    whereIsItem2: 'whereIsItem-2',
+    whereIsItem3: 'whereIsItem-3',
     continue: 'continue'
   }
 
@@ -59,25 +62,22 @@ describe('/ivory-integral route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector('.govuk-fieldset__legend')
+      const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Who owns the item?')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'Is the item currently in Great Britain?'
+      )
     })
 
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
-        elementIds.ivoryIsIntegral,
-        'I own it',
-        'I own it'
+        elementIds.whereIsItem,
+        'Yes',
+        'Yes'
       )
 
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.ivoryIsIntegral2,
-        'Someone else owns it',
-        'Someone else owns it'
-      )
+      TestHelper.checkRadioOption(document, elementIds.whereIsItem2, 'No', 'No')
     })
 
     it('should have the correct Call to Action button', () => {
@@ -100,27 +100,17 @@ describe('/ivory-integral route', () => {
 
     describe('Success', () => {
       it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'I own it',
-          nextUrl
-        )
+        await _checkSelectedRadioAction(postOptions, server, 'Yes', nextUrl)
       })
 
       it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'You cannot remove the ivory easily or without damaging the item',
-          nextUrl
-        )
+        await _checkSelectedRadioAction(postOptions, server, 'No', nextUrl)
       })
     })
 
     describe('Failure', () => {
       it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.whoOwnsItem = ''
+        postOptions.payload.whereIsItem = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -128,9 +118,9 @@ describe('/ivory-integral route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'whoOwnsItem',
-          'whoOwnsItem-error',
-          'Tell us who owns the item'
+          'whereIsItem',
+          'whereIsItem-error',
+          'You must tell us if the item is currently in Great Britain'
         )
       })
     })
@@ -147,8 +137,8 @@ const _checkSelectedRadioAction = async (
   selectedOption,
   nextUrl
 ) => {
-  const redisKey = 'owned-by-applicant'
-  postOptions.payload.whoOwnsItem = selectedOption
+  const redisKey = 'where-is-item'
+  postOptions.payload.whereIsItem = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(0)
 
@@ -158,7 +148,7 @@ const _checkSelectedRadioAction = async (
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
     redisKey,
-    selectedOption === 'I own it' ? 'Yes' : 'No'
+    selectedOption
   )
 
   expect(response.headers.location).toEqual(nextUrl)

@@ -13,7 +13,7 @@ const CharacterLimits = require('../../mock-data/character-limits')
 describe('/user-details/applicant/address-international route', () => {
   let server
   const url = '/user-details/applicant/address-international'
-  const nextUrl = '/where-is-item'
+  const nextUrl = '/intention-for-item'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -106,7 +106,7 @@ describe('/user-details/applicant/address-international route', () => {
 
     describe('Success', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('no')
+        RedisService.get = jest.fn().mockReturnValue('No')
       })
 
       it('should store the address in Redis and progress to the next route when the address is entered by the search', async () => {

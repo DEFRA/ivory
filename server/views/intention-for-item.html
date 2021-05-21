@@ -9,14 +9,17 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
-
-      <p id="helpText">Great Britain is England, Wales and Scotland.</p>
-
       {{ govukRadios({
-        idPrefix: "whereIsItem",
-        name: "whereIsItem",
-        errorMessage: fieldErrors['whereIsItem'],
+        idPrefix: "intentionForItem",
+        name: "intentionForItem",
+        fieldset: {
+          legend: {
+            text: pageTitle,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        errorMessage: fieldErrors['intentionForItem'],
         items: items
       }) }}
 

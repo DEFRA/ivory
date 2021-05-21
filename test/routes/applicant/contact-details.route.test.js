@@ -54,7 +54,7 @@ describe('user-details/applicant/contact-details route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockReturnValue('yes')
+      RedisService.get = jest.fn().mockReturnValue('Yes')
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -113,7 +113,7 @@ describe('user-details/applicant/contact-details route', () => {
 
     describe('Success', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('no')
+        RedisService.get = jest.fn().mockReturnValue('No')
       })
 
       it('should store the value in Redis and progress to the next route when all fields have been entered correctly', async () => {
@@ -139,7 +139,7 @@ describe('user-details/applicant/contact-details route', () => {
 
     describe('Failure', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('yes')
+        RedisService.get = jest.fn().mockReturnValue('Yes')
       })
 
       it('should display a validation error message if the user does not enter the full name', async () => {

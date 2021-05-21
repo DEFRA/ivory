@@ -170,6 +170,57 @@
           },
           {
             key: {
+              text: "What do you intend to do with the item?"
+            },
+            value: {
+              text: intentionForItem
+            },
+            actions: {
+              items: [
+                {
+                  href: "intention-for-item",
+                  text: "Change",
+                  visuallyHiddenText: "What do you intend to do with the item?"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Is the item currently in Great Britain?"
+            },
+            value: {
+              text: whereIsItem
+            },
+            actions: {
+              items: [
+                {
+                  href: "where-is-item",
+                  text: "Change",
+                  visuallyHiddenText: "Is the item currently in Great Britain?"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Will the item move into/out of Great Britain when you sell/hire/sell or hire it?"
+            },
+            value: {
+              text: saleIntention
+            },
+            actions: {
+              items: [
+                {
+                  href: "sale-intention",
+                  text: "Change",
+                  visuallyHiddenText: "Will the item move into/out of Great Britain when you sell/hire/sell or hire it?"
+                }
+              ]
+            }
+          },
+          {
+            key: {
               text: "Cost"
             },
             value: {

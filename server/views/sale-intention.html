@@ -11,6 +11,15 @@
 
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
+      <p id="helpText">Great Britain is England, Wales and Scotland.</p>
+
+      {{ govukRadios({
+        idPrefix: "saleIntention",
+        name: "saleIntention",
+        errorMessage: fieldErrors['saleIntention'],
+        items: items
+      }) }}
+
       {{ govukButton({
           attributes: {
             id: "continue"

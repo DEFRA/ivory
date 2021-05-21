@@ -1,7 +1,7 @@
 'use strict'
 
 const RedisService = require('../services/redis.service')
-const { Paths, RedisKeys, Views } = require('../utils/constants')
+const { Options, Paths, RedisKeys, Views } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
@@ -24,8 +24,8 @@ const handlers = {
         .code(400)
     }
 
-    if (payload.yesNoIdk === 'No') {
-      await RedisService.set(request, RedisKeys.IVORY_ADDED, 'No')
+    if (payload.yesNoIdk === Options.NO) {
+      await RedisService.set(request, RedisKeys.IVORY_ADDED, Options.NO)
       return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
 
@@ -33,7 +33,7 @@ const handlers = {
       return 'Game over man...game over!'
     }
 
-    if (payload.yesNoIdk === 'Yes') {
+    if (payload.yesNoIdk === Options.YES) {
       return h.redirect(Paths.TAKEN_FROM_ELEPHANT)
     }
   }

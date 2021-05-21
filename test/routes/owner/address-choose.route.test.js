@@ -19,7 +19,7 @@ const {
 describe('/user-details/owner/address-choose route', () => {
   let server
   const url = '/user-details/owner/address-choose'
-  const nextUrlWhereIsItem = '/where-is-item'
+  const nextUrlIntentionForItem = '/intention-for-item'
 
   const nextUrlApplicantContactDetails =
     '/user-details/applicant/contact-details'
@@ -69,7 +69,7 @@ describe('/user-details/owner/address-choose route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('yes')
+          .mockReturnValueOnce('Yes')
           .mockReturnValueOnce(JSON.stringify(multipleAddresses))
           .mockReturnValueOnce(nameOrNumber)
           .mockReturnValueOnce(postcode)
@@ -152,7 +152,7 @@ describe('/user-details/owner/address-choose route', () => {
 
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('yes')
+          .mockReturnValueOnce('Yes')
           .mockReturnValueOnce(JSON.stringify(multipleAddresses))
           .mockReturnValueOnce(nameOrNumber)
           .mockReturnValueOnce(postcode)
@@ -173,7 +173,7 @@ describe('/user-details/owner/address-choose route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('no')
+          .mockReturnValueOnce('No')
           .mockReturnValueOnce(JSON.stringify(multipleAddresses))
           .mockReturnValueOnce(nameOrNumber)
           .mockReturnValueOnce(postcode)
@@ -256,7 +256,7 @@ describe('/user-details/owner/address-choose route', () => {
 
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('no')
+          .mockReturnValueOnce('No')
           .mockReturnValueOnce(JSON.stringify(multipleAddresses))
           .mockReturnValueOnce(nameOrNumber)
           .mockReturnValueOnce(postcode)
@@ -289,7 +289,7 @@ describe('/user-details/owner/address-choose route', () => {
 
     describe('Success: Owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('yes')
+        RedisService.get = jest.fn().mockReturnValue('Yes')
       })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
@@ -318,7 +318,7 @@ describe('/user-details/owner/address-choose route', () => {
           singleAddress[0].Address.AddressLine
         )
 
-        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
+        expect(response.headers.location).toEqual(nextUrlIntentionForItem)
       })
     })
 
@@ -326,7 +326,7 @@ describe('/user-details/owner/address-choose route', () => {
       beforeEach(() => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('no')
+          .mockReturnValueOnce('No')
           .mockReturnValueOnce(JSON.stringify(singleAddress))
       })
 
@@ -361,7 +361,7 @@ describe('/user-details/owner/address-choose route', () => {
       beforeEach(() => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('no')
+          .mockReturnValueOnce('No')
           .mockReturnValueOnce(JSON.stringify(singleAddress))
       })
 

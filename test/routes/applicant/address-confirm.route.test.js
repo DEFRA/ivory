@@ -16,7 +16,7 @@ const { singleAddress } = require('../../mock-data/addresses')
 describe('/user-details/applicant/address-confirm route', () => {
   let server
   const url = '/user-details/applicant/address-confirm'
-  const nextUrlWhereIsItem = '/where-is-item'
+  const nextUrl = '/intention-for-item'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -59,7 +59,7 @@ describe('/user-details/applicant/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('no')
+          .mockReturnValueOnce('No')
           .mockReturnValueOnce(JSON.stringify(singleAddress))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -142,9 +142,9 @@ describe('/user-details/applicant/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('no')
+          .mockReturnValueOnce('No')
           .mockReturnValueOnce(JSON.stringify(singleAddress))
-          .mockReturnValueOnce('no')
+          .mockReturnValueOnce('No')
       })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
@@ -167,7 +167,7 @@ describe('/user-details/applicant/address-confirm route', () => {
           redisKeyApplicantAddress,
           singleAddress[0].Address.AddressLine
         )
-        expect(response.headers.location).toEqual(nextUrlWhereIsItem)
+        expect(response.headers.location).toEqual(nextUrl)
       })
     })
   })

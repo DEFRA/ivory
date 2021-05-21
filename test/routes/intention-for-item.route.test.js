@@ -8,14 +8,15 @@ const { ServerEvents } = require('../../server/utils/constants')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-describe('/ivory-integral route', () => {
+describe('/intention-for-item route', () => {
   let server
-  const url = '/who-owns-the-item'
-  const nextUrl = '/user-details/owner/contact-details'
+  const url = '/intention-for-item'
+  const nextUrl = '/where-is-item'
 
   const elementIds = {
-    ivoryIsIntegral: 'whoOwnsItem',
-    ivoryIsIntegral2: 'whoOwnsItem-2',
+    intentionForItem: 'intentionForItem',
+    intentionForItem2: 'intentionForItem-2',
+    intentionForItem3: 'intentionForItem-3',
     continue: 'continue'
   }
 
@@ -61,22 +62,31 @@ describe('/ivory-integral route', () => {
     it('should have the correct page heading', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Who owns the item?')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'What do you intend to do with the item?'
+      )
     })
 
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
-        elementIds.ivoryIsIntegral,
-        'I own it',
-        'I own it'
+        elementIds.intentionForItem,
+        'Sell it',
+        'Sell it'
       )
 
       TestHelper.checkRadioOption(
         document,
-        elementIds.ivoryIsIntegral2,
-        'Someone else owns it',
-        'Someone else owns it'
+        elementIds.intentionForItem2,
+        'Hire it out',
+        'Hire it out'
+      )
+
+      TestHelper.checkRadioOption(
+        document,
+        elementIds.intentionForItem3,
+        "I'm not sure yet",
+        "I'm not sure yet"
       )
     })
 
@@ -100,19 +110,23 @@ describe('/ivory-integral route', () => {
 
     describe('Success', () => {
       it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'I own it',
-          nextUrl
-        )
+        await _checkSelectedRadioAction(postOptions, server, 'Sell it', nextUrl)
       })
 
       it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'You cannot remove the ivory easily or without damaging the item',
+          'Hire it out',
+          nextUrl
+        )
+      })
+
+      it('should store the value in Redis and progress to the next route when the third option has been selected', async () => {
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          "I'm not sure yet",
           nextUrl
         )
       })
@@ -120,7 +134,7 @@ describe('/ivory-integral route', () => {
 
     describe('Failure', () => {
       it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.whoOwnsItem = ''
+        postOptions.payload.intentionForItem = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -128,9 +142,9 @@ describe('/ivory-integral route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'whoOwnsItem',
-          'whoOwnsItem-error',
-          'Tell us who owns the item'
+          'intentionForItem',
+          'intentionForItem-error',
+          'You must tell us what you intend to do with the item'
         )
       })
     })
@@ -147,8 +161,8 @@ const _checkSelectedRadioAction = async (
   selectedOption,
   nextUrl
 ) => {
-  const redisKey = 'owned-by-applicant'
-  postOptions.payload.whoOwnsItem = selectedOption
+  const redisKey = 'intention-for-item'
+  postOptions.payload.intentionForItem = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(0)
 
@@ -158,7 +172,7 @@ const _checkSelectedRadioAction = async (
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
     redisKey,
-    selectedOption === 'I own it' ? 'Yes' : 'No'
+    selectedOption
   )
 
   expect(response.headers.location).toEqual(nextUrl)

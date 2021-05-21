@@ -54,6 +54,17 @@ const _getContext = async request => {
       request,
       RedisKeys.APPLICANT_ADDRESS
     )}`,
+
+    intentionForItem: `${await RedisService.get(
+      request,
+      RedisKeys.INTENTION_FOR_ITEM
+    )}`,
+    whereIsItem: `${await RedisService.get(request, RedisKeys.WHERE_IS_ITEM)}`,
+    saleIntention: `${await RedisService.get(
+      request,
+      RedisKeys.SALE_INTENTION
+    )}`,
+
     cost:
       parseInt(await RedisService.get(request, RedisKeys.PAYMENT_AMOUNT)) / 100
   }
