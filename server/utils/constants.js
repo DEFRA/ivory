@@ -34,11 +34,11 @@ const SaleIntention = {
 const Paths = {
   APPLICANT_ADDRESS_CHOOSE: '/user-details/applicant/address-choose',
   APPLICANT_ADDRESS_CONFIRM: '/user-details/applicant/address-confirm',
-  APPLICANT_CONTACT_DETAILS: '/user-details/applicant/contact-details',
   APPLICANT_ADDRESS_ENTER: '/user-details/applicant/address-enter',
   APPLICANT_ADDRESS_FIND: '/user-details/applicant/address-find',
   APPLICANT_ADDRESS_INTERNATIONAL:
     '/user-details/applicant/address-international',
+  APPLICANT_CONTACT_DETAILS: '/user-details/applicant/contact-details',
   CAN_CONTINUE: '/can-continue',
   CHECK_YOUR_ANSWERS: '/check-your-answers',
   DESCRIBE_THE_ITEM: '/describe-the-item',
@@ -47,6 +47,7 @@ const Paths = {
   IVORY_AGE: '/ivory-age',
   IVORY_INTEGRAL: '/ivory-integral',
   IVORY_VOLUME: '/ivory-volume',
+  LEGAL_REPONSIBILITY: '/legal-responsibility',
   MAKE_PAYMENT: '/make-payment',
   OWNER_ADDRESS_CHOOSE: '/user-details/owner/address-choose',
   OWNER_ADDRESS_CONFIRM: '/user-details/owner/address-confirm',
@@ -80,6 +81,7 @@ const Views = {
   IVORY_AGE: 'ivory-age',
   IVORY_INTEGRAL: 'ivory-integral',
   IVORY_VOLUME: 'ivory-volume',
+  LEGAL_REPONSIBILITY: 'legal-responsibility',
   SALE_INTENTION: 'sale-intention',
   SERVICE_COMPLETE: 'service-complete',
   TAKEN_FROM_ELEPHANT: 'taken-from-elephant',
@@ -87,8 +89,8 @@ const Views = {
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHERE_IS_ITEM: 'where-is-item',
   WHO_OWNS_ITEM: 'who-owns-the-item',
-  YES_NO_IDK: 'yes-no-idk',
-  WHY_IS_ITEM_RMI: 'why-is-item-rmi'
+  WHY_IS_ITEM_RMI: 'why-is-item-rmi',
+  YES_NO_IDK: 'yes-no-idk'
 }
 
 const RedisKeys = {
@@ -107,8 +109,8 @@ const RedisKeys = {
   OWNER_ADDRESS: 'owner.address',
   OWNER_EMAIL_ADDRESS: 'owner.emailAddress',
   OWNER_NAME: 'owner.name',
-  PAYMENT_ID: 'payment-id',
   PAYMENT_AMOUNT: 'payment-amount',
+  PAYMENT_ID: 'payment-id',
   PAYMENT_REFERENCE: 'payment-reference',
   SALE_INTENTION: 'sale-intention',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',

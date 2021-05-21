@@ -1,0 +1,45 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+{% block formContent %}
+  <div class="flash-card">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+
+        <header>
+          <h1 class="govuk-heading-l" id="pageTitle">{{ pageTitle }}</h1>
+        </header>
+
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {% for helpTextPara in helpTextParas %}
+          <p id="helpTextPara-{{ loop.index }}">{{ helpTextPara }}</p>
+        {% endfor %}
+
+        <div class="govuk-inset-text" style="border-left: 10px solid white">
+          <p id="callOutText">{{ callOutText }}</p>
+        </div>
+
+        {{ govukButton({
+            attributes: {
+              id: "continue"
+            },
+            text: "Continue",
+            classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-4"
+          })
+        }}
+
+        <p class="govuk-body govuk-!-margin-bottom-0">
+          <a id="cancelLink" href="https://www.gov.uk/government/consultations/uk-ivory-ban-implementing-the-ivory-act-2018">Cancel</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
