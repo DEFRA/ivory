@@ -5,9 +5,9 @@ const { Paths, RedisKeys, SaleIntention, Views } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
-  get: async (request, h) => {
+  get: (request, h) => {
     return h.view(Views.INTENTION_FOR_ITEM, {
-      ...(await _getContext(request))
+      ..._getContext(request)
     })
   },
 
@@ -18,7 +18,7 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.INTENTION_FOR_ITEM, {
-          ...(await _getContext(request)),
+          ..._getContext(request),
           ...buildErrorSummary(errors)
         })
         .code(400)

@@ -5,9 +5,9 @@ const { Options, Paths, RedisKeys, Views } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
-  get: async (request, h) => {
+  get: (request, h) => {
     return h.view(Views.WHERE_IS_ITEM, {
-      ...(await _getContext(request))
+      ..._getContext(request)
     })
   },
 
@@ -18,7 +18,7 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.WHERE_IS_ITEM, {
-          ...(await _getContext(request)),
+          ..._getContext(request),
           ...buildErrorSummary(errors)
         })
         .code(400)
