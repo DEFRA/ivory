@@ -97,10 +97,10 @@ $govuk-global-styles: true;
     }
 
   a {
-  color: govuk-colour("white");
-  &:visited, &:hover, &:active {
     color: govuk-colour("white");
-    }
-  text-decoration: none;
+    &:visited, &:hover, &:active {
+      color: govuk-colour("white");
+      }
+    text-decoration: none;
   }
 }
