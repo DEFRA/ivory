@@ -10,6 +10,8 @@ const RedisService = require('../../server/services/redis.service')
 
 const CharacterLimits = require('../mock-data/character-limits')
 
+const other = 'Other reason'
+
 describe('/ivory-volume route', () => {
   let server
   const url = '/ivory-volume'
@@ -103,8 +105,8 @@ describe('/ivory-volume route', () => {
         TestHelper.checkRadioOption(
           document,
           elementIds.ivoryVolume4,
-          'Other',
-          'Other'
+          other,
+          other
         )
       })
 
@@ -180,7 +182,7 @@ describe('/ivory-volume route', () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'Other',
+          other,
           nextUrl,
           'some text'
         )
@@ -204,7 +206,7 @@ describe('/ivory-volume route', () => {
       })
 
       it('should display a validation error message if the user selects other and leaves text area empty', async () => {
-        postOptions.payload.ivoryVolume = 'Other'
+        postOptions.payload.ivoryVolume = other
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -220,7 +222,7 @@ describe('/ivory-volume route', () => {
 
       it('should display a validation error message if the other text area > 4000 chars', async () => {
         postOptions.payload = {
-          ivoryVolume: 'Other',
+          ivoryVolume: other,
           otherDetail: `${CharacterLimits.fourThousandCharacters}X`
         }
         const response = await TestHelper.submitPostRequest(

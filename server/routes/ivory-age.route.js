@@ -11,6 +11,8 @@ const { formatNumberWithCommas } = require('../utils/general')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
+const other = 'Other reason'
+
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.IVORY_AGE, {
@@ -51,7 +53,7 @@ const _getIvoryAge = payload => {
     ivoryAge = payload.ivoryAge
   }
 
-  if (payload.ivoryAge.includes('Other')) {
+  if (payload.ivoryAge.includes(other)) {
     return `${ivoryAge}: ${payload.otherDetail}`
   } else {
     return ivoryAge
@@ -79,7 +81,7 @@ const _getContext = async request => {
     pageTitle: `How do you know the item was made before ${madeBefore}?`,
     checkbox4: `It’s been in the family since before ${madeBefore}`,
     checkbox6:
-      itemType === ItemType.HIGH_VALUE ? 'It’s been carbon-dated' : 'Other'
+      itemType === ItemType.HIGH_VALUE ? 'It’s been carbon-dated' : other
   }
 }
 
@@ -103,7 +105,7 @@ const _getCheckboxes = async request => {
       checkbox5Checked: ivoryAge.includes(
         'I have written verification from a relevant expert'
       ),
-      checkbox6Checked: ivoryAge.includes('Other')
+      checkbox6Checked: ivoryAge.includes(other)
     }
   }
 }
@@ -116,7 +118,7 @@ const _validateForm = payload => {
       name: 'ivoryAge',
       text: 'You just tell us how you know the item’s age'
     })
-  } else if (payload.ivoryAge.includes('Other')) {
+  } else if (payload.ivoryAge.includes(other)) {
     if (Validators.empty(payload.otherDetail)) {
       errors.push({
         name: 'otherDetail',

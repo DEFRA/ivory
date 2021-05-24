@@ -10,6 +10,8 @@ const RedisService = require('../../server/services/redis.service')
 
 const CharacterLimits = require('../mock-data/character-limits')
 
+const other = 'Other reason'
+
 describe('/ivory-age route', () => {
   let server
   const url = '/ivory-age'
@@ -122,8 +124,8 @@ describe('/ivory-age route', () => {
         TestHelper.checkRadioOption(
           document,
           elementIds.ivoryAge6,
-          'Other',
-          'Other'
+          other,
+          other
         )
       })
 
@@ -162,8 +164,8 @@ describe('/ivory-age route', () => {
         TestHelper.checkRadioOption(
           document,
           elementIds.ivoryAge6,
-          'Other',
-          'Other'
+          other,
+          other
         )
       })
     })
@@ -194,8 +196,8 @@ describe('/ivory-age route', () => {
         TestHelper.checkRadioOption(
           document,
           elementIds.ivoryAge6,
-          'Other',
-          'Other'
+          other,
+          other
         )
       })
     })
@@ -299,7 +301,7 @@ describe('/ivory-age route', () => {
         await _checkSelectedCheckboxAction(
           postOptions,
           server,
-          'Other',
+          other,
           nextUrlUploadPhotos,
           'some text'
         )
@@ -366,7 +368,7 @@ describe('/ivory-age route', () => {
       })
 
       it('should display a validation error message if the user selects other and leaves text area empty', async () => {
-        postOptions.payload.ivoryAge = 'Other'
+        postOptions.payload.ivoryAge = other
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -382,7 +384,7 @@ describe('/ivory-age route', () => {
 
       it('should display a validation error message if the other text area > 4000 chars', async () => {
         postOptions.payload = {
-          ivoryAge: 'Other',
+          ivoryAge: other,
           otherDetail: `${CharacterLimits.fourThousandCharacters}X`
         }
         const response = await TestHelper.submitPostRequest(

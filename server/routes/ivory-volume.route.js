@@ -11,6 +11,8 @@ const { formatNumberWithCommas } = require('../utils/general')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
+const other = 'Other reason'
+
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.IVORY_VOLUME, {
@@ -26,7 +28,7 @@ const handlers = {
       return h
         .view(Views.IVORY_VOLUME, {
           ...(await _getContext(request)),
-          otherChecked: payload.ivoryVolume === 'Other',
+          otherChecked: payload.ivoryVolume === other,
           otherText: payload.otherDetail ? payload.otherDetail : '',
           ...buildErrorSummary(errors)
         })
@@ -36,7 +38,7 @@ const handlers = {
     await RedisService.set(
       request,
       RedisKeys.IVORY_VOLUME,
-      payload.ivoryVolume === 'Other'
+      payload.ivoryVolume === other
         ? `${payload.ivoryVolume}: ${payload.otherDetail}`
         : payload.ivoryVolume
     )
@@ -68,7 +70,7 @@ const _validateForm = payload => {
     })
   }
 
-  if (payload.ivoryVolume === 'Other') {
+  if (payload.ivoryVolume === other) {
     if (Validators.empty(payload.otherDetail)) {
       errors.push({
         name: 'otherDetail',
