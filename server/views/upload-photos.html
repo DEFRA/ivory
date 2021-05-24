@@ -1,6 +1,6 @@
-{% extends 'form-layout.html' %}
+{% extends 'multipart-form-layout.html' %}
 
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block formContent %}
@@ -10,6 +10,18 @@
     <div class="govuk-grid-column-two-thirds">
 
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
+      {{ govukFileUpload({
+        attributes: {
+          accept: ".jpg,.png",
+          multiple: true
+        },
+        id: "fileUpload",
+        name: "fileUpload",
+        label: {
+          text: "Upload files"
+        }
+      }) }}
 
       {{ govukButton({
           attributes: {

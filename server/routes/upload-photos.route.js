@@ -1,7 +1,10 @@
 'use strict'
 
 const { Paths, Views } = require('../utils/constants')
-const { buildErrorSummary } = require('../utils/validation')
+// const { buildErrorSummary } = require('../utils/validation')
+
+// TODO validate length (413 error - Payload content length greater than maximum allowed: 1048576")
+const MAX_MEGABYES = 5
 
 const handlers = {
   get: (request, h) => {
@@ -12,18 +15,20 @@ const handlers = {
 
   post: (request, h) => {
     const payload = request.payload
-    const errors = _validateForm(payload)
+    console.log(payload)
 
-    if (errors.length) {
-      return h
-        .view(Views.UPLOAD_PHOTOS, {
-          ..._getContext(),
-          ...buildErrorSummary(errors)
-        })
-        .code(400)
-    }
+    // const errors = _validateForm(payload)
+    // if (errors.length) {
+    // return h.view(Views.UPLOAD_PHOTOS, {
+    //       ..._getContext(),
+    //       ...buildErrorSummary(errors)
+    // })
+    //     .code(400)
+    // }
 
-    return h.redirect(Paths.WHO_OWNS_ITEM)
+    return h.view(Views.UPLOAD_PHOTOS)
+
+    // return h.redirect(Paths.WHO_OWNS_ITEM)
   }
 }
 
@@ -33,13 +38,13 @@ const _getContext = () => {
   }
 }
 
-const _validateForm = payload => {
-  const errors = []
+// const _validateForm = payload => {
+//   const errors = []
 
-  // TODO Validation
+//   // TODO Validation
 
-  return errors
-}
+//   return errors
+// }
 
 module.exports = [
   {
@@ -50,6 +55,15 @@ module.exports = [
   {
     method: 'POST',
     path: `${Paths.UPLOAD_PHOTOS}`,
-    handler: handlers.post
+    handler: handlers.post,
+    config: {
+      payload: {
+        maxBytes: 1024 * 1024 * MAX_MEGABYES,
+        multipart: {
+          output: 'file'
+        },
+        parse: true
+      }
+    }
   }
 ]
