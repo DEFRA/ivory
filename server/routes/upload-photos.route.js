@@ -28,7 +28,7 @@ const handlers = {
 
     return h.view(Views.UPLOAD_PHOTOS)
 
-    // return h.redirect(Paths.WHO_OWNS_ITEM)
+    // return h.redirect(Paths.YOUR_PHOTOS)
   }
 }
 
