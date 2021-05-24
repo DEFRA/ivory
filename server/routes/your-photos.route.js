@@ -5,7 +5,7 @@ const { buildErrorSummary } = require('../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.UPLOAD_PHOTOS, {
+    return h.view(Views.YOUR_PHOTOS, {
       ..._getContext()
     })
   },
@@ -16,20 +16,20 @@ const handlers = {
 
     if (errors.length) {
       return h
-        .view(Views.UPLOAD_PHOTOS, {
+        .view(Views.YOUR_PHOTOS, {
           ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    return h.redirect(Paths.YOUR_PHOTOS)
+    return h.redirect(Paths.WHO_OWNS_ITEM)
   }
 }
 
 const _getContext = () => {
   return {
-    pageTitle: 'Add up to 6 photos of your item'
+    pageTitle: 'Your photos'
   }
 }
 
@@ -44,12 +44,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.UPLOAD_PHOTOS}`,
+    path: `${Paths.YOUR_PHOTOS}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.UPLOAD_PHOTOS}`,
+    path: `${Paths.YOUR_PHOTOS}`,
     handler: handlers.post
   }
 ]

@@ -62,7 +62,8 @@ const Paths = {
   WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',
   WHERE_IS_ITEM: '/where-is-item',
   WHO_OWNS_ITEM: '/who-owns-the-item',
-  WHY_IS_ITEM_RMI: '/why-is-item-rmi'
+  WHY_IS_ITEM_RMI: '/why-is-item-rmi',
+  YOUR_PHOTOS: '/your-photos'
 }
 
 const Views = {
@@ -90,7 +91,8 @@ const Views = {
   WHERE_IS_ITEM: 'where-is-item',
   WHO_OWNS_ITEM: 'who-owns-the-item',
   WHY_IS_ITEM_RMI: 'why-is-item-rmi',
-  YES_NO_IDK: 'yes-no-idk'
+  YES_NO_IDK: 'yes-no-idk',
+  YOUR_PHOTOS: 'your-photos'
 }
 
 const RedisKeys = {
@@ -114,7 +116,8 @@ const RedisKeys = {
   PAYMENT_REFERENCE: 'payment-reference',
   SALE_INTENTION: 'sale-intention',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
-  WHERE_IS_ITEM: 'where-is-item'
+  WHERE_IS_ITEM: 'where-is-item',
+  YOUR_PHOTOS: 'your-photos'
 }
 
 module.exports = Object.freeze({
