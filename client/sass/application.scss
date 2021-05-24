@@ -89,3 +89,18 @@ $govuk-global-styles: true;
 
   }
 }
+
+.govuk-phase-banner-alt {
+  background-color: govuk-colour("pink");
+  &:hover {
+    background-color: darken(govuk-colour("pink"), 10%);
+    }
+
+  a {
+  color: govuk-colour("white");
+  &:visited, &:hover, &:active {
+    color: govuk-colour("white");
+    }
+  text-decoration: none;
+  }
+}

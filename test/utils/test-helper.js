@@ -78,7 +78,7 @@ module.exports = class TestHelper {
   static checkBetaBanner (document) {
     const element = document.querySelector('.govuk-phase-banner__content__tag')
     expect(element).toBeTruthy()
-    expect(TestHelper.getTextContent(element).toLowerCase()).toEqual('beta')
+    expect(TestHelper.getTextContent(element).toLowerCase()).toEqual('give feedback')
   }
 
   /**
