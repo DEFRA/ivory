@@ -104,3 +104,8 @@ $govuk-global-styles: true;
     text-decoration: none;
   }
 }
+
+.govuk-phase-banner-alt__text {
+  display: table-cell;
+  vertical-align: middle;
+}
