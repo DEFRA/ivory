@@ -12,7 +12,9 @@ module.exports = class RedisService {
   static async set (request, key, value) {
     const client = request.redis.client
     const keyWithSessionId = `${request.state[SESSION_ID]}.${key}`
-    client.set(keyWithSessionId, value)
-    client.expire(keyWithSessionId, REDIS_TTL_IN_SECONDS)
+    client.setex(keyWithSessionId, REDIS_TTL_IN_SECONDS, value)
+
+    // TODO Confirm expiry still works
+    // client.expire(keyWithSessionId, REDIS_TTL_IN_SECONDS)
   }
 }

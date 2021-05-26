@@ -1,23 +1,27 @@
 'use strict'
 
+const os = require('os')
+const { writeFileSync } = require('fs')
+
+const RedisService = require('../services/redis.service')
 const { Paths, Views } = require('../utils/constants')
 const { buildErrorSummary } = require('../utils/validation')
 
 const handlers = {
-  get: (request, h) => {
+  get: async (request, h) => {
     return h.view(Views.YOUR_PHOTOS, {
-      ..._getContext()
+      ...(await _getContext(request))
     })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
       return h
         .view(Views.YOUR_PHOTOS, {
-          ..._getContext(),
+          ...(await _getContext(request)),
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -27,9 +31,16 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
+const _getContext = async request => {
+  const files = ['lamp.png']
+
+  const base64 = await RedisService.get(request, 'THE_IMAGE')
+  const buff = Buffer.from(base64, 'base64')
+  await writeFileSync(`${os.tmpdir()}/myfileX.jpg`, buff)
+
   return {
-    pageTitle: 'Your photos'
+    pageTitle: 'Your photos',
+    files
   }
 }
 

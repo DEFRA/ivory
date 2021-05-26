@@ -1,10 +1,15 @@
 'use strict'
 
-const { Paths, Views } = require('../utils/constants')
-// const { buildErrorSummary } = require('../utils/validation')
+const os = require('os')
+const { readFileSync, writeFileSync } = require('fs')
 
-// TODO validate length (413 error - Payload content length greater than maximum allowed: 1048576")
-const MAX_MEGABYES = 5
+const RedisService = require('../services/redis.service')
+const { Paths, Views } = require('../utils/constants')
+const { buildErrorSummary } = require('../utils/validation')
+
+const MAX_MEGABYES = 50
+
+const MAX_FILES = 1
 
 const handlers = {
   get: (request, h) => {
@@ -17,18 +22,25 @@ const handlers = {
     const payload = request.payload
     console.log(payload)
 
-    // const errors = _validateForm(payload)
-    // if (errors.length) {
-    // return h.view(Views.UPLOAD_PHOTOS, {
-    //       ..._getContext(),
-    //       ...buildErrorSummary(errors)
-    // })
-    //     .code(400)
-    // }
+    const errors = _validateForm(payload)
+    if (errors.length) {
+      return h
+        .view(Views.UPLOAD_PHOTOS, {
+          ..._getContext(),
+          ...buildErrorSummary(errors)
+        })
+        .code(400)
+    }
 
-    return h.view(Views.UPLOAD_PHOTOS)
+    const file = readFileSync(payload.files.path)
+    const buffer = Buffer.from(file)
+    const base64 = buffer.toString('base64')
 
-    // return h.redirect(Paths.YOUR_PHOTOS)
+    RedisService.set(request, 'THE_IMAGE', base64)
+
+    writeFileSync(`${os.tmpdir()}/myfile.jpg`, file)
+
+    return h.redirect(Paths.YOUR_PHOTOS)
   }
 }
 
@@ -38,13 +50,29 @@ const _getContext = () => {
   }
 }
 
-// const _validateForm = payload => {
-//   const errors = []
+const _validateForm = payload => {
+  const errors = []
 
-//   // TODO Validation
+  if (
+    payload.files &&
+    Array.isArray(payload.files) &&
+    payload.files.length > MAX_FILES
+  ) {
+    errors.push({
+      name: 'files',
+      text: 'Files must be uploaded one at a time'
+    })
+  } else if (payload.files.bytes === 0) {
+    errors.push({
+      name: 'files',
+      text: 'File cannot be empty'
+    })
+  }
 
-//   return errors
-// }
+  // TODO Other validation
+
+  return errors
+}
 
 module.exports = [
   {
