@@ -64,7 +64,7 @@ const handlers = {
     await RedisService.set(
       request,
       RedisKeys.ADDRESS_FIND_POSTCODE,
-      payload.postcode
+      payload.postcode.toUpperCase()
     )
 
     await RedisService.set(
