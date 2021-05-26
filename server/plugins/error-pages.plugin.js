@@ -4,6 +4,8 @@
 
 'use strict'
 
+const { Paths } = require('../utils/constants')
+
 module.exports = {
   plugin: {
     name: 'error-pages',
@@ -14,23 +16,24 @@ module.exports = {
         if (response.isBoom) {
           const statusCode = response.output.statusCode
 
-          if (statusCode === 404) {
-            return h.view('404').code(statusCode)
-          }
-
-          if (statusCode === 503) {
-            return h.view('503').code(statusCode)
-          }
-
           // Log the error
           request.log('error', {
-            statusCode: statusCode,
+            statusCode,
             message: response.message,
             stack: response.data ? response.data.stack : response.stack
           })
 
-          return h.view('500').code(statusCode)
+          if (statusCode === 404) {
+            return h.redirect(Paths.PAGE_NOT_FOUND)
+          }
+
+          if (statusCode === 503) {
+            return h.redirect(Paths.SERVICE_UNAVAILABLE)
+          }
+
+          return h.redirect(Paths.PROBLEM_WITH_SERVICE)
         }
+
         return h.continue
       })
     }
