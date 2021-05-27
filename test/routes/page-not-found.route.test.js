@@ -3,7 +3,6 @@
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
-const { ServerEvents } = require('../../server/utils/constants')
 
 describe('/page-not-found (404) route', () => {
   let server
@@ -17,11 +16,8 @@ describe('/page-not-found (404) route', () => {
 
   let document
 
-  beforeAll(async done => {
+  beforeAll(async () => {
     server = await createServer()
-    server.events.on(ServerEvents.PLUGINS_LOADED, () => {
-      done()
-    })
   })
 
   afterAll(() => {

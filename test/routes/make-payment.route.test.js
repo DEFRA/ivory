@@ -3,7 +3,6 @@
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
-const { ServerEvents } = require('../../server/utils/constants')
 
 jest.mock('randomstring')
 const RandomString = require('randomstring')
@@ -22,11 +21,8 @@ describe('/make-payment route', () => {
   const url = '/make-payment'
   const nextUrl = 'THE_NEXT_URL'
 
-  beforeAll(async done => {
+  beforeAll(async () => {
     server = await createServer()
-    server.events.on(ServerEvents.PLUGINS_LOADED, () => {
-      done()
-    })
   })
 
   afterAll(() => {

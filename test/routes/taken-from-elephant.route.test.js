@@ -3,7 +3,6 @@
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
-const { ServerEvents } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
@@ -23,11 +22,8 @@ describe('/taken-from-elephant route', () => {
 
   let document
 
-  beforeAll(async done => {
+  beforeAll(async () => {
     server = await createServer()
-    server.events.on(ServerEvents.PLUGINS_LOADED, () => {
-      done()
-    })
   })
 
   afterAll(() => {
