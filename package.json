@@ -48,6 +48,7 @@
     "nunjucks": "3.2.3",
     "postcode-validator": "^3.2.0",
     "randomstring": "^1.2.1",
+    "sharp": "^0.28.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
