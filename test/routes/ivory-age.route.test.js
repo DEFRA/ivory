@@ -3,10 +3,11 @@
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
-const { ItemType, ServerEvents } = require('../../server/utils/constants')
+const { ItemType } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
+const { ServerEvents } = require('../../server/utils/constants')
 
 const CharacterLimits = require('../mock-data/character-limits')
 

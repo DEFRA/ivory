@@ -3,10 +3,11 @@
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
-const { ItemType, ServerEvents } = require('../../server/utils/constants')
+const { ItemType } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
+const { ServerEvents } = require('../../server/utils/constants')
 
 describe('/legal-responsibility route', () => {
   let server
@@ -112,9 +113,7 @@ describe('/legal-responsibility route', () => {
 
     describe('GET: Has the correct details when it IS a S2 (high value) item', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockReturnValue(ItemType.HIGH_VALUE)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.HIGH_VALUE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })

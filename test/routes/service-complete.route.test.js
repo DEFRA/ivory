@@ -3,13 +3,13 @@
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
-const { ServerEvents } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
 jest.mock('../../server/services/payment.service')
 const PaymentService = require('../../server/services/payment.service')
+const { ServerEvents } = require('../../server/utils/constants')
 
 describe('/service-complete route', () => {
   let server

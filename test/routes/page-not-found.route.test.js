@@ -3,6 +3,7 @@
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
+
 const { ServerEvents } = require('../../server/utils/constants')
 
 describe('/page-not-found (404) route', () => {
@@ -23,6 +24,10 @@ describe('/page-not-found (404) route', () => {
       done()
     })
   })
+
+  // beforeAll(async () => {
+  //   server = await createServer()
+  // })
 
   afterAll(() => {
     server.stop()

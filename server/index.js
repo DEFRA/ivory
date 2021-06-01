@@ -18,8 +18,6 @@ const createServer = async () => {
     state: options
   })
 
-  server.event(ServerEvents.PLUGINS_LOADED)
-
   _registerPlugins(server)
 
   _createSessionCookie(server)
@@ -28,6 +26,8 @@ const createServer = async () => {
 }
 
 const _registerPlugins = async server => {
+  server.event(ServerEvents.PLUGINS_LOADED)
+
   await server.register(require('./plugins/blipp.plugin'))
   await server.register(require('./plugins/disinfect.plugin'))
   await server.register(require('./plugins/error-pages.plugin'))

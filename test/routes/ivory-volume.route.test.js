@@ -3,10 +3,11 @@
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
-const { ItemType, ServerEvents } = require('../../server/utils/constants')
+const { ItemType } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
+const { ServerEvents } = require('../../server/utils/constants')
 
 const CharacterLimits = require('../mock-data/character-limits')
 
@@ -121,9 +122,7 @@ describe('/ivory-volume route', () => {
 
     describe('GET: Has correct heading for a musical item', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockReturnValue(ItemType.MUSICAL)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.MUSICAL)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -263,7 +262,7 @@ const _checkSelectedRadioAction = async (
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
     redisKey,
-    (otherText === '') ? selectedOption : `${selectedOption}: ${otherText}`
+    otherText === '' ? selectedOption : `${selectedOption}: ${otherText}`
   )
 
   expect(response.headers.location).toEqual(nextUrl)

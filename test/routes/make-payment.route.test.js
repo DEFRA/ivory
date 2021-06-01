@@ -3,7 +3,6 @@
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
-const { ServerEvents } = require('../../server/utils/constants')
 
 jest.mock('randomstring')
 const RandomString = require('randomstring')
@@ -13,6 +12,7 @@ const RedisService = require('../../server/services/redis.service')
 
 jest.mock('../../server/services/payment.service')
 const PaymentService = require('../../server/services/payment.service')
+const { ServerEvents } = require('../../server/utils/constants')
 
 const paymentReference = 'ABCDEF'
 const paymentId = 'THE_PAYMENT_ID'
