@@ -9,7 +9,6 @@ const RedisService = require('../../server/services/redis.service')
 
 jest.mock('../../server/services/payment.service')
 const PaymentService = require('../../server/services/payment.service')
-const { ServerEvents } = require('../../server/utils/constants')
 
 describe('/service-complete route', () => {
   let server
@@ -24,11 +23,8 @@ describe('/service-complete route', () => {
 
   let document
 
-  beforeAll(async done => {
+  beforeAll(async () => {
     server = await createServer()
-    server.events.on(ServerEvents.PLUGINS_LOADED, () => {
-      done()
-    })
   })
 
   afterAll(() => {

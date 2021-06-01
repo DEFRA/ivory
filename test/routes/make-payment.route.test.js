@@ -12,7 +12,6 @@ const RedisService = require('../../server/services/redis.service')
 
 jest.mock('../../server/services/payment.service')
 const PaymentService = require('../../server/services/payment.service')
-const { ServerEvents } = require('../../server/utils/constants')
 
 const paymentReference = 'ABCDEF'
 const paymentId = 'THE_PAYMENT_ID'
@@ -22,11 +21,8 @@ describe('/make-payment route', () => {
   const url = '/make-payment'
   const nextUrl = 'THE_NEXT_URL'
 
-  beforeAll(async done => {
+  beforeAll(async () => {
     server = await createServer()
-    server.events.on(ServerEvents.PLUGINS_LOADED, () => {
-      done()
-    })
   })
 
   afterAll(() => {

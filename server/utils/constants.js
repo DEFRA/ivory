@@ -146,9 +146,6 @@ module.exports = Object.freeze({
   Views,
   RedisKeys,
   SaleIntention,
-  ServerEvents: {
-    PLUGINS_LOADED: 'pluginsLoaded'
-  },
   StatusCodes,
   DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession'
 })

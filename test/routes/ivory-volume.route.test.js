@@ -7,7 +7,6 @@ const { ItemType } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
-const { ServerEvents } = require('../../server/utils/constants')
 
 const CharacterLimits = require('../mock-data/character-limits')
 
@@ -29,11 +28,8 @@ describe('/ivory-volume route', () => {
 
   let document
 
-  beforeAll(async done => {
+  beforeAll(async () => {
     server = await createServer()
-    server.events.on(ServerEvents.PLUGINS_LOADED, () => {
-      done()
-    })
   })
 
   afterAll(() => {

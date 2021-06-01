@@ -16,8 +16,6 @@ module.exports = [
     handler: {
       directory: {
         path: [
-          // TODO paramaterise this
-          // '/var/folders/hf/vwnf4tvs7vxczdwf_c5tp8v80000gn/T',
           os.tmpdir(),
           'server/public/static',
           'server/public/build',

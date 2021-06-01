@@ -8,7 +8,9 @@ const RedisService = require('../services/redis.service')
 const { Paths, RedisKeys, Views } = require('../utils/constants')
 const { buildErrorSummary } = require('../utils/validation')
 
+// TODO: Confirm max individual file size
 const MAX_MEGABYES = 32
+
 const MAX_FILES = 1
 const THUMBNAIL_WIDTH = 1000
 const ALLOWED_EXTENSIONS = ['.JPG', '.JPEG', '.PNG']
@@ -159,7 +161,6 @@ const _validateForm = payload => {
       text: 'The file cannot be empty'
     })
   } else if (payload.files.bytes > 1024 * 1024 * MAX_MEGABYES) {
-    // TODO: Confirm max individual file size
     errors.push({
       name: 'files',
       text: `The file must be smaller than ${MAX_MEGABYES}MB`
@@ -219,7 +220,6 @@ module.exports = [
     handler: handlers.post,
     config: {
       payload: {
-        // maxBytes: 1024 * 1024 * MAX_MEGABYES * 10,
         maxBytes: 1024 * 1024 * MAX_MEGABYES,
         multipart: {
           output: 'file'

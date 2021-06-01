@@ -7,7 +7,6 @@ const { ItemType } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
-const { ServerEvents } = require('../../server/utils/constants')
 
 describe('/legal-responsibility route', () => {
   let server
@@ -25,11 +24,8 @@ describe('/legal-responsibility route', () => {
 
   let document
 
-  beforeAll(async done => {
+  beforeAll(async () => {
     server = await createServer()
-    server.events.on(ServerEvents.PLUGINS_LOADED, () => {
-      done()
-    })
   })
 
   afterAll(() => {

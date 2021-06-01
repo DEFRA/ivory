@@ -9,7 +9,6 @@ const RedisService = require('../../../server/services/redis.service')
 
 jest.mock('../../../server/services/address.service')
 const AddressService = require('../../../server/services/address.service')
-const { ServerEvents } = require('../../../server/utils/constants')
 
 const { singleAddress } = require('../../mock-data/addresses')
 
@@ -30,11 +29,8 @@ describe('/user-details/applicant/address-confirm route', () => {
 
   let document
 
-  beforeAll(async done => {
+  beforeAll(async () => {
     server = await createServer()
-    server.events.on(ServerEvents.PLUGINS_LOADED, () => {
-      done()
-    })
   })
 
   afterAll(() => {
