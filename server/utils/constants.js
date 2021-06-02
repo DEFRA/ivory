@@ -32,6 +32,7 @@ const SaleIntention = {
 }
 
 const Paths = {
+  ACCESSIBILITY_STATEMENT: '/accessibility-statement',
   APPLICANT_ADDRESS_CHOOSE: '/user-details/applicant/address-choose',
   APPLICANT_ADDRESS_CONFIRM: '/user-details/applicant/address-confirm',
   APPLICANT_ADDRESS_ENTER: '/user-details/applicant/address-enter',
@@ -56,6 +57,7 @@ const Paths = {
   OWNER_ADDRESS_INTERNATIONAL: '/user-details/owner/address-international',
   OWNER_CONTACT_DETAILS: '/user-details/owner/contact-details',
   PAGE_NOT_FOUND: '/page-not-found',
+  PRIVACY_NOTICE: '/privacy-notice',
   PROBLEM_WITH_SERVICE: '/problem-with-service',
   SALE_INTENTION: '/sale-intention',
   SERVICE_COMPLETE: '/service-complete',
@@ -70,6 +72,7 @@ const Paths = {
 }
 
 const Views = {
+  ACCESSIBILITY_STATEMENT: 'accessibility-statement',
   ADDRESS_CHOOSE: 'user-details/address-choose',
   ADDRESS_CONFIRM: 'user-details/address-confirm',
   ADDRESS_ENTER: 'user-details/address-enter',
@@ -87,6 +90,7 @@ const Views = {
   IVORY_VOLUME: 'ivory-volume',
   LEGAL_REPONSIBILITY: 'legal-responsibility',
   PAGE_NOT_FOUND: 'page-not-found',
+  PRIVACY_NOTICE: 'privacy-notice',
   PROBLEM_WITH_SERVICE: 'problem-with-service',
   SALE_INTENTION: 'sale-intention',
   SERVICE_COMPLETE: 'service-complete',
