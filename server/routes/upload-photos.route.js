@@ -178,33 +178,6 @@ const _validateForm = payload => {
     })
   }
 
-  // TODO: max size
-  // payload.maxBytes
-  // Default value: 1048576 (1MB).
-  // Limits the size of incoming payloads to the specified byte count.
-  // Allowing very large payloads may cause the server to run out of memory.
-  // Gives 413 error if breached
-  // 413 Payload Too Large
-  // Selecting a large file causes the browser to 'hang' before populating the input box
-
-  // TODO: virus - The file contains a virus
-
-  // TODO: some other reason - The file could not could not be uploaded - try again - Same as the catch??
-
-  // TODO: pwd - The file is protected with a password - only DOC and PDF??? TBC
-
-  // Do we care about preserving image filenames? - possibility of clases due to writing to temp file
-
-  // Image resolution: can validate that file is a big enough height and width in pixels or big enough size
-
-  // X-browser - POC works in Chrome and Firefox
-
-  // Sharp: Node.js image resizing library - 1.1m weekly downloads
-
-  // image resizing - thumbnails
-  // File named wrong
-  // add another feedback - multiple images in Redis
-
   return errors
 }
 
