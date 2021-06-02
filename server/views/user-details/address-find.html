@@ -25,7 +25,7 @@
 
           {{ govukInput({
               label: {
-                text: 'Property name or number'
+                html: '<span class="govuk-!-font-weight-bold">Property name or number</span>'
               },
               hint: {
                 text: 'For example, The Mill, Flat A or 37b'
@@ -39,7 +39,7 @@
 
           {{ govukInput({
               label: {
-                text: "Postcode"
+                html: '<span class="govuk-!-font-weight-bold">Postcode</span>'
               },
               classes: "govuk-input--width-10",
               id: "postcode",

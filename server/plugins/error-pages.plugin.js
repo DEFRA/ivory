@@ -4,7 +4,7 @@
 
 'use strict'
 
-const { Paths } = require('../utils/constants')
+const { Paths, StatusCodes } = require('../utils/constants')
 
 module.exports = {
   plugin: {
@@ -23,11 +23,15 @@ module.exports = {
             stack: response.data ? response.data.stack : response.stack
           })
 
-          if (statusCode === 404) {
+          if (statusCode === StatusCodes.PAGE_NOT_FOUND) {
             return h.redirect(Paths.PAGE_NOT_FOUND)
           }
 
-          if (statusCode === 503) {
+          if (statusCode === StatusCodes.PAYLOAD_TOO_LARGE) {
+            return h.redirect(request.route.path)
+          }
+
+          if (statusCode === StatusCodes.SERVICE_UNAVAILABLE) {
             return h.redirect(Paths.SERVICE_UNAVAILABLE)
           }
 

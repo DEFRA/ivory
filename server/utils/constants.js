@@ -125,9 +125,20 @@ const RedisKeys = {
   PAYMENT_ID: 'payment-id',
   PAYMENT_REFERENCE: 'payment-reference',
   SALE_INTENTION: 'sale-intention',
+  UPLOAD_PHOTOS_IMAGE_DATA: 'upload-photos.image-data-',
+  UPLOAD_PHOTOS_IMAGE_FILELIST: 'upload-photos.image-filelist',
+  UPLOAD_PHOTOS_THUMBNAIL_DATA: 'upload-photos.thumbnail-data',
+  UPLOAD_PHOTOS_THUMBNAIL_FILESLIST: 'upload-photos.thumbnail-filelist',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHERE_IS_ITEM: 'where-is-item',
   YOUR_PHOTOS: 'your-photos'
+}
+
+const StatusCodes = {
+  PAGE_NOT_FOUND: 404,
+  PAYLOAD_TOO_LARGE: 413,
+  PROBLEM_WITH_SERVICE: 500,
+  SERVICE_UNAVAILABLE: 503
 }
 
 module.exports = Object.freeze({
@@ -139,6 +150,6 @@ module.exports = Object.freeze({
   Views,
   RedisKeys,
   SaleIntention,
-  DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession',
-  SESSION_ID: 'sessionId'
+  StatusCodes,
+  DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession'
 })

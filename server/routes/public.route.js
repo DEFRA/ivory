@@ -1,5 +1,7 @@
 'use strict'
 
+const os = require('os')
+
 module.exports = [
   {
     method: 'GET',
@@ -14,6 +16,7 @@ module.exports = [
     handler: {
       directory: {
         path: [
+          os.tmpdir(),
           'server/public/static',
           'server/public/build',
           'node_modules/govuk-frontend/govuk/assets'

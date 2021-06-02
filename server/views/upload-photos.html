@@ -1,6 +1,6 @@
-{% extends 'form-layout.html' %}
+{% extends 'multipart-form-layout.html' %}
 
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block formContent %}
@@ -11,6 +11,27 @@
 
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
+      {% if (not hideHelpText) %}
+        <p id="helpText1" class="govuk-body">You must add photos one at a time, up to a total of 6.</p>
+        <p id="helpText2" class="govuk-body">You must include a photo of:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li id="listItem1">the whole item</li>
+          <li id="listItem2">any distinguishing features, including where the ivory is</li>
+        </ul>
+      {% endif %}
+
+      {{ govukFileUpload({
+        attributes: {
+          accept: ".jpg,.jpeg,.png"
+        },
+        id: "files",
+        name: "files",
+        label: {
+          text: "Upload a file"
+        },
+        errorMessage: fieldErrors['files']
+      }) }}
+
       {{ govukButton({
           attributes: {
             id: "continue"
@@ -18,6 +39,10 @@
           text: "Continue"
         })
       }}
+
+      {% if hideHelpText %}
+        <p class="govuk-body"><a id="cancel" class="govuk-link" href="{{ yourPhotosUrl }}">Cancel</a></p>
+      {% endif %}
 
     </div>
   </div>

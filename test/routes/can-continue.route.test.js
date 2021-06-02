@@ -73,9 +73,7 @@ describe('/ivory-volume route', () => {
       it('should have the correct list heading', () => {
         const element = document.querySelector(`#${elementIds.listHeading}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'You’ll need to:'
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('You’ll need to:')
       })
 
       it('should have the correct list item', () => {
@@ -134,9 +132,7 @@ describe('/ivory-volume route', () => {
 
     describe('GET: Has the correct details when it IS a S2 (high value) item', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockReturnValue(ItemType.HIGH_VALUE)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.HIGH_VALUE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })

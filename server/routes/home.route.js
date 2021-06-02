@@ -1,7 +1,7 @@
 'use strict'
 
 const { v4: uuidv4 } = require('uuid')
-const { SESSION_ID, Views } = require('../utils/constants')
+const { DEFRA_IVORY_SESSION_KEY, Views } = require('../utils/constants')
 
 const handlers = {
   get: (request, h) => {
@@ -22,7 +22,7 @@ const handlers = {
 }
 
 const _setCookieSessionId = h => {
-  h.state(SESSION_ID, uuidv4())
+  h.state(DEFRA_IVORY_SESSION_KEY, uuidv4())
 }
 
 module.exports = [

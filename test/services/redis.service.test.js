@@ -33,21 +33,15 @@ describe('Redis service', () => {
       const redisValue = 'some_value'
       const redisTtlSeconds = 86400
 
-      expect(mockRequest.redis.client.set).toBeCalledTimes(0)
-      expect(mockRequest.redis.client.expire).toBeCalledTimes(0)
+      expect(mockRequest.redis.client.setex).toBeCalledTimes(0)
 
       await RedisService.set(mockRequest, redisKey, redisValue)
 
-      expect(mockRequest.redis.client.set).toBeCalledTimes(1)
-      expect(mockRequest.redis.client.set).toBeCalledWith(
+      expect(mockRequest.redis.client.setex).toBeCalledTimes(1)
+      expect(mockRequest.redis.client.setex).toBeCalledWith(
         `${sessionId}.${redisKey}`,
+        redisTtlSeconds,
         redisValue
-      )
-
-      expect(mockRequest.redis.client.expire).toBeCalledTimes(1)
-      expect(mockRequest.redis.client.expire).toBeCalledWith(
-        `${sessionId}.${redisKey}`,
-        redisTtlSeconds
       )
     })
   })
@@ -56,13 +50,12 @@ describe('Redis service', () => {
 const _createMocks = () => {
   mockRequest = jest.fn()
   mockRequest.state = {
-    sessionId
+    DefraIvorySession: sessionId
   }
   mockRequest.redis = {
     client: {
       get: jest.fn(),
-      set: jest.fn(),
-      expire: jest.fn()
+      setex: jest.fn()
     }
   }
 }
