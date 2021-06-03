@@ -112,6 +112,7 @@ const RedisKeys = {
   APPLICANT_ADDRESS: 'applicant.address',
   APPLICANT_EMAIL_ADDRESS: 'applicant.emailAddress',
   APPLICANT_NAME: 'applicant.name',
+  DESCRIBE_THE_ITEM: 'describe-the-item',
   INTENTION_FOR_ITEM: 'intention-for-item',
   IVORY_ADDED: 'ivory-added',
   IVORY_AGE: 'ivory-age',

@@ -1,6 +1,7 @@
 {% extends 'form-layout.html' %}
 
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block formContent %}
@@ -8,8 +9,88 @@
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
+      
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {{ govukInput({
+          label: {
+            html: '<span class="govuk-!-font-weight-bold">What is the item?</span>'
+          },
+          hint: {
+            text: "For example, 'sword', 'chest of drawers'"
+          },
+          id: "whatIsItem",
+          name: "whatIsItem",
+          value: whatIsItem,
+          errorMessage: fieldErrors['whatIsItem']
+      }) }}
+
+      {{ govukInput({
+          label: {
+            html: '<span class="govuk-!-font-weight-bold">Where is the ivory on it?</span>'
+          },
+          hint: {
+            text: "For example, 'scabbard has ivory inlay', 'chest has ivory knobs'"
+          },
+          id: "whereIsIvory",
+          name: "whereIsIvory",
+          value: whereIsIvory,
+          errorMessage: fieldErrors['whereIsIvory']
+      }) }}
+
+      {{ govukInput({
+          label: {
+            html: '<span class="govuk-!-font-weight-bold">Describe any unique, identifying features (optional)</span>'
+          },
+          hint: {
+            text: "For example, 'handle has a carved image of a soldier', 'one of the feet is cracked'"
+          },
+          id: "uniqueFeatures",
+          name: "uniqueFeatures",
+          value: uniqueFeatures,
+          errorMessage: fieldErrors['uniqueFeatures']
+      }) }}      
+
+      {% if isSection2 %}
+
+        {{ govukInput({
+            label: {
+              html: '<span class="govuk-!-font-weight-bold">Where was it made? (optional)</span>'
+            },
+            hint: {
+              text: "For example, 'Japan', 'Europe'"
+            },
+            id: "whereMade",
+            name: "whereMade",
+            value: whereMade,
+            errorMessage: fieldErrors['whereMade']
+        }) }}      
+
+        {{ govukInput({
+            label: {
+              html: '<span class="govuk-!-font-weight-bold">When was it made? (optional)</span>'
+            },
+            hint: {
+              text: "For example, '5th century', 'Georgian era'"
+            },
+            id: "whenMade",
+            name: "whenMade",
+            value: whenMade,
+            errorMessage: fieldErrors['whenMade']
+        }) }}     
+
+      {% endif %}
+
+    {% endcall %}
 
       {{ govukButton({
           attributes: {

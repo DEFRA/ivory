@@ -4,6 +4,8 @@ const { Paths, Views, RedisKeys } = require('../utils/constants')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
+const NOT_APPLICABLE = 'N/A'
+
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.CHECK_YOUR_ANSWERS, {
@@ -29,12 +31,23 @@ const handlers = {
 }
 
 const _getContext = async request => {
+  const itemDescription = JSON.parse(
+    await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
+  )
+
   return {
     pageTitle: 'Check your answers (incomplete)',
     whatTypeOfItemIsIt: await RedisService.get(
       request,
       RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
     ),
+
+    whatIsItem: itemDescription.whatIsItem,
+    whereIsIvory: itemDescription.whereIsIvory,
+    uniqueFeatures: itemDescription.uniqueFeatures || NOT_APPLICABLE,
+    whereMade: itemDescription.whereMade || NOT_APPLICABLE,
+    whenMade: itemDescription.whenMade || NOT_APPLICABLE,
+
     ivoryVolume: await RedisService.get(request, RedisKeys.IVORY_VOLUME),
     ivoryAge: await RedisService.get(request, RedisKeys.IVORY_AGE),
     ivoryIntegral: await RedisService.get(request, RedisKeys.IVORY_INTEGRAL),

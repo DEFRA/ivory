@@ -8,7 +8,7 @@ const { buildErrorSummary, Validators } = require('../utils/validation')
 const handlers = {
   get: async (request, h) => {
     return h.view(Views.WHAT_TYPE_OF_ITEM_IS_IT, {
-      ..._getContext()
+      ...(await _getContext(request))
     })
   },
 
@@ -19,7 +19,7 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.WHAT_TYPE_OF_ITEM_IS_IT, {
-          ..._getContext(),
+          ...(await _getContext(request)),
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -42,7 +42,12 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
+const _getContext = async request => {
+  const whatTypeOfItemIsIt = await RedisService.get(
+    request,
+    RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
+  )
+
   return {
     pageTitle: 'What is your ivory item?',
     items: [
@@ -52,7 +57,8 @@ const _getContext = () => {
         hint: {
           text:
             'Any replacement ivory must have been harvested before 1 January 1975.'
-        }
+        },
+        checked: whatTypeOfItemIsIt === ItemType.MUSICAL
       },
       {
         value: ItemType.TEN_PERCENT,
@@ -60,7 +66,8 @@ const _getContext = () => {
         hint: {
           text:
             'The ivory must be integral to the item. Any replacement ivory must have been harvested before 1 January 1975.'
-        }
+        },
+        checked: whatTypeOfItemIsIt === ItemType.TEN_PERCENT
       },
       {
         value: ItemType.MINIATURE,
@@ -68,7 +75,8 @@ const _getContext = () => {
         hint: {
           text:
             'Any replacement ivory must have been harvested before 1 January 1975.'
-        }
+        },
+        checked: whatTypeOfItemIsIt === ItemType.MINIATURE
       },
       {
         value: ItemType.MUSEUM,
@@ -76,7 +84,8 @@ const _getContext = () => {
         hint: {
           text:
             'This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum.'
-        }
+        },
+        checked: whatTypeOfItemIsIt === ItemType.MUSEUM
       },
       {
         value: ItemType.HIGH_VALUE,
@@ -84,7 +93,8 @@ const _getContext = () => {
         hint: {
           text:
             'Any replacement ivory must have been harvested before 1 January 1975.'
-        }
+        },
+        checked: whatTypeOfItemIsIt === ItemType.HIGH_VALUE
       }
     ]
   }
