@@ -16,7 +16,7 @@ const TWO_MINUTES_IN_MS = 120000
 
 const MAX_FILES = 1
 const THUMBNAIL_WIDTH = 1000
-const ALLOWED_EXTENSIONS = ['.JPG', '.JPEG', '.PNG', '.HEIC']
+const ALLOWED_EXTENSIONS = ['.JPG', '.JPEG', '.PNG']
 
 const handlers = {
   get: async (request, h) => {
