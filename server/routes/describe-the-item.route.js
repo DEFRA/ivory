@@ -64,20 +64,16 @@ const handlers = {
 }
 
 const _getContext = async (request, itemType) => {
-  const itemDescription = JSON.parse(
-    await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
-  )
-
   const context = {
     pageTitle: 'Tell us about the item',
     isSection2: itemType === ItemType.HIGH_VALUE
   }
 
-  if (itemDescription) {
-    for (const fieldName in itemDescription) {
-      context[fieldName] = itemDescription[fieldName]
-    }
-  }
+  const itemDescription = JSON.parse(
+    await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
+  )
+
+  _addRedisDataToContext(context, itemDescription)
 
   addPayloadToContext(request, context)
 
@@ -146,6 +142,15 @@ const _validateForm = payload => {
 
   return errors
 }
+
+const _addRedisDataToContext = (context, itemDescription) => {
+  if (itemDescription) {
+    for (const fieldName in itemDescription) {
+      context[fieldName] = itemDescription[fieldName]
+    }
+  }
+}
+
 module.exports = [
   {
     method: 'GET',

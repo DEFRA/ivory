@@ -13,7 +13,7 @@ const MAX_MEGABYES = 32
 
 const MAX_FILES = 1
 const THUMBNAIL_WIDTH = 1000
-const ALLOWED_EXTENSIONS = ['.JPG', '.JPEG', '.PNG']
+const ALLOWED_EXTENSIONS = ['.JPG', '.JPEG', '.PNG', '.HEIC']
 
 const handlers = {
   get: async (request, h) => {
@@ -128,6 +128,7 @@ const _getContext = async request => {
   return {
     pageTitle: !hideHelpText ? 'Add a photo of your item' : 'Add another photo',
     hideHelpText,
+    accept: '.jpg,.jpeg,.png',
     files,
     thumbnails,
     yourPhotosUrl: Paths.YOUR_PHOTOS
