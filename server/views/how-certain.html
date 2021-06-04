@@ -1,0 +1,49 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block formContent %}
+
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+        {{ govukRadios({
+          idPrefix: "howCertain",
+          name: "howCertain",
+          fieldset: {
+            legend: {
+              text: "How certain are you that your item is exempt?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          errorMessage: fieldErrors['howCertain'],
+          hint: {
+            html: '<p id="help1">To use this service, you must be completely certain.</p>
+                    <p id="help2">If you’re still unsure, we can help you decide.</p>'
+          },
+          items: [
+            {
+              value: "Completely",
+              text: "Completely"
+            },
+            {
+              value: "I’d like some help to work this out",
+              text: "I’d like some help to work this out"
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+            attributes: {
+              id: "continue"
+            },
+            text: "Continue"
+          })
+        }}
+
+    </div>
+  </div>
+{% endblock %}
