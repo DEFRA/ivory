@@ -19,7 +19,7 @@ const schema = joi.object().keys({
     .bool()
     .valid(true, false)
     .default(false),
-  serviceApiHost: joi.string().default('127.0.0.1'),
+  serviceApiHost: joi.string().default('http://127.0.0.1'),
   serviceApiPort: joi.number().default(3010),
   addressLookupEnabled: joi
     .bool()
