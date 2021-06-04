@@ -11,6 +11,9 @@ const { buildErrorSummary } = require('../utils/validation')
 // TODO: Confirm max individual file size
 const MAX_MEGABYES = 32
 
+// TODO: Decide on request timeout
+const TWO_MINUTES_IN_MS = 120000
+
 const MAX_FILES = 1
 const THUMBNAIL_WIDTH = 1000
 const ALLOWED_EXTENSIONS = ['.JPG', '.JPEG', '.PNG', '.HEIC']
@@ -198,7 +201,8 @@ module.exports = [
         multipart: {
           output: 'file'
         },
-        parse: true
+        parse: true,
+        timeout: TWO_MINUTES_IN_MS
       }
     }
   }
