@@ -4,9 +4,9 @@ const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
 
-describe('/how-certain route', () => {
+describe('/eligibility-checker/how-certain route', () => {
   let server
-  const url = '/how-certain'
+  const url = '/eligibility-checker/how-certain'
   const nextUrlTypeOfItem = '/what-type-of-item-is-it'
   const nextUrlContainsElephant = '/check-your-answers'
 
