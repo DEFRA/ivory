@@ -23,15 +23,13 @@ const handlers = {
         .code(400)
     }
 
-    switch (itemType) {
-      case ItemType.HIGH_VALUE:
-        return h.redirect(Paths.WHY_IS_ITEM_RMI)
-      case ItemType.MINIATURE:
-        return h.redirect(Paths.IVORY_AGE)
-      case ItemType.MUSEUM:
-        return h.redirect(Paths.UPLOAD_PHOTOS)
-      default:
-        return h.redirect(Paths.IVORY_VOLUME)
+    switch (payload.containElephantIvory) {
+      case 'Yes':
+        return h.redirect(Paths.CHECK_YOUR_ANSWERS)
+      case 'No':
+        return h.redirect(Paths.DO_NOT_NEED_SERVICE)
+      case 'I dont know':
+        return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }
 }

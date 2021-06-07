@@ -9,15 +9,40 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
-
-      {{ govukButton({
-          attributes: {
-            id: "continue"
+        {{ govukRadios({
+          idPrefix: "containElephantIvory",
+          name: "containElephantIvory",
+          fieldset: {
+            legend: {
+              text: pageTitle,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
           },
-          text: "Finish and return to guidance"
-        })
-      }}
+          errorMessage: fieldErrors['containElephantIvory'],
+          items: [
+            {
+              value: "Yes",
+              text: "Yes"
+            },
+            {
+              value: "No",
+              text: "No"
+            },
+            {
+              value: "I dont know",
+              text: "I don't know"
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+            attributes: {
+              id: "continue"
+            },
+            text: "Continue"
+          })
+        }}
 
     </div>
   </div>
