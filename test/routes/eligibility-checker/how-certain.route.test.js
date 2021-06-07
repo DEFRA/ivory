@@ -1,8 +1,8 @@
 'use strict'
 
-const createServer = require('../../server')
+const createServer = require('../../../server')
 
-const TestHelper = require('../utils/test-helper')
+const TestHelper = require('../../utils/test-helper')
 
 describe('/eligibility-checker/how-certain route', () => {
   let server
