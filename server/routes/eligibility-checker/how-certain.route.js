@@ -1,7 +1,7 @@
 'use strict'
 
-const { Paths, Views } = require('../utils/constants')
-const { buildErrorSummary, Validators } = require('../utils/validation')
+const { Paths, Views } = require('../../utils/constants')
+const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
   get: (request, h) => {
