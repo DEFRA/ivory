@@ -8,7 +8,7 @@ const handlers = {
     return h.view(Views.HOW_CERTAIN)
   },
 
-  post: async (request, h) => {
+  post: (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 

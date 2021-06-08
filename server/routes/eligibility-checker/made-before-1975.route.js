@@ -5,29 +5,29 @@ const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.CONTAIN_ELEPHANT_IVORY, {
+    return h.view(Views.MADE_BEFORE_1975, {
       ..._getContext()
     })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
       return h
-        .view(Views.CONTAIN_ELEPHANT_IVORY, {
+        .view(Views.MADE_BEFORE_1975, {
           ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    switch (payload.containElephantIvory) {
+    switch (payload.madeBefore1975) {
       case 'Yes':
-        return h.redirect(Paths.SELLING_TO_MUSEUM)
+        return h.redirect(Paths.LESS_THAN_20_IVORY)
       case 'No':
-        return h.redirect(Paths.DO_NOT_NEED_SERVICE)
+        return h.redirect(Paths.CANNOT_TRADE)
       case 'I dont know':
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
@@ -36,15 +36,15 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Does your item contain elephant ivory?'
+    pageTitle: 'Was the item made before 1 January 1975?'
   }
 }
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.containElephantIvory)) {
+  if (Validators.empty(payload.madeBefore1975)) {
     errors.push({
-      name: 'containElephantIvory',
+      name: 'madeBefore1975',
       text: 'You need to select something!'
     })
   }
@@ -54,12 +54,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.CONTAIN_ELEPHANT_IVORY}`,
+    path: `${Paths.MADE_BEFORE_1975}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.CONTAIN_ELEPHANT_IVORY}`,
+    path: `${Paths.MADE_BEFORE_1975}`,
     handler: handlers.post
   }
 ]

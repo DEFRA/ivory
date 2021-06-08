@@ -5,7 +5,7 @@ const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.CONTAIN_ELEPHANT_IVORY, {
+    return h.view(Views.RMI_AND_PRE_1918, {
       ..._getContext()
     })
   },
@@ -16,35 +16,35 @@ const handlers = {
 
     if (errors.length) {
       return h
-        .view(Views.CONTAIN_ELEPHANT_IVORY, {
+        .view(Views.RMI_AND_PRE_1918, {
           ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    switch (payload.containElephantIvory) {
+    switch (payload.rmiAndPre1918) {
       case 'Yes':
-        return h.redirect(Paths.SELLING_TO_MUSEUM)
+        return h.redirect(Paths.IVORY_ADDED)
       case 'No':
-        return h.redirect(Paths.DO_NOT_NEED_SERVICE)
+        return h.redirect(Paths.CANNOT_TRADE)
       case 'I dont know':
-        return h.redirect(Paths.CANNOT_CONTINUE)
+        return h.redirect(Paths.IVORY_ADDED)
     }
   }
 }
 
 const _getContext = () => {
   return {
-    pageTitle: 'Does your item contain elephant ivory?'
+    pageTitle: 'Is it a pre-1918 item of outstandingly high artistic, cultural or historical value?'
   }
 }
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.containElephantIvory)) {
+  if (Validators.empty(payload.rmiAndPre1918)) {
     errors.push({
-      name: 'containElephantIvory',
+      name: 'rmiAndPre1918',
       text: 'You need to select something!'
     })
   }
@@ -54,12 +54,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.CONTAIN_ELEPHANT_IVORY}`,
+    path: `${Paths.RMI_AND_PRE_1918}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.CONTAIN_ELEPHANT_IVORY}`,
+    path: `${Paths.RMI_AND_PRE_1918}`,
     handler: handlers.post
   }
 ]

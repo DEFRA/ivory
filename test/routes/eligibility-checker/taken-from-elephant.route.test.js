@@ -1,22 +1,20 @@
 'use strict'
 
-const createServer = require('../../server')
+const createServer = require('../../../server')
 
-const TestHelper = require('../utils/test-helper')
+const TestHelper = require('../../utils/test-helper')
 
-jest.mock('../../server/services/redis.service')
-const RedisService = require('../../server/services/redis.service')
-
-describe('/taken-from-elephant route', () => {
+describe('/eligibility-checker/taken-from-elephant route', () => {
   let server
-  const url = '/taken-from-elephant'
-  const nextUrl = '/check-your-answers'
+  const url = '/eligibility-checker/taken-from-elephant'
+  const nextUrlCannotTrade = '/eligibility-checker/cannot-trade'
+  const nextUrlCanContinue = '/can-continue'
+  const nextUrlCannotContinue = '/eligibility-checker/cannot-continue'
 
   const elementIds = {
-    yesNoIdk: 'yesNoIdk',
-    yesNoIdk2: 'yesNoIdk-2',
-    yesNoIdk3: 'yesNoIdk-3',
-    yesNoIdkHint: 'yesNoIdk-hint',
+    takenFromElephant: 'takenFromElephant',
+    takenFromElephant2: 'takenFromElephant-2',
+    takenFromElephant3: 'takenFromElephant-3',
     continue: 'continue'
   }
 
@@ -28,14 +26,6 @@ describe('/taken-from-elephant route', () => {
 
   afterAll(() => {
     server.stop()
-  })
-
-  beforeEach(() => {
-    _createMocks()
-  })
-
-  afterEach(() => {
-    jest.clearAllMocks()
   })
 
   describe('GET', () => {
@@ -64,23 +54,12 @@ describe('/taken-from-elephant route', () => {
       )
     })
 
-    it('should NOT have hint text', () => {
-      const element = document.querySelector(`#${elementIds.yesNoIdkHint}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('')
-    })
-
     it('should have the correct radio buttons', () => {
-      TestHelper.checkRadioOption(document, elementIds.yesNoIdk, 'Yes', 'Yes')
+      TestHelper.checkRadioOption(document, elementIds.takenFromElephant, 'Yes', 'Yes')
 
-      TestHelper.checkRadioOption(document, elementIds.yesNoIdk2, 'No', 'No')
+      TestHelper.checkRadioOption(document, elementIds.takenFromElephant2, 'No', 'No')
 
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.yesNoIdk3,
-        'I dont know',
-        "I don't know"
-      )
+      TestHelper.checkRadioOption(document, elementIds.takenFromElephant3, 'I dont know', "I don't know")
     })
 
     it('should have the correct Call to Action button', () => {
@@ -102,14 +81,22 @@ describe('/taken-from-elephant route', () => {
     })
 
     describe('Success', () => {
-      it('should store the value in Redis and progress to the next route when "No" has been selected', async () => {
-        await _checkSelectedRadioAction(postOptions, server, 'No', nextUrl)
+      it('should progress to the next route when "Yes" has been selected', async () => {
+        await _checkSelectedRadioAction(postOptions, server, 'Yes', nextUrlCannotTrade)
+      })
+
+      it('should progress to the next route when "No" has been selected', async () => {
+        await _checkSelectedRadioAction(postOptions, server, 'No', nextUrlCanContinue)
+      })
+
+      it('should progress to the next route when "I dont know" has been selected', async () => {
+        await _checkSelectedRadioAction(postOptions, server, 'I dont know', nextUrlCannotContinue)
       })
     })
 
     describe('Failure', () => {
       it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.yesNoIdk = ''
+        postOptions.payload.takenFromElephant = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -117,8 +104,8 @@ describe('/taken-from-elephant route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'yesNoIdk',
-          'yesNoIdk-error',
+          'takenFromElephant',
+          'takenFromElephant-error',
           'You must tell us if the replacement ivory was taken from an elephant on or after 1 January 1975'
         )
       })
@@ -126,29 +113,15 @@ describe('/taken-from-elephant route', () => {
   })
 })
 
-const _createMocks = () => {
-  RedisService.set = jest.fn()
-}
-
 const _checkSelectedRadioAction = async (
   postOptions,
   server,
   selectedOption,
   nextUrl
 ) => {
-  const redisKey = 'ivory-added'
-  postOptions.payload.yesNoIdk = selectedOption
-
-  expect(RedisService.set).toBeCalledTimes(0)
+  postOptions.payload.takenFromElephant = selectedOption
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
-
-  expect(RedisService.set).toBeCalledTimes(1)
-  expect(RedisService.set).toBeCalledWith(
-    expect.any(Object),
-    redisKey,
-    selectedOption === 'No' ? 'yes-pre-1975' : ''
-  )
 
   expect(response.headers.location).toEqual(nextUrl)
 }

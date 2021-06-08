@@ -1,11 +1,12 @@
 'use strict'
 
-const { Paths, Views } = require('../../utils/constants')
+const { ItemType, Paths, RedisKeys, Views } = require('../../utils/constants')
+const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.SELLING_TO_MUSEUM, {
+    return h.view(Views.IS_IT_A_MUSICAL_INSTRUMENT, {
       ..._getContext()
     })
   },
@@ -16,35 +17,38 @@ const handlers = {
 
     if (errors.length) {
       return h
-        .view(Views.SELLING_TO_MUSEUM, {
+        .view(Views.IS_IT_A_MUSICAL_INSTRUMENT, {
           ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    switch (payload.sellingToMuseum) {
+    switch (payload.isItAMusicalInstrument) {
       case 'Yes':
-        return h.redirect(Paths.ARE_YOU_A_MUSEUM)
+        await RedisService.set(
+          request,
+          RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
+          ItemType.MUSICAL
+        )
+        return h.redirect(Paths.MADE_BEFORE_1975)
       case 'No':
-        return h.redirect(Paths.IS_IT_A_MUSICAL_INSTRUMENT)
-      case 'I dont know':
-        return h.redirect(Paths.IS_IT_A_MUSICAL_INSTRUMENT)
+        return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
   }
 }
 
 const _getContext = () => {
   return {
-    pageTitle: 'Are you selling or hiring the item out to a museum?'
+    pageTitle: 'Is your item a musical instrument?'
   }
 }
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.sellingToMuseum)) {
+  if (Validators.empty(payload.isItAMusicalInstrument)) {
     errors.push({
-      name: 'sellingToMuseum',
+      name: 'isItAMusicalInstrument',
       text: 'You need to select something!'
     })
   }
@@ -54,12 +58,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.SELLING_TO_MUSEUM}`,
+    path: `${Paths.IS_IT_A_MUSICAL_INSTRUMENT}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.SELLING_TO_MUSEUM}`,
+    path: `${Paths.IS_IT_A_MUSICAL_INSTRUMENT}`,
     handler: handlers.post
   }
 ]

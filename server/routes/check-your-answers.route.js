@@ -38,7 +38,6 @@ const _getContext = async request => {
     ivoryVolume: await RedisService.get(request, RedisKeys.IVORY_VOLUME),
     ivoryAge: await RedisService.get(request, RedisKeys.IVORY_AGE),
     ivoryIntegral: await RedisService.get(request, RedisKeys.IVORY_INTEGRAL),
-    ivoryAdded: await RedisService.get(request, RedisKeys.IVORY_ADDED),
 
     ownerDetails: `${await RedisService.get(
       request,

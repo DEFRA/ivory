@@ -9,8 +9,8 @@
 
     <div class="govuk-grid-column-two-thirds">
       {{ govukRadios({
-        idPrefix: "yesNoIdk",
-        name: "yesNoIdk",
+        idPrefix: "takenFromElephant",
+        name: "takenFromElephant",
         fieldset: {
           legend: {
             text: pageTitle,
@@ -18,10 +18,7 @@
             classes: "govuk-fieldset__legend--l"
           }
         },
-        hint: {
-          text: hintText
-        },
-        errorMessage: fieldErrors['yesNoIdk'],
+        errorMessage: fieldErrors['takenFromElephant'],
         items: [
           {
             value: "Yes",
