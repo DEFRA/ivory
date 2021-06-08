@@ -5,7 +5,7 @@ const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.CONTAIN_ELEPHANT_IVORY, {
+    return h.view(Views.SELLING_TO_MUSEUM, {
       ..._getContext()
     })
   },
@@ -16,35 +16,35 @@ const handlers = {
 
     if (errors.length) {
       return h
-        .view(Views.CONTAIN_ELEPHANT_IVORY, {
+        .view(Views.SELLING_TO_MUSEUM, {
           ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    switch (payload.containElephantIvory) {
+    switch (payload.sellingToMuseum) {
       case 'Yes':
-        return h.redirect(Paths.SELLING_TO_MUSEUM)
+        return h.redirect(Paths.ARE_YOU_A_MUSEUM)
       case 'No':
-        return h.redirect(Paths.DO_NOT_NEED_SERVICE)
+        return h.redirect(Paths.CHECK_YOUR_ANSWERS)
       case 'I dont know':
-        return h.redirect(Paths.CANNOT_CONTINUE)
+        return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
   }
 }
 
 const _getContext = () => {
   return {
-    pageTitle: 'Does your item contain elephant ivory?'
+    pageTitle: 'Are you selling or hiring the item out to a museum?'
   }
 }
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.containElephantIvory)) {
+  if (Validators.empty(payload.sellingToMuseum)) {
     errors.push({
-      name: 'containElephantIvory',
+      name: 'sellingToMuseum',
       text: 'You need to select something!'
     })
   }
@@ -54,12 +54,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.CONTAIN_ELEPHANT_IVORY}`,
+    path: `${Paths.SELLING_TO_MUSEUM}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.CONTAIN_ELEPHANT_IVORY}`,
+    path: `${Paths.SELLING_TO_MUSEUM}`,
     handler: handlers.post
   }
 ]

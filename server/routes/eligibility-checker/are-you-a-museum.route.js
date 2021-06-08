@@ -1,11 +1,12 @@
 'use strict'
 
-const { Paths, Views } = require('../../utils/constants')
+const { ItemType, Paths, RedisKeys, Views } = require('../../utils/constants')
+const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.CONTAIN_ELEPHANT_IVORY, {
+    return h.view(Views.ARE_YOU_A_MUSEUM, {
       ..._getContext()
     })
   },
@@ -16,35 +17,38 @@ const handlers = {
 
     if (errors.length) {
       return h
-        .view(Views.CONTAIN_ELEPHANT_IVORY, {
+        .view(Views.ARE_YOU_A_MUSEUM, {
           ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    switch (payload.containElephantIvory) {
+    switch (payload.areYouAMuseum) {
       case 'Yes':
-        return h.redirect(Paths.SELLING_TO_MUSEUM)
-      case 'No':
         return h.redirect(Paths.DO_NOT_NEED_SERVICE)
-      case 'I dont know':
-        return h.redirect(Paths.CANNOT_CONTINUE)
+      case 'No':
+        await RedisService.set(
+          request,
+          RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
+          ItemType.MUSEUM
+        )
+        return h.redirect(Paths.CAN_CONTINUE)
     }
   }
 }
 
 const _getContext = () => {
   return {
-    pageTitle: 'Does your item contain elephant ivory?'
+    pageTitle: 'Are you selling or hiring the item out on behalf of a museum?'
   }
 }
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.containElephantIvory)) {
+  if (Validators.empty(payload.areYouAMuseum)) {
     errors.push({
-      name: 'containElephantIvory',
+      name: 'areYouAMuseum',
       text: 'You need to select something!'
     })
   }
@@ -54,12 +58,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.CONTAIN_ELEPHANT_IVORY}`,
+    path: `${Paths.ARE_YOU_A_MUSEUM}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.CONTAIN_ELEPHANT_IVORY}`,
+    path: `${Paths.ARE_YOU_A_MUSEUM}`,
     handler: handlers.post
   }
 ]
