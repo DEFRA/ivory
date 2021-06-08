@@ -10,7 +10,7 @@ const RedisService = require('../../server/services/redis.service')
 describe('/what-type-of-item-is-it route', () => {
   let server
   const url = '/what-type-of-item-is-it'
-  const nextUrlCanContinue = '/can-continue'
+  const nextUrl = '/can-continue'
 
   const elementIds = {
     whatTypeOfItemIsIt: 'whatTypeOfItemIsIt',
@@ -138,7 +138,7 @@ describe('/what-type-of-item-is-it route', () => {
       expect(TestHelper.getTextContent(element)).toEqual(
         'check if you can sell or hire out your item'
       )
-      expect(element.href).toEqual('about:blank#')
+      expect(element.href).toEqual('/eligibility-checker/how-certain')
     })
 
     it('should have the correct Call to Action button', () => {
@@ -165,7 +165,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Musical instrument made before 1975 with less than 20% ivory',
-          nextUrlCanContinue,
+          nextUrl,
           2000
         )
       })
@@ -175,7 +175,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Item made before 3 March 1947 with less than 10% ivory',
-          nextUrlCanContinue,
+          nextUrl,
           2000
         )
       })
@@ -185,7 +185,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
-          nextUrlCanContinue,
+          nextUrl,
           2000
         )
       })
@@ -195,7 +195,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Item to be sold or hired out to a qualifying museum',
-          nextUrlCanContinue,
+          nextUrl,
           2000
         )
       })
@@ -205,7 +205,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
-          nextUrlCanContinue,
+          nextUrl,
           25000
         )
       })
