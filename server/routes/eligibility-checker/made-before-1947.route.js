@@ -6,7 +6,7 @@ const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.LESS_THAN_20_IVORY, {
+    return h.view(Views.MADE_BEFORE_1947, {
       ..._getContext()
     })
   },
@@ -17,23 +17,23 @@ const handlers = {
 
     if (errors.length) {
       return h
-        .view(Views.LESS_THAN_20_IVORY, {
+        .view(Views.MADE_BEFORE_1947, {
           ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    switch (payload.lessThan20Ivory) {
+    switch (payload.madeBefore1947) {
       case 'Yes':
         await RedisService.set(
           request,
           RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
-          ItemType.MUSICAL
+          ItemType.TEN_PERCENT
         )
         return h.redirect(Paths.IVORY_ADDED)
       case 'No':
-        return h.redirect(Paths.RMI_AND_PRE_1918)
+        return h.redirect(Paths.CANNOT_TRADE)
       case 'I dont know':
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
@@ -42,15 +42,15 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Is the whole item less than 20% ivory?'
+    pageTitle: 'Was the item made before 3 March 1947?'
   }
 }
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.lessThan20Ivory)) {
+  if (Validators.empty(payload.madeBefore1947)) {
     errors.push({
-      name: 'lessThan20Ivory',
+      name: 'madeBefore1947',
       text: 'You need to select something!'
     })
   }
@@ -60,12 +60,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.LESS_THAN_20_IVORY}`,
+    path: `${Paths.MADE_BEFORE_1947}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.LESS_THAN_20_IVORY}`,
+    path: `${Paths.MADE_BEFORE_1947}`,
     handler: handlers.post
   }
 ]

@@ -25,9 +25,9 @@ const handlers = {
 
     switch (payload.lessThan10Ivory) {
       case 'Yes':
-        return h.redirect(Paths.IVORY_ADDED)
+        return h.redirect(Paths.MADE_BEFORE_1947)
       case 'No':
-        return h.redirect(Paths.RMI_AND_PRE_1918)
+        return h.redirect(Paths.IS_IT_A_PORTRAIT_MINIATURE)
       case 'I dont know':
         return h.redirect(Paths.CANNOT_CONTINUE)
     }

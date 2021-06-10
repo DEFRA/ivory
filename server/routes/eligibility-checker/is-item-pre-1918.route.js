@@ -6,7 +6,7 @@ const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.LESS_THAN_20_IVORY, {
+    return h.view(Views.IS_ITEM_PRE_1918, {
       ..._getContext()
     })
   },
@@ -14,26 +14,26 @@ const handlers = {
   post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
+    const whatIsItem = await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
 
     if (errors.length) {
       return h
-        .view(Views.LESS_THAN_20_IVORY, {
+        .view(Views.IS_ITEM_PRE_1918, {
           ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    switch (payload.lessThan20Ivory) {
+    switch (payload.isItemPre1918) {
       case 'Yes':
-        await RedisService.set(
-          request,
-          RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
-          ItemType.MUSICAL
-        )
-        return h.redirect(Paths.IVORY_ADDED)
+        if (whatIsItem === ItemType.MINIATURE) {
+          return h.redirect(Paths.LESS_THAN_320CM_SQUARED)
+        } else {
+          return h.redirect(Paths.IS_IT_RMI)
+        }
       case 'No':
-        return h.redirect(Paths.RMI_AND_PRE_1918)
+        return h.redirect(Paths.CANNOT_TRADE)
       case 'I dont know':
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
@@ -42,15 +42,15 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Is the whole item less than 20% ivory?'
+    pageTitle: 'Is the item pre 1918?'
   }
 }
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.lessThan20Ivory)) {
+  if (Validators.empty(payload.isItemPre1918)) {
     errors.push({
-      name: 'lessThan20Ivory',
+      name: 'isItemPre1918',
       text: 'You need to select something!'
     })
   }
@@ -60,12 +60,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.LESS_THAN_20_IVORY}`,
+    path: `${Paths.IS_ITEM_PRE_1918}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.LESS_THAN_20_IVORY}`,
+    path: `${Paths.IS_ITEM_PRE_1918}`,
     handler: handlers.post
   }
 ]

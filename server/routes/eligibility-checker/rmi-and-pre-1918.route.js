@@ -1,6 +1,7 @@
 'use strict'
 
-const { Paths, Views } = require('../../utils/constants')
+const { ItemType, Paths, RedisKeys, Views } = require('../../utils/constants')
+const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
@@ -10,7 +11,7 @@ const handlers = {
     })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
@@ -25,11 +26,16 @@ const handlers = {
 
     switch (payload.rmiAndPre1918) {
       case 'Yes':
+        await RedisService.set(
+          request,
+          RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
+          ItemType.HIGH_VALUE
+        )
         return h.redirect(Paths.IVORY_ADDED)
       case 'No':
         return h.redirect(Paths.CANNOT_TRADE)
       case 'I dont know':
-        return h.redirect(Paths.IVORY_ADDED)
+        return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }
 }

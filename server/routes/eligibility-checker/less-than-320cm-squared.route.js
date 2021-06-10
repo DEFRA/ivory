@@ -1,12 +1,11 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views } = require('../../utils/constants')
-const RedisService = require('../../services/redis.service')
+const { Paths, Views } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.LESS_THAN_20_IVORY, {
+    return h.view(Views.LESS_THAN_320CM_SQUARED, {
       ..._getContext()
     })
   },
@@ -17,23 +16,18 @@ const handlers = {
 
     if (errors.length) {
       return h
-        .view(Views.LESS_THAN_20_IVORY, {
+        .view(Views.LESS_THAN_320CM_SQUARED, {
           ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    switch (payload.lessThan20Ivory) {
+    switch (payload.lessThan320cmSquared) {
       case 'Yes':
-        await RedisService.set(
-          request,
-          RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
-          ItemType.MUSICAL
-        )
         return h.redirect(Paths.IVORY_ADDED)
       case 'No':
-        return h.redirect(Paths.RMI_AND_PRE_1918)
+        return h.redirect(Paths.IS_IT_RMI)
       case 'I dont know':
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
@@ -42,15 +36,15 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Is the whole item less than 20% ivory?'
+    pageTitle: 'Less than 320cm squared?'
   }
 }
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.lessThan20Ivory)) {
+  if (Validators.empty(payload.lessThan320cmSquared)) {
     errors.push({
-      name: 'lessThan20Ivory',
+      name: 'lessThan320cmSquared',
       text: 'You need to select something!'
     })
   }
@@ -60,12 +54,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.LESS_THAN_20_IVORY}`,
+    path: `${Paths.LESS_THAN_320CM_SQUARED}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.LESS_THAN_20_IVORY}`,
+    path: `${Paths.LESS_THAN_320CM_SQUARED}`,
     handler: handlers.post
   }
 ]
