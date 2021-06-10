@@ -32,7 +32,7 @@ const _getContext = async request => {
     return {
       pageTitle: 'You must now apply for an exemption certificate',
       additionalSteps: [
-        'pay a non-refundable administration fee of £250',
+        `pay a non-refundable administration fee of £${config.paymentAmountBandB / 100}`,
         'wait 30 days for your application to be approved by an expert'
       ],
       finalParagraph: 'If your application is successful, we will send you an exemption certificate so you can sell or hire out your item.'
@@ -41,7 +41,7 @@ const _getContext = async request => {
     return {
       pageTitle: 'You must now make a self-assessment to sell or hire out your item',
       additionalSteps: [
-        'pay an administration fee of £20'
+        `pay an administration fee of £${config.paymentAmountBandA / 100}`
       ],
       finalParagraph: 'As soon as you successfully make the payment, you’ll be able to sell the item or hire it out.'
     }
