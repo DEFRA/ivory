@@ -1,5 +1,6 @@
 'use strict'
 
+const config = require('../utils/config')
 const RedisService = require('../services/redis.service')
 const { ItemType, Paths, RedisKeys, Views } = require('../utils/constants')
 
@@ -10,7 +11,14 @@ const handlers = {
     })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
+    const cost =
+      _getItemType !== ItemType.HIGH_VALUE
+        ? config.paymentAmountBandA
+        : config.paymentAmountBandB
+
+    await RedisService.set(request, RedisKeys.PAYMENT_AMOUNT, cost)
+
     return h.redirect(Paths.LEGAL_REPONSIBILITY)
   }
 }
