@@ -13,7 +13,7 @@ const handlers = {
 
   post: async (request, h) => {
     const cost =
-      _getItemType !== ItemType.HIGH_VALUE
+      await _getItemType(request) !== ItemType.HIGH_VALUE
         ? config.paymentAmountBandA
         : config.paymentAmountBandB
 

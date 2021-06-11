@@ -11,6 +11,7 @@ const RedisService = require('../../server/services/redis.service')
 describe('/ivory-volume route', () => {
   let server
   const url = '/can-continue'
+  const nextUrl = '/legal-responsibility'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -183,8 +184,24 @@ describe('/ivory-volume route', () => {
     })
 
     describe('Success', () => {
-      it('should redirect', async () => {
-        await TestHelper.submitPostRequest(server, postOptions, 302)
+      it('should redirect and save the correct payment amount when it "IS NOT" a S2 (high value) item', async () => {
+        RedisService.get = jest.fn().mockReturnValue(ItemType.MUSICAL)
+        await _checkPostAction(
+          postOptions,
+          server,
+          nextUrl,
+          2000
+        )
+      })
+
+      it('should redirect and save the correct payment amount when it "IS" a S2 (high value) item', async () => {
+        RedisService.get = jest.fn().mockReturnValue(ItemType.HIGH_VALUE)
+        await _checkPostAction(
+          postOptions,
+          server,
+          nextUrl,
+          25000
+        )
       })
     })
   })
@@ -192,4 +209,26 @@ describe('/ivory-volume route', () => {
 
 const _createMocks = () => {
   RedisService.set = jest.fn()
+}
+
+const _checkPostAction = async (
+  postOptions,
+  server,
+  nextUrl,
+  expectedAmount
+) => {
+  const redisKeyPaymentAmount = 'payment-amount'
+
+  expect(RedisService.set).toBeCalledTimes(0)
+
+  const response = await TestHelper.submitPostRequest(server, postOptions)
+
+  expect(RedisService.set).toBeCalledTimes(1)
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    redisKeyPaymentAmount,
+    expectedAmount
+  )
+
+  expect(response.headers.location).toEqual(nextUrl)
 }

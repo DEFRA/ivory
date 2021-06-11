@@ -165,8 +165,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Musical instrument made before 1975 with less than 20% ivory',
-          nextUrl,
-          2000
+          nextUrl
         )
       })
 
@@ -175,8 +174,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Item made before 3 March 1947 with less than 10% ivory',
-          nextUrl,
-          2000
+          nextUrl
         )
       })
 
@@ -185,8 +183,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
-          nextUrl,
-          2000
+          nextUrl
         )
       })
 
@@ -195,8 +192,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Item to be sold or hired out to a qualifying museum',
-          nextUrl,
-          2000
+          nextUrl
         )
       })
 
@@ -205,8 +201,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
-          nextUrl,
-          25000
+          nextUrl
         )
       })
     })
@@ -238,27 +233,20 @@ const _checkSelectedRadioAction = async (
   postOptions,
   server,
   selectedOption,
-  nextUrl,
-  expectedAmount
+  nextUrl
 ) => {
   const redisKeyTypeOfItem = 'what-type-of-item-is-it'
-  const redisKeyPaymentAmount = 'payment-amount'
   postOptions.payload.whatTypeOfItemIsIt = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(0)
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
-  expect(RedisService.set).toBeCalledTimes(2)
+  expect(RedisService.set).toBeCalledTimes(1)
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
     redisKeyTypeOfItem,
     selectedOption
-  )
-  expect(RedisService.set).toBeCalledWith(
-    expect.any(Object),
-    redisKeyPaymentAmount,
-    expectedAmount
   )
 
   expect(response.headers.location).toEqual(nextUrl)
