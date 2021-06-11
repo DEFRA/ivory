@@ -1,6 +1,6 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views } = require('../../utils/constants')
+const { ItemType, Paths, RedisKeys, Views, Options } = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
@@ -25,9 +25,9 @@ const handlers = {
     }
 
     switch (payload.areYouAMuseum) {
-      case 'Yes':
+      case Options.YES:
         return h.redirect(Paths.DO_NOT_NEED_SERVICE)
-      case 'No':
+      case Options.NO:
         await RedisService.set(
           request,
           RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,

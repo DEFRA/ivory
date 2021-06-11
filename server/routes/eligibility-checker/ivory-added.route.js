@@ -1,6 +1,6 @@
 'use strict'
 
-const { Paths, Views } = require('../../utils/constants')
+const { Paths, Views, Options } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
@@ -24,11 +24,11 @@ const handlers = {
     }
 
     switch (payload.ivoryAdded) {
-      case 'Yes':
+      case Options.YES:
         return h.redirect(Paths.TAKEN_FROM_ELEPHANT)
-      case 'No':
+      case Options.NO:
         return h.redirect(Paths.CAN_CONTINUE)
-      case 'I dont know':
+      case Options.I_DONT_KNOW:
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }

@@ -1,6 +1,6 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views } = require('../../utils/constants')
+const { ItemType, Paths, RedisKeys, Views, Options } = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
@@ -26,15 +26,15 @@ const handlers = {
     }
 
     switch (payload.isItemPre1918) {
-      case 'Yes':
+      case Options.YES:
         if (whatIsItem === ItemType.MINIATURE) {
           return h.redirect(Paths.LESS_THAN_320CM_SQUARED)
         } else {
           return h.redirect(Paths.IS_IT_RMI)
         }
-      case 'No':
+      case Options.NO:
         return h.redirect(Paths.CANNOT_TRADE)
-      case 'I dont know':
+      case Options.I_DONT_KNOW:
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }

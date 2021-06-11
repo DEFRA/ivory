@@ -1,6 +1,6 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views } = require('../../utils/constants')
+const { ItemType, Paths, RedisKeys, Views, Options } = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
@@ -25,16 +25,16 @@ const handlers = {
     }
 
     switch (payload.rmiAndPre1918) {
-      case 'Yes':
+      case Options.YES:
         await RedisService.set(
           request,
           RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
           ItemType.HIGH_VALUE
         )
         return h.redirect(Paths.IVORY_ADDED)
-      case 'No':
+      case Options.NO:
         return h.redirect(Paths.CANNOT_TRADE)
-      case 'I dont know':
+      case Options.I_DONT_KNOW:
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }

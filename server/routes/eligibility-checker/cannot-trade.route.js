@@ -1,6 +1,6 @@
 'use strict'
 
-const { Paths, Views } = require('../../utils/constants')
+const { Paths, Views, Urls } = require('../../utils/constants')
 
 const handlers = {
   get: (request, h) => {
@@ -10,7 +10,7 @@ const handlers = {
   },
 
   post: (request, h) => {
-    return h.redirect('https://www.gov.uk/')
+    return h.redirect(Urls.GOV_UK_HOME)
   }
 }
 

@@ -1,6 +1,6 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views } = require('../../utils/constants')
+const { ItemType, Paths, RedisKeys, Views, Options } = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
@@ -25,21 +25,21 @@ const handlers = {
     }
 
     switch (payload.isItAPortraitMiniature) {
-      case 'Yes':
+      case Options.YES:
         await RedisService.set(
           request,
           RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
           ItemType.MINIATURE
         )
         return h.redirect(Paths.IS_ITEM_PRE_1918)
-      case 'No':
+      case Options.NO:
         await RedisService.set(
           request,
           RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
           ''
         )
         return h.redirect(Paths.IS_ITEM_PRE_1918)
-      case 'I dont know':
+      case Options.I_DONT_KNOW:
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }

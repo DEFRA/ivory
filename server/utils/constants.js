@@ -12,7 +12,8 @@ const CharacterLimits = {
 
 const Options = {
   YES: 'Yes',
-  NO: 'No'
+  NO: 'No',
+  I_DONT_KNOW: 'I dont know'
 }
 
 const ItemType = {
@@ -29,6 +30,10 @@ const SaleIntention = {
   SELL: 'Sell it',
   HIRE: 'Hire it out',
   NOT_SURE_YET: "I'm not sure yet"
+}
+
+const Urls = {
+  GOV_UK_HOME: 'https://www.gov.uk/'
 }
 
 const Paths = {
@@ -186,5 +191,6 @@ module.exports = Object.freeze({
   RedisKeys,
   SaleIntention,
   StatusCodes,
+  Urls,
   DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession'
 })

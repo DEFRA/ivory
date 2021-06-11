@@ -1,6 +1,6 @@
 'use strict'
 
-const { Paths, Views } = require('../../utils/constants')
+const { Paths, Views, Options } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const handlers = {
@@ -24,11 +24,11 @@ const handlers = {
     }
 
     switch (payload.sellingToMuseum) {
-      case 'Yes':
+      case Options.YES:
         return h.redirect(Paths.ARE_YOU_A_MUSEUM)
-      case 'No':
+      case Options.NO:
         return h.redirect(Paths.IS_IT_A_MUSICAL_INSTRUMENT)
-      case 'I dont know':
+      case Options.I_DONT_KNOW:
         return h.redirect(Paths.IS_IT_A_MUSICAL_INSTRUMENT)
     }
   }
