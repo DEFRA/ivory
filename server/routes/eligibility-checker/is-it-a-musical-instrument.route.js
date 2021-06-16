@@ -34,7 +34,19 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Is your item a musical instrument?'
+    pageTitle: 'Is your item a musical instrument?',
+    helpText: 'This includes accessories used to play a musical instrument, like a violin bow, although these must be registered as separate items.',
+    helpText2: 'This does not include:',
+    items: [
+      {
+        value: Options.YES,
+        text: Options.YES
+      },
+      {
+        value: Options.NO,
+        text: Options.NO
+      }
+    ]
   }
 }
 
@@ -43,7 +55,7 @@ const _validateForm = payload => {
   if (Validators.empty(payload.isItAMusicalInstrument)) {
     errors.push({
       name: 'isItAMusicalInstrument',
-      text: 'You need to select something!'
+      text: 'Tell us whether your item is a musical instrument'
     })
   }
   return errors

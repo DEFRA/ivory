@@ -13,7 +13,7 @@ const CharacterLimits = {
 const Options = {
   YES: 'Yes',
   NO: 'No',
-  I_DONT_KNOW: 'I dont know'
+  I_DONT_KNOW: 'I don’t know'
 }
 
 const ItemType = {

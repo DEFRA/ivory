@@ -9,40 +9,31 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-        {{ govukRadios({
-          idPrefix: "sellingToMuseum",
-          name: "sellingToMuseum",
-          fieldset: {
-            legend: {
-              text: pageTitle,
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
-            }
-          },
-          errorMessage: fieldErrors['sellingToMuseum'],
-          items: [
-            {
-              value: "Yes",
-              text: "Yes"
-            },
-            {
-              value: "No",
-              text: "No"
-            },
-            {
-              value: "I dont know",
-              text: "I don't know"
-            }
-          ]
-        }) }}
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
-        {{ govukButton({
-            attributes: {
-              id: "continue"
-            },
-            text: "Continue"
-          })
-        }}
+      <p id="helpText">{{ helpText }}</p>
+
+      <ul id="helpTextList" class="govuk-list govuk-list--bullet">
+        <li>Arts Council England</li>
+        <li>Museums Galleries Scotland</li>
+        <li>Northern Ireland Museums Council</li>
+        <li>the Museums, Archives and Libraries Division of the Welsh Government</li>
+      </ul>
+
+      {{ govukRadios({
+        idPrefix: "sellingToMuseum",
+        name: "sellingToMuseum",
+        errorMessage: fieldErrors['sellingToMuseum'],
+        items: items
+      }) }}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text: "Continue"
+        })
+      }}
 
     </div>
   </div>

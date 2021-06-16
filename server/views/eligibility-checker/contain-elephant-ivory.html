@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -9,40 +10,37 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-        {{ govukRadios({
-          idPrefix: "containElephantIvory",
-          name: "containElephantIvory",
-          fieldset: {
-            legend: {
-              text: pageTitle,
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
-            }
-          },
-          errorMessage: fieldErrors['containElephantIvory'],
-          items: [
-            {
-              value: "Yes",
-              text: "Yes"
-            },
-            {
-              value: "No",
-              text: "No"
-            },
-            {
-              value: "I dont know",
-              text: "I don't know"
-            }
-          ]
-        }) }}
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
-        {{ govukButton({
-            attributes: {
-              id: "continue"
-            },
-            text: "Continue"
-          })
-        }}
+      <p id="helpText">{{ helpText }}</p>
+
+      {{ govukDetails({
+        id: "howDoIKnow",
+        summaryText: "How do I know if my ivory is elephant ivory?",
+        html: '<p>It can be extremely difficult to tell the difference between:</p>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>elephant ivory</li>
+                <li>other types of ivory, such as walrus</li>
+                <li>fake ivory, such as ivorine</li>
+                <li>certain types of animal bone</li>
+              </ul>
+              <p>If you are not sure about the item you want to sell or buy, you should consult an expert first, such as a registered antiques dealer or auctioneer who specialises in ivory.</p>'
+      }) }}
+
+      {{ govukRadios({
+        idPrefix: "containElephantIvory",
+        name: "containElephantIvory",
+        errorMessage: fieldErrors['containElephantIvory'],
+        items: items
+      }) }}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text: "Continue"
+        })
+      }}
 
     </div>
   </div>

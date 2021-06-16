@@ -74,7 +74,7 @@ describe('/what-type-of-item-is-it route', () => {
         'Musical instrument made before 1975 with less than 20% ivory',
         'Musical instrument made before 1975 with less than 20% ivory',
         false,
-        'Any replacement ivory must have been harvested before 1 January 1975.'
+        'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
       )
 
       TestHelper.checkRadioOption(
@@ -83,7 +83,7 @@ describe('/what-type-of-item-is-it route', () => {
         'Item made before 3 March 1947 with less than 10% ivory',
         'Item made before 3 March 1947 with less than 10% ivory',
         false,
-        'The ivory must be integral to the item. Any replacement ivory must have been harvested before 1 January 1975.'
+        'The ivory must be integral to the item. Any replacement ivory must have been taken from an elephant before 1 January 1975.'
       )
 
       TestHelper.checkRadioOption(
@@ -92,7 +92,7 @@ describe('/what-type-of-item-is-it route', () => {
         'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
         'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
         false,
-        'Any replacement ivory must have been harvested before 1 January 1975.'
+        'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
       )
 
       TestHelper.checkRadioOption(
@@ -110,7 +110,7 @@ describe('/what-type-of-item-is-it route', () => {
         'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
         'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
         false,
-        'Any replacement ivory must have been harvested before 1 January 1975.'
+        'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
       )
     })
 

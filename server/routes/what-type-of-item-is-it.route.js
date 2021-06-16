@@ -48,7 +48,7 @@ const _getContext = async request => {
         text: ItemType.MUSICAL,
         hint: {
           text:
-            'Any replacement ivory must have been harvested before 1 January 1975.'
+            'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
         },
         checked: whatTypeOfItemIsIt === ItemType.MUSICAL
       },
@@ -57,7 +57,7 @@ const _getContext = async request => {
         text: ItemType.TEN_PERCENT,
         hint: {
           text:
-            'The ivory must be integral to the item. Any replacement ivory must have been harvested before 1 January 1975.'
+            'The ivory must be integral to the item. Any replacement ivory must have been taken from an elephant before 1 January 1975.'
         },
         checked: whatTypeOfItemIsIt === ItemType.TEN_PERCENT
       },
@@ -66,7 +66,7 @@ const _getContext = async request => {
         text: ItemType.MINIATURE,
         hint: {
           text:
-            'Any replacement ivory must have been harvested before 1 January 1975.'
+            'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
         },
         checked: whatTypeOfItemIsIt === ItemType.MINIATURE
       },
@@ -84,7 +84,7 @@ const _getContext = async request => {
         text: ItemType.HIGH_VALUE,
         hint: {
           text:
-            'Any replacement ivory must have been harvested before 1 January 1975.'
+            'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
         },
         checked: whatTypeOfItemIsIt === ItemType.HIGH_VALUE
       }
