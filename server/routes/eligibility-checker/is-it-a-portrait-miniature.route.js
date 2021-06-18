@@ -47,7 +47,22 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Is it a portrait miniature?'
+    pageTitle: 'Is your item a portrait miniature?',
+    helpText: 'Portrait miniatures are small portraits, popular in the 18th or 19th century, that were often painted on very thin pieces of ivory.',
+    items: [
+      {
+        value: Options.YES,
+        text: Options.YES
+      },
+      {
+        value: Options.NO,
+        text: Options.NO
+      },
+      {
+        value: Options.I_DONT_KNOW,
+        text: Options.I_DONT_KNOW
+      }
+    ]
   }
 }
 
@@ -56,7 +71,7 @@ const _validateForm = payload => {
   if (Validators.empty(payload.isItAPortraitMiniature)) {
     errors.push({
       name: 'isItAPortraitMiniature',
-      text: 'You need to select something!'
+      text: 'Tell us whether your item is a portrait miniature'
     })
   }
   return errors

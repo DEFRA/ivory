@@ -34,15 +34,25 @@ const handlers = {
         return h.redirect(Paths.IVORY_ADDED)
       case Options.NO:
         return h.redirect(Paths.CANNOT_TRADE)
-      case Options.I_DONT_KNOW:
-        return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }
 }
 
 const _getContext = () => {
   return {
-    pageTitle: 'Is it RMI?'
+    pageTitle: 'Does your item have outstandingly high artistic, cultural or historical value?',
+    helpText: 'The item must be a rare and socially significant example of its type.',
+    callOutText: 'An item that only has sentimental value would not qualify, regardless of how important it is to you personally.',
+    items: [
+      {
+        value: Options.YES,
+        text: Options.YES
+      },
+      {
+        value: Options.NO,
+        text: Options.NO
+      }
+    ]
   }
 }
 
@@ -51,7 +61,7 @@ const _validateForm = payload => {
   if (Validators.empty(payload.isItRmi)) {
     errors.push({
       name: 'isItRmi',
-      text: 'You need to select something!'
+      text: 'Tell us whether your item has outstandingly high artistic, cultural or historical value'
     })
   }
   return errors

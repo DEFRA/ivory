@@ -50,16 +50,31 @@ describe('/eligibility-checker/ivory-added route', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Has any ivory been added to the item since 1 January 1975 to repair or restore it?'
+        'Has any ivory been added since 1 January 1975 to restore the item to its original state?'
       )
     })
 
     it('should have the correct radio buttons', () => {
-      TestHelper.checkRadioOption(document, elementIds.ivoryAdded, 'Yes', 'Yes')
+      TestHelper.checkRadioOption(
+        document,
+        elementIds.ivoryAdded,
+        'Yes',
+        'Yes'
+      )
 
-      TestHelper.checkRadioOption(document, elementIds.ivoryAdded2, 'No', 'No')
+      TestHelper.checkRadioOption(
+        document,
+        elementIds.ivoryAdded2,
+        'No',
+        'No'
+      )
 
-      TestHelper.checkRadioOption(document, elementIds.ivoryAdded3, 'I dont know', "I don't know")
+      TestHelper.checkRadioOption(
+        document,
+        elementIds.ivoryAdded3,
+        'I don’t know',
+        'I don’t know'
+      )
     })
 
     it('should have the correct Call to Action button', () => {
@@ -82,15 +97,30 @@ describe('/eligibility-checker/ivory-added route', () => {
 
     describe('Success', () => {
       it('should progress to the next route when "Yes" has been selected', async () => {
-        await _checkSelectedRadioAction(postOptions, server, 'Yes', nextUrlTakeFromElephant)
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          'Yes',
+          nextUrlTakeFromElephant
+        )
       })
 
       it('should progress to the next route when "No" has been selected', async () => {
-        await _checkSelectedRadioAction(postOptions, server, 'No', nextUrlCanContinue)
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          'No',
+          nextUrlCanContinue
+        )
       })
 
       it('should progress to the next route when "I dont know" has been selected', async () => {
-        await _checkSelectedRadioAction(postOptions, server, 'I dont know', nextUrlCannotContinue)
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          'I don’t know',
+          nextUrlCannotContinue
+        )
       })
     })
 

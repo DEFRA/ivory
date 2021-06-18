@@ -37,7 +37,21 @@ const handlers = {
 const _getContext = () => {
   return {
     pageTitle:
-      'Has any ivory been added to the item since 1 January 1975 to repair or restore it?'
+      'Has any ivory been added since 1 January 1975 to restore the item to its original state?',
+    items: [
+      {
+        value: Options.YES,
+        text: Options.YES
+      },
+      {
+        value: Options.NO,
+        text: Options.NO
+      },
+      {
+        value: Options.I_DONT_KNOW,
+        text: Options.I_DONT_KNOW
+      }
+    ]
   }
 }
 

@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -9,40 +10,38 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-        {{ govukRadios({
-          idPrefix: "lessThan20Ivory",
-          name: "lessThan20Ivory",
-          fieldset: {
-            legend: {
-              text: pageTitle,
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
-            }
-          },
-          errorMessage: fieldErrors['lessThan20Ivory'],
-          items: [
-            {
-              value: "Yes",
-              text: "Yes"
-            },
-            {
-              value: "No",
-              text: "No"
-            },
-            {
-              value: "I dont know",
-              text: "I don't know"
-            }
-          ]
-        }) }}
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
-        {{ govukButton({
-            attributes: {
-              id: "continue"
-            },
-            text: "Continue"
-          })
-        }}
+      <p id="helpText">{{ helpText }}</p>
+
+      <p id="helpText2">{{ helpText2 }}</p>
+
+      <p id="helpText3">{{ helpText3 }}</p>
+
+      {{ govukDetails({
+        id: "whatKindsOfItem",
+        summaryText: "What kinds of item have less than 20% ivory?",
+        html: '<p>Items likely to have less than 20% ivory include:</p>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>a piano with ivory keys</li>
+                <li>a violin bow with ivory at the end of the bow</li>
+              </ul>'
+      }) }}
+
+      {{ govukRadios({
+        idPrefix: "lessThan20Ivory",
+        name: "lessThan20Ivory",
+        errorMessage: fieldErrors['lessThan20Ivory'],
+        items: items
+      }) }}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text: "Continue"
+        })
+      }}
 
     </div>
   </div>

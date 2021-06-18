@@ -1,20 +1,37 @@
 {% extends 'form-layout.html' %}
 
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block formContent %}
 
   <div class="govuk-grid-row">
-
     <div class="govuk-grid-column-two-thirds">
 
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
+      <p id="helpText">{{ helpText }}</p>
+
+      {{ govukInsetText({
+        id: "callOutText",
+        text: callOutText
+      }) }}
+
+      <h2 id="heading2" class="govuk-heading-m">{{ heading2 }}</h2>
+
+      <p id="helpText2">{{ helpText2 }}</p>
+
+      <ul id="helpTextList" class="govuk-list govuk-list--bullet">
+        <li>keeping it</li>
+        <li>giving it away as a gift</li>
+        <li>leaving it to someone in your will</li>
+      </ul>
 
       {{ govukButton({
           attributes: {
             id: "continue"
           },
-          text: "Finish and return to guidance"
+          text: "Finish and return to GOV.UK"
         })
       }}
 

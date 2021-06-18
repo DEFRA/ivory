@@ -9,40 +9,24 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-        {{ govukRadios({
-          idPrefix: "lessThan320cmSquared",
-          name: "lessThan320cmSquared",
-          fieldset: {
-            legend: {
-              text: pageTitle,
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
-            }
-          },
-          errorMessage: fieldErrors['lessThan320cmSquared'],
-          items: [
-            {
-              value: "Yes",
-              text: "Yes"
-            },
-            {
-              value: "No",
-              text: "No"
-            },
-            {
-              value: "I dont know",
-              text: "I don't know"
-            }
-          ]
-        }) }}
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
-        {{ govukButton({
-            attributes: {
-              id: "continue"
-            },
-            text: "Continue"
-          })
-        }}
+      <p id="helpText">{{ helpText }}</p>
+
+      {{ govukRadios({
+        idPrefix: "lessThan320cmSquared",
+        name: "lessThan320cmSquared",
+        errorMessage: fieldErrors['lessThan320cmSquared'],
+        items: items
+      }) }}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text: "Continue"
+        })
+      }}
 
     </div>
   </div>

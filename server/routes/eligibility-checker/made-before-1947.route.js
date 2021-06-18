@@ -42,7 +42,22 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Was the item made before 3 March 1947?'
+    pageTitle: 'Was your item made before 3 March 1947?',
+    helpText: 'The following might help you decide:',
+    items: [
+      {
+        value: Options.YES,
+        text: Options.YES
+      },
+      {
+        value: Options.NO,
+        text: Options.NO
+      },
+      {
+        value: Options.I_DONT_KNOW,
+        text: Options.I_DONT_KNOW
+      }
+    ]
   }
 }
 
@@ -51,7 +66,7 @@ const _validateForm = payload => {
   if (Validators.empty(payload.madeBefore1947)) {
     errors.push({
       name: 'madeBefore1947',
-      text: 'You need to select something!'
+      text: 'Tell us whether your item was made before 3 March 1947'
     })
   }
   return errors

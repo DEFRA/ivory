@@ -16,7 +16,11 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'You cannot continue'
+    pageTitle: 'You cannot continue',
+    helpText: 'To use this service, you must know for sure whether your item qualifies for exemption.',
+    callOutText: 'You may need to get an expert to check it for you, such as a registered antiques dealer or auctioneer that specialises in ivory.',
+    heading2: 'What you can do with this item',
+    helpText2: 'In the meantime, your options include:'
   }
 }
 

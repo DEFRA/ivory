@@ -42,7 +42,24 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Is the whole item less than 20% ivory?'
+    pageTitle: 'Is the whole item less than 20% ivory?',
+    helpText: 'You must give a reasonable assessment of the volume of ivory in your whole item. In some cases, it’s easy to do this by eye. In others, you’ll need to take measurements.',
+    helpText2: 'If it’s difficult to do this without damaging the item, you can make an assessment based on knowledge of similar items.',
+    helpText3: 'Do not include any empty spaces, for instance the space within a violin or piano.',
+    items: [
+      {
+        value: Options.YES,
+        text: Options.YES
+      },
+      {
+        value: Options.NO,
+        text: Options.NO
+      },
+      {
+        value: Options.I_DONT_KNOW,
+        text: Options.I_DONT_KNOW
+      }
+    ]
   }
 }
 
@@ -51,7 +68,7 @@ const _validateForm = payload => {
   if (Validators.empty(payload.lessThan20Ivory)) {
     errors.push({
       name: 'lessThan20Ivory',
-      text: 'You need to select something!'
+      text: 'Tell us whether your item is less than 20% ivory'
     })
   }
   return errors
