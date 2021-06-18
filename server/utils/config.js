@@ -13,6 +13,8 @@ const schema = joi.object().keys({
   servicePort: joi.number().default(3000),
   serviceName: joi.string().default('No service name in .env'),
   logLevel: joi.string().default('warn'),
+  requestTimeout: joi.number().default(120000),
+  maximumFileSize: joi.number().default(32),
   redisHost: joi.string().default('127.0.0.1'),
   redisPort: joi.number().default(6379),
   serviceApiEnabled: joi
@@ -44,6 +46,8 @@ const config = {
   servicePort: process.env.SERVICE_PORT,
   serviceName: process.env.SERVICE_NAME,
   logLevel: process.env.LOG_LEVEL,
+  requestTimeout: process.env.REQUEST_TIMEOUT,
+  maximumFileSize: process.env.MAXIMUM_FILE_SIZE,
   redisHost: process.env.REDIS_HOST,
   redisPort: process.env.REDIS_PORT,
   serviceApiEnabled: process.env.SERVICE_API_ENABLED,

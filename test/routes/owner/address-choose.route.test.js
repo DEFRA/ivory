@@ -128,11 +128,11 @@ describe('/user-details/owner/address-choose route', () => {
         const element = document.querySelector(
           `#${elementIds.addressNotOnList}`
         )
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'The address is not on the list'
+        TestHelper.checkLink(
+          element,
+          'The address is not on the list',
+          'address-enter'
         )
-        expect(element.href).toEqual('address-enter')
       })
 
       it('should have the correct Call to Action button', () => {
@@ -232,11 +232,11 @@ describe('/user-details/owner/address-choose route', () => {
         const element = document.querySelector(
           `#${elementIds.addressNotOnList}`
         )
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'The address is not on the list'
+        TestHelper.checkLink(
+          element,
+          'The address is not on the list',
+          'address-enter'
         )
-        expect(element.href).toEqual('address-enter')
       })
 
       it('should have the correct Call to Action button', () => {

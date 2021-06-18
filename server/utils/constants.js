@@ -80,6 +80,7 @@ const Paths = {
   PAGE_NOT_FOUND: '/page-not-found',
   PRIVACY_NOTICE: '/privacy-notice',
   PROBLEM_WITH_SERVICE: '/problem-with-service',
+  REMOVE_PHOTO: '/remove-photo',
   RMI_AND_PRE_1918: '/eligibility-checker/rmi-and-pre-1918',
   SALE_INTENTION: '/sale-intention',
   SELLING_TO_MUSEUM: '/eligibility-checker/selling-to-museum',
@@ -87,6 +88,7 @@ const Paths = {
   SERVICE_UNAVAILABLE: '/service-unavailable',
   TAKEN_FROM_ELEPHANT: '/eligibility-checker/taken-from-elephant',
   UPLOAD_PHOTOS: '/upload-photos',
+  UPLOAD_TIMEOUT: '/upload-timeout',
   WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',
   WHERE_IS_ITEM: '/where-is-item',
   WHO_OWNS_ITEM: '/who-owns-the-item',
@@ -138,6 +140,7 @@ const Views = {
   SERVICE_UNAVAILABLE: 'service-unavailable',
   TAKEN_FROM_ELEPHANT: 'eligibility-checker/taken-from-elephant',
   UPLOAD_PHOTOS: 'upload-photos',
+  UPLOAD_TIMEOUT: 'upload-timeout',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHERE_IS_ITEM: 'where-is-item',
   WHO_OWNS_ITEM: 'who-owns-the-item',
@@ -165,10 +168,8 @@ const RedisKeys = {
   PAYMENT_ID: 'payment-id',
   PAYMENT_REFERENCE: 'payment-reference',
   SALE_INTENTION: 'sale-intention',
-  UPLOAD_PHOTOS_IMAGE_DATA: 'upload-photos.image-data-',
-  UPLOAD_PHOTOS_IMAGE_FILELIST: 'upload-photos.image-filelist',
-  UPLOAD_PHOTOS_THUMBNAIL_DATA: 'upload-photos.thumbnail-data',
-  UPLOAD_PHOTOS_THUMBNAIL_FILESLIST: 'upload-photos.thumbnail-filelist',
+  UPLOAD_PHOTOS: 'upload-photos',
+  UPLOAD_PHOTOS_ERROR: 'upload-photos.error',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHERE_IS_ITEM: 'where-is-item',
   YOUR_PHOTOS: 'your-photos'
@@ -176,6 +177,7 @@ const RedisKeys = {
 
 const StatusCodes = {
   PAGE_NOT_FOUND: 404,
+  REQUEST_TIMEOUT: 408,
   PAYLOAD_TOO_LARGE: 413,
   PROBLEM_WITH_SERVICE: 500,
   SERVICE_UNAVAILABLE: 503

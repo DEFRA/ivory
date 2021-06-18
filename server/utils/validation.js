@@ -58,13 +58,15 @@ const Validators = {
  * @returns An error summary object
  */
 const buildErrorSummary = errors => {
-  return {
-    errorSummary: {
-      titleText: VALIDATION_SUMMARY_HEADING,
-      errorList: _getErrorList(errors)
-    },
-    fieldErrors: _getFieldErrors(errors)
-  }
+  return errors && errors.length
+    ? {
+        errorSummary: {
+          titleText: VALIDATION_SUMMARY_HEADING,
+          errorList: _getErrorList(errors)
+        },
+        fieldErrors: _getFieldErrors(errors)
+      }
+    : {}
 }
 
 const _getErrorList = errors => {

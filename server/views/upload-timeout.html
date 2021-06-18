@@ -1,0 +1,21 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
+      <p id="para1" class="govuk-body">This may be due to a slow internet connection.</p>
+    </div>
+  </div>
+
+  {{ govukButton({
+      attributes: {
+        id: "tryAgain"
+      },
+      text: "Try again"
+    })
+  }}
+{% endblock %}

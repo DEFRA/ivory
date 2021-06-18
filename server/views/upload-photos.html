@@ -12,12 +12,28 @@
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
       {% if (not hideHelpText) %}
-        <p id="helpText1" class="govuk-body">You must add photos one at a time, up to a total of 6.</p>
-        <p id="helpText2" class="govuk-body">You must include a photo of:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li id="listItem1">the whole item</li>
-          <li id="listItem2">any distinguishing features, including where the ivory is</li>
-        </ul>
+        <span id="hint" class="govuk-body">
+
+          <p id="helpText1" class="govuk-body">You must add photos one at a time, up to a total of 6.</p>
+
+          <p id="helpText2" class="govuk-body">These must be clear, well-lit and high-resolution images.</p>
+
+          <p id="helpText3" class="govuk-body">You must include a photo of:</p>
+
+          <ul id="helpText4" class="govuk-list govuk-list--bullet">
+            <li>the whole item</li>
+            <li>any distinguishing features, including where the ivory is</li>
+          </ul>
+
+          <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload photo</h2>
+
+          <p id="helpText5" class="govuk-body">The photo must be:</p>
+
+          <ul id="helpText6" class="govuk-list govuk-list--bullet">
+            <li>in JPG or PNG format</li>
+            <li>smaller than {{ maximumFileSize }}mb</li>
+          </ul>
+        </span>
       {% endif %}
 
       {{ govukFileUpload({
@@ -26,9 +42,6 @@
         },
         id: "files",
         name: "files",
-        label: {
-          text: "Upload a file"
-        },
         errorMessage: fieldErrors['files']
       }) }}
 
@@ -41,7 +54,9 @@
       }}
 
       {% if hideHelpText %}
-        <p class="govuk-body"><a id="cancel" class="govuk-link" href="{{ yourPhotosUrl }}">Cancel</a></p>
+        <p class="govuk-body">
+          <a id="cancel" class="govuk-link" href="{{ yourPhotosUrl }}">Cancel</a>
+        </p>
       {% endif %}
 
     </div>

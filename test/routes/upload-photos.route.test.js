@@ -1,0 +1,385 @@
+'use strict'
+
+const createServer = require('../../server')
+
+const TestHelper = require('../utils/test-helper')
+
+jest.mock('../../server/services/redis.service')
+const RedisService = require('../../server/services/redis.service')
+
+describe('/upload-photos route', () => {
+  let server
+  const url = '/upload-photos'
+  const nextUrl = '/your-photos'
+
+  const elementIds = {
+    pageTitle: 'pageTitle',
+    files: 'files',
+    helpText1: 'helpText1',
+    helpText2: 'helpText2',
+    helpText3: 'helpText3',
+    helpText4: 'helpText4',
+    helpText5: 'helpText5',
+    helpText6: 'helpText6',
+    helpTextSubHeading: 'helpTextSubHeading',
+    continue: 'continue',
+    cancel: 'cancel'
+  }
+
+  let document
+
+  beforeAll(async () => {
+    server = await createServer()
+  })
+
+  afterAll(() => {
+    server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  describe('GET', () => {
+    const getOptions = {
+      method: 'GET',
+      url
+    }
+
+    describe('GET: No photos', () => {
+      beforeEach(async () => {
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the Beta banner', () => {
+        TestHelper.checkBetaBanner(document)
+      })
+
+      it('should have the Back link', () => {
+        TestHelper.checkBackLink(document)
+      })
+
+      it('should have the correct page heading', () => {
+        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Add a photo of your item'
+        )
+      })
+
+      it('should have the correct help text', () => {
+        let element = document.querySelector(`#${elementIds.helpText1}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'You must add photos one at a time, up to a total of 6.'
+        )
+
+        element = document.querySelector(`#${elementIds.helpText2}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'These must be clear, well-lit and high-resolution images.'
+        )
+
+        element = document.querySelector(`#${elementIds.helpText3}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'You must include a photo of:'
+        )
+
+        element = document.querySelector(
+          `#${elementIds.helpText4} > li:nth-child(1)`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('the whole item')
+
+        element = document.querySelector(
+          `#${elementIds.helpText4} > li:nth-child(2)`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'any distinguishing features, including where the ivory is'
+        )
+
+        element = document.querySelector(`#${elementIds.helpTextSubHeading}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Upload photo')
+
+        element = document.querySelector(`#${elementIds.helpText5}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('The photo must be:')
+
+        element = document.querySelector(
+          `#${elementIds.helpText6} > li:nth-child(1)`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'in JPG or PNG format'
+        )
+
+        element = document.querySelector(
+          `#${elementIds.helpText6} > li:nth-child(2)`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('smaller than 32mb')
+      })
+
+      it('should have the file chooser', () => {
+        const element = document.querySelector(`#${elementIds.files}`)
+        expect(element).toBeTruthy()
+      })
+
+      it('should have the correct Call to Action button', () => {
+        const element = document.querySelector(`#${elementIds.continue}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      })
+
+      it('should not have the Cancel link', () => {
+        const element = document.querySelector(`#${elementIds.cancel}`)
+        expect(element).toBeFalsy()
+      })
+    })
+
+    describe('GET: Existing photos', () => {
+      beforeEach(async () => {
+        const mockData = {
+          files: ['lamp.png', 'chair.jpeg'],
+          fileData: [],
+          thumbnails: ['lamp-thumbnail.png', 'chair-thumbnail.jpeg'],
+          thumbnailData: []
+        }
+        RedisService.get = jest.fn().mockReturnValue(JSON.stringify(mockData))
+
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the Beta banner', () => {
+        TestHelper.checkBetaBanner(document)
+      })
+
+      it('should have the Back link', () => {
+        TestHelper.checkBackLink(document)
+      })
+
+      it('should have the correct page heading', () => {
+        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Add another photo')
+      })
+
+      it('should not have the help text', () => {
+        TestHelper.checkElementsDoNotExist(document, [
+          `#${elementIds.helpText1}`,
+          `#${elementIds.helpText2}`,
+          `#${elementIds.helpText3}`,
+          `#${elementIds.helpText4} > li:nth-child(1)`,
+          `#${elementIds.helpText4} > li:nth-child(2)`,
+          `#${elementIds.helpTextSubHeading}`,
+          `#${elementIds.helpText5}`,
+          `#${elementIds.helpText6} > li:nth-child(1)`,
+          `#${elementIds.helpText6} > li:nth-child(2)`
+        ])
+      })
+
+      it('should have the file chooser', () => {
+        const element = document.querySelector(`#${elementIds.files}`)
+        expect(element).toBeTruthy()
+      })
+
+      it('should have the correct Call to Action button', () => {
+        const element = document.querySelector(`#${elementIds.continue}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      })
+
+      it('should have the Cancel link', () => {
+        const element = document.querySelector(`#${elementIds.cancel}`)
+        TestHelper.checkLink(element, 'Cancel', '/your-photos')
+      })
+    })
+  })
+
+  describe('POST', () => {
+    let postOptions
+
+    beforeEach(() => {
+      postOptions = {
+        method: 'POST',
+        url,
+        payload: {}
+      }
+    })
+
+    describe('Success', () => {
+      it('should store the images in Redis and progress to the next route', async () => {
+        postOptions.payload.files = {
+          path:
+            '/var/folders/hf/vwnf4tvs7vxczdwf_c5tp8v80000gn/T/1623826020951-45761-36e933b463bc5a94',
+          bytes: 37474,
+          filename: 'image1.png',
+          headers: {
+            'content-disposition':
+              'form-data; name="files"; filename="image1.png"',
+            'content-type': 'image/png'
+          }
+        }
+
+        expect(RedisService.set).toBeCalledTimes(0)
+
+        const response = await TestHelper.submitPostRequest(server, postOptions)
+
+        expect(RedisService.set).toBeCalledTimes(1)
+
+        // TODO
+        // expect(RedisService.set).toBeCalledWith(
+        //   expect.any(Object),
+        //   'upload-photos',
+        //   expect.any(Object)
+        // )
+
+        expect(response.headers.location).toEqual(nextUrl)
+      })
+    })
+
+    describe('Failure', () => {
+      it('should display a validation error message if the user does not select a file', async () => {
+        const payloadFile = {
+          path:
+            '/var/folders/hf/vwnf4tvs7vxczdwf_c5tp8v80000gn/T/1623827235405-47160-c20b3bcd27518179',
+          bytes: 0,
+          headers: {
+            'content-disposition': 'form-data; name="files"; filename=""',
+            'content-type': 'application/octet-stream'
+          }
+        }
+        await _checkValidation(
+          server,
+          postOptions,
+          payloadFile,
+          'You must choose a file to upload'
+        )
+      })
+
+      it('should display a validation error message if the user selects more than one file', async () => {
+        const payloadFiles = [
+          {
+            path:
+              '/var/folders/hf/vwnf4tvs7vxczdwf_c5tp8v80000gn/T/1623835615409-48488-1ed22e9610acc71a',
+            bytes: 197310,
+            filename: 'image1.jpeg',
+            headers: {
+              'content-disposition':
+                'form-data; name="files"; filename="image1.jpeg"',
+              'content-type': 'image/jpeg'
+            }
+          },
+          {
+            path:
+              '/var/folders/hf/vwnf4tvs7vxczdwf_c5tp8v80000gn/T/1623835615413-48488-1df6378565952bbc',
+            bytes: 153090,
+            filename: 'image2.png',
+            headers: {
+              'content-disposition':
+                'form-data; name="files"; filename="image2.png"',
+              'content-type': 'image/jpeg'
+            }
+          }
+        ]
+        await _checkValidation(
+          server,
+          postOptions,
+          payloadFiles,
+          'Files must be uploaded one at a time'
+        )
+      })
+
+      it('should display a validation error message if the user tries to upload an empty file', async () => {
+        const payloadFile = {
+          path:
+            '/var/folders/hf/vwnf4tvs7vxczdwf_c5tp8v80000gn/T/1623835615409-48488-1ed22e9610acc71a',
+          bytes: 0,
+          filename: 'image1.jpeg',
+          headers: {
+            'content-disposition':
+              'form-data; name="files"; filename="image1.jpeg"',
+            'content-type': 'image/jpeg'
+          }
+        }
+        await _checkValidation(
+          server,
+          postOptions,
+          payloadFile,
+          'The file cannot be empty'
+        )
+      })
+
+      it('should NOT display a validation error message if the user uploads a file that is <= 32MB', async () => {
+        const payloadFile = {
+          path:
+            '/var/folders/hf/vwnf4tvs7vxczdwf_c5tp8v80000gn/T/1623835615409-48488-1ed22e9610acc71a',
+          bytes: 32 * 1024 * 1024,
+          filename: 'image1.jpeg',
+          headers: {
+            'content-disposition':
+              'form-data; name="files"; filename="image1.jpeg"',
+            'content-type': 'image/jpeg'
+          }
+        }
+        postOptions.payload.files = payloadFile
+        await TestHelper.submitPostRequest(server, postOptions, 302)
+      })
+
+      it('should display a validation error message if the user tries to upload a file that is not the correct type', async () => {
+        const payloadFile = {
+          path:
+            '/var/folders/hf/vwnf4tvs7vxczdwf_c5tp8v80000gn/T/1623835615409-48488-1ed22e9610acc71a',
+          bytes: 5000,
+          filename: 'document1.doc',
+          headers: {
+            'content-disposition':
+              'form-data; name="files"; filename="document1.doc"',
+            'content-type': 'application/msword'
+          }
+        }
+        await _checkValidation(
+          server,
+          postOptions,
+          payloadFile,
+          'The file must be a JPG or PNG'
+        )
+      })
+    })
+  })
+})
+
+const _createMocks = () => {
+  const mockData = {
+    files: [],
+    fileData: [],
+    thumbnails: [],
+    thumbnailData: []
+  }
+  RedisService.get = jest.fn().mockReturnValue(JSON.stringify(mockData))
+
+  RedisService.set = jest.fn()
+}
+
+const _checkValidation = async (
+  server,
+  postOptions,
+  payloadFile,
+  expectedError
+) => {
+  postOptions.payload.files = payloadFile
+  const response = await TestHelper.submitPostRequest(server, postOptions, 400)
+  await TestHelper.checkValidationError(
+    response,
+    'files',
+    'files-error',
+    expectedError
+  )
+}

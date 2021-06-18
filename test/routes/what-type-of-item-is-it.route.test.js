@@ -134,11 +134,11 @@ describe('/what-type-of-item-is-it route', () => {
       const element = document.querySelector(
         `#${elementIds.eligibilityChecker}`
       )
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'check if you can sell or hire out your item'
+      TestHelper.checkLink(
+        element,
+        'check if you can sell or hire out your item',
+        '/eligibility-checker/how-certain'
       )
-      expect(element.href).toEqual('/eligibility-checker/how-certain')
     })
 
     it('should have the correct Call to Action button', () => {

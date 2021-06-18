@@ -78,7 +78,9 @@ module.exports = class TestHelper {
   static checkBetaBanner (document) {
     const element = document.querySelector('.govuk-phase-banner__content__tag')
     expect(element).toBeTruthy()
-    expect(TestHelper.getTextContent(element).toLowerCase()).toEqual('give feedback')
+    expect(TestHelper.getTextContent(element).toLowerCase()).toEqual(
+      'give feedback'
+    )
   }
 
   /**
@@ -96,6 +98,12 @@ module.exports = class TestHelper {
     }
   }
 
+  static checkLink (element, label, href) {
+    expect(element).toBeTruthy()
+    expect(TestHelper.getTextContent(element)).toEqual(label)
+    expect(element.href).toEqual(href)
+  }
+
   static checkElementsExist (document, elementIds) {
     if (elementIds && Array.isArray(elementIds) && elementIds.length) {
       for (let i = 0; i < elementIds.length; i++) {
@@ -108,14 +116,21 @@ module.exports = class TestHelper {
     }
   }
 
-  static checkElementsDoNotExist (document, elementIds) {
-    if (elementIds && Array.isArray(elementIds) && elementIds.length) {
-      for (let i = 0; i < elementIds.length; i++) {
+  /**
+   * Checks the document to make sure that none of the selectors return an HTML element
+   * i.e. that the HTML elements do not exist within the document
+   * @param {*} document The HTML document
+   * @param {*} selectors An array of CSS selectors to check within the document
+   */
+
+  static checkElementsDoNotExist (document, selectors) {
+    if (selectors && Array.isArray(selectors) && selectors.length) {
+      for (let i = 0; i < selectors.length; i++) {
         try {
-          expect(document.querySelector(`#${elementIds[i]}`)).toBeFalsy()
+          expect(document.querySelector(selectors[i])).toBeFalsy()
         } catch (e) {
           throw new Error(
-            `Element with ID [${elementIds[i]}] exists when it shoudn't`
+            `Element with selector [${selectors[i]}] exists when it shoudn't`
           )
         }
       }

@@ -31,9 +31,9 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  const itemDescription = JSON.parse(
-    await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
-  )
+  const itemDescription =
+    JSON.parse(await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)) ||
+    {}
 
   return {
     pageTitle: 'Check your answers (incomplete)',

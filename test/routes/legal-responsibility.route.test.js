@@ -99,9 +99,9 @@ describe('/legal-responsibility route', () => {
 
       it('should have the correct "Cancel" link', () => {
         const element = document.querySelector(`#${elementIds.cancelLink}`)
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('Cancel')
-        expect(element.href).toEqual(
+        TestHelper.checkLink(
+          element,
+          'Cancel',
           'https://www.gov.uk/government/consultations/uk-ivory-ban-implementing-the-ivory-act-2018'
         )
       })
