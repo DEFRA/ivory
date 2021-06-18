@@ -102,6 +102,7 @@ describe('/your-photos route', () => {
     })
   })
 
+  // TODO
   describe.skip('POST', () => {
     let postOptions
 

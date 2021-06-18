@@ -1,12 +1,12 @@
 'use strict'
 
-const createServer = require('../../server')
+const createServer = require('../../../server')
 
-const TestHelper = require('../utils/test-helper')
+const TestHelper = require('../../utils/test-helper')
 
-describe('/page-not-found (404) route', () => {
+describe('/errors/problem-with-service (500) route', () => {
   let server
-  const url = '/page-not-found'
+  const url = '/errors/problem-with-service'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -45,21 +45,15 @@ describe('/page-not-found (404) route', () => {
     it('should have the correct page heading', () => {
       const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Page not found')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'Sorry, there is a problem with the service'
+      )
     })
 
-    it('should have the correct paragraphs', () => {
-      let element = document.querySelector(`#${elementIds.para1}`)
+    it('should have the correct paragraph', () => {
+      const element = document.querySelector(`#${elementIds.para1}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'If you typed the web address, check it is correct.'
-      )
-
-      element = document.querySelector(`#${elementIds.para2}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'If you pasted the web address, check you copied the entire address.'
-      )
+      expect(TestHelper.getTextContent(element)).toEqual('Try again later.')
     })
   })
 })

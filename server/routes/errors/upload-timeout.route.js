@@ -1,6 +1,6 @@
 'use strict'
 
-const { Paths, Views } = require('../utils/constants')
+const { Paths, Views } = require('../../utils/constants')
 
 const handlers = {
   get: (request, h) => {

@@ -1,17 +1,16 @@
 'use strict'
 
-const createServer = require('../../server')
+const createServer = require('../../../server')
 
-const TestHelper = require('../utils/test-helper')
+const TestHelper = require('../../utils/test-helper')
 
-describe('/problem-with-service (500) route', () => {
+describe('/errors/service-unavailable (503) route', () => {
   let server
-  const url = '/problem-with-service'
+  const url = '/errors/service-unavailable'
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    para1: 'para1',
-    para2: 'para2'
+    para1: 'para1'
   }
 
   let document
@@ -46,14 +45,16 @@ describe('/problem-with-service (500) route', () => {
       const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Sorry, there is a problem with the service'
+        'Sorry, the service is unavailable'
       )
     })
 
     it('should have the correct paragraph', () => {
       const element = document.querySelector(`#${elementIds.para1}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Try again later.')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'You will be able to use the service later.'
+      )
     })
   })
 })

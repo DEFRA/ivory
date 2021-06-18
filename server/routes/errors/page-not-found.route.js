@@ -1,10 +1,10 @@
 'use strict'
 
-const { Paths, Views } = require('../utils/constants')
+const { Paths, Views } = require('../../utils/constants')
 
 const handlers = {
   get: (request, h) => {
-    return h.view(Views.PROBLEM_WITH_SERVICE, {
+    return h.view(Views.PAGE_NOT_FOUND, {
       ..._getContext()
     })
   }
@@ -12,14 +12,14 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Sorry, there is a problem with the service'
+    pageTitle: 'Page not found'
   }
 }
 
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.PROBLEM_WITH_SERVICE}`,
+    path: `${Paths.PAGE_NOT_FOUND}`,
     handler: handlers.get
   }
 ]
