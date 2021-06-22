@@ -15,6 +15,7 @@ const schema = joi.object().keys({
   logLevel: joi.string().default('warn'),
   redisHost: joi.string().default('127.0.0.1'),
   redisPort: joi.number().default(6379),
+  redisPassword: joi.string(),
   serviceApiEnabled: joi
     .bool()
     .valid(true, false)
@@ -46,6 +47,7 @@ const config = {
   logLevel: process.env.LOG_LEVEL,
   redisHost: process.env.REDIS_HOST,
   redisPort: process.env.REDIS_PORT,
+  redisPassword: process.env.REDIS_PASSWORD,
   serviceApiEnabled: process.env.SERVICE_API_ENABLED,
   serviceApiHost: process.env.SERVICE_API_HOST,
   serviceApiPort: process.env.SERVICE_API_PORT,

@@ -6,7 +6,7 @@ Digital service to support the Ivory Act.
 
 The default values will be used if the environment variables are missing or commented out.
 
-| name                       | description                | required | default         |            valid                   | notes |
+| name                       | description                | required | default         |               valid                | notes |
 | -------------------------- | -------------------------- | :------: | --------------- | :--------------------------------: | ----- |
 | NODE_ENV                   | Node environment           |    no    |                 |    development,test,production     |       |
 | PORT                       | Port number                |    no    | 3000            |                                    |       |
@@ -14,7 +14,8 @@ The default values will be used if the environment variables are missing or comm
 | COOKIE_VALIDATION_PASSWORD | Cookie encoding password   |   yes    |                 |          Any text string           |       |
 | REDIS_HOST                 | Redis server IP address    |    no    | 127.0.0.1       |                                    |       |
 | REDIS_PORT                 | Redis port number          |    no    | 6379            |                                    |       |
-| SERVICE_API_ENABLED        | Enable/disable ivory API   |    no    | false           |            true,false              |       |
+| REDIS_PASSWORD             | Redis password             |    no    |                 |                                    |       |
+| SERVICE_API_ENABLED        | Enable/disable ivory API   |    no    | false           |             true,false             |       |
 | SERVICE_API_HOST           | Ivory API IP address       |    no    | 127.0.0.1       |                                    |       |
 | SERVICE_API_PORT           | Ivory API port number      |    no    | 3010            |                                    |       |
 | ADDRESS_LOOKUP_ENABLED     | Enable/disable address API |    no    | false           |             true,false             |       |
