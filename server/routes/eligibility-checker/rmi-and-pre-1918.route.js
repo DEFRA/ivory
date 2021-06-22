@@ -42,7 +42,22 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Is it a pre-1918 item of outstandingly high artistic, cultural or historical value?'
+    pageTitle: 'Is it a pre-1918 item of outstandingly high artistic, cultural or historical value?',
+    helpText: 'The item must:',
+    items: [
+      {
+        value: Options.YES,
+        text: Options.YES
+      },
+      {
+        value: Options.NO,
+        text: Options.NO
+      },
+      {
+        value: Options.I_DONT_KNOW,
+        text: Options.I_DONT_KNOW
+      }
+    ]
   }
 }
 
@@ -51,7 +66,7 @@ const _validateForm = payload => {
   if (Validators.empty(payload.rmiAndPre1918)) {
     errors.push({
       name: 'rmiAndPre1918',
-      text: 'You need to select something!'
+      text: 'Tell us whether your item is a pre-1918 item of outstandingly high artistic, cultural or historical value'
     })
   }
   return errors

@@ -10,11 +10,29 @@
 
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
+      <p id="helpText">{{ helpText }}</p>
+
+      <p id="helpText2">Based on your answers, it is illegal to sell it, hire it out or exchange it for goods or services.</p>
+
+      <h2 id="heading2" class="govuk-heading-m">What you can do with this item</h2>
+
+      <p id="helpText3">Your options include:</p>
+
+      <ul id="helpTextList" class="govuk-list govuk-list--bullet">
+        <li>keeping it</li>
+        <li>giving it away as a gift</li>
+        <li>leaving it to someone in your will</li>
+      </ul>
+
+      <h2 id="heading2-2" class="govuk-heading-m">When it may become exempt</h2>
+
+      <p id="helpText4">If a museum is interested in your item, you may be able to sell or hire it out to them. In this case, you should try and declare it again.</p>
+
       {{ govukButton({
           attributes: {
             id: "continue"
           },
-          text: "Finish and return to guidance"
+          text: "Finish and return to GOV.UK"
         })
       }}
 
