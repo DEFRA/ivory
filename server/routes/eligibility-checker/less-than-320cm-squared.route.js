@@ -2,6 +2,7 @@
 
 const { Paths, Views, Options } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
+const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
@@ -38,20 +39,7 @@ const _getContext = () => {
   return {
     pageTitle: 'Does the portrait miniature have an ivory surface area of less than 320 square centimetres?',
     helpText: 'Only measure the parts of the portrait you can see. Do not include the frame or areas covered by the frame.',
-    items: [
-      {
-        value: Options.YES,
-        text: Options.YES
-      },
-      {
-        value: Options.NO,
-        text: Options.NO
-      },
-      {
-        value: Options.I_DONT_KNOW,
-        text: Options.I_DONT_KNOW
-      }
-    ]
+    items: getStandardOptions()
   }
 }
 

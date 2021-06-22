@@ -3,6 +3,7 @@
 const { ItemType, Paths, RedisKeys, Views, Options } = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
+const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
@@ -44,20 +45,7 @@ const _getContext = () => {
   return {
     pageTitle: 'Is it a pre-1918 item of outstandingly high artistic, cultural or historical value?',
     helpText: 'The item must:',
-    items: [
-      {
-        value: Options.YES,
-        text: Options.YES
-      },
-      {
-        value: Options.NO,
-        text: Options.NO
-      },
-      {
-        value: Options.I_DONT_KNOW,
-        text: Options.I_DONT_KNOW
-      }
-    ]
+    items: getStandardOptions()
   }
 }
 

@@ -26,7 +26,7 @@ const _getContext = referringUrl => {
   } else if (referringUrl.includes(Paths.MADE_BEFORE_1947)) {
     return {
       pageTitle,
-      helpText: 'Your item must have been made before 1947.'
+      helpText: 'Your item must have been made before 3 March 1947.'
     }
   } else {
     return {

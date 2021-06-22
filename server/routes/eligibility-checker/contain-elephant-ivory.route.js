@@ -2,6 +2,7 @@
 
 const { Paths, Views, Options } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
+const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
@@ -38,20 +39,7 @@ const _getContext = () => {
   return {
     pageTitle: 'Does your item contain elephant ivory?',
     helpText: 'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state in some way.',
-    items: [
-      {
-        value: Options.YES,
-        text: Options.YES
-      },
-      {
-        value: Options.NO,
-        text: Options.NO
-      },
-      {
-        value: Options.I_DONT_KNOW,
-        text: Options.I_DONT_KNOW
-      }
-    ]
+    items: getStandardOptions()
   }
 }
 

@@ -159,7 +159,7 @@ describe('/eligibility-checker/cannot-trade route', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Your item must have been made before 1947.'
+        'Your item must have been made before 3 March 1947.'
       )
     })
   })

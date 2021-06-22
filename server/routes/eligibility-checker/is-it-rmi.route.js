@@ -3,6 +3,7 @@
 const { ItemType, Paths, RedisKeys, Views, Options } = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
+const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
@@ -43,16 +44,7 @@ const _getContext = () => {
     pageTitle: 'Does your item have outstandingly high artistic, cultural or historical value?',
     helpText: 'The item must be a rare and socially significant example of its type.',
     callOutText: 'An item that only has sentimental value would not qualify, regardless of how important it is to you personally.',
-    items: [
-      {
-        value: Options.YES,
-        text: Options.YES
-      },
-      {
-        value: Options.NO,
-        text: Options.NO
-      }
-    ]
+    items: getStandardOptions(false)
   }
 }
 

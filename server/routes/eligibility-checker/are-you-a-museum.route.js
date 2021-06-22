@@ -3,6 +3,7 @@
 const { ItemType, Paths, RedisKeys, Views, Options } = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
+const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
@@ -42,16 +43,7 @@ const _getContext = () => {
   return {
     pageTitle: 'Are you selling or hiring the item out on behalf of a museum?',
     helpText: 'You must be acting on behalf of a museum that is a member of the International Council of Museums, or accredited by one of the following:',
-    items: [
-      {
-        value: Options.YES,
-        text: Options.YES
-      },
-      {
-        value: Options.NO,
-        text: Options.NO
-      }
-    ]
+    items: getStandardOptions(false)
   }
 }
 

@@ -2,6 +2,7 @@
 
 const { Paths, Views, Options } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
+const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
@@ -38,20 +39,7 @@ const _getContext = () => {
   return {
     pageTitle: 'Are you selling or hiring your item out to a museum?',
     helpText: 'The museum must be a member of the International Council of Museums, or accredited by one of the following:',
-    items: [
-      {
-        value: Options.YES,
-        text: Options.YES
-      },
-      {
-        value: Options.NO,
-        text: Options.NO
-      },
-      {
-        value: Options.I_DONT_KNOW,
-        text: Options.I_DONT_KNOW
-      }
-    ]
+    items: getStandardOptions()
   }
 }
 

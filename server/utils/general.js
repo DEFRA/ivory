@@ -1,5 +1,7 @@
 'use strict'
 
+const { Options } = require('./constants')
+
 const addPayloadToContext = (request, context = {}) => {
   if (request && request.payload) {
     for (const fieldName in request.payload) {
@@ -28,8 +30,29 @@ const formatNumberWithCommas = num => {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
 
+const getStandardOptions = (includeIdk = true) => {
+  const items = [
+    {
+      value: Options.YES,
+      text: Options.YES
+    },
+    {
+      value: Options.NO,
+      text: Options.NO
+    }
+  ]
+  if (includeIdk) {
+    items.push({
+      value: Options.I_DONT_KNOW,
+      text: Options.I_DONT_KNOW
+    })
+  }
+  return items
+}
+
 module.exports = {
   addPayloadToContext,
   convertToCommaSeparatedTitleCase,
-  formatNumberWithCommas
+  formatNumberWithCommas,
+  getStandardOptions
 }
