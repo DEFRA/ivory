@@ -1,7 +1,8 @@
 'use strict'
 
+const fs = require('fs')
+
 const path = require('path')
-const { readFileSync } = require('fs')
 const sharp = require('sharp')
 
 const config = require('../utils/config')
@@ -44,7 +45,9 @@ const handlers = {
     try {
       const filename = payload.files.filename
       const extension = path.extname(filename)
-      const file = readFileSync(payload.files.path)
+
+      const file = await fs.promises.readFile(payload.files.path)
+
       const filenameNoExtension = filename.substring(
         0,
         filename.length - extension.length
@@ -119,13 +122,6 @@ const _getContext = async request => {
 
 const _validateForm = payload => {
   const errors = []
-
-  // else if (payload.files.bytes > 1024 * 1024 * config.maximumFileSize) {
-  //   errors.push({
-  //     name: 'files',
-  //     text: `The file must be smaller than ${config.maximumFileSize}mb`
-  //   })
-  // }
 
   if (
     payload.files &&

@@ -102,8 +102,7 @@ describe('/your-photos route', () => {
     })
   })
 
-  // TODO
-  describe.skip('POST', () => {
+  describe('POST', () => {
     let postOptions
 
     beforeEach(() => {
@@ -115,31 +114,10 @@ describe('/your-photos route', () => {
     })
 
     describe('Success', () => {
-      it('should store the images in Redis and progress to the next route', async () => {
-        postOptions.payload.files = {
-          path:
-            '/var/folders/hf/vwnf4tvs7vxczdwf_c5tp8v80000gn/T/1623826020951-45761-36e933b463bc5a94',
-          bytes: 37474,
-          filename: 'image1.png',
-          headers: {
-            'content-disposition':
-              'form-data; name="files"; filename="image1.png"',
-            'content-type': 'image/png'
-          }
-        }
-
-        expect(RedisService.set).toBeCalledTimes(0)
-
+      it('should progress to the next route', async () => {
         const response = await TestHelper.submitPostRequest(server, postOptions)
 
-        expect(RedisService.set).toBeCalledTimes(1)
-
-        // TODO
-        // expect(RedisService.set).toBeCalledWith(
-        //   expect.any(Object),
-        //   'upload-photos',
-        //   expect.any(Object)
-        // )
+        expect(RedisService.set).toBeCalledTimes(0)
 
         expect(response.headers.location).toEqual(nextUrl)
       })
