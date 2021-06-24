@@ -135,3 +135,5 @@ See the `/test` folder for more information.
 [standard.js](http://standardjs.com/) is used to lint both the server-side and client-side javascript code.
 
 It's defined as a build task and can be run using `npm run lint`.
+
+Webhook test.
