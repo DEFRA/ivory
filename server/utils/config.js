@@ -1,7 +1,16 @@
 'use strict'
 
 const joi = require('joi')
+
+// Load application configuration using Dotenv
+// (see https://www.npmjs.com/package/dotenv)
+require('dotenv').config()
+
 const envs = ['development', 'test', 'production']
+
+const getBoolean = value => {
+  return String(value).toLowerCase() === 'true'
+}
 
 // Define config schema
 const schema = joi.object().keys({
@@ -37,7 +46,9 @@ const schema = joi.object().keys({
   paymentUrl: joi.string().default('http://some-url'),
   paymentApiKey: joi.string(),
   paymentAmountBandA: joi.number().default(2000),
-  paymentAmountBandB: joi.number().default(25000)
+  paymentAmountBandB: joi.number().default(25000),
+  useBasicAuth: joi.bool(),
+  basicAuthPassword: joi.string().default('bob')
 })
 
 // Build config
@@ -63,7 +74,9 @@ const config = {
   paymentUrl: process.env.PAYMENT_URL,
   paymentApiKey: process.env.PAYMENT_API_KEY,
   paymentAmountBandA: process.env.PAYMENT_AMOUNT_BAND_A,
-  paymentAmountBandB: process.env.PAYMENT_AMOUNT_BAND_B
+  paymentAmountBandB: process.env.PAYMENT_AMOUNT_BAND_B,
+  useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH || true),
+  basicAuthPassword: process.env.BASIC_AUTH_PASSWORD
 }
 
 // Validate config

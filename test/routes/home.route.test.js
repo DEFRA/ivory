@@ -32,7 +32,7 @@ describe('/ route', () => {
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
 
-    it('should have the Beta banner', () => {
+    it.only('should have the Beta banner', () => {
       TestHelper.checkBetaBanner(document)
     })
 

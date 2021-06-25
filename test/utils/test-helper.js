@@ -2,12 +2,21 @@
 
 const jsdom = require('jsdom')
 const { JSDOM } = jsdom
+const config = require('../../server/utils/config')
 
 const elementIds = {
   backLink: 'back-link'
 }
 
 const DEFAULT_VALIDATION_SUMMARY_HEADING = 'There is a problem'
+
+const USERNAME = 'defra'
+
+const basicHeader = function (username, password) {
+  return (
+    'Basic ' + Buffer.from(username + ':' + password, 'utf8').toString('base64')
+  )
+}
 
 module.exports = class TestHelper {
   /**
@@ -34,6 +43,10 @@ module.exports = class TestHelper {
     expectedResponseCode = 200,
     respondWithDocument = true
   ) {
+    options.headers = {
+      authorization: basicHeader(USERNAME, config.basicAuthPassword)
+    }
+
     const response = await server.inject(options)
     expect(response.statusCode).toBe(expectedResponseCode)
 
@@ -50,6 +63,10 @@ module.exports = class TestHelper {
    * @returns  the HTTP response
    */
   static async getResponse (server, options, expectedResponseCode = 200) {
+    options.headers = {
+      authorization: basicHeader(USERNAME, config.basicAuthPassword)
+    }
+
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(expectedResponseCode)
@@ -66,7 +83,12 @@ module.exports = class TestHelper {
    * @returns  the HTTP response
    */
   static async submitPostRequest (server, options, expectedResponseCode = 302) {
+    options.headers = {
+      authorization: basicHeader(USERNAME, config.basicAuthPassword)
+    }
+
     const response = await server.inject(options)
+
     expect(response.statusCode).toBe(expectedResponseCode)
     return response
   }
