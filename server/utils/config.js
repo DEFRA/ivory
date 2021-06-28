@@ -8,9 +8,9 @@ require('dotenv').config()
 
 const envs = ['development', 'test', 'production']
 
-const getBoolean = value => {
-  return String(value).toLowerCase() === 'true'
-}
+// const getBoolean = value => {
+//   return String(value).toLowerCase() === 'true'
+// }
 
 // Define config schema
 const schema = joi.object().keys({
