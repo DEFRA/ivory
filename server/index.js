@@ -10,7 +10,7 @@ const { DEFRA_IVORY_SESSION_KEY } = require('./utils/constants')
 const users = {
   defra: {
     username: 'defra',
-    password: '$2a$04$cIFq2TKhfYzmccljQdnzp.57V8Az61o7SUIIfUK.Bioc49q7YhlLm'
+    password: '$2a$04$R/Iqfgw5oXbBd.ozznzZ9OThrl2E12B8zcPWsOKy/7s35D5cS.V/S'
   }
 }
 

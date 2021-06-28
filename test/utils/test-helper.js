@@ -43,9 +43,13 @@ module.exports = class TestHelper {
     expectedResponseCode = 200,
     respondWithDocument = true
   ) {
-    options.headers = {
-      authorization: basicHeader(USERNAME, config.basicAuthPassword)
+    if (!options.headers) {
+      options.headers = {}
     }
+    options.headers.authorization = basicHeader(
+      USERNAME,
+      config.basicAuthPassword
+    )
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(expectedResponseCode)
@@ -63,9 +67,13 @@ module.exports = class TestHelper {
    * @returns  the HTTP response
    */
   static async getResponse (server, options, expectedResponseCode = 200) {
-    options.headers = {
-      authorization: basicHeader(USERNAME, config.basicAuthPassword)
+    if (!options.headers) {
+      options.headers = {}
     }
+    options.headers.authorization = basicHeader(
+      USERNAME,
+      config.basicAuthPassword
+    )
 
     const response = await server.inject(options)
 
@@ -83,9 +91,13 @@ module.exports = class TestHelper {
    * @returns  the HTTP response
    */
   static async submitPostRequest (server, options, expectedResponseCode = 302) {
-    options.headers = {
-      authorization: basicHeader(USERNAME, config.basicAuthPassword)
+    if (!options.headers) {
+      options.headers = {}
     }
+    options.headers.authorization = basicHeader(
+      USERNAME,
+      config.basicAuthPassword
+    )
 
     const response = await server.inject(options)
 

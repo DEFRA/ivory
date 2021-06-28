@@ -48,7 +48,7 @@ const schema = joi.object().keys({
   paymentAmountBandA: joi.number().default(2000),
   paymentAmountBandB: joi.number().default(25000),
   useBasicAuth: joi.bool(),
-  basicAuthPassword: joi.string().default('bob')
+  basicAuthPassword: joi.string()
 })
 
 // Build config

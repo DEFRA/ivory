@@ -4,7 +4,8 @@ const { Paths, Views, Urls } = require('../../utils/constants')
 
 const handlers = {
   get: (request, h) => {
-    const referringUrl = request.headers.referer
+    const referringUrl = request.headers.referer || ''
+
     return h.view(Views.CANNOT_TRADE, {
       ..._getContext(referringUrl)
     })
@@ -21,7 +22,8 @@ const _getContext = referringUrl => {
   if (referringUrl.includes(Paths.TAKEN_FROM_ELEPHANT)) {
     return {
       pageTitle,
-      helpText: 'Any replacement ivory in your item must have been taken from an elephant before 1 January 1975.'
+      helpText:
+        'Any replacement ivory in your item must have been taken from an elephant before 1 January 1975.'
     }
   } else if (referringUrl.includes(Paths.MADE_BEFORE_1947)) {
     return {
@@ -31,7 +33,8 @@ const _getContext = referringUrl => {
   } else {
     return {
       pageTitle,
-      helpText: 'Your item does not meet any of the ivory ban exemption criteria.'
+      helpText:
+        'Your item does not meet any of the ivory ban exemption criteria.'
     }
   }
 }
