@@ -75,7 +75,7 @@ const config = {
   paymentApiKey: process.env.PAYMENT_API_KEY || 'some-api-key',
   paymentAmountBandA: process.env.PAYMENT_AMOUNT_BAND_A,
   paymentAmountBandB: process.env.PAYMENT_AMOUNT_BAND_B,
-  useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH),
+  useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH || 'false'),
   basicAuthPassword: process.env.BASIC_AUTH_PASSWORD
 }
 
