@@ -72,7 +72,7 @@ const config = {
   addressLookupPfxCert: process.env.ADDRESS_LOOKUP_PFX_CERT,
   cookieValidationPassword: process.env.COOKIE_VALIDATION_PASSWORD,
   paymentUrl: process.env.PAYMENT_URL || 'http://some-url',
-  paymentApiKey: process.env.PAYMENT_API_KEY || '',
+  paymentApiKey: process.env.PAYMENT_API_KEY || 'some-api-key',
   paymentAmountBandA: process.env.PAYMENT_AMOUNT_BAND_A,
   paymentAmountBandB: process.env.PAYMENT_AMOUNT_BAND_B,
   useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH),
