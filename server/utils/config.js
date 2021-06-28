@@ -8,9 +8,9 @@ require('dotenv').config()
 
 const envs = ['development', 'test', 'production']
 
-// const getBoolean = value => {
-//   return String(value).toLowerCase() === 'true'
-// }
+const getBoolean = value => {
+  return String(value).toLowerCase() === 'true'
+}
 
 // Define config schema
 const schema = joi.object().keys({
@@ -34,7 +34,9 @@ const schema = joi.object().keys({
   addressLookupUrl: joi.string(),
   addressLookupPassphrase: joi.string(),
   addressLookupPfxCert: joi.string(),
-  cookieValidationPassword: joi.string(),
+  cookieValidationPassword: joi
+    .string()
+    .default('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
   paymentUrl: joi.string(),
   paymentApiKey: joi.string(),
   paymentAmountBandA: joi.number(),
@@ -62,9 +64,7 @@ const config = {
   addressLookupUrl: process.env.ADDRESS_LOOKUP_URL || 'http://some-url',
   addressLookupPassphrase: process.env.ADDRESS_LOOKUP_PASSPHRASE,
   addressLookupPfxCert: process.env.ADDRESS_LOOKUP_PFX_CERT,
-  cookieValidationPassword:
-    process.env.COOKIE_VALIDATION_PASSWORD ||
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+  cookieValidationPassword: process.env.COOKIE_VALIDATION_PASSWORD,
   paymentUrl: process.env.PAYMENT_URL || 'http://some-url',
   paymentApiKey: process.env.PAYMENT_API_KEY || 'some-api-key',
   paymentAmountBandA: process.env.PAYMENT_AMOUNT_BAND_A || 2000,
@@ -72,7 +72,8 @@ const config = {
 
   // TODO reinstate this
   // useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH || false),
-  useBasicAuth: false,
+  useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH || false),
+  // useBasicAuth: false,
 
   basicAuthPassword: process.env.BASIC_AUTH_PASSWORD
 }
