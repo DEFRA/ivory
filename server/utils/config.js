@@ -32,8 +32,8 @@ config.cookieValidationPassword =
   'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 config.paymentUrl = process.env.PAYMENT_URL || 'http://some-url'
 config.paymentApiKey = process.env.PAYMENT_API_KEY || 'some-api-key'
-config.paymentAmountBandA = process.env.PAYMENT_AMOUNT_BAND_A || 2000
-config.paymentAmountBandB = process.env.PAYMENT_AMOUNT_BAND_B || 25000
+config.paymentAmountBandA = parseInt(process.env.PAYMENT_AMOUNT_BAND_A || 2000)
+config.paymentAmountBandB = parseInt(process.env.PAYMENT_AMOUNT_BAND_B || 25000)
 
 config.useBasicAuth = getBoolean(process.env.USE_BASIC_AUTH || false)
 config.basicAuthPassword = process.env.BASIC_AUTH_PASSWORD
