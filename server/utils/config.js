@@ -41,7 +41,7 @@ const schema = joi.object().keys({
   paymentApiKey: joi.string(),
   paymentAmountBandA: joi.number(),
   paymentAmountBandB: joi.number(),
-  useBasicAuth: joi.bool(),
+  useBasicAuth: joi.bool().default(false),
   basicAuthPassword: joi.string()
 })
 
@@ -72,7 +72,7 @@ const config = {
 
   // TODO reinstate this
   // useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH || false),
-  useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH || false),
+  useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH),
   // useBasicAuth: false,
 
   basicAuthPassword: process.env.BASIC_AUTH_PASSWORD
