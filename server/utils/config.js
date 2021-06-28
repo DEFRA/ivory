@@ -44,7 +44,7 @@ const schema = joi.object().keys({
     .string()
     .default('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
   paymentUrl: joi.string(),
-  paymentApiKey: joi.string().default('some-api-key'),
+  paymentApiKey: joi.string(),
   paymentAmountBandA: joi.number().default(2000),
   paymentAmountBandB: joi.number().default(25000),
   useBasicAuth: joi.bool().default(false),
