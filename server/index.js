@@ -1,9 +1,18 @@
 'use strict'
 
 const hapi = require('@hapi/hapi')
+const Bcrypt = require('bcrypt')
+
 const config = require('./utils/config')
 const { options } = require('./utils/cookie-config')
 const { DEFRA_IVORY_SESSION_KEY } = require('./utils/constants')
+
+const users = {
+  defra: {
+    username: 'defra',
+    password: '$2a$04$R/Iqfgw5oXbBd.ozznzZ9OThrl2E12B8zcPWsOKy/7s35D5cS.V/S'
+  }
+}
 
 const createServer = async () => {
   const server = hapi.server({
@@ -25,7 +34,25 @@ const createServer = async () => {
   return server
 }
 
+const validate = async (request, username, password) => {
+  const user = users[username]
+  if (!user) {
+    return { credentials: null, isValid: false }
+  }
+
+  const isValid = await Bcrypt.compare(password, user.password)
+  const credentials = { id: user.id, name: user.name }
+
+  return { isValid, credentials }
+}
+
 const _registerPlugins = async server => {
+  if (config.useBasicAuth) {
+    await server.register(require('@hapi/basic'))
+    server.auth.strategy('simple', 'basic', { validate })
+    server.auth.default('simple')
+  }
+
   await server.register(require('./plugins/blipp.plugin'))
   await server.register(require('./plugins/disinfect.plugin'))
   await server.register(require('./plugins/error-pages.plugin'))

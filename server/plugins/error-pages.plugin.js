@@ -44,7 +44,9 @@ module.exports = {
             return h.redirect(Paths.SERVICE_UNAVAILABLE)
           }
 
-          return h.redirect(Paths.PROBLEM_WITH_SERVICE)
+          if (statusCode !== StatusCodes.UNAUTHORIZED) {
+            return h.redirect(Paths.PROBLEM_WITH_SERVICE)
+          }
         }
 
         return h.continue

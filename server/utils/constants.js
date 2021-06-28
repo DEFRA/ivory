@@ -176,6 +176,7 @@ const RedisKeys = {
 }
 
 const StatusCodes = {
+  UNAUTHORIZED: 401,
   PAGE_NOT_FOUND: 404,
   REQUEST_TIMEOUT: 408,
   PAYLOAD_TOO_LARGE: 413,
