@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h1 id="page-heading" class="govuk-heading-xl">{{ pageHeading }}</h1>
+
+    <ul class="govuk-list">
+      <li>  
+        <label id="service-name-label">Service:</label>
+        <strong id="service-name">{{ data.name }}</strong>
+      </li>
+      <li>
+        <label id="version-label">Version:</label>
+        <strong id="version">{{ data.version }}</strong>
+      </li>
+      <li>
+        <label id="server-started-label">Server started:</label>
+        <strong id="server-started">{{ data.uptime }}</strong>
+      </li>
+      <li>
+        <label id="page-rendered-label">Page rendered:</label>
+        <strong id="page-rendered">{{ data.rendered }}</strong>
+      </li>
+    </ul>
+{% endblock %}

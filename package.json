@@ -1,6 +1,6 @@
 {
   "name": "ivory",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Digital service to support the Ivory Act",
   "main": "index.js",
   "scripts": {
@@ -45,6 +45,7 @@
     "hapi-robots": "^3.2.2",
     "hapi-sanitize-payload": "^2.0.0",
     "joi": "^17.4.0",
+    "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
     "node-sass": "^6.0.1",
     "nunjucks": "3.2.3",
