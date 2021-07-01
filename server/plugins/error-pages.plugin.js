@@ -17,12 +17,14 @@ module.exports = {
         if (response.isBoom) {
           const statusCode = response.output.statusCode
 
-          // Log the error
-          request.log('error', {
-            statusCode,
-            message: response.message,
-            stack: response.data ? response.data.stack : response.stack
-          })
+          // Log the error, unless it is just a basic authenication issue
+          if (statusCode !== StatusCodes.UNAUTHORIZED) {
+            request.log('error', {
+              statusCode,
+              message: response.message,
+              stack: response.data ? response.data.stack : response.stack
+            })
+          }
 
           if (statusCode === StatusCodes.PAGE_NOT_FOUND) {
             return h.redirect(Paths.PAGE_NOT_FOUND)
