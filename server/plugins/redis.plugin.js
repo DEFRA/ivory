@@ -8,12 +8,12 @@ module.exports = {
     settings: config.redisPassword
       ? {
           host: config.redisHost,
-          port: config.redisPort
+          port: config.redisPort,
+          password: config.redisPassword
         }
       : {
           host: config.redisHost,
-          port: config.redisPort,
-          password: config.redisPassword
+          port: config.redisPort
         },
     decorate: true
   }
