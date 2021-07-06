@@ -126,7 +126,7 @@ describe('/upload-photos route', () => {
           `#${elementIds.helpText6} > li:nth-child(2)`
         )
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('smaller than 32mb')
+        expect(TestHelper.getTextContent(element)).toEqual('smaller than 30mb')
       })
 
       it('should have the file chooser', () => {
@@ -154,7 +154,7 @@ describe('/upload-photos route', () => {
           thumbnails: ['lamp-thumbnail.png', 'chair-thumbnail.jpeg'],
           thumbnailData: []
         }
-        RedisService.get = jest.fn().mockReturnValue(JSON.stringify(mockData))
+        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -309,7 +309,7 @@ describe('/upload-photos route', () => {
       })
 
       // This test is failing as it has not yet been possible to successfully mock fs.promises.readFile without breaking the server
-      it.skip('should NOT display a validation error message if the user uploads a file that is <= 32MB', async () => {
+      it.skip('should NOT display a validation error message if the user uploads a file that is less than the maximum allowed file size', async () => {
         const payloadFile = {
           path: tempFolder,
           bytes: 32 * 1024 * 1024,

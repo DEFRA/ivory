@@ -11,7 +11,8 @@ const RedisService = require('../../../server/services/redis.service')
 describe('/eligibility-checker/is-item-pre-1918 route', () => {
   let server
   const url = '/eligibility-checker/is-item-pre-1918'
-  const nextUrlLessThan320cmSquared = '/eligibility-checker/less-than-320cm-squared'
+  const nextUrlLessThan320cmSquared =
+    '/eligibility-checker/less-than-320cm-squared'
   const nextUrlIsItRmi = '/eligibility-checker/is-it-rmi'
   const nextUrlCannotTrade = '/eligibility-checker/cannot-trade'
   const nextUrlCannotContinue = '/eligibility-checker/cannot-continue'
@@ -122,7 +123,7 @@ describe('/eligibility-checker/is-item-pre-1918 route', () => {
 
     describe('Success', () => {
       it('should progress to the next route when the first option has been selected & item IS a miniature', async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.MINIATURE)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.MINIATURE)
         await _checkSelectedRadioAction(
           postOptions,
           server,
@@ -132,7 +133,7 @@ describe('/eligibility-checker/is-item-pre-1918 route', () => {
       })
 
       it('should progress to the next route when the first option has been selected & item IS a miniature', async () => {
-        RedisService.get = jest.fn().mockReturnValue('')
+        RedisService.get = jest.fn().mockResolvedValue('')
         await _checkSelectedRadioAction(
           postOptions,
           server,

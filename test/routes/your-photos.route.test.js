@@ -47,7 +47,7 @@ describe('/your-photos route', () => {
 
     describe('GET: 6 or less photos', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(JSON.stringify(mockData))
+        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })

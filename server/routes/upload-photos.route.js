@@ -31,7 +31,7 @@ const handlers = {
 
     const uploadData = context.uploadData
 
-    const errors = _validateForm(payload)
+    const errors = _validateForm(payload, uploadData)
 
     if (errors.length) {
       return h
@@ -55,6 +55,7 @@ const handlers = {
       const thumbnailFilename = `${filenameNoExtension}-thumbnail${extension}`
 
       uploadData.files.push(filename)
+      uploadData.fileSizes.push(payload.files.bytes)
       uploadData.thumbnails.push(thumbnailFilename)
 
       const buffer = Buffer.from(file)
@@ -104,6 +105,7 @@ const _getContext = async request => {
   ) || {
     files: [],
     fileData: [],
+    fileSizes: [],
     thumbnails: [],
     thumbnailData: []
   }
@@ -120,7 +122,7 @@ const _getContext = async request => {
   }
 }
 
-const _validateForm = payload => {
+const _validateForm = (payload, uploadData) => {
   const errors = []
 
   if (
@@ -157,9 +159,32 @@ const _validateForm = payload => {
       name: 'files',
       text: 'The file must be a JPG or PNG'
     })
+  } else if (_checkForDuplicates(payload, uploadData)) {
+    errors.push({
+      name: 'files',
+      text: "You've already uploaded that image. Choose a different one"
+    })
   }
 
   return errors
+}
+
+const _checkForDuplicates = (payload, uploadData) => {
+  let duplicateFound
+
+  if (uploadData.files && uploadData.fileSizes) {
+    for (let i = 0; i < uploadData.files.length; i++) {
+      if (
+        uploadData.files[i] === payload.files.filename &&
+        uploadData.fileSizes[i] === payload.files.bytes
+      ) {
+        duplicateFound = true
+        break
+      }
+    }
+  }
+
+  return duplicateFound
 }
 
 const _checkForFileSizeError = async request => {
