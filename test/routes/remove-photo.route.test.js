@@ -37,7 +37,7 @@ describe('/remove-photo route', () => {
       method: 'GET'
     }
 
-    describe.only('GET: One photo', () => {
+    describe('GET: One photo', () => {
       beforeEach(() => {
         RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
       })
