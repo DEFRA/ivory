@@ -123,7 +123,7 @@ describe('/eligibility-checker/is-item-pre-1918 route', () => {
 
     describe('Success', () => {
       it('should progress to the next route when the first option has been selected & item IS a miniature', async () => {
-        RedisService.get = jest.fn().mockResolvedValue(ItemType.MINIATURE)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.MINIATURE)
         await _checkSelectedRadioAction(
           postOptions,
           server,
@@ -133,7 +133,7 @@ describe('/eligibility-checker/is-item-pre-1918 route', () => {
       })
 
       it('should progress to the next route when the first option has been selected & item IS a miniature', async () => {
-        RedisService.get = jest.fn().mockResolvedValue('')
+        RedisService.get = jest.fn().mockReturnValue('')
         await _checkSelectedRadioAction(
           postOptions,
           server,

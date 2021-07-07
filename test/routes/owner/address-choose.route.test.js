@@ -285,7 +285,7 @@ describe('/user-details/owner/address-choose route', () => {
 
     describe('Success: Owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('Yes')
+        RedisService.get = jest.fn().mockReturnValue('Yes')
       })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {

@@ -44,7 +44,7 @@ describe('/service-complete route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockResolvedValue(paymentReference)
+      RedisService.get = jest.fn().mockReturnValue(paymentReference)
     })
 
     describe('GET: Success', () => {

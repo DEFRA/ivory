@@ -39,7 +39,7 @@ describe('/remove-photo route', () => {
 
     describe('GET: One photo', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
+        RedisService.get = jest.fn().mockReturnValue(JSON.stringify(mockData))
       })
 
       it('should redirect to the "Upload photos" page', async () => {

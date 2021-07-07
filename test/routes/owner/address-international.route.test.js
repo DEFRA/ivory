@@ -47,7 +47,7 @@ describe('/user-details/owner/address-international route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockResolvedValue('Yes')
+      RedisService.get = jest.fn().mockReturnValue('Yes')
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -97,7 +97,7 @@ describe('/user-details/owner/address-international route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockResolvedValue('No')
+      RedisService.get = jest.fn().mockReturnValue('No')
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -142,7 +142,7 @@ describe('/user-details/owner/address-international route', () => {
 
     describe('Success: Owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('Yes')
+        RedisService.get = jest.fn().mockReturnValue('Yes')
       })
 
       it('should store the address in Redis and progress to the next route when the address is entered by the search', async () => {
@@ -175,7 +175,7 @@ describe('/user-details/owner/address-international route', () => {
 
     describe('Success: Not owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('No')
+        RedisService.get = jest.fn().mockReturnValue('No')
       })
 
       it('should store the address in Redis and progress to the next route when the address is entered by the search', async () => {

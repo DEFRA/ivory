@@ -109,7 +109,7 @@ describe('/legal-responsibility route', () => {
 
     describe('GET: Has the correct details when it IS a S2 (high value) item', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
+        RedisService.get = jest.fn().mockReturnValue(ItemType.HIGH_VALUE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
