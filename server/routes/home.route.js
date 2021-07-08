@@ -1,23 +1,13 @@
 'use strict'
 
 const { v4: uuidv4 } = require('uuid')
-const { DEFRA_IVORY_SESSION_KEY, Views } = require('../utils/constants')
+const { DEFRA_IVORY_SESSION_KEY, Paths } = require('../utils/constants')
 
 const handlers = {
   get: (request, h) => {
     _setCookieSessionId(h)
 
-    return h.view(Views.HOME, {
-      pageTitle: 'Hello',
-      message: 'Elephants'
-    })
-  },
-
-  post: (request, h) => {
-    return h.view(Views.HOME, {
-      pageTitle: 'Hello',
-      message: 'Elephants'
-    })
+    return h.redirect(Paths.HOW_CERTAIN)
   }
 }
 
@@ -30,10 +20,5 @@ module.exports = [
     method: 'GET',
     path: '/',
     handler: handlers.get
-  },
-  {
-    method: 'POST',
-    path: '/',
-    handler: handlers.post
   }
 ]
