@@ -70,6 +70,7 @@ describe('/remove-photo route', () => {
           JSON.stringify({
             files: [],
             fileData: [],
+            fileSizes: [],
             thumbnails: [],
             thumbnailData: []
           })
@@ -111,6 +112,7 @@ describe('/remove-photo route', () => {
           JSON.stringify({
             files: mockDataSixPhotos.files.slice(1),
             fileData: mockDataSixPhotos.fileData.slice(1),
+            fileSizes: mockDataSixPhotos.fileSizes.slice(1),
             thumbnails: mockDataSixPhotos.thumbnails.slice(1),
             thumbnailData: mockDataSixPhotos.thumbnailData.slice(1)
           })
@@ -125,6 +127,7 @@ describe('/remove-photo route', () => {
 const mockData = {
   files: ['1.png'],
   fileData: ['file-data'],
+  fileSizes: [100],
   thumbnails: ['1-thumbnail.png'],
   thumbnailData: ['thumbnail-data']
 }
@@ -139,6 +142,7 @@ const mockDataSixPhotos = {
     'file-data',
     'file-data'
   ],
+  fileSizes: [100, 200, 300, 400, 500, 600],
   thumbnails: [
     '1-thumbnail.png',
     '2-thumbnail.jpeg',

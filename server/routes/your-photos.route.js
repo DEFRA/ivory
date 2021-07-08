@@ -32,6 +32,7 @@ const _getContext = async request => {
   ) || {
     files: [],
     fileData: [],
+    fileSizes: [],
     thumbnails: [],
     thumbnailData: []
   }

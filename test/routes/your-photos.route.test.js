@@ -128,6 +128,7 @@ describe('/your-photos route', () => {
 const mockData = {
   files: ['1.png'],
   fileData: ['file-data'],
+  fileSizes: [100],
   thumbnails: ['1-thumbnail.png'],
   thumbnailData: ['thumbnail-data']
 }
@@ -142,6 +143,7 @@ const mockDataSixPhotos = {
     'file-data',
     'file-data'
   ],
+  fileSizes: [100, 200, 300, 400, 500, 600],
   thumbnails: [
     '1-thumbnail.png',
     '2-thumbnail.jpeg',

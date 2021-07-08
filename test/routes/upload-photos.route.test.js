@@ -151,6 +151,7 @@ describe('/upload-photos route', () => {
         const mockData = {
           files: ['lamp.png', 'chair.jpeg'],
           fileData: [],
+          fileSizes: [100, 200],
           thumbnails: ['lamp-thumbnail.png', 'chair-thumbnail.jpeg'],
           thumbnailData: []
         }
@@ -344,12 +345,68 @@ describe('/upload-photos route', () => {
       })
     })
   })
+
+  describe('POST: Duplicate file validation', () => {
+    let postOptions
+    let response
+
+    beforeEach(async () => {
+      postOptions = {
+        method: 'POST',
+        url,
+        payload: {
+          files: {
+            path: tempFolder,
+            bytes: 100,
+            filename: 'lamp.png',
+            headers: {
+              'content-disposition':
+                'form-data; name="files"; filename="lamp.png"',
+              'content-type': 'image/png'
+            }
+          }
+        }
+      }
+
+      const mockData = {
+        files: ['lamp.png'],
+        fileData: [],
+        fileSizes: [100],
+        thumbnails: ['lamp-thumbnail.png'],
+        thumbnailData: []
+      }
+      RedisService.get = jest.fn().mockReturnValue(JSON.stringify(mockData))
+
+      response = await TestHelper.submitPostRequest(server, postOptions, 400)
+    })
+
+    it('should display a validation error message if the user tries to upload a duplicate file', async () => {
+      const payloadFile = {
+        path: tempFolder,
+        bytes: 100,
+        headers: {
+          'content-disposition': 'form-data; name="files"; filename="lamp.png"',
+          'content-type': 'application/octet-stream'
+        }
+      }
+
+      postOptions.payload.files = payloadFile
+
+      await TestHelper.checkValidationError(
+        response,
+        'files',
+        'files-error',
+        "You've already uploaded that image. Choose a different one"
+      )
+    })
+  })
 })
 
 const _createMocks = () => {
   const mockData = {
     files: [],
     fileData: [],
+    fileSizes: [100, 200],
     thumbnails: [],
     thumbnailData: []
   }
