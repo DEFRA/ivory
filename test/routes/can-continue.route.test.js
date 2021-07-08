@@ -32,8 +32,8 @@ describe('/ivory-volume route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -131,7 +131,7 @@ describe('/ivory-volume route', () => {
 
     describe('GET: Has the correct details when it IS a S2 (high value) item', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.HIGH_VALUE)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -183,12 +183,12 @@ describe('/ivory-volume route', () => {
 
     describe('Success', () => {
       it('should redirect and save the correct payment amount when it "IS NOT" a S2 (high value) item', async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.MUSICAL)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.MUSICAL)
         await _checkPostAction(postOptions, server, nextUrl, 2000)
       })
 
       it('should redirect and save the correct payment amount when it "IS" a S2 (high value) item', async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.HIGH_VALUE)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
         await _checkPostAction(postOptions, server, nextUrl, 25000)
       })
     })

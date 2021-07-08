@@ -27,8 +27,8 @@ describe('/sale-intention route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -92,8 +92,8 @@ describe('/sale-intention route', () => {
       it('should have the correct page heading when the applicant says they are selling the item', async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('Sell it')
-          .mockReturnValueOnce('Yes')
+          .mockResolvedValueOnce('Sell it')
+          .mockResolvedValueOnce('Yes')
 
         document = await TestHelper.submitGetRequest(server, getOptions)
 
@@ -107,8 +107,8 @@ describe('/sale-intention route', () => {
       it('should have the correct page heading when the applicant says they are hiring out the item', async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('Hire it out')
-          .mockReturnValueOnce('Yes')
+          .mockResolvedValueOnce('Hire it out')
+          .mockResolvedValueOnce('Yes')
 
         document = await TestHelper.submitGetRequest(server, getOptions)
 
@@ -122,8 +122,8 @@ describe('/sale-intention route', () => {
       it('should have the correct page heading when the applicant says they are selling or hiring out the item', async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce("I'm not sure yet")
-          .mockReturnValueOnce('Yes')
+          .mockResolvedValueOnce("I'm not sure yet")
+          .mockResolvedValueOnce('Yes')
 
         document = await TestHelper.submitGetRequest(server, getOptions)
 
@@ -139,8 +139,8 @@ describe('/sale-intention route', () => {
       it('should have the correct page heading when the applicant says they are selling the item', async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('Sell it')
-          .mockReturnValueOnce('No')
+          .mockResolvedValueOnce('Sell it')
+          .mockResolvedValueOnce('No')
 
         document = await TestHelper.submitGetRequest(server, getOptions)
 
@@ -154,8 +154,8 @@ describe('/sale-intention route', () => {
       it('should have the correct page heading when the applicant says they are hiring out the item', async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('Hire it out')
-          .mockReturnValueOnce('No')
+          .mockResolvedValueOnce('Hire it out')
+          .mockResolvedValueOnce('No')
 
         document = await TestHelper.submitGetRequest(server, getOptions)
 
@@ -169,8 +169,8 @@ describe('/sale-intention route', () => {
       it('should have the correct page heading when the applicant says they are selling or hiring out the item', async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce("I'm not sure yet")
-          .mockReturnValueOnce('No')
+          .mockResolvedValueOnce("I'm not sure yet")
+          .mockResolvedValueOnce('No')
 
         document = await TestHelper.submitGetRequest(server, getOptions)
 
@@ -222,8 +222,8 @@ describe('/sale-intention route', () => {
         it('should display a validation error message if the user does not select an item', async () => {
           RedisService.get = jest
             .fn()
-            .mockReturnValueOnce('Sell it')
-            .mockReturnValueOnce('Yes')
+            .mockResolvedValueOnce('Sell it')
+            .mockResolvedValueOnce('Yes')
 
           const response = await TestHelper.submitPostRequest(
             server,
@@ -243,8 +243,8 @@ describe('/sale-intention route', () => {
         it('should display a validation error message if the user does not select an item', async () => {
           RedisService.get = jest
             .fn()
-            .mockReturnValueOnce('Hire it out')
-            .mockReturnValueOnce('No')
+            .mockResolvedValueOnce('Hire it out')
+            .mockResolvedValueOnce('No')
 
           const response = await TestHelper.submitPostRequest(
             server,

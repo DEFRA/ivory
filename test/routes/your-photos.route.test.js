@@ -27,8 +27,8 @@ describe('/your-photos route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -47,7 +47,7 @@ describe('/your-photos route', () => {
 
     describe('GET: 6 or less photos', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(JSON.stringify(mockData))
+        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -90,7 +90,7 @@ describe('/your-photos route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValue(JSON.stringify(mockDataSixPhotos))
+          .mockResolvedValue(JSON.stringify(mockDataSixPhotos))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })

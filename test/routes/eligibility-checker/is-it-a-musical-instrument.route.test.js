@@ -26,8 +26,8 @@ describe('/eligibility-checker/is-it-a-musical-instrument route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('GET', () => {

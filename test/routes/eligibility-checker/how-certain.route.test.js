@@ -8,7 +8,8 @@ describe('/eligibility-checker/how-certain route', () => {
   let server
   const url = '/eligibility-checker/how-certain'
   const nextUrlTypeOfItem = '/what-type-of-item-is-it'
-  const nextUrlContainElephantIvory = '/eligibility-checker/contain-elephant-ivory'
+  const nextUrlContainElephantIvory =
+    '/eligibility-checker/contain-elephant-ivory'
 
   const elementIds = {
     help1: 'help1',
@@ -24,8 +25,8 @@ describe('/eligibility-checker/how-certain route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('GET', () => {
@@ -49,19 +50,25 @@ describe('/eligibility-checker/how-certain route', () => {
     it('should have the correct page heading', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('How certain are you that your item is exempt?')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'How certain are you that your item is exempt?'
+      )
     })
 
     it('should have the correct help text 1', () => {
       const element = document.querySelector(`#${elementIds.help1}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('To use this service, you must be completely certain.')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'To use this service, you must be completely certain.'
+      )
     })
 
     it('should have the correct help text 2', () => {
       const element = document.querySelector(`#${elementIds.help2}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('If you’re still unsure, we can help you decide.')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'If you’re still unsure, we can help you decide.'
+      )
     })
 
     it('should have the correct radio buttons', () => {

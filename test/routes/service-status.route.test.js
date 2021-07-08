@@ -26,8 +26,8 @@ describe('Enter Permit Number route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   afterEach(() => {

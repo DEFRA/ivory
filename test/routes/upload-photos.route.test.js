@@ -34,8 +34,8 @@ describe('/upload-photos route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -154,7 +154,7 @@ describe('/upload-photos route', () => {
           thumbnails: ['lamp-thumbnail.png', 'chair-thumbnail.jpeg'],
           thumbnailData: []
         }
-        RedisService.get = jest.fn().mockReturnValue(JSON.stringify(mockData))
+        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -355,8 +355,8 @@ const _createMocks = () => {
   }
   RedisService.get = jest
     .fn()
-    .mockReturnValueOnce('false')
-    .mockReturnValueOnce(JSON.stringify(mockData))
+    .mockResolvedValueOnce('false')
+    .mockResolvedValueOnce(JSON.stringify(mockData))
 
   RedisService.set = jest.fn()
 }

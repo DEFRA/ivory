@@ -54,8 +54,8 @@ describe('/describe-the-item route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -76,8 +76,8 @@ describe('/describe-the-item route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce(ItemTypes.MUSICAL)
-          .mockReturnValueOnce(JSON.stringify(itemDescription))
+          .mockResolvedValueOnce(ItemTypes.MUSICAL)
+          .mockResolvedValueOnce(JSON.stringify(itemDescription))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })

@@ -24,8 +24,8 @@ describe('/eligibility-checker/ivory-added route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('GET', () => {
@@ -55,19 +55,9 @@ describe('/eligibility-checker/ivory-added route', () => {
     })
 
     it('should have the correct radio buttons', () => {
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.ivoryAdded,
-        'Yes',
-        'Yes'
-      )
+      TestHelper.checkRadioOption(document, elementIds.ivoryAdded, 'Yes', 'Yes')
 
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.ivoryAdded2,
-        'No',
-        'No'
-      )
+      TestHelper.checkRadioOption(document, elementIds.ivoryAdded2, 'No', 'No')
 
       TestHelper.checkRadioOption(
         document,

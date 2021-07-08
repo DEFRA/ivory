@@ -45,8 +45,8 @@ describe('/user-details/applicant/address-choose route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -61,10 +61,10 @@ describe('/user-details/applicant/address-choose route', () => {
     beforeEach(async () => {
       RedisService.get = jest
         .fn()
-        .mockReturnValueOnce('No')
-        .mockReturnValueOnce(JSON.stringify(multipleAddresses))
-        .mockReturnValueOnce(nameOrNumber)
-        .mockReturnValueOnce(postcode)
+        .mockResolvedValueOnce('No')
+        .mockResolvedValueOnce(JSON.stringify(multipleAddresses))
+        .mockResolvedValueOnce(nameOrNumber)
+        .mockResolvedValueOnce(postcode)
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -140,10 +140,10 @@ describe('/user-details/applicant/address-choose route', () => {
 
       RedisService.get = jest
         .fn()
-        .mockReturnValueOnce('No')
-        .mockReturnValueOnce(JSON.stringify(multipleAddresses))
-        .mockReturnValueOnce(nameOrNumber)
-        .mockReturnValueOnce(postcode)
+        .mockResolvedValueOnce('No')
+        .mockResolvedValueOnce(JSON.stringify(multipleAddresses))
+        .mockResolvedValueOnce(nameOrNumber)
+        .mockResolvedValueOnce(postcode)
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -173,8 +173,8 @@ describe('/user-details/applicant/address-choose route', () => {
       beforeEach(() => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('No')
-          .mockReturnValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce('No')
+          .mockResolvedValueOnce(JSON.stringify(singleAddress))
       })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
@@ -206,8 +206,8 @@ describe('/user-details/applicant/address-choose route', () => {
       beforeEach(() => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('Yes')
-          .mockReturnValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce('Yes')
+          .mockResolvedValueOnce(JSON.stringify(singleAddress))
       })
 
       it('should display a validation error message if the user does not select an address', async () => {

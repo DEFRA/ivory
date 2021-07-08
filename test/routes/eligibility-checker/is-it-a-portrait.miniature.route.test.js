@@ -28,8 +28,8 @@ describe('/eligibility-checker/is-it-a-portrait-miniature route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {

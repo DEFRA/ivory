@@ -26,8 +26,8 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('GET', () => {

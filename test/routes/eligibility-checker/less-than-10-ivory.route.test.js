@@ -8,7 +8,8 @@ describe('/eligibility-checker/less-than-10-ivory route', () => {
   let server
   const url = '/eligibility-checker/less-than-10-ivory'
   const nextUrlMadeBefore1947 = '/eligibility-checker/made-before-1947'
-  const nextUrlIsItAPortraitMiniature = '/eligibility-checker/is-it-a-portrait-miniature'
+  const nextUrlIsItAPortraitMiniature =
+    '/eligibility-checker/is-it-a-portrait-miniature'
   const nextUrlCannotContinue = '/eligibility-checker/cannot-continue'
 
   const elementIds = {
@@ -29,8 +30,8 @@ describe('/eligibility-checker/less-than-10-ivory route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('GET', () => {
