@@ -57,16 +57,13 @@ describe('/remove-photo route', () => {
 
         expect(RedisService.get).toBeCalledTimes(1)
 
-        expect(RedisService.get).toBeCalledWith(
-          expect.any(Object),
-          'upload-photos'
-        )
+        expect(RedisService.get).toBeCalledWith(expect.any(Object), redisKey)
 
         expect(RedisService.set).toBeCalledTimes(1)
 
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
-          'upload-photos',
+          redisKey,
           JSON.stringify({
             files: [],
             fileData: [],
