@@ -123,7 +123,7 @@ describe('/eligibility-checker/how-certain route', () => {
           server,
           'Completely',
           nextUrlTypeOfItem,
-          true
+          false
         )
       })
 
@@ -133,7 +133,7 @@ describe('/eligibility-checker/how-certain route', () => {
           server,
           'I’d like some help to work this out',
           nextUrlContainElephantIvory,
-          false
+          true
         )
       })
     })
