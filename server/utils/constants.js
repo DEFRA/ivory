@@ -172,6 +172,7 @@ const RedisKeys = {
   SALE_INTENTION: 'sale-intention',
   UPLOAD_PHOTOS: 'upload-photos',
   UPLOAD_PHOTOS_ERROR: 'upload-photos.error',
+  USED_CHECKER: 'used-checker',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHERE_IS_ITEM: 'where-is-item',
   YOUR_PHOTOS: 'your-photos'

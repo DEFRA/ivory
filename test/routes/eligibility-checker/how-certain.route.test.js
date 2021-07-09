@@ -1,5 +1,8 @@
 'use strict'
 
+jest.mock('../../../server/services/redis.service')
+const RedisService = require('../../../server/services/redis.service')
+
 const createServer = require('../../../server')
 
 const TestHelper = require('../../utils/test-helper')
@@ -8,7 +11,8 @@ describe('/eligibility-checker/how-certain route', () => {
   let server
   const url = '/eligibility-checker/how-certain'
   const nextUrlTypeOfItem = '/what-type-of-item-is-it'
-  const nextUrlContainElephantIvory = '/eligibility-checker/contain-elephant-ivory'
+  const nextUrlContainElephantIvory =
+    '/eligibility-checker/contain-elephant-ivory'
 
   const elementIds = {
     help1: 'help1',
@@ -26,6 +30,14 @@ describe('/eligibility-checker/how-certain route', () => {
 
   afterAll(() => {
     server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('GET', () => {
@@ -49,19 +61,25 @@ describe('/eligibility-checker/how-certain route', () => {
     it('should have the correct page heading', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('How certain are you that your item is exempt?')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'How certain are you that your item is exempt?'
+      )
     })
 
     it('should have the correct help text 1', () => {
       const element = document.querySelector(`#${elementIds.help1}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('To use this service, you must be completely certain.')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'To use this service, you must be completely certain.'
+      )
     })
 
     it('should have the correct help text 2', () => {
       const element = document.querySelector(`#${elementIds.help2}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('If you’re still unsure, we can help you decide.')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'If you’re still unsure, we can help you decide.'
+      )
     })
 
     it('should have the correct radio buttons', () => {
@@ -104,7 +122,8 @@ describe('/eligibility-checker/how-certain route', () => {
           postOptions,
           server,
           'Completely',
-          nextUrlTypeOfItem
+          nextUrlTypeOfItem,
+          true
         )
       })
 
@@ -113,7 +132,8 @@ describe('/eligibility-checker/how-certain route', () => {
           postOptions,
           server,
           'I’d like some help to work this out',
-          nextUrlContainElephantIvory
+          nextUrlContainElephantIvory,
+          false
         )
       })
     })
@@ -137,15 +157,30 @@ describe('/eligibility-checker/how-certain route', () => {
   })
 })
 
+const _createMocks = () => {
+  RedisService.set = jest.fn()
+}
+
 const _checkSelectedRadioAction = async (
   postOptions,
   server,
   selectedOption,
-  nextUrl
+  nextUrl,
+  expectedRedisValue
 ) => {
   postOptions.payload.howCertain = selectedOption
 
+  expect(RedisService.set).toBeCalledTimes(0)
+
   const response = await TestHelper.submitPostRequest(server, postOptions)
+
+  expect(RedisService.set).toBeCalledTimes(1)
+
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    'used-checker',
+    expectedRedisValue
+  )
 
   expect(response.headers.location).toEqual(nextUrl)
 }
