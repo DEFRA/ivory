@@ -25,6 +25,7 @@ describe('/ivory-age route', () => {
     ivoryAge4: 'ivoryAge-4',
     ivoryAge5: 'ivoryAge-5',
     ivoryAge6: 'ivoryAge-6',
+    ivoryAge7: 'ivoryAge-7',
     otherDetail: 'otherDetail',
     continue: 'continue'
   }
@@ -121,6 +122,13 @@ describe('/ivory-age route', () => {
         TestHelper.checkRadioOption(
           document,
           elementIds.ivoryAge6,
+          'I am an expert, and it’s my professional opinion',
+          'I am an expert, and it’s my professional opinion'
+        )
+
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.ivoryAge7,
           other,
           other
         )
@@ -161,6 +169,13 @@ describe('/ivory-age route', () => {
         TestHelper.checkRadioOption(
           document,
           elementIds.ivoryAge6,
+          'I am an expert, and it’s my professional opinion',
+          'I am an expert, and it’s my professional opinion'
+        )
+
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.ivoryAge7,
           other,
           other
         )
@@ -193,6 +208,13 @@ describe('/ivory-age route', () => {
         TestHelper.checkRadioOption(
           document,
           elementIds.ivoryAge6,
+          'I am an expert, and it’s my professional opinion',
+          'I am an expert, and it’s my professional opinion'
+        )
+
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.ivoryAge7,
           other,
           other
         )
@@ -225,6 +247,13 @@ describe('/ivory-age route', () => {
         TestHelper.checkRadioOption(
           document,
           elementIds.ivoryAge6,
+          'I am an expert, and it’s my professional opinion',
+          'I am an expert, and it’s my professional opinion'
+        )
+
+        TestHelper.checkRadioOption(
+          document,
+          elementIds.ivoryAge7,
           'It’s been carbon-dated',
           'It’s been carbon-dated'
         )
