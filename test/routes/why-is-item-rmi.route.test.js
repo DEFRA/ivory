@@ -1,0 +1,242 @@
+'use strict'
+
+const createServer = require('../../server')
+
+const TestHelper = require('../utils/test-helper')
+
+jest.mock('../../server/services/redis.service')
+const RedisService = require('../../server/services/redis.service')
+
+describe('/why-is-item-rmi route', () => {
+  let server
+  const url = '/why-is-item-rmi'
+  const nextUrl = '/ivory-age'
+
+  const elementIds = {
+    pageTitle: 'pageTitle',
+    whyRmi: 'whyRmi',
+    whyRmiSummary: 'whyRmiSummary',
+    para1: 'para1',
+    para2: 'para2',
+    para3: 'para3',
+    para4: 'para4',
+    para5: 'para5',
+    para6: 'para6',
+    bullet1: 'bullet1',
+    bullet2: 'bullet2',
+    bullet3: 'bullet3',
+    bullet4: 'bullet4',
+    bullet5: 'bullet5',
+    bullet6: 'bullet6',
+    bullet7: 'bullet7',
+    bullet8: 'bullet8',
+    bullet9: 'bullet9',
+    continue: 'continue'
+  }
+
+  let document
+
+  beforeAll(async () => {
+    server = await createServer()
+  })
+
+  afterAll(() => {
+    server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  describe('GET', () => {
+    const rmiReason = 'RMI Reason'
+
+    const getOptions = {
+      method: 'GET',
+      url
+    }
+
+    beforeEach(async () => {
+      RedisService.get = jest.fn().mockResolvedValue(rmiReason)
+
+      document = await TestHelper.submitGetRequest(server, getOptions)
+    })
+
+    it('should have the Beta banner', () => {
+      TestHelper.checkBetaBanner(document)
+    })
+
+    it('should have the Back link', () => {
+      TestHelper.checkBackLink(document)
+    })
+
+    it('should have the correct page heading', () => {
+      const element = document.querySelector(`#${elementIds.pageTitle}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'Why is your item of outstandingly high artistic, cultural or historical value?'
+      )
+    })
+
+    it('should have the correct page copy', () => {
+      _checkElement(
+        document,
+        elementIds.para1,
+        'Make your case in the text box below.'
+      )
+
+      _checkElement(
+        document,
+        elementIds.para2,
+        'You can upload supporting documents later on. If you’d prefer to make your case within these documents, use the text box to summarise any documents you want to upload.'
+      )
+
+      _checkElement(
+        document,
+        `${elementIds.whyRmiSummary} .govuk-details__summary-text`,
+        'What qualifies as ‘outstandingly high artistic, cultural or historical value’?'
+      )
+
+      _checkElement(document, elementIds.para3, 'The item must:')
+
+      _checkElement(
+        document,
+        elementIds.bullet1,
+        'have been made before 1 January 1918'
+      )
+
+      _checkElement(
+        document,
+        elementIds.bullet2,
+        'be a rare and socially significant example of its type'
+      )
+
+      _checkElement(
+        document,
+        elementIds.para4,
+        'An item that only has sentimental value would not qualify, regardless of how important it is to you personally.'
+      )
+
+      _checkElement(
+        document,
+        elementIds.para5,
+        'Each item is assessed individually by recognised experts. They set a very high threshold when approving items for sale or hire.'
+      )
+
+      _checkElement(
+        document,
+        elementIds.para6,
+        'They’ll consider various things, such as whether an item:'
+      )
+
+      _checkElement(document, elementIds.bullet3, 'is unique or extremely rare')
+
+      _checkElement(
+        document,
+        elementIds.bullet4,
+        'is of high artistic or aesthetic quality, for example from a known artist, school or studio'
+      )
+
+      _checkElement(
+        document,
+        elementIds.bullet5,
+        'is in better condition than other items like it'
+      )
+
+      _checkElement(
+        document,
+        elementIds.bullet6,
+        'is part of a well-known collection'
+      )
+
+      _checkElement(document, elementIds.bullet7, 'has an important history')
+
+      _checkElement(
+        document,
+        elementIds.bullet8,
+        'is important to a specific place or region'
+      )
+
+      _checkElement(
+        document,
+        elementIds.bullet9,
+        'has previously been recognised for its value or status, for example being recognised as a national treasure'
+      )
+    })
+
+    it('should have the correct textarea', () => {
+      const element = document.querySelector(`#${elementIds.whyRmi}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(rmiReason)
+    })
+
+    it('should have the correct Call to Action button', () => {
+      const element = document.querySelector(`#${elementIds.continue}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual('Continue')
+    })
+  })
+
+  describe('POST', () => {
+    let postOptions
+
+    beforeEach(() => {
+      postOptions = {
+        method: 'POST',
+        url,
+        payload: {}
+      }
+    })
+
+    describe('Success', () => {
+      it('should store the value in Redis and progress to the next route', async () => {
+        const whyRmiReason = 'SOME REASON HERE'
+        postOptions.payload.whyRmi = whyRmiReason
+
+        expect(RedisService.set).toBeCalledTimes(0)
+
+        const response = await TestHelper.submitPostRequest(server, postOptions)
+
+        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          'why-is-item-rmi',
+          whyRmiReason
+        )
+
+        expect(response.headers.location).toEqual(nextUrl)
+      })
+    })
+
+    describe.skip('Failure', () => {
+      it('should display a validation error message if the user does not select an item', async () => {
+        postOptions.payload.whatTypeOfItemIsIt = ''
+        const response = await TestHelper.submitPostRequest(
+          server,
+          postOptions,
+          400
+        )
+        await TestHelper.checkValidationError(
+          response,
+          'whatTypeOfItemIsIt',
+          'whatTypeOfItemIsIt-error',
+          'Tell us what type of ivory you want to sell or hire out'
+        )
+      })
+    })
+  })
+})
+
+const _createMocks = () => {
+  RedisService.set = jest.fn()
+}
+
+const _checkElement = (document, id, expectedValue) => {
+  const element = document.querySelector(`#${id}`)
+  expect(element).toBeTruthy()
+  expect(TestHelper.getTextContent(element)).toEqual(expectedValue)
+}
