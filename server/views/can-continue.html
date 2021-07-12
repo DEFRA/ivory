@@ -10,18 +10,24 @@
 
       <h1 class="govuk-heading-l" id="pageTitle">{{ pageTitle }}</h1>
 
-        <p class="govuk-body" id="listHeading">You’ll need to:</p>
+        <p class="govuk-body" id="listHeading">The following pages will guide you through the process.</p>
 
-        <ul class="govuk-list govuk-list--bullet">
-          <li id="listItem-1">describe the item and how it meets the exemption criteria</li>
-          <li id="listItem-2">upload some photos of it</li>
-          <li id="listItem-3">provide contact details</li>
+        <ol class="govuk-list govuk-list--number">
+          <li id="listItem-1">Add up to 6 photos of the item.</li>
+          <li id="listItem-2">Describe the item and how it meets the exemption criteria.</li>
+
           {% for additionalStep in additionalSteps %}
             <li id="additionalStep-{{ loop.index }}">{{ additionalStep }}</li>
           {% endfor %}
-        </ul>
+        </ol>
 
-        <p class="govuk-body" id="finalParagraph">{{ finalParagraph }}</p>
+        <div class="govuk-inset-text">
+          <p class="govuk-body" id="timeoutParagraph">You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.</p>
+        </div>
+        
+        {% if isSection2 %}
+          <p class="govuk-body" id="finalParagraph">After you’ve paid for your application, you’ll need to wait up to 30 days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.</p>
+        {% endif %}
 
       {{ govukButton({
           attributes: {
@@ -31,7 +37,10 @@
         })
       }}
 
-      <p class="govuk-body"><a id="cancelLink" class="govuk-link" href="/">Cancel</a></p>
+      {% if usedChecker %}
+        <p class="govuk-body"><a id="cancelLink" class="govuk-link" href="{{ cancelLink }}">Cancel</a></p>
+      {% endif %}
+
     </div>
   </div>
 {% endblock %}
