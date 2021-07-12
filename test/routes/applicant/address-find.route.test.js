@@ -43,8 +43,8 @@ describe('/user-details/applicant/address-find route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -62,7 +62,7 @@ describe('/user-details/applicant/address-find route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockReturnValue('Yes')
+      RedisService.get = jest.fn().mockResolvedValue('Yes')
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -136,7 +136,7 @@ describe('/user-details/applicant/address-find route', () => {
 
     describe('Success', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('No')
+        RedisService.get = jest.fn().mockResolvedValue('No')
       })
 
       it('should store the query terms and address array in Redis and progress to the next route when a single address is returned by the search', async () => {

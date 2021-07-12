@@ -12,7 +12,7 @@
     "docker:build": "docker build --no-cache -t ivory/ivory .",
     "docker:run": "docker run -p \"3000:3000\" ivory/ivory",
     "lint": "standard",
-    "unit-test": "npx jest --runInBand --verbose",
+    "unit-test": "npx jest --verbose",
     "test": "npm run lint && npm run unit-test",
     "postinstall": "npm run build"
   },
@@ -31,8 +31,8 @@
   },
   "dependencies": {
     "@hapi/basic": "^6.0.0",
-    "@hapi/boom": "^9.1.2",
-    "@hapi/hapi": "^20.1.4",
+    "@hapi/boom": "^9.1.3",
+    "@hapi/hapi": "^20.1.5",
     "@hapi/inert": "^6.0.3",
     "@hapi/vision": "^6.1.0",
     "bcrypt": "^5.0.1",
@@ -49,16 +49,16 @@
     "node-fetch": "^2.6.1",
     "node-sass": "^6.0.1",
     "nunjucks": "3.2.3",
-    "postcode-validator": "^3.3.0",
+    "postcode-validator": "^3.5.3",
     "randomstring": "^1.2.1",
     "sharp": "^0.28.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "jest": "^27.0.5",
+    "jest": "^27.0.6",
     "jest-junit": "^12.2.0",
     "jsdom": "^16.6.0",
-    "nock": "^13.1.0",
+    "nock": "^13.1.1",
     "standard": "^16.0.3"
   },
   "standard": {

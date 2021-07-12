@@ -8,7 +8,8 @@ describe('/eligibility-checker/selling-to-museum route', () => {
   let server
   const url = '/eligibility-checker/selling-to-museum'
   const nextUrlAreYouAMuseum = '/eligibility-checker/are-you-a-museum'
-  const nextUrlIsItAMusicalInstrument = '/eligibility-checker/is-it-a-musical-instrument'
+  const nextUrlIsItAMusicalInstrument =
+    '/eligibility-checker/is-it-a-musical-instrument'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -26,8 +27,8 @@ describe('/eligibility-checker/selling-to-museum route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('GET', () => {

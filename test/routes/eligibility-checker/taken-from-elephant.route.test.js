@@ -24,8 +24,8 @@ describe('/eligibility-checker/taken-from-elephant route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('GET', () => {

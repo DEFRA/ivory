@@ -1,5 +1,7 @@
 'use strict'
 
+const Hoek = require('@hapi/hoek')
+
 const RedisService = require('../services/redis.service')
 const { Paths, RedisKeys } = require('../utils/constants')
 
@@ -10,7 +12,10 @@ const handlers = {
     )
 
     for (const array in uploadData) {
-      uploadData[array].splice(parseInt(request.params.index) - 1, 1)
+      uploadData[array].splice(
+        parseInt(Hoek.escapeHtml(request.params.index)) - 1,
+        1
+      )
     }
 
     await RedisService.set(

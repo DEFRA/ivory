@@ -32,8 +32,8 @@ describe('/ivory-volume route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -118,7 +118,7 @@ describe('/ivory-volume route', () => {
 
     describe('GET: Has correct heading for a musical item', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.MUSICAL)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.MUSICAL)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })

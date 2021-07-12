@@ -36,8 +36,8 @@ describe('/ivory-age route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -56,7 +56,7 @@ describe('/ivory-age route', () => {
 
     describe('GET: Item is a musical instrument', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.MUSICAL)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.MUSICAL)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -145,7 +145,7 @@ describe('/ivory-age route', () => {
 
     describe('GET: Item has < 10% ivory', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.TEN_PERCENT)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.TEN_PERCENT)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -184,7 +184,7 @@ describe('/ivory-age route', () => {
 
     describe('GET: Has correct details for a portrait miniature', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.MINIATURE)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.MINIATURE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -223,7 +223,7 @@ describe('/ivory-age route', () => {
 
     describe('GET: Has correct details for S2 (item of outstandingly high value)', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.HIGH_VALUE)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -274,7 +274,7 @@ describe('/ivory-age route', () => {
 
     describe('Success: Item is a musical instrument', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.MUSICAL)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.MUSICAL)
       })
 
       it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
@@ -336,7 +336,7 @@ describe('/ivory-age route', () => {
 
     describe('Success: Item has < 10% ivory', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.TEN_PERCENT)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.TEN_PERCENT)
       })
 
       it('should store the value in Redis and progress to the next route when the fourth option has been selected', async () => {
@@ -351,7 +351,7 @@ describe('/ivory-age route', () => {
 
     describe('Success: Item of outstandingly high value', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.HIGH_VALUE)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
       })
 
       it('should store the value in Redis and progress to the next route when the fourth option has been selected', async () => {
@@ -375,7 +375,7 @@ describe('/ivory-age route', () => {
 
     describe('Failure', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockReturnValue(ItemType.TEN_PERCENT)
+        RedisService.get = jest.fn().mockResolvedValue(ItemType.TEN_PERCENT)
       })
 
       it('should display a validation error message if the user does not check a box', async () => {

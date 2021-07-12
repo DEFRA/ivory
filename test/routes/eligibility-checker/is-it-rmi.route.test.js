@@ -28,8 +28,8 @@ describe('/eligibility-checker/is-it-rmi route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -88,19 +88,9 @@ describe('/eligibility-checker/is-it-rmi route', () => {
     })
 
     it('should have the correct radio buttons', () => {
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.isItRmi,
-        'Yes',
-        'Yes'
-      )
+      TestHelper.checkRadioOption(document, elementIds.isItRmi, 'Yes', 'Yes')
 
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.isItRmi2,
-        'No',
-        'No'
-      )
+      TestHelper.checkRadioOption(document, elementIds.isItRmi2, 'No', 'No')
     })
 
     it('should have the correct Call to Action button', () => {

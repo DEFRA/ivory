@@ -54,8 +54,8 @@ describe('/describe-the-item route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -76,8 +76,8 @@ describe('/describe-the-item route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce(ItemTypes.MUSICAL)
-          .mockReturnValueOnce(JSON.stringify(itemDescription))
+          .mockResolvedValueOnce(ItemTypes.MUSICAL)
+          .mockResolvedValueOnce(JSON.stringify(itemDescription))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -151,8 +151,8 @@ describe('/describe-the-item route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce(ItemTypes.HIGH_VALUE)
-          .mockReturnValueOnce(JSON.stringify(itemDescription))
+          .mockResolvedValueOnce(ItemTypes.HIGH_VALUE)
+          .mockResolvedValueOnce(JSON.stringify(itemDescription))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -246,8 +246,8 @@ describe('/describe-the-item route', () => {
       beforeEach(() => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce(ItemTypes.HIGH_VALUE)
-          .mockReturnValueOnce(JSON.stringify(itemDescription))
+          .mockResolvedValueOnce(ItemTypes.HIGH_VALUE)
+          .mockResolvedValueOnce(JSON.stringify(itemDescription))
       })
 
       it('should display a validation error message if the user does not enter "What is the item?"', async () => {
@@ -371,8 +371,8 @@ const _checkSuccessfulPost = async (
 ) => {
   RedisService.get = jest
     .fn()
-    .mockReturnValueOnce(itemType)
-    .mockReturnValueOnce(JSON.stringify(itemDescription))
+    .mockResolvedValueOnce(itemType)
+    .mockResolvedValueOnce(JSON.stringify(itemDescription))
 
   postOptions.payload = itemDescription
 

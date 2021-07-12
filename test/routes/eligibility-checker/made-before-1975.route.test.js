@@ -27,8 +27,8 @@ describe('/eligibility-checker/made-before-1975 route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('GET', () => {

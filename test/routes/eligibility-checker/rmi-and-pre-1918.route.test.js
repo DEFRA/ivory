@@ -30,8 +30,8 @@ describe('/eligibility-checker/rmi-and-pre-1918 route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -71,9 +71,7 @@ describe('/eligibility-checker/rmi-and-pre-1918 route', () => {
     it('should have the correct help text', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'The item must:'
-      )
+      expect(TestHelper.getTextContent(element)).toEqual('The item must:')
     })
 
     it('should have a help text list', () => {
