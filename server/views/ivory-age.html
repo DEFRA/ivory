@@ -9,7 +9,7 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      {% if checkbox6 == 'Other reason' %}
+      {% if checkbox7 == 'Other reason' %}
         {% set otherHtml %}
           {{ govukTextarea({
             name: "otherDetail",
@@ -65,9 +65,14 @@
           checked: checkbox5Checked
         },
         {
-          value: checkbox6,
-          text: checkbox6,
-          checked: checkbox6Checked,
+          value: "I am an expert, and it’s my professional opinion",
+          text: "I am an expert, and it’s my professional opinion",
+          checked: checkbox6Checked
+        },
+        {
+          value: checkbox7,
+          text: checkbox7,
+          checked: checkbox7Checked,
           conditional: {
             html: otherHtml
           }

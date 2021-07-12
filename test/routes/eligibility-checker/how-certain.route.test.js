@@ -1,5 +1,8 @@
 'use strict'
 
+jest.mock('../../../server/services/redis.service')
+const RedisService = require('../../../server/services/redis.service')
+
 const createServer = require('../../../server')
 
 const TestHelper = require('../../utils/test-helper')
@@ -27,6 +30,14 @@ describe('/eligibility-checker/how-certain route', () => {
 
   afterAll(async () => {
     await server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('GET', () => {
@@ -111,7 +122,8 @@ describe('/eligibility-checker/how-certain route', () => {
           postOptions,
           server,
           'Completely',
-          nextUrlTypeOfItem
+          nextUrlTypeOfItem,
+          false
         )
       })
 
@@ -120,7 +132,8 @@ describe('/eligibility-checker/how-certain route', () => {
           postOptions,
           server,
           'I’d like some help to work this out',
-          nextUrlContainElephantIvory
+          nextUrlContainElephantIvory,
+          true
         )
       })
     })
@@ -144,15 +157,30 @@ describe('/eligibility-checker/how-certain route', () => {
   })
 })
 
+const _createMocks = () => {
+  RedisService.set = jest.fn()
+}
+
 const _checkSelectedRadioAction = async (
   postOptions,
   server,
   selectedOption,
-  nextUrl
+  nextUrl,
+  expectedRedisValue
 ) => {
   postOptions.payload.howCertain = selectedOption
 
+  expect(RedisService.set).toBeCalledTimes(0)
+
   const response = await TestHelper.submitPostRequest(server, postOptions)
+
+  expect(RedisService.set).toBeCalledTimes(1)
+
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    'used-checker',
+    expectedRedisValue
+  )
 
   expect(response.headers.location).toEqual(nextUrl)
 }

@@ -10,7 +10,7 @@ const RedisService = require('../../server/services/redis.service')
 describe('/intention-for-item route', () => {
   let server
   const url = '/intention-for-item'
-  const nextUrl = '/where-is-item'
+  const nextUrl = '/check-your-answers'
 
   const elementIds = {
     intentionForItem: 'intentionForItem',

@@ -7,8 +7,7 @@ const TestHelper = require('../utils/test-helper')
 describe('/ route', () => {
   let server
   const url = '/'
-
-  let document
+  const nextUrl = '/eligibility-checker/how-certain'
 
   beforeAll(async () => {
     server = await createServer()
@@ -28,34 +27,13 @@ describe('/ route', () => {
       url
     }
 
-    beforeEach(async () => {
-      document = await TestHelper.submitGetRequest(server, getOptions)
-    })
-
-    it('should have the Beta banner', () => {
-      TestHelper.checkBetaBanner(document)
-    })
-
-    it('should have the Back link', () => {
-      TestHelper.checkBackLink(document)
-    })
-  })
-
-  describe('POST', () => {
-    let postOptions
-
-    beforeEach(() => {
-      postOptions = {
-        method: 'POST',
-        url,
-        payload: {}
-      }
-    })
-
-    describe('Success', () => {
-      it('should stay on the home route', async () => {
-        await TestHelper.submitPostRequest(server, postOptions, 200)
-      })
+    it('should redirect to the "How certain" route', async () => {
+      const response = await TestHelper.submitPostRequest(
+        server,
+        getOptions,
+        302
+      )
+      expect(response.headers.location).toEqual(nextUrl)
     })
   })
 })

@@ -2,7 +2,13 @@
 
 const config = require('../utils/config')
 const RedisService = require('../services/redis.service')
-const { ItemType, Paths, RedisKeys, Views } = require('../utils/constants')
+const {
+  ItemType,
+  Paths,
+  RedisKeys,
+  Views,
+  Urls
+} = require('../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
@@ -13,7 +19,7 @@ const handlers = {
 
   post: async (request, h) => {
     const cost =
-      await _getItemType(request) !== ItemType.HIGH_VALUE
+      (await _getItemType(request)) !== ItemType.HIGH_VALUE
         ? config.paymentAmountBandA
         : config.paymentAmountBandB
 
@@ -23,29 +29,53 @@ const handlers = {
   }
 }
 
-const _getItemType = async request => {
-  return await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
+const _getItemType = request => {
+  return RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
+}
+
+const _usedChecker = async request => {
+  return (await RedisService.get(request, RedisKeys.USED_CHECKER)) === 'true'
 }
 
 const _getContext = async request => {
-  if ((await _getItemType(request)) === ItemType.HIGH_VALUE) {
-    return {
-      pageTitle: 'You must now apply for an exemption certificate',
-      additionalSteps: [
-        `pay a non-refundable administration fee of £${config.paymentAmountBandB / 100}`,
-        'wait 30 days for your application to be approved by an expert'
-      ],
-      finalParagraph: 'If your application is successful, we will send you an exemption certificate so you can sell or hire out your item.'
-    }
-  } else {
-    return {
-      pageTitle: 'You must now make a self-assessment to sell or hire out your item',
-      additionalSteps: [
-        `pay an administration fee of £${config.paymentAmountBandA / 100}`
-      ],
-      finalParagraph: 'As soon as you successfully make the payment, you’ll be able to sell the item or hire it out.'
-    }
+  const usedChecker = await _usedChecker(request)
+
+  const itemType = await _getItemType(request)
+
+  const context = {
+    isSection2: itemType === ItemType.HIGH_VALUE,
+    usedChecker,
+    additionalSteps: [],
+    cancelLink: Urls.GOV_UK_HOME
   }
+
+  let cost
+  if (itemType === ItemType.HIGH_VALUE) {
+    // Section 2
+    context.pageTitle = usedChecker
+      ? 'You can now apply for an exemption certificate'
+      : 'You must now apply for an exemption certificate'
+
+    context.additionalSteps.push(
+      'Upload any documents that support your application.'
+    )
+
+    cost = config.paymentAmountBandB / 100
+  } else {
+    // Section 10
+    context.pageTitle = usedChecker
+      ? 'You can now make a self-assessment to sell or hire out your item'
+      : 'You must now make a self-assessment to sell or hire out your item'
+
+    cost = config.paymentAmountBandA / 100
+  }
+
+  context.additionalSteps.push('Provide contact details.')
+  context.additionalSteps.push(
+    `Pay a non-refundable administration fee of £${cost}.`
+  )
+
+  return context
 }
 
 module.exports = [
