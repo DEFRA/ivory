@@ -212,9 +212,9 @@ describe('/why-is-item-rmi route', () => {
       })
     })
 
-    describe.skip('Failure', () => {
-      it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.whatTypeOfItemIsIt = ''
+    describe('Failure', () => {
+      it('should display a validation error message if the user does not enter the reason', async () => {
+        postOptions.payload.whyRmi = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -222,9 +222,9 @@ describe('/why-is-item-rmi route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'whatTypeOfItemIsIt',
-          'whatTypeOfItemIsIt-error',
-          'Tell us what type of ivory you want to sell or hire out'
+          'whyRmi',
+          'whyRmi-error',
+          'You must explain why your item is of outstandingly high artistic, cultural or historical value'
         )
       })
     })
