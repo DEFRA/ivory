@@ -7,6 +7,8 @@ const TestHelper = require('../utils/test-helper')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
+const CharacterLimits = require('../mock-data/character-limits')
+
 describe('/why-is-item-rmi route', () => {
   let server
   const url = '/why-is-item-rmi'
@@ -213,7 +215,7 @@ describe('/why-is-item-rmi route', () => {
     })
 
     describe('Failure', () => {
-      it('should display a validation error message if the user does not enter the reason', async () => {
+      it('should display a validation error message if the user does not enter the RMI reason', async () => {
         postOptions.payload.whyRmi = ''
         const response = await TestHelper.submitPostRequest(
           server,
@@ -225,6 +227,18 @@ describe('/why-is-item-rmi route', () => {
           'whyRmi',
           'whyRmi-error',
           'You must explain why your item is of outstandingly high artistic, cultural or historical value'
+        )
+      })
+
+      it('should display a validation error message if the RMI reason is too long', async () => {
+        postOptions.payload = {
+          whyRmi: `${CharacterLimits.oneHundredThousandCharacters}X`
+        }
+        await TestHelper.checkFormFieldValidation(
+          postOptions,
+          server,
+          elementIds.whyRmi,
+          'Your description must have fewer than 100,000 characters'
         )
       })
     })
