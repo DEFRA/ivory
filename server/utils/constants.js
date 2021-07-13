@@ -170,6 +170,7 @@ const RedisKeys = {
   UPLOAD_PHOTOS_ERROR: 'upload-photos.error',
   USED_CHECKER: 'used-checker',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
+  WHY_IS_ITEM_RMI: 'why-is-item-rmi',
   YOUR_PHOTOS: 'your-photos'
 }
 

@@ -1,43 +1,68 @@
 'use strict'
 
-const { Paths, Views } = require('../utils/constants')
-const { buildErrorSummary } = require('../utils/validation')
+const RedisService = require('../services/redis.service')
+const {
+  CharacterLimits,
+  Paths,
+  RedisKeys,
+  Views
+} = require('../utils/constants')
+const { formatNumberWithCommas } = require('../utils/general')
+const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
-  get: (request, h) => {
+  get: async (request, h) => {
     return h.view(Views.WHY_IS_ITEM_RMI, {
-      ..._getContext()
+      ...(await _getContext(request))
     })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
       return h
-        .view(Views.UPLOAD_PHOTOS, {
-          ..._getContext(),
+        .view(Views.WHY_IS_ITEM_RMI, {
+          ...(await _getContext(request)),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
+    await RedisService.set(request, RedisKeys.WHY_IS_ITEM_RMI, payload.whyRmi)
+
     return h.redirect(Paths.IVORY_AGE)
   }
 }
 
-const _getContext = () => {
+const _getContext = async request => {
+  const whyRmi = await RedisService.get(request, RedisKeys.WHY_IS_ITEM_RMI)
+
   return {
     pageTitle:
-      'Why is your item of outstandingly high artistic, cultural or historical value?'
+      'Why is your item of outstandingly high artistic, cultural or historical value?',
+    whyRmi
   }
 }
 
 const _validateForm = payload => {
   const errors = []
 
-  // TODO Validation
+  if (Validators.empty(payload.whyRmi)) {
+    errors.push({
+      name: 'whyRmi',
+      text:
+        'You must explain why your item is of outstandingly high artistic, cultural or historical value'
+    })
+  } else if (Validators.maxLength(payload.whyRmi, CharacterLimits.Textarea)) {
+    errors.push({
+      name: 'whyRmi',
+      text: `Your description must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Textarea
+      )} characters`
+    })
+  }
 
   return errors
 }

@@ -48,6 +48,7 @@ const _getContext = async request => {
     whereMade: itemDescription.whereMade || NOT_APPLICABLE,
     whenMade: itemDescription.whenMade || NOT_APPLICABLE,
 
+    whyRmi: await RedisService.get(request, RedisKeys.WHY_IS_ITEM_RMI),
     ivoryVolume: await RedisService.get(request, RedisKeys.IVORY_VOLUME),
     ivoryAge: await RedisService.get(request, RedisKeys.IVORY_AGE),
     ivoryIntegral: await RedisService.get(request, RedisKeys.IVORY_INTEGRAL),
