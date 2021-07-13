@@ -31,14 +31,16 @@ const handlers = {
         .code(400)
     }
 
+    await RedisService.set(
+      request,
+      RedisKeys.ARE_YOU_A_MUSEUM,
+      payload.areYouAMuseum === Options.YES
+    )
+
     switch (payload.areYouAMuseum) {
       case Options.YES:
-        await RedisService.set(request, RedisKeys.ARE_YOU_A_MUSEUM, true)
-
         return h.redirect(Paths.DO_NOT_NEED_SERVICE)
       case Options.NO:
-        await RedisService.set(request, RedisKeys.ARE_YOU_A_MUSEUM, false)
-
         await RedisService.set(
           request,
           RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
