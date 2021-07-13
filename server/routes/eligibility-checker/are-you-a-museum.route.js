@@ -1,6 +1,12 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views, Options } = require('../../utils/constants')
+const {
+  ItemType,
+  Paths,
+  RedisKeys,
+  Views,
+  Options
+} = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
@@ -27,8 +33,12 @@ const handlers = {
 
     switch (payload.areYouAMuseum) {
       case Options.YES:
+        await RedisService.set(request, RedisKeys.ARE_YOU_A_MUSEUM, true)
+
         return h.redirect(Paths.DO_NOT_NEED_SERVICE)
       case Options.NO:
+        await RedisService.set(request, RedisKeys.ARE_YOU_A_MUSEUM, false)
+
         await RedisService.set(
           request,
           RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
@@ -42,7 +52,8 @@ const handlers = {
 const _getContext = () => {
   return {
     pageTitle: 'Are you selling or hiring the item out on behalf of a museum?',
-    helpText: 'You must be acting on behalf of a museum that is a member of the International Council of Museums, or accredited by one of the following:',
+    helpText:
+      'You must be acting on behalf of a museum that is a member of the International Council of Museums, or accredited by one of the following:',
     items: getStandardOptions(false)
   }
 }

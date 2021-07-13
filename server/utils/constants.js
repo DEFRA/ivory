@@ -152,6 +152,8 @@ const RedisKeys = {
   APPLICANT_ADDRESS: 'applicant.address',
   APPLICANT_EMAIL_ADDRESS: 'applicant.emailAddress',
   APPLICANT_NAME: 'applicant.name',
+  ARE_YOU_A_MUSEUM: 'eligibility-checker.are-you-a-museum',
+  CONTAIN_ELEPHANT_IVORY: 'eligibility-checker.contain-elephant-ivory',
   DESCRIBE_THE_ITEM: 'describe-the-item',
   INTENTION_FOR_ITEM: 'intention-for-item',
   IVORY_AGE: 'ivory-age',

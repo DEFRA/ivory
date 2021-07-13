@@ -1,11 +1,12 @@
 'use strict'
 
-const { Paths, Views, Urls } = require('../../utils/constants')
+const RedisService = require('../../services/redis.service')
+const { Paths, RedisKeys, Views, Urls } = require('../../utils/constants')
 
 const handlers = {
-  get: (request, h) => {
+  get: async (request, h) => {
     return h.view(Views.DO_NOT_NEED_SERVICE, {
-      ..._getContext()
+      ...(await _getContext(request))
     })
   },
 
@@ -14,9 +15,18 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
+const _getContext = async request => {
+  const isMuseum =
+    (await RedisService.get(request, RedisKeys.ARE_YOU_A_MUSEUM)) === 'true'
+
+  const notContainingIvory =
+    (await RedisService.get(request, RedisKeys.CONTAIN_ELEPHANT_IVORY)) ===
+    'false'
+
   return {
-    pageTitle: 'You don’t need to tell us about this item'
+    pageTitle: 'You don’t need to tell us about this item',
+    isMuseum,
+    notContainingIvory
   }
 }
 

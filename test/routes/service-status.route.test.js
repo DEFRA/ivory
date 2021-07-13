@@ -8,8 +8,8 @@ describe('Enter Permit Number route', () => {
   let server
   const url = '/service-status'
 
-  const elementIDs = {
-    pageHeading: 'page-heading',
+  const elementIds = {
+    pageTitle: 'pageTitle',
     serviceNameLabel: 'service-name-label',
     serviceName: 'service-name',
     versionLabel: 'version-label',
@@ -53,47 +53,47 @@ describe('Enter Permit Number route', () => {
     })
 
     it('should display the correct page heading', () => {
-      const element = document.querySelector(`#${elementIDs.pageHeading}`)
+      const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Service status')
     })
 
     it('should display the service name', () => {
-      let element = document.querySelector(`#${elementIDs.serviceNameLabel}`)
+      let element = document.querySelector(`#${elementIds.serviceNameLabel}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Service:')
 
-      element = document.querySelector(`#${elementIDs.serviceName}`)
+      element = document.querySelector(`#${elementIds.serviceName}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('ivory')
     })
 
     it('should display the version number', () => {
-      let element = document.querySelector(`#${elementIDs.versionLabel}`)
+      let element = document.querySelector(`#${elementIds.versionLabel}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Version:')
 
-      element = document.querySelector(`#${elementIDs.version}`)
+      element = document.querySelector(`#${elementIds.version}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element).length > 0).toBeTruthy()
     })
 
     it('should display the date/time that the server started', () => {
-      let element = document.querySelector(`#${elementIDs.serverStartedLabel}`)
+      let element = document.querySelector(`#${elementIds.serverStartedLabel}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Server started:')
 
-      element = document.querySelector(`#${elementIDs.serverStarted}`)
+      element = document.querySelector(`#${elementIds.serverStarted}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element).length > 0).toBeTruthy()
     })
 
     it('should display the date/time that the page was rendered', () => {
-      let element = document.querySelector(`#${elementIDs.pageRenderedLabel}`)
+      let element = document.querySelector(`#${elementIds.pageRenderedLabel}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Page rendered:')
 
-      element = document.querySelector(`#${elementIDs.pageRendered}`)
+      element = document.querySelector(`#${elementIds.pageRendered}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element).length > 0).toBeTruthy()
     })
