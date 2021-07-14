@@ -1,6 +1,7 @@
 'use strict'
 
-const { Paths, Views, Options } = require('../../utils/constants')
+const RedisService = require('../../services/redis.service')
+const { Options, Paths, RedisKeys, Views } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
@@ -11,14 +12,14 @@ const handlers = {
     })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
       return h
         .view(Views.CONTAIN_ELEPHANT_IVORY, {
-          ..._getContext(),
+          ...(await _getContext(request)),
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -28,6 +29,8 @@ const handlers = {
       case Options.YES:
         return h.redirect(Paths.SELLING_TO_MUSEUM)
       case Options.NO:
+        await RedisService.set(request, RedisKeys.CONTAIN_ELEPHANT_IVORY, false)
+
         return h.redirect(Paths.DO_NOT_NEED_SERVICE)
       case Options.I_DONT_KNOW:
         return h.redirect(Paths.CANNOT_CONTINUE)
@@ -38,7 +41,8 @@ const handlers = {
 const _getContext = () => {
   return {
     pageTitle: 'Does your item contain elephant ivory?',
-    helpText: 'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state in some way.',
+    helpText:
+      'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state in some way.',
     items: getStandardOptions()
   }
 }

@@ -1,14 +1,17 @@
 'use strict'
 
-const { Paths, Views } = require('../../utils/constants')
+const RedisService = require('../../services/redis.service')
+const { Paths, Views, RedisKeys } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
+
+const completelyCertain = 'Completely'
 
 const handlers = {
   get: (request, h) => {
     return h.view(Views.HOW_CERTAIN)
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
     const payload = request.payload
     const errors = _validateForm(payload)
 
@@ -20,11 +23,17 @@ const handlers = {
         .code(400)
     }
 
-    if (payload.howCertain === 'Completely') {
-      return h.redirect(Paths.WHAT_TYPE_OF_ITEM_IS_IT)
-    } else {
-      return h.redirect(Paths.CONTAIN_ELEPHANT_IVORY)
-    }
+    await RedisService.set(
+      request,
+      RedisKeys.USED_CHECKER,
+      payload.howCertain !== completelyCertain
+    )
+
+    return h.redirect(
+      payload.howCertain === completelyCertain
+        ? Paths.WHAT_TYPE_OF_ITEM_IS_IT
+        : Paths.CONTAIN_ELEPHANT_IVORY
+    )
   }
 }
 
@@ -33,7 +42,8 @@ const _validateForm = payload => {
   if (Validators.empty(payload.howCertain)) {
     errors.push({
       name: 'howCertain',
-      text: 'Tell us how certain you are that your item is exempt from the ivory ban'
+      text:
+        'Tell us how certain you are that your item is exempt from the ivory ban'
     })
   }
   return errors

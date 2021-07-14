@@ -80,7 +80,7 @@ const _getContext = async request => {
   return {
     pageTitle: `How do you know the item was made before ${madeBefore}?`,
     checkbox4: `It’s been in the family since before ${madeBefore}`,
-    checkbox6:
+    checkbox7:
       itemType === ItemType.HIGH_VALUE ? 'It’s been carbon-dated' : other
   }
 }
@@ -105,7 +105,10 @@ const _getCheckboxes = async request => {
       checkbox5Checked: ivoryAge.includes(
         'I have written verification from a relevant expert'
       ),
-      checkbox6Checked: ivoryAge.includes(other)
+      checkbox6Checked: ivoryAge.includes(
+        'I am an expert, and it’s my professional opinion'
+      ),
+      checkbox7Checked: ivoryAge.includes(other)
     }
   }
 }

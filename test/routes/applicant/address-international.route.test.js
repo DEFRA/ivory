@@ -27,8 +27,8 @@ describe('/user-details/applicant/address-international route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -102,7 +102,7 @@ describe('/user-details/applicant/address-international route', () => {
 
     describe('Success', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('No')
+        RedisService.get = jest.fn().mockResolvedValue('No')
       })
 
       it('should store the address in Redis and progress to the next route when the address is entered by the search', async () => {

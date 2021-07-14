@@ -30,7 +30,7 @@ const handlers = {
       payload.intentionForItem
     )
 
-    return h.redirect(Paths.WHERE_IS_ITEM)
+    return h.redirect(Paths.CHECK_YOUR_ANSWERS)
   }
 }
 

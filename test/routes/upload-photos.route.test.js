@@ -34,8 +34,8 @@ describe('/upload-photos route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -126,7 +126,7 @@ describe('/upload-photos route', () => {
           `#${elementIds.helpText6} > li:nth-child(2)`
         )
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('smaller than 32mb')
+        expect(TestHelper.getTextContent(element)).toEqual('smaller than 30mb')
       })
 
       it('should have the file chooser', () => {
@@ -151,10 +151,11 @@ describe('/upload-photos route', () => {
         const mockData = {
           files: ['lamp.png', 'chair.jpeg'],
           fileData: [],
+          fileSizes: [100, 200],
           thumbnails: ['lamp-thumbnail.png', 'chair-thumbnail.jpeg'],
           thumbnailData: []
         }
-        RedisService.get = jest.fn().mockReturnValue(JSON.stringify(mockData))
+        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -309,7 +310,7 @@ describe('/upload-photos route', () => {
       })
 
       // This test is failing as it has not yet been possible to successfully mock fs.promises.readFile without breaking the server
-      it.skip('should NOT display a validation error message if the user uploads a file that is <= 32MB', async () => {
+      it.skip('should NOT display a validation error message if the user uploads a file that is less than the maximum allowed file size', async () => {
         const payloadFile = {
           path: tempFolder,
           bytes: 32 * 1024 * 1024,
@@ -344,19 +345,75 @@ describe('/upload-photos route', () => {
       })
     })
   })
+
+  describe('POST: Duplicate file validation', () => {
+    let postOptions
+    let response
+
+    beforeEach(async () => {
+      postOptions = {
+        method: 'POST',
+        url,
+        payload: {
+          files: {
+            path: tempFolder,
+            bytes: 100,
+            filename: 'lamp.png',
+            headers: {
+              'content-disposition':
+                'form-data; name="files"; filename="lamp.png"',
+              'content-type': 'image/png'
+            }
+          }
+        }
+      }
+
+      const mockData = {
+        files: ['lamp.png'],
+        fileData: [],
+        fileSizes: [100],
+        thumbnails: ['lamp-thumbnail.png'],
+        thumbnailData: []
+      }
+      RedisService.get = jest.fn().mockReturnValue(JSON.stringify(mockData))
+
+      response = await TestHelper.submitPostRequest(server, postOptions, 400)
+    })
+
+    it('should display a validation error message if the user tries to upload a duplicate file', async () => {
+      const payloadFile = {
+        path: tempFolder,
+        bytes: 100,
+        headers: {
+          'content-disposition': 'form-data; name="files"; filename="lamp.png"',
+          'content-type': 'application/octet-stream'
+        }
+      }
+
+      postOptions.payload.files = payloadFile
+
+      await TestHelper.checkValidationError(
+        response,
+        'files',
+        'files-error',
+        "You've already uploaded that image. Choose a different one"
+      )
+    })
+  })
 })
 
 const _createMocks = () => {
   const mockData = {
     files: [],
     fileData: [],
+    fileSizes: [100, 200],
     thumbnails: [],
     thumbnailData: []
   }
   RedisService.get = jest
     .fn()
-    .mockReturnValueOnce('false')
-    .mockReturnValueOnce(JSON.stringify(mockData))
+    .mockResolvedValueOnce('false')
+    .mockResolvedValueOnce(JSON.stringify(mockData))
 
   RedisService.set = jest.fn()
 }

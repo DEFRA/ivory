@@ -31,8 +31,8 @@ describe('user-details/owner/contact-details route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -50,7 +50,7 @@ describe('user-details/owner/contact-details route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockReturnValue('Yes')
+      RedisService.get = jest.fn().mockResolvedValue('Yes')
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -112,7 +112,7 @@ describe('user-details/owner/contact-details route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockReturnValue('No')
+      RedisService.get = jest.fn().mockResolvedValue('No')
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -177,7 +177,7 @@ describe('user-details/owner/contact-details route', () => {
 
     describe('Success: Owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('Yes')
+        RedisService.get = jest.fn().mockResolvedValue('Yes')
       })
 
       it('should store the value in Redis and progress to the next route when all fields have been entered correctly', async () => {
@@ -203,7 +203,7 @@ describe('user-details/owner/contact-details route', () => {
 
     describe('Success: Not owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('No')
+        RedisService.get = jest.fn().mockResolvedValue('No')
       })
 
       it('should store the value in Redis and progress to the next route when all fields have been entered correctly', async () => {
@@ -229,7 +229,7 @@ describe('user-details/owner/contact-details route', () => {
 
     describe('Failure: Owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('Yes')
+        RedisService.get = jest.fn().mockResolvedValue('Yes')
       })
 
       it('should display a validation error message if the user does not enter the full name', async () => {
@@ -333,7 +333,7 @@ describe('user-details/owner/contact-details route', () => {
 
     describe('Failure: Not owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockReturnValue('No')
+        RedisService.get = jest.fn().mockResolvedValue('No')
       })
 
       it('should display a validation error message if the user does not enter the full name', async () => {

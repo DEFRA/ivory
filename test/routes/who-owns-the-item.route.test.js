@@ -7,7 +7,7 @@ const TestHelper = require('../utils/test-helper')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-describe('/ivory-integral route', () => {
+describe('/who-owns-the-item route', () => {
   let server
   const url = '/who-owns-the-item'
   const nextUrl = '/user-details/owner/contact-details'
@@ -24,8 +24,8 @@ describe('/ivory-integral route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -134,6 +134,7 @@ describe('/ivory-integral route', () => {
 })
 
 const _createMocks = () => {
+  RedisService.get = jest.fn()
   RedisService.set = jest.fn()
 }
 

@@ -2,6 +2,9 @@
 
 const createServer = require('../../../server')
 
+jest.mock('../../../server/services/redis.service')
+const RedisService = require('../../../server/services/redis.service')
+
 const TestHelper = require('../../utils/test-helper')
 
 describe('/eligibility-checker/contain-elephant-ivory route', () => {
@@ -26,8 +29,16 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('GET', () => {
@@ -174,7 +185,23 @@ const _checkSelectedRadioAction = async (
 ) => {
   postOptions.payload.containElephantIvory = selectedOption
 
+  expect(RedisService.set).toBeCalledTimes(0)
+
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
+  if (selectedOption === 'No') {
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      'eligibility-checker.contain-elephant-ivory',
+      false
+    )
+  } else {
+    expect(RedisService.set).toBeCalledTimes(0)
+  }
+
   expect(response.headers.location).toEqual(nextUrl)
+}
+
+const _createMocks = () => {
+  RedisService.set = jest.fn()
 }

@@ -33,8 +33,8 @@ describe('/user-details/applicant/address-confirm route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -55,8 +55,8 @@ describe('/user-details/applicant/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('No')
-          .mockReturnValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce('No')
+          .mockResolvedValueOnce(JSON.stringify(singleAddress))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -140,9 +140,9 @@ describe('/user-details/applicant/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('No')
-          .mockReturnValueOnce(JSON.stringify(singleAddress))
-          .mockReturnValueOnce('No')
+          .mockResolvedValueOnce('No')
+          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce('No')
       })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {

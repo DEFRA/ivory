@@ -31,8 +31,8 @@ describe('/eligibility-checker/less-than-20-ivory route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {

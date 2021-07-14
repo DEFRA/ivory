@@ -1,6 +1,7 @@
 {% extends 'form-layout.html' %}
 
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block formContent %}
@@ -10,6 +11,48 @@
     <div class="govuk-grid-column-two-thirds">
 
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
+      <p class="govuk-body" id="para1">Make your case in the text box below.</p>
+
+      <p class="govuk-body" id="para2">You can upload supporting documents later on. If you’d prefer to make your case within these documents, use the text box to summarise any documents you want to upload.</p>
+
+      {% set detailHtml %}
+        <p class="govuk-body" id="para3">The item must:</p>
+        
+        <ul class="govuk-list govuk-list--bullet">
+          <li id="bullet1">have been made before 1 January 1918</li>
+          <li id="bullet2">be a rare and socially significant example of its type</li>
+        </ul>
+
+        <p class="govuk-body" id="para4">An item that only has sentimental value would not qualify, regardless of how important it is to you personally.</p>
+
+        <p class="govuk-body" id="para5">Each item is assessed individually by recognised experts. They set a very high threshold when approving items for sale or hire.</p>
+
+        <p class="govuk-body" id="para6">They’ll consider various things, such as whether an item:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li id="bullet3">is unique or extremely rare</li>
+          <li id="bullet4">is of high artistic or aesthetic quality, for example from a known artist, school or studio</li>
+          <li id="bullet5">is in better condition than other items like it</li>
+          <li id="bullet6">is part of a well-known collection</li>
+          <li id="bullet7">has an important history</li>
+          <li id="bullet8">is important to a specific place or region</li>
+          <li id="bullet9">has previously been recognised for its value or status, for example being recognised as a national treasure</li>
+        </ul>
+      {% endset -%}
+
+      {{ govukDetails({
+        id: "whyRmiSummary",
+        summaryText: "What qualifies as ‘outstandingly high artistic, cultural or historical value’?",
+        html: detailHtml
+      }) }}
+
+      {{ govukTextarea({
+        name: "whyRmi",
+        id: "whyRmi",
+        value: whyRmi,
+        errorMessage: fieldErrors['whyRmi']
+      }) }}
 
       {{ govukButton({
           attributes: {

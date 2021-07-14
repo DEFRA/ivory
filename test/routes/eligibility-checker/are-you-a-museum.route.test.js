@@ -28,8 +28,8 @@ describe('/eligibility-checker/are-you-a-museum route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -172,12 +172,20 @@ const _checkSelectedRadioAction = async (
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
   if (redisValue) {
-    expect(RedisService.set).toBeCalledTimes(1)
+    expect(RedisService.set).toBeCalledTimes(2)
+
     expect(RedisService.set).toBeCalledWith(
       expect.any(Object),
       redisKeyTypeOfItem,
       redisValue
     )
+
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      redisKeyTypeOfItem,
+      redisValue
+    )
+    // await RedisService.set(request, RedisKeys.ARE_YOU_A_MUSEUM, true)
   }
 
   expect(response.headers.location).toEqual(nextUrl)

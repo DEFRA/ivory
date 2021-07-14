@@ -10,7 +10,7 @@ const RedisService = require('../../server/services/redis.service')
 describe('/intention-for-item route', () => {
   let server
   const url = '/intention-for-item'
-  const nextUrl = '/where-is-item'
+  const nextUrl = '/check-your-answers'
 
   const elementIds = {
     intentionForItem: 'intentionForItem',
@@ -25,8 +25,8 @@ describe('/intention-for-item route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {

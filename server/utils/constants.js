@@ -82,7 +82,6 @@ const Paths = {
   PROBLEM_WITH_SERVICE: '/errors/problem-with-service',
   REMOVE_PHOTO: '/remove-photo',
   RMI_AND_PRE_1918: '/eligibility-checker/rmi-and-pre-1918',
-  SALE_INTENTION: '/sale-intention',
   SELLING_TO_MUSEUM: '/eligibility-checker/selling-to-museum',
   SERVICE_COMPLETE: '/service-complete',
   SERVICE_STATUS: '/service-status',
@@ -91,7 +90,6 @@ const Paths = {
   UPLOAD_PHOTOS: '/upload-photos',
   UPLOAD_TIMEOUT: '/errors/upload-timeout',
   WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',
-  WHERE_IS_ITEM: '/where-is-item',
   WHO_OWNS_ITEM: '/who-owns-the-item',
   WHY_IS_ITEM_RMI: '/why-is-item-rmi',
   YOUR_PHOTOS: '/your-photos'
@@ -114,7 +112,6 @@ const Views = {
   CONTAIN_ELEPHANT_IVORY: 'eligibility-checker/contain-elephant-ivory',
   DESCRIBE_THE_ITEM: 'describe-the-item',
   DO_NOT_NEED_SERVICE: 'eligibility-checker/do-not-need-service',
-  HOME: 'home',
   HOW_CERTAIN: 'eligibility-checker/how-certain',
   INTENTION_FOR_ITEM: 'intention-for-item',
   IS_IT_A_MUSICAL_INSTRUMENT: 'eligibility-checker/is-it-a-musical-instrument',
@@ -135,7 +132,6 @@ const Views = {
   PRIVACY_NOTICE: 'privacy-notice',
   PROBLEM_WITH_SERVICE: 'errors/problem-with-service',
   RMI_AND_PRE_1918: 'eligibility-checker/rmi-and-pre-1918',
-  SALE_INTENTION: 'sale-intention',
   SELLING_TO_MUSEUM: 'eligibility-checker/selling-to-museum',
   SERVICE_COMPLETE: 'service-complete',
   SERVICE_STATUS: 'service-status',
@@ -144,7 +140,6 @@ const Views = {
   UPLOAD_PHOTOS: 'upload-photos',
   UPLOAD_TIMEOUT: 'errors/upload-timeout',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
-  WHERE_IS_ITEM: 'where-is-item',
   WHO_OWNS_ITEM: 'who-owns-the-item',
   WHY_IS_ITEM_RMI: 'why-is-item-rmi',
   YOUR_PHOTOS: 'your-photos'
@@ -157,6 +152,8 @@ const RedisKeys = {
   APPLICANT_ADDRESS: 'applicant.address',
   APPLICANT_EMAIL_ADDRESS: 'applicant.emailAddress',
   APPLICANT_NAME: 'applicant.name',
+  ARE_YOU_A_MUSEUM: 'eligibility-checker.are-you-a-museum',
+  CONTAIN_ELEPHANT_IVORY: 'eligibility-checker.contain-elephant-ivory',
   DESCRIBE_THE_ITEM: 'describe-the-item',
   INTENTION_FOR_ITEM: 'intention-for-item',
   IVORY_AGE: 'ivory-age',
@@ -169,11 +166,11 @@ const RedisKeys = {
   PAYMENT_AMOUNT: 'payment-amount',
   PAYMENT_ID: 'payment-id',
   PAYMENT_REFERENCE: 'payment-reference',
-  SALE_INTENTION: 'sale-intention',
   UPLOAD_PHOTOS: 'upload-photos',
   UPLOAD_PHOTOS_ERROR: 'upload-photos.error',
+  USED_CHECKER: 'used-checker',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
-  WHERE_IS_ITEM: 'where-is-item',
+  WHY_IS_ITEM_RMI: 'why-is-item-rmi',
   YOUR_PHOTOS: 'your-photos'
 }
 

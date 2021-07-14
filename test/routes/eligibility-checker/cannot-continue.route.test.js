@@ -25,8 +25,8 @@ describe('/eligibility-checker/cannot-continue route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('GET', () => {
@@ -50,9 +50,7 @@ describe('/eligibility-checker/cannot-continue route', () => {
     it('should have the correct page heading', () => {
       const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'You cannot continue'
-      )
+      expect(TestHelper.getTextContent(element)).toEqual('You cannot continue')
     })
 
     it('should have the correct help text', () => {
@@ -95,7 +93,9 @@ describe('/eligibility-checker/cannot-continue route', () => {
     it('should have the correct Call to Action button', () => {
       const element = document.querySelector(`#${elementIds.continue}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Finish and return to GOV.UK')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'Finish and return to GOV.UK'
+      )
     })
   })
 
@@ -112,21 +112,13 @@ describe('/eligibility-checker/cannot-continue route', () => {
 
     describe('Success', () => {
       it('should redirect', async () => {
-        await _checkPostAction(
-          postOptions,
-          server,
-          nextUrl
-        )
+        await _checkPostAction(postOptions, server, nextUrl)
       })
     })
   })
 })
 
-const _checkPostAction = async (
-  postOptions,
-  server,
-  nextUrl
-) => {
+const _checkPostAction = async (postOptions, server, nextUrl) => {
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
   expect(response.headers.location).toEqual(nextUrl)

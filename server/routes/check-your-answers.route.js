@@ -48,6 +48,7 @@ const _getContext = async request => {
     whereMade: itemDescription.whereMade || NOT_APPLICABLE,
     whenMade: itemDescription.whenMade || NOT_APPLICABLE,
 
+    whyRmi: await RedisService.get(request, RedisKeys.WHY_IS_ITEM_RMI),
     ivoryVolume: await RedisService.get(request, RedisKeys.IVORY_VOLUME),
     ivoryAge: await RedisService.get(request, RedisKeys.IVORY_AGE),
     ivoryIntegral: await RedisService.get(request, RedisKeys.IVORY_INTEGRAL),
@@ -70,11 +71,6 @@ const _getContext = async request => {
     intentionForItem: `${await RedisService.get(
       request,
       RedisKeys.INTENTION_FOR_ITEM
-    )}`,
-    whereIsItem: `${await RedisService.get(request, RedisKeys.WHERE_IS_ITEM)}`,
-    saleIntention: `${await RedisService.get(
-      request,
-      RedisKeys.SALE_INTENTION
     )}`,
 
     cost:

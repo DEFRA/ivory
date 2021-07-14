@@ -26,8 +26,8 @@ describe('/eligibility-checker/less-than-320cm-squared route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('GET', () => {

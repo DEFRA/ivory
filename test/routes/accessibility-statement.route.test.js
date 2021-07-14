@@ -49,8 +49,8 @@ describe('/accessibility-statement', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('GET', () => {

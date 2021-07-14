@@ -35,8 +35,8 @@ describe('/user-details/owner/address-confirm route', () => {
     server = await createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
@@ -57,8 +57,8 @@ describe('/user-details/owner/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('Yes')
-          .mockReturnValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce('Yes')
+          .mockResolvedValueOnce(JSON.stringify(singleAddress))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -129,8 +129,8 @@ describe('/user-details/owner/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('No')
-          .mockReturnValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce('No')
+          .mockResolvedValueOnce(JSON.stringify(singleAddress))
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -215,9 +215,9 @@ describe('/user-details/owner/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('Yes')
-          .mockReturnValueOnce(JSON.stringify(singleAddress))
-          .mockReturnValueOnce('Yes')
+          .mockResolvedValueOnce('Yes')
+          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce('Yes')
       })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
@@ -253,9 +253,9 @@ describe('/user-details/owner/address-confirm route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockReturnValueOnce('No')
-          .mockReturnValueOnce(JSON.stringify(singleAddress))
-          .mockReturnValueOnce('No')
+          .mockResolvedValueOnce('No')
+          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce('No')
       })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {

@@ -1,7 +1,8 @@
 'use strict'
 
-const { Options, Paths, Views, RedisKeys } = require('../utils/constants')
 const RedisService = require('../services/redis.service')
+
+const { Options, Paths, Views, RedisKeys } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
