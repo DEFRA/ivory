@@ -7,8 +7,7 @@ const config = require('../utils/config')
 const ActiveDirectoryAuthService = require('../services/active-directory-auth.service')
 const authService = new ActiveDirectoryAuthService()
 
-// TODO
-// const SECTION_2_ENDPOINT = 'cre2c_ivorysection2cases'
+const SECTION_2_ENDPOINT = 'cre2c_ivorysection2cases'
 const SECTION_10_ENDPOINT = 'cre2c_ivorysection10cases'
 
 const headers = {
@@ -18,15 +17,16 @@ const headers = {
 }
 
 module.exports = class ODataService {
-  static async createRecord (body) {
+  static async createRecord (body, isSection2) {
     const token = await authService.getToken()
 
     headers.Authorization = `Bearer ${token}`
 
     const apiEndpoint = config.dataverseApiEndpoint
 
-    // TODO section 2
-    const url = `${apiEndpoint}/${SECTION_10_ENDPOINT}`
+    const url = `${apiEndpoint}/${
+      isSection2 ? SECTION_2_ENDPOINT : SECTION_10_ENDPOINT
+    }`
 
     _setContentLength(headers, body)
 
