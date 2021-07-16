@@ -82,6 +82,7 @@ const Paths = {
   PROBLEM_WITH_SERVICE: '/errors/problem-with-service',
   REMOVE_PHOTO: '/remove-photo',
   RMI_AND_PRE_1918: '/eligibility-checker/rmi-and-pre-1918',
+  SAVE_RECORD: '/save-record',
   SELLING_TO_MUSEUM: '/eligibility-checker/selling-to-museum',
   SERVICE_COMPLETE: '/service-complete',
   SERVICE_STATUS: '/service-status',

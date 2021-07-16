@@ -31,6 +31,12 @@ const schema = joi.object().keys({
     .default(false),
   serviceApiHost: joi.string().default('http://127.0.0.1'),
   serviceApiPort: joi.number().default(3010),
+  dataverseAuthorityHostUrl: joi.string(),
+  dataverseTenant: joi.string(),
+  dataverseClientId: joi.string(),
+  dataverseClientSecret: joi.string(),
+  dataverseResource: joi.string(),
+  dataverseApiEndpoint: joi.string(),
   addressLookupEnabled: joi
     .bool()
     .valid(true, false)
@@ -63,6 +69,12 @@ const config = {
   serviceApiEnabled: process.env.SERVICE_API_ENABLED,
   serviceApiHost: process.env.SERVICE_API_HOST,
   serviceApiPort: process.env.SERVICE_API_PORT,
+  dataverseAuthorityHostUrl: process.env.DATAVERSE_AUTHORITY_HOST_URL,
+  dataverseTenant: process.env.DATAVERSE_TENANT,
+  dataverseClientId: process.env.DATAVERSE_CLIENT_ID,
+  dataverseClientSecret: process.env.DATAVERSE_CLIENT_SECRET,
+  dataverseResource: process.env.DATAVERSE_RESOURCE,
+  dataverseApiEndpoint: process.env.DATAVERSE_API_ENDPOINT,
   addressLookupEnabled: process.env.ADDRESS_LOOKUP_ENABLED,
   addressLookupUrl: process.env.ADDRESS_LOOKUP_URL,
   addressLookupPassphrase: process.env.ADDRESS_LOOKUP_PASSPHRASE,
