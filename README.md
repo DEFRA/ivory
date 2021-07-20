@@ -1,8 +1,8 @@
 # Ivory Project
 
 ![Build Status](https://github.com/DEFRA/ivory/workflows/CI/badge.svg?branch=develop)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_waste-carriers-front-office&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=DEFRA_waste-carriers-front-office)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_waste-carriers-front-office&metric=coverage)](https://sonarcloud.io/dashboard?id=DEFRA_waste-carriers-front-office)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_ivory&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=DEFRA_ivory)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_ivory&metric=coverage)](https://sonarcloud.io/dashboard?id=DEFRA_ivory)
 [![security](https://hakiri.io/github/DEFRA/waste-carriers-front-office/main.svg)](https://hakiri.io/github/DEFRA/waste-carriers-front-office/main)
 [![Licence](https://img.shields.io/badge/Licence-OGLv3-blue.svg)](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3)
 
