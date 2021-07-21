@@ -1,9 +1,10 @@
 # Ivory Project
 
-![Build Status](https://github.com/DEFRA/ivory/workflows/CI/badge.svg?branch=develop)
+![Build Status](https://github.com/DEFRA/ivory/workflows/CI/badge.svg)
+[![Quality](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_ivory&metric=alert_status)](https://sonarcloud.io/dashboard?id=DEFRA_ivory)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_ivory&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=DEFRA_ivory)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_ivory&metric=coverage)](https://sonarcloud.io/dashboard?id=DEFRA_ivory)
-[![security](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_ivory&metric=security_rating)](https://sonarcloud.io/dashboard?id=DEFRA_ivory)
+[![Security](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_ivory&metric=security_rating)](https://sonarcloud.io/dashboard?id=DEFRA_ivory)
 [![Licence](https://img.shields.io/badge/Licence-OGLv3-blue.svg)](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3)
 
 Digital service to support the Ivory Act.
