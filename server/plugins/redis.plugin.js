@@ -9,7 +9,8 @@ module.exports = {
       ? {
           host: config.redisHost,
           port: config.redisPort,
-          password: config.redisPassword
+          password: config.redisPassword,
+          tls: {}
         }
       : {
           host: config.redisHost,
