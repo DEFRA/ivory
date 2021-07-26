@@ -22,15 +22,10 @@ const schema = joi.object().keys({
   logLevel: joi.string().default('warn'),
   requestTimeout: joi.number().default(120000),
   maximumFileSize: joi.number().default(30),
-  redisHost: joi.string().default('127.0.0.1'),
-  redisPort: joi.number().default(6379),
+  redisHost: joi.string(),
+  redisPort: joi.number(),
   redisPassword: joi.string(),
-  serviceApiEnabled: joi
-    .bool()
-    .valid(true, false)
-    .default(false),
-  serviceApiHost: joi.string().default('http://127.0.0.1'),
-  serviceApiPort: joi.number().default(3010),
+  redisUseTls: joi.bool(),
   addressLookupEnabled: joi
     .bool()
     .valid(true, false)
@@ -60,9 +55,7 @@ const config = {
   redisHost: process.env.REDIS_HOST,
   redisPort: process.env.REDIS_PORT,
   redisPassword: process.env.REDIS_PASSWORD,
-  serviceApiEnabled: process.env.SERVICE_API_ENABLED,
-  serviceApiHost: process.env.SERVICE_API_HOST,
-  serviceApiPort: process.env.SERVICE_API_PORT,
+  redisUseTls: process.env.REDIS_USE_TLS,
   addressLookupEnabled: process.env.ADDRESS_LOOKUP_ENABLED,
   addressLookupUrl: process.env.ADDRESS_LOOKUP_URL,
   addressLookupPassphrase: process.env.ADDRESS_LOOKUP_PASSPHRASE,
