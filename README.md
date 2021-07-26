@@ -22,9 +22,7 @@ The default values will be used if the environment variables are missing or comm
 | REDIS_HOST                 | Redis server IP address    |    no    | 127.0.0.1       |                                    |       |
 | REDIS_PORT                 | Redis port number          |    no    | 6379            |                                    |       |
 | REDIS_PASSWORD             | Redis password             |    no    |                 |                                    |       |
-| SERVICE_API_ENABLED        | Enable/disable ivory API   |    no    | false           |             true,false             |       |
-| SERVICE_API_HOST           | Ivory API IP address       |    no    | 127.0.0.1       |                                    |       |
-| SERVICE_API_PORT           | Ivory API port number      |    no    | 3010            |                                    |       |
+| REDIS_USE_TLS              | Enable/disable SSL/TLS     |    no    |                 |             true,false             |       |
 | ADDRESS_LOOKUP_ENABLED     | Enable/disable address API |    no    | false           |             true,false             |       |
 | ADDRESS_LOOKUP_URL         | Address lookup URL         |    no    | http://some-url |                                    |       |
 | ADDRESS_LOOKUP_PASSPHRASE  | Address lookup passphrase  |    no    |                 |                                    |       |
