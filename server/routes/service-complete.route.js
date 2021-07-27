@@ -33,14 +33,14 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  const paymentReference = await RedisService.get(
+  const submissionReference = await RedisService.get(
     request,
-    RedisKeys.PAYMENT_REFERENCE
+    RedisKeys.SUBMISSION_REFERENCE
   )
 
   return {
     pageTitle: 'Service complete',
-    paymentReference,
+    submissionReference,
     hideBackLink: true
   }
 }

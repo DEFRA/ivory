@@ -9,17 +9,17 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      {% if checkbox7 == 'Other reason' %}
+      {% if options[6].label == 'Other reason' %}
         {% set otherHtml %}
           {{ govukTextarea({
-            name: "otherDetail",
-            id: "otherDetail",
+            name: "otherReason",
+            id: "otherReason",
             label: {
               text: "Give details"
             },
             value: otherText,
             rows: 2,
-            errorMessage: fieldErrors['otherDetail']
+            errorMessage: fieldErrors['otherReason']
           }) }}
         {% endset -%}
       {% endif %}
@@ -40,39 +40,39 @@
         errorMessage: fieldErrors['ivoryAge'],
         items: [
         {
-          value: "It has a stamp, serial number or signature to prove its age",
-          text: "It has a stamp, serial number or signature to prove its age",
-          checked: checkbox1Checked
+          value: options[0].label,
+          text: options[0].label,
+          checked: options[0].checked
         },
         {
-          value: "I have a dated receipt showing when it was bought or repaired",
-          text: 'I have a dated receipt showing when it was bought or repaired',
-          checked: checkbox2Checked
+          value: options[1].label,
+          text: options[1].label,
+          checked: options[1].checked
         },
         {
-          value: "I have a dated publication that shows or describes the item",
-          text: "I have a dated publication that shows or describes the item",
-          checked: checkbox3Checked
+          value: options[2].label,
+          text: options[2].label,
+          checked: options[2].checked
         },
         {
-          value: checkbox4,
-          text: checkbox4,
-          checked: checkbox4Checked
+          value: options[3].label,
+          text: options[3].label,
+          checked: options[3].checked
         },
         {
-          value: "I have written verification from a relevant expert",
-          text: "I have written verification from a relevant expert",
-          checked: checkbox5Checked
+          value: options[4].label,
+          text: options[4].label,
+          checked: options[4].checked
         },
         {
-          value: "I am an expert, and it’s my professional opinion",
-          text: "I am an expert, and it’s my professional opinion",
-          checked: checkbox6Checked
+          value: options[5].label,
+          text: options[5].label,
+          checked: options[5].checked
         },
         {
-          value: checkbox7,
-          text: checkbox7,
-          checked: checkbox7Checked,
+          value: options[6].label,
+          text: options[6].label,
+          checked: options[6].checked,
           conditional: {
             html: otherHtml
           }

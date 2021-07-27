@@ -35,6 +35,14 @@ const _getContext = async request => {
     JSON.parse(await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)) ||
     {}
 
+  const ivoryAge =
+    JSON.parse(await RedisService.get(request, RedisKeys.IVORY_AGE)) || {}
+
+  let ivoryAgeFormatted = ivoryAge.ivoryAge.join(', ')
+  if (ivoryAge.otherReason) {
+    ivoryAgeFormatted += ` REASON: ${ivoryAge.otherReason}`
+  }
+
   return {
     pageTitle: 'Check your answers (incomplete)',
     whatTypeOfItemIsIt: await RedisService.get(
@@ -50,9 +58,8 @@ const _getContext = async request => {
 
     whyRmi: await RedisService.get(request, RedisKeys.WHY_IS_ITEM_RMI),
     ivoryVolume: await RedisService.get(request, RedisKeys.IVORY_VOLUME),
-    ivoryAge: await RedisService.get(request, RedisKeys.IVORY_AGE),
+    ivoryAge: ivoryAgeFormatted,
     ivoryIntegral: await RedisService.get(request, RedisKeys.IVORY_INTEGRAL),
-
     ownerDetails: `${await RedisService.get(
       request,
       RedisKeys.OWNER_NAME

@@ -12,7 +12,7 @@ const handlers = {
       await RedisService.get(request, RedisKeys.PAYMENT_AMOUNT)
     )
 
-    const paymentReference = _generateReference()
+    const submissionReference = _generateReference()
 
     const description = await RedisService.get(
       request,
@@ -26,15 +26,15 @@ const handlers = {
 
     const response = await PaymentService.makePayment(
       amount,
-      paymentReference,
+      submissionReference,
       description,
       email
     )
 
     await RedisService.set(
       request,
-      RedisKeys.PAYMENT_REFERENCE,
-      paymentReference
+      RedisKeys.SUBMISSION_REFERENCE,
+      submissionReference
     )
 
     await RedisService.set(request, RedisKeys.PAYMENT_ID, response.payment_id)

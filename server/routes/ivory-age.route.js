@@ -1,6 +1,7 @@
 'use strict'
 
 const {
+  AgeExemptionReasons,
   CharacterLimits,
   ItemType,
   Paths,
@@ -10,8 +11,6 @@ const {
 const { formatNumberWithCommas } = require('../utils/general')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
-
-const other = 'Other reason'
 
 const handlers = {
   get: async (request, h) => {
@@ -28,14 +27,13 @@ const handlers = {
       return h
         .view(Views.IVORY_AGE, {
           ...(await _getContext(request)),
-          ...(await _getCheckboxes(request)),
-          otherText: payload.otherDetail ? payload.otherDetail : '',
+          otherText: payload.otherReason ? payload.otherReason : '',
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    await RedisService.set(request, RedisKeys.IVORY_AGE, _getIvoryAge(payload))
+    await _storeRedisValues(request)
 
     if ((await _getItemType(request)) === ItemType.TEN_PERCENT) {
       return h.redirect(Paths.IVORY_INTEGRAL)
@@ -45,22 +43,80 @@ const handlers = {
   }
 }
 
-const _getIvoryAge = payload => {
-  let ivoryAge
-  if (Array.isArray(payload.ivoryAge)) {
-    ivoryAge = payload.ivoryAge.join('.\n')
-  } else {
-    ivoryAge = payload.ivoryAge
+const _storeRedisValues = request => {
+  const payload = request.payload
+
+  if (!Array.isArray(payload.ivoryAge)) {
+    request.payload.ivoryAge = [request.payload.ivoryAge]
   }
 
-  if (payload.ivoryAge.includes(other)) {
-    return `${ivoryAge}: ${payload.otherDetail}`
-  } else {
-    return ivoryAge
+  return RedisService.set(request, RedisKeys.IVORY_AGE, JSON.stringify(payload))
+}
+
+const _getItemType = async request => {
+  return await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
+}
+
+const _getContext = async request => {
+  const itemType = await _getItemType(request)
+  const madeBeforeDate = _getMadeBeforeDate(itemType)
+
+  return {
+    pageTitle: `How do you know the item was made before ${madeBeforeDate}?`,
+    options: await _getCheckboxes(request, itemType)
   }
 }
 
-const _getMadeBefore = itemType => {
+const _getCheckboxes = async (request, itemType) => {
+  const madeBeforeOption = _getMadeBeforeOption(itemType)
+  const ivoryAge = request.payload ? request.payload.ivoryAge : null
+
+  return [
+    {
+      label: AgeExemptionReasons.STAMP_OR_SERIAL,
+      checked:
+        ivoryAge && ivoryAge.includes(AgeExemptionReasons.STAMP_OR_SERIAL)
+    },
+    {
+      label: AgeExemptionReasons.DATED_RECEIPT,
+      checked: ivoryAge && ivoryAge.includes(AgeExemptionReasons.DATED_RECEIPT)
+    },
+    {
+      label: AgeExemptionReasons.DATED_PUBLICATION,
+      checked:
+        ivoryAge && ivoryAge.includes(AgeExemptionReasons.DATED_PUBLICATION)
+    },
+    {
+      label: madeBeforeOption,
+      checked: ivoryAge && ivoryAge.includes(madeBeforeOption)
+    },
+    {
+      label: AgeExemptionReasons.EXPERT_VERIFICATION,
+      checked:
+        ivoryAge && ivoryAge.includes(AgeExemptionReasons.EXPERT_VERIFICATION)
+    },
+    {
+      label: AgeExemptionReasons.PROFESSIONAL_OPINION,
+      checked:
+        ivoryAge && ivoryAge.includes(AgeExemptionReasons.PROFESSIONAL_OPINION)
+    },
+    {
+      label:
+        itemType === ItemType.HIGH_VALUE
+          ? AgeExemptionReasons.CARBON_DATED
+          : AgeExemptionReasons.OTHER_REASON,
+      checked:
+        ivoryAge &&
+        ivoryAge.includes(
+          itemType === ItemType.HIGH_VALUE
+            ? AgeExemptionReasons.CARBON_DATED
+            : AgeExemptionReasons.OTHER_REASON
+        )
+    }
+  ]
+}
+
+const _getMadeBeforeDate = itemType => {
   if (itemType === ItemType.MUSICAL) {
     return '1975'
   } else if (itemType === ItemType.TEN_PERCENT) {
@@ -70,46 +126,13 @@ const _getMadeBefore = itemType => {
   }
 }
 
-const _getItemType = async request => {
-  return await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
-}
-
-const _getContext = async request => {
-  const itemType = await _getItemType(request)
-  const madeBefore = _getMadeBefore(itemType)
-  return {
-    pageTitle: `How do you know the item was made before ${madeBefore}?`,
-    checkbox4: `It’s been in the family since before ${madeBefore}`,
-    checkbox7:
-      itemType === ItemType.HIGH_VALUE ? 'It’s been carbon-dated' : other
-  }
-}
-
-const _getCheckboxes = async request => {
-  const madeBefore = _getMadeBefore(await _getItemType(request))
-  const ivoryAge = request.payload.ivoryAge
-  if (ivoryAge) {
-    return {
-      checkbox1Checked: ivoryAge.includes(
-        'It has a stamp, serial number or signature to prove its age'
-      ),
-      checkbox2Checked: ivoryAge.includes(
-        'I have a dated receipt showing when it was bought or repaired'
-      ),
-      checkbox3Checked: ivoryAge.includes(
-        'I have a dated publication that shows or describes the item'
-      ),
-      checkbox4Checked: ivoryAge.includes(
-        `It’s been in the family since before ${madeBefore}`
-      ),
-      checkbox5Checked: ivoryAge.includes(
-        'I have written verification from a relevant expert'
-      ),
-      checkbox6Checked: ivoryAge.includes(
-        'I am an expert, and it’s my professional opinion'
-      ),
-      checkbox7Checked: ivoryAge.includes(other)
-    }
+const _getMadeBeforeOption = itemType => {
+  if (itemType === ItemType.MUSICAL) {
+    return AgeExemptionReasons.BEEN_IN_FAMILY_1975
+  } else if (itemType === ItemType.TEN_PERCENT) {
+    return AgeExemptionReasons.BEEN_IN_FAMILY_1947
+  } else {
+    return AgeExemptionReasons.BEEN_IN_FAMILY_1918
   }
 }
 
@@ -121,17 +144,17 @@ const _validateForm = payload => {
       name: 'ivoryAge',
       text: 'You just tell us how you know the item’s age'
     })
-  } else if (payload.ivoryAge.includes(other)) {
-    if (Validators.empty(payload.otherDetail)) {
+  } else if (payload.ivoryAge.includes(AgeExemptionReasons.OTHER_REASON)) {
+    if (Validators.empty(payload.otherReason)) {
       errors.push({
-        name: 'otherDetail',
+        name: 'otherReason',
         text: 'You just tell us how you know the item’s age'
       })
     }
 
-    if (Validators.maxLength(payload.otherDetail, CharacterLimits.Input)) {
+    if (Validators.maxLength(payload.otherReason, CharacterLimits.Input)) {
       errors.push({
-        name: 'otherDetail',
+        name: 'otherReason',
         text: `Enter no more than ${formatNumberWithCommas(
           CharacterLimits.Input
         )} characters`

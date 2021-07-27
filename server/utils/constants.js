@@ -16,6 +16,22 @@ const Options = {
   I_DONT_KNOW: 'I don’t know'
 }
 
+const AgeExemptionReasons = {
+  STAMP_OR_SERIAL:
+    'It has a stamp, serial number or signature to prove its age',
+  DATED_RECEIPT:
+    'I have a dated receipt showing when it was bought or repaired',
+  DATED_PUBLICATION:
+    'I have a dated publication that shows or describes the item',
+  BEEN_IN_FAMILY_1975: 'It’s been in the family since before 1975',
+  BEEN_IN_FAMILY_1947: 'It’s been in the family since before 3 March 1947',
+  BEEN_IN_FAMILY_1918: 'It’s been in the family since before 1918',
+  EXPERT_VERIFICATION: 'I have written verification from a relevant expert',
+  PROFESSIONAL_OPINION: 'I am an expert, and it’s my professional opinion',
+  CARBON_DATED: 'It’s been carbon-dated',
+  OTHER_REASON: 'Other reason'
+}
+
 const ItemType = {
   MUSICAL: 'Musical instrument made before 1975 with less than 20% ivory',
   TEN_PERCENT: 'Item made before 3 March 1947 with less than 10% ivory',
@@ -26,7 +42,7 @@ const ItemType = {
     'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
 }
 
-const SaleIntention = {
+const Intention = {
   SELL: 'Sell it',
   HIRE: 'Hire it out',
   NOT_SURE_YET: "I'm not sure yet"
@@ -166,7 +182,7 @@ const RedisKeys = {
   OWNER_NAME: 'owner.name',
   PAYMENT_AMOUNT: 'payment-amount',
   PAYMENT_ID: 'payment-id',
-  PAYMENT_REFERENCE: 'payment-reference',
+  SUBMISSION_REFERENCE: 'submission-reference',
   UPLOAD_PHOTOS: 'upload-photos',
   UPLOAD_PHOTOS_ERROR: 'upload-photos.error',
   USED_CHECKER: 'used-checker',
@@ -185,6 +201,7 @@ const StatusCodes = {
 }
 
 module.exports = Object.freeze({
+  AgeExemptionReasons,
   AddressType,
   CharacterLimits,
   Options,
@@ -192,7 +209,7 @@ module.exports = Object.freeze({
   Paths,
   Views,
   RedisKeys,
-  SaleIntention,
+  Intention,
   StatusCodes,
   Urls,
   DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession'

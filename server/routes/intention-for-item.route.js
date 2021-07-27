@@ -1,7 +1,7 @@
 'use strict'
 
 const RedisService = require('../services/redis.service')
-const { Paths, RedisKeys, SaleIntention, Views } = require('../utils/constants')
+const { Paths, RedisKeys, Intention, Views } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
@@ -39,16 +39,16 @@ const _getContext = () => {
     pageTitle: 'What do you intend to do with the item?',
     items: [
       {
-        value: SaleIntention.SELL,
-        text: SaleIntention.SELL
+        value: Intention.SELL,
+        text: Intention.SELL
       },
       {
-        value: SaleIntention.HIRE,
-        text: SaleIntention.HIRE
+        value: Intention.HIRE,
+        text: Intention.HIRE
       },
       {
-        value: SaleIntention.NOT_SURE_YET,
-        text: SaleIntention.NOT_SURE_YET
+        value: Intention.NOT_SURE_YET,
+        text: Intention.NOT_SURE_YET
       }
     ]
   }
