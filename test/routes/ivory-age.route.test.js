@@ -26,7 +26,7 @@ describe('/ivory-age route', () => {
     ivoryAge5: 'ivoryAge-5',
     ivoryAge6: 'ivoryAge-6',
     ivoryAge7: 'ivoryAge-7',
-    otherDetail: 'otherDetail',
+    otherReason: 'otherReason',
     continue: 'continue'
   }
 
@@ -137,7 +137,7 @@ describe('/ivory-age route', () => {
       it('should have the other detail form field', () => {
         TestHelper.checkFormField(
           document,
-          elementIds.otherDetail,
+          elementIds.otherReason,
           'Give details'
         )
       })
@@ -323,7 +323,7 @@ describe('/ivory-age route', () => {
       })
 
       it('should store the value in Redis and progress to the next route when the sixth option has been selected & Other text added', async () => {
-        postOptions.payload.otherDetail = 'some text'
+        postOptions.payload.otherReason = 'some text'
         await _checkSelectedCheckboxAction(
           postOptions,
           server,
@@ -402,8 +402,8 @@ describe('/ivory-age route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'otherDetail',
-          'otherDetail-error',
+          'otherReason',
+          'otherReason-error',
           'You just tell us how you know the item’s age'
         )
       })
@@ -411,7 +411,7 @@ describe('/ivory-age route', () => {
       it('should display a validation error message if the other text area > 4000 chars', async () => {
         postOptions.payload = {
           ivoryAge: other,
-          otherDetail: `${CharacterLimits.fourThousandCharacters}X`
+          otherReason: `${CharacterLimits.fourThousandCharacters}X`
         }
         const response = await TestHelper.submitPostRequest(
           server,
@@ -420,8 +420,8 @@ describe('/ivory-age route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'otherDetail',
-          'otherDetail-error',
+          'otherReason',
+          'otherReason-error',
           'Enter no more than 4,000 characters'
         )
       })

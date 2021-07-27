@@ -14,12 +14,9 @@ const AgeExemptionReasonLookup = {
   [AgeExemptionReasons.STAMP_OR_SERIAL]: 881990000,
   [AgeExemptionReasons.DATED_RECEIPT]: 881990001,
   [AgeExemptionReasons.DATED_PUBLICATION]: 881990002,
-
-  // checkbox4 - TODO X
   [AgeExemptionReasons.BEEN_IN_FAMILY_1975]: 881990003,
   [AgeExemptionReasons.BEEN_IN_FAMILY_1947]: 881990004,
   [AgeExemptionReasons.BEEN_IN_FAMILY_1918]: 881990005,
-
   [AgeExemptionReasons.EXPERT_VERIFICATION]: 881990006,
   [AgeExemptionReasons.PROFESSIONAL_OPINION]: 881990007,
   [AgeExemptionReasons.CARBON_DATED]: 881990008,
@@ -113,12 +110,15 @@ const _createSection10Body = async (request, itemType) => {
 
   const body = {
     createdon: now,
-    cre2c_submissiondate: now,
     cre2c_datestatusapplied: now,
     statuscode: 1,
     statecode: 0,
     cre2c_status: Status.New,
 
+    cre2c_submissiondate: await RedisService.get(
+      request,
+      RedisKeys.SUBMISSION_DATE
+    ),
     cre2c_submissionreference: await RedisService.get(
       request,
       RedisKeys.SUBMISSION_REFERENCE
@@ -130,9 +130,12 @@ const _createSection10Body = async (request, itemType) => {
 
     cre2c_exemptiontype: _getExemptionCategoryCode(itemType),
     cre2c_whyageexempt: _getAgeExemptionReasonCodes(ivoryAge),
+    cre2c_whyageexemptotherreason: ivoryAge.otherReason,
 
-    // TBC
-    // cre2c_whyivoryexempt: ivoryAge.otherReason,
+    // An explanation of how the applicant knows the ivory has appropriate ivory content
+    // From the "Confirm the ivory volume page" page
+    // Should we have two fields? One for the radio button and one for other? Or just convert everything to a string?
+    // cre2c_whyivoryexempt:
 
     cre2c_whyivoryintegral: WhyIvoryIntegral.NotApplicable,
     cre2c_wherestheivory: itemDescription.whereIsIvory,
@@ -176,9 +179,10 @@ const _createSection2Body = async request => {
 
     cre2c_exemptioncategory: ExemptionType.RareAndMostImportant,
     cre2c_whyageexempt: _getAgeExemptionReasonCodes(ivoryAge),
+    cre2c_whyageexemptotherreason: ivoryAge.otherReason,
 
     // TBC
-    // cre2c_whyivoryexempt: ivoryAge.otherReason,
+    // cre2c_whyivoryexempt:,
 
     cre2c_wherestheivory: itemDescription.whereIsIvory,
     cre2c_itemsummary: itemDescription.whatIsItem,

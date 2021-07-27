@@ -33,6 +33,12 @@ const handlers = {
 
     await RedisService.set(
       request,
+      RedisKeys.SUBMISSION_DATE,
+      new Date().toISOString()
+    )
+
+    await RedisService.set(
+      request,
       RedisKeys.SUBMISSION_REFERENCE,
       submissionReference
     )

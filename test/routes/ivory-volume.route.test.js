@@ -22,7 +22,7 @@ describe('/ivory-volume route', () => {
     ivoryVolume2: 'ivoryVolume-2',
     ivoryVolume3: 'ivoryVolume-3',
     ivoryVolume4: 'ivoryVolume-4',
-    otherDetail: 'otherDetail',
+    otherReason: 'otherReason',
     continue: 'continue'
   }
 
@@ -110,7 +110,7 @@ describe('/ivory-volume route', () => {
       it('should have the other detail form field', () => {
         TestHelper.checkFormField(
           document,
-          elementIds.otherDetail,
+          elementIds.otherReason,
           'Give details'
         )
       })
@@ -173,7 +173,7 @@ describe('/ivory-volume route', () => {
       })
 
       it('should store the value in Redis and progress to the next route when the fourth option has been selected & Other text added', async () => {
-        postOptions.payload.otherDetail = 'some text'
+        postOptions.payload.otherReason = 'some text'
         await _checkSelectedRadioAction(
           postOptions,
           server,
@@ -209,8 +209,8 @@ describe('/ivory-volume route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'otherDetail',
-          'otherDetail-error',
+          'otherReason',
+          'otherReason-error',
           'You must tell us how you know the item’s ivory volume'
         )
       })
@@ -218,7 +218,7 @@ describe('/ivory-volume route', () => {
       it('should display a validation error message if the other text area > 4000 chars', async () => {
         postOptions.payload = {
           ivoryVolume: other,
-          otherDetail: `${CharacterLimits.fourThousandCharacters}X`
+          otherReason: `${CharacterLimits.fourThousandCharacters}X`
         }
         const response = await TestHelper.submitPostRequest(
           server,
@@ -227,8 +227,8 @@ describe('/ivory-volume route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'otherDetail',
-          'otherDetail-error',
+          'otherReason',
+          'otherReason-error',
           'Enter no more than 4,000 characters'
         )
       })

@@ -27,7 +27,7 @@ const handlers = {
       return h
         .view(Views.IVORY_AGE, {
           ...(await _getContext(request)),
-          otherText: payload.otherReason ? payload.otherReason : '',
+          otherReason: payload.otherReason ? payload.otherReason : '',
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -58,18 +58,28 @@ const _getItemType = async request => {
 }
 
 const _getContext = async request => {
+  let payload
+  if (request.payload) {
+    payload = request.payload
+  } else {
+    payload = JSON.parse(await RedisService.get(request, RedisKeys.IVORY_AGE))
+  }
+
   const itemType = await _getItemType(request)
   const madeBeforeDate = _getMadeBeforeDate(itemType)
 
   return {
     pageTitle: `How do you know the item was made before ${madeBeforeDate}?`,
-    options: await _getCheckboxes(request, itemType)
+    options: await _getCheckboxes(payload, itemType),
+    otherReason: payload.ivoryAge.includes(AgeExemptionReasons.OTHER_REASON)
+      ? payload.otherReason
+      : null
   }
 }
 
-const _getCheckboxes = async (request, itemType) => {
+const _getCheckboxes = async (payload, itemType) => {
   const madeBeforeOption = _getMadeBeforeOption(itemType)
-  const ivoryAge = request.payload ? request.payload.ivoryAge : null
+  const ivoryAge = payload ? payload.ivoryAge : null
 
   return [
     {

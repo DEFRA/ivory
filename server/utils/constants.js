@@ -32,6 +32,12 @@ const AgeExemptionReasons = {
   OTHER_REASON: 'Other reason'
 }
 
+const Intention = {
+  SELL: 'Sell it',
+  HIRE: 'Hire it out',
+  NOT_SURE_YET: "I'm not sure yet"
+}
+
 const ItemType = {
   MUSICAL: 'Musical instrument made before 1975 with less than 20% ivory',
   TEN_PERCENT: 'Item made before 3 March 1947 with less than 10% ivory',
@@ -42,10 +48,11 @@ const ItemType = {
     'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
 }
 
-const Intention = {
-  SELL: 'Sell it',
-  HIRE: 'Hire it out',
-  NOT_SURE_YET: "I'm not sure yet"
+const IvoryVolumeReasons = {
+  CLEAR_FROM_LOOKING_AT_IT: 'It’s clear from looking at it',
+  MEASURED_IT: 'I measured it',
+  WRITTEN_VERIFICATION: 'I have written verification from a relevant expert',
+  OTHER_REASON: 'Other reason'
 }
 
 const Urls = {
@@ -182,6 +189,7 @@ const RedisKeys = {
   OWNER_NAME: 'owner.name',
   PAYMENT_AMOUNT: 'payment-amount',
   PAYMENT_ID: 'payment-id',
+  SUBMISSION_DATE: 'submission-date',
   SUBMISSION_REFERENCE: 'submission-reference',
   UPLOAD_PHOTOS: 'upload-photos',
   UPLOAD_PHOTOS_ERROR: 'upload-photos.error',
@@ -201,16 +209,17 @@ const StatusCodes = {
 }
 
 module.exports = Object.freeze({
-  AgeExemptionReasons,
   AddressType,
+  AgeExemptionReasons,
   CharacterLimits,
-  Options,
-  ItemType,
-  Paths,
-  Views,
-  RedisKeys,
+  DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession',
   Intention,
+  ItemType,
+  IvoryVolumeReasons,
+  Options,
+  Paths,
+  RedisKeys,
   StatusCodes,
   Urls,
-  DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession'
+  Views
 })

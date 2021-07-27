@@ -3,6 +3,7 @@
 const {
   CharacterLimits,
   ItemType,
+  IvoryVolumeReasons,
   Paths,
   RedisKeys,
   Views
@@ -28,8 +29,6 @@ const handlers = {
       return h
         .view(Views.IVORY_VOLUME, {
           ...(await _getContext(request)),
-          otherChecked: payload.ivoryVolume === other,
-          otherText: payload.otherDetail ? payload.otherDetail : '',
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -38,9 +37,7 @@ const handlers = {
     await RedisService.set(
       request,
       RedisKeys.IVORY_VOLUME,
-      payload.ivoryVolume === other
-        ? `${payload.ivoryVolume}: ${payload.otherDetail}`
-        : payload.ivoryVolume
+      JSON.stringify(payload)
     )
 
     return h.redirect(Paths.IVORY_AGE)
@@ -52,11 +49,49 @@ const _getItemType = async request => {
 }
 
 const _getContext = async request => {
+  let payload
+  if (request.payload) {
+    payload = request.payload
+  } else {
+    payload = JSON.parse(
+      await RedisService.get(request, RedisKeys.IVORY_VOLUME)
+    )
+  }
+
   const itemType = await _getItemType(request)
   const percentage = itemType === ItemType.MUSICAL ? 20 : 10
+
   return {
-    pageTitle: `How do you know the item has less than ${percentage}% ivory by volume?`
+    pageTitle: `How do you know the item has less than ${percentage}% ivory by volume?`,
+    options: await _getCheckboxes(payload),
+    otherReason:
+      payload.ivoryVolume === IvoryVolumeReasons.OTHER_REASON
+        ? payload.otherReason
+        : null
   }
+}
+
+const _getCheckboxes = async payload => {
+  const ivoryVolume = payload ? payload.ivoryVolume : null
+
+  return [
+    {
+      label: IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT,
+      checked: ivoryVolume === IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT
+    },
+    {
+      label: IvoryVolumeReasons.MEASURED_IT,
+      checked: ivoryVolume === IvoryVolumeReasons.MEASURED_IT
+    },
+    {
+      label: IvoryVolumeReasons.WRITTEN_VERIFICATION,
+      checked: ivoryVolume === IvoryVolumeReasons.WRITTEN_VERIFICATION
+    },
+    {
+      label: IvoryVolumeReasons.OTHER_REASON,
+      checked: ivoryVolume === IvoryVolumeReasons.OTHER_REASON
+    }
+  ]
 }
 
 const _validateForm = payload => {
@@ -71,16 +106,16 @@ const _validateForm = payload => {
   }
 
   if (payload.ivoryVolume === other) {
-    if (Validators.empty(payload.otherDetail)) {
+    if (Validators.empty(payload.otherReason)) {
       errors.push({
-        name: 'otherDetail',
+        name: 'otherReason',
         text: errorMessage
       })
     }
 
-    if (Validators.maxLength(payload.otherDetail, CharacterLimits.Input)) {
+    if (Validators.maxLength(payload.otherReason, CharacterLimits.Input)) {
       errors.push({
-        name: 'otherDetail',
+        name: 'otherReason',
         text: `Enter no more than ${formatNumberWithCommas(
           CharacterLimits.Input
         )} characters`

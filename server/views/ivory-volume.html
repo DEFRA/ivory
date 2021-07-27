@@ -11,14 +11,14 @@
 
       {% set otherHtml %}
         {{ govukTextarea({
-          name: "otherDetail",
-          id: "otherDetail",
+          name: "otherReason",
+          id: "otherReason",
           label: {
             text: "Give details"
           },
-          value: otherText,
+          value: otherReason,
           rows: 2,
-          errorMessage: fieldErrors['otherDetail']
+          errorMessage: fieldErrors['otherReason']
         }) }}
       {% endset -%}
 
@@ -35,21 +35,24 @@
         errorMessage: fieldErrors['ivoryVolume'],
         items: [
           {
-            value: "It’s clear from looking at it",
-            text: "It’s clear from looking at it"
+            value: options[0].label,
+            text: options[0].label,
+            checked: options[0].checked
           },
           {
-            value: "I measured it",
-            text: "I measured it"
+            value: options[1].label,
+            text: options[1].label,
+            checked: options[1].checked
           },
           {
-            value: "I have written verification from a relevant expert",
-            text: "I have written verification from a relevant expert"
+            value: options[2].label,
+            text: options[2].label,
+            checked: options[2].checked
           },
           {
-            value: "Other reason",
-            text: "Other reason",
-            checked: otherChecked,
+            value: options[3].label,
+            text: options[3].label,
+            checked: options[3].checked,
             conditional: {
               html: otherHtml
             }
