@@ -131,15 +131,13 @@ const _createSection10Body = async (request, itemType) => {
       : null,
     cre2c_whyivoryexemptotherreason: ivoryVolume
       ? ivoryVolume.otherReason
-      : null
-  }
-
-  if (itemType === ItemType.TEN_PERCENT) {
-    body.cre2c_whyivoryintegral = await _getIvoryIntegralReasonCode(
-      await RedisService.get(request, RedisKeys.IVORY_INTEGRAL)
-    )
-  } else {
-    body.cre2c_whyivoryintegral = WhyIvoryIntegral.NotApplicable
+      : null,
+    cre2c_whyivoryintegral:
+      itemType === ItemType.TEN_PERCENT
+        ? _getIvoryIntegralReasonCode(
+            await RedisService.get(request, RedisKeys.IVORY_INTEGRAL)
+          )
+        : WhyIvoryIntegral.NotApplicable
   }
 
   // console.log('section 10 body', body)

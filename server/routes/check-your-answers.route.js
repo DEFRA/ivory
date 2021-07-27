@@ -38,7 +38,8 @@ const _getContext = async request => {
   const ivoryAge =
     JSON.parse(await RedisService.get(request, RedisKeys.IVORY_AGE)) || {}
 
-  let ivoryAgeFormatted = ivoryAge.ivoryAge.join(', ')
+  let ivoryAgeFormatted =
+    ivoryAge && ivoryAge.ivoryAge ? ivoryAge.ivoryAge.join(', ') : ''
   if (ivoryAge.otherReason) {
     ivoryAgeFormatted += ` REASON: ${ivoryAge.otherReason}`
   }
