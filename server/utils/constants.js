@@ -48,6 +48,15 @@ const ItemType = {
     'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
 }
 
+const IvoryIntegralReasons = {
+  NOT_APPLICABLE: 'Not applicable',
+  ESSENTIAL_TO_DESIGN_OR_FUNCTION:
+    'The ivory is essential to the design or function of the item',
+  CANNOT_EASILY_REMOVE:
+    'You cannot remove the ivory easily or without damaging the item',
+  BOTH_OF_ABOVE: 'Both of the above'
+}
+
 const IvoryVolumeReasons = {
   CLEAR_FROM_LOOKING_AT_IT: 'It’s clear from looking at it',
   MEASURED_IT: 'I measured it',
@@ -191,6 +200,7 @@ const RedisKeys = {
   PAYMENT_ID: 'payment-id',
   SUBMISSION_DATE: 'submission-date',
   SUBMISSION_REFERENCE: 'submission-reference',
+  TARGET_COMPLETION_DATE: 'target-completion-date',
   UPLOAD_PHOTOS: 'upload-photos',
   UPLOAD_PHOTOS_ERROR: 'upload-photos.error',
   USED_CHECKER: 'used-checker',
@@ -215,6 +225,7 @@ module.exports = Object.freeze({
   DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession',
   Intention,
   ItemType,
+  IvoryIntegralReasons,
   IvoryVolumeReasons,
   Options,
   Paths,

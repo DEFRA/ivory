@@ -5,7 +5,9 @@ const {
   Paths,
   RedisKeys,
   ItemType,
-  Intention
+  Intention,
+  IvoryIntegralReasons,
+  IvoryVolumeReasons
 } = require('../utils/constants')
 const ODataService = require('../services/odata.service')
 const RedisService = require('../services/redis.service')
@@ -51,6 +53,20 @@ const IntentionLookup = {
   [Intention.NOT_SURE_YET]: IntentionType.NotSure
 }
 
+const IvoryIntegralLookup = {
+  [IvoryIntegralReasons.NOT_APPLICABLE]: 881990000,
+  [IvoryIntegralReasons.ESSENTIAL_TO_DESIGN_OR_FUNCTION]: 881990001,
+  [IvoryIntegralReasons.CANNOT_EASILY_REMOVE]: 881990002,
+  [IvoryIntegralReasons.BOTH_OF_ABOVE]: 881990003
+}
+
+const IvoryVolumeLookup = {
+  [IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT]: 881990000,
+  [IvoryVolumeReasons.MEASURED_IT]: 881990001,
+  [IvoryVolumeReasons.WRITTEN_VERIFICATION]: 881990002,
+  [IvoryVolumeReasons.OTHER_REASON]: 881990003
+}
+
 const Status = {
   New: 881990000,
   InProgress: 881990001,
@@ -81,6 +97,7 @@ const handlers = {
       : await _createSection10Body(request, itemType)
 
     // TODO handle errors
+    // TODO upload images 2-6 if available
     ODataService.createRecord(body, isSection2)
 
     // if (_recordCreationFailed(state)) {
@@ -97,6 +114,10 @@ module.exports = [
   }
 ]
 
+const _createBody = async (request, itemType) => {
+  // TODO refactor
+}
+
 const _createSection10Body = async (request, itemType) => {
   const now = new Date().toISOString()
 
@@ -108,21 +129,34 @@ const _createSection10Body = async (request, itemType) => {
     await RedisService.get(request, RedisKeys.IVORY_AGE)
   )
 
+  const ivoryVolumeStringified = await RedisService.get(
+    request,
+    RedisKeys.IVORY_VOLUME
+  )
+
+  const ivoryVolume = ivoryVolumeStringified
+    ? JSON.parse(ivoryVolumeStringified)
+    : null
+
   const body = {
-    createdon: now,
-    cre2c_datestatusapplied: now,
-    statuscode: 1,
-    statecode: 0,
-    cre2c_status: Status.New,
+    ..._getCommonFields(),
+
+    // createdon: now,
+    // cre2c_datestatusapplied: now,
+    // statuscode: 1,
+    // statecode: 0,
+    // cre2c_status: Status.New,
 
     cre2c_submissiondate: await RedisService.get(
       request,
       RedisKeys.SUBMISSION_DATE
     ),
+
     cre2c_submissionreference: await RedisService.get(
       request,
       RedisKeys.SUBMISSION_REFERENCE
     ),
+
     cre2c_paymentreference: await RedisService.get(
       request,
       RedisKeys.PAYMENT_ID
@@ -132,12 +166,14 @@ const _createSection10Body = async (request, itemType) => {
     cre2c_whyageexempt: _getAgeExemptionReasonCodes(ivoryAge),
     cre2c_whyageexemptotherreason: ivoryAge.otherReason,
 
-    // An explanation of how the applicant knows the ivory has appropriate ivory content
-    // From the "Confirm the ivory volume page" page
-    // Should we have two fields? One for the radio button and one for other? Or just convert everything to a string?
-    // cre2c_whyivoryexempt:
+    cre2c_whyivoryexempt: ivoryVolume
+      ? _getIvoryVolumeReasonCode(ivoryVolume.ivoryVolume)
+      : null,
 
-    cre2c_whyivoryintegral: WhyIvoryIntegral.NotApplicable,
+    cre2c_whyivoryexemptotherreason: ivoryVolume
+      ? ivoryVolume.otherReason
+      : null,
+
     cre2c_wherestheivory: itemDescription.whereIsIvory,
     cre2c_itemsummary: itemDescription.whatIsItem,
     cre2c_uniquefeatures: itemDescription.uniqueFeatures,
@@ -147,14 +183,23 @@ const _createSection10Body = async (request, itemType) => {
     )
   }
 
+  if (itemType === ItemType.TEN_PERCENT) {
+    body.cre2c_whyivoryintegral = await _getIvoryIntegralReasonCode(
+      await RedisService.get(request, RedisKeys.IVORY_INTEGRAL)
+    )
+  } else {
+    body.cre2c_whyivoryintegral = WhyIvoryIntegral.NotApplicable
+  }
+
+  await _addPhoto(request, body)
   await _addOwnerAndApplicantDetails(request, body)
+
+  // console.log('section 10 body', body)
 
   return body
 }
 
 const _createSection2Body = async request => {
-  const now = new Date().toISOString()
-
   const itemDescription = JSON.parse(
     await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
   )
@@ -164,37 +209,39 @@ const _createSection2Body = async request => {
   )
 
   const body = {
-    cre2c_submissiondate: now,
-    createdon: now,
-    cre2c_datestatusapplied: now,
-    statuscode: 1,
-    statecode: 0,
-    cre2c_status: Status.New,
+    ..._getCommonFields(),
+    // createdon: now,
+    // cre2c_datestatusapplied: now,
+    // statuscode: 1,
+    // statecode: 0,
+    // cre2c_status: Status.New,
 
-    cre2c_name: await RedisService.get(request, RedisKeys.SUBMISSION_REFERENCE),
+    cre2c_submissiondate: await RedisService.get(
+      request,
+      RedisKeys.SUBMISSION_DATE
+    ),
+
+    cre2c_targetcompletiondate: await RedisService.get(
+      request,
+      RedisKeys.TARGET_COMPLETION_DATE
+    ),
+
     cre2c_paymentreference: await RedisService.get(
       request,
       RedisKeys.PAYMENT_ID
     ),
 
+    cre2c_name: await RedisService.get(request, RedisKeys.SUBMISSION_REFERENCE),
+
     cre2c_exemptioncategory: ExemptionType.RareAndMostImportant,
     cre2c_whyageexempt: _getAgeExemptionReasonCodes(ivoryAge),
     cre2c_whyageexemptotherreason: ivoryAge.otherReason,
-
-    // TBC
-    // cre2c_whyivoryexempt:,
 
     cre2c_wherestheivory: itemDescription.whereIsIvory,
     cre2c_itemsummary: itemDescription.whatIsItem,
     cre2c_uniquefeatures: itemDescription.uniqueFeatures,
     cre2c_whereitwasmade: itemDescription.whereMade,
     cre2c_whenitwasmade: itemDescription.whenMade,
-
-    // TODO
-    cre2c_supportingevidence1: null,
-    cre2c_ivoryvolumeproof: null,
-    cre2c_supportingevidence1_name: null,
-    // //
 
     cre2c_whyoutstandinglyvaluable: await RedisService.get(
       request,
@@ -204,35 +251,27 @@ const _createSection2Body = async request => {
     cre2c_intention: _getIntentionCategoryCode(
       await RedisService.get(request, RedisKeys.INTENTION_FOR_ITEM)
     )
-
-    // TODO: Photo 1
-    // cre2c_photo1id: 'fad3a2e7-bdeb-eb11-bacb-00224841ee65',
-    // cre2c_photo1_timestamp: 637626454535927942,
-    // cre2c_photo1: 'BITS adfkhasdfkhasfkjhaf jlahksdfkajs dhfa',
-    // cre2c_photo1_url:
-    // '/Image/download.aspx?Entity=cre2c_ivorysection2case&Attribute=cre2c_photo1&Id=cd353ad0-bdeb-eb11-bacb-00224841ee65&Timestamp=637626454535927942',
-
-    // TODO confirm these are not needed
-    // cre2c_assessmentsupportingevidence_name: 'S2 Institute Pro-forma V2.docx',
-    // cre2c_instituteemail: 'PI3@museum.com',
-    // cre2c_certificate: null,
-    // cre2c_certificatenumber: null,
-    // cre2c_assessmentsummary:
-    //   'It is of my view that this item does meet the criteria for a RMI item. Summary: there are many of these on the market',
-    // cre2c_nameofassessor: 'Joe assesor',
-    // cre2c_daterecommendationreceived: '2021-08-02T11:00:00Z',
-    // cre2c_nameofinstitute: 'P3',
-    // cre2c_assessoremail: 'Joeassesor@j.com',
-    // cre2c_certificate_name: null,
-    // cre2c_recommendation: null,
-    // cre2c_assessmentsupportingevidence:
-    //   'a70c594f-beeb-eb11-bacb-00224841ee65',
-    // cre2c_targetcompletiondate: '2021-08-02T00:00:00Z',
   }
 
+  await _addPhoto(request, body)
+  await _addSupportingInformation(request, body)
   await _addOwnerAndApplicantDetails(request, body)
 
+  // console.log('section 2 body', body)
+
   return body
+}
+
+const _getCommonFields = () => {
+  const now = new Date().toISOString()
+
+  return {
+    createdon: now,
+    cre2c_datestatusapplied: now,
+    statuscode: 1,
+    statecode: 0,
+    cre2c_status: Status.New
+  }
 }
 
 const _addOwnerAndApplicantDetails = async (request, body) => {
@@ -260,6 +299,24 @@ const _addOwnerAndApplicantDetails = async (request, body) => {
   )
 }
 
+const _addPhoto = async (request, body) => {
+  const photos = JSON.parse(
+    await RedisService.get(request, RedisKeys.UPLOAD_PHOTOS)
+  )
+
+  body.cre2c_photo1 = photos && photos.fileData ? photos.fileData[0] : null
+}
+
+// TODO - IVORY-367 - These fields will be added
+const _addSupportingInformation = async (request, body) => {
+  // const photos = JSON.parse(
+  //   await RedisService.get(request, RedisKeys.SUPPORTING_INFORMATION)
+  // )
+
+  body.re2c_supportingevidence1 = null
+  body.cre2c_supportingevidence1_name = null
+}
+
 const _getExemptionCategoryCode = itemType => {
   return ExemptionTypeLookup[itemType]
 }
@@ -274,6 +331,14 @@ const _getAgeExemptionReasonCodes = ivoryAgeReasons => {
 
 const _getIntentionCategoryCode = intention => {
   return IntentionLookup[intention]
+}
+
+const _getIvoryVolumeReasonCode = ivoryVolumeReason => {
+  return IvoryVolumeLookup[ivoryVolumeReason]
+}
+
+const _getIvoryIntegralReasonCode = ivoryIntegralReason => {
+  return IvoryIntegralLookup[ivoryIntegralReason]
 }
 
 // const _recordCreationFailed = state => {

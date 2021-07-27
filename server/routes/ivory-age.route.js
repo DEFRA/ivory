@@ -71,9 +71,10 @@ const _getContext = async request => {
   return {
     pageTitle: `How do you know the item was made before ${madeBeforeDate}?`,
     options: await _getCheckboxes(payload, itemType),
-    otherReason: payload.ivoryAge.includes(AgeExemptionReasons.OTHER_REASON)
-      ? payload.otherReason
-      : null
+    otherReason:
+      payload && payload.ivoryAge.includes(AgeExemptionReasons.OTHER_REASON)
+        ? payload.otherReason
+        : null
   }
 }
 
