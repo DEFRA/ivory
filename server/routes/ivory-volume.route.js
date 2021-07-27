@@ -65,7 +65,7 @@ const _getContext = async request => {
     pageTitle: `How do you know the item has less than ${percentage}% ivory by volume?`,
     options: await _getCheckboxes(payload),
     otherReason:
-      payload.ivoryVolume === IvoryVolumeReasons.OTHER_REASON
+      payload && payload.ivoryVolume === IvoryVolumeReasons.OTHER_REASON
         ? payload.otherReason
         : null
   }

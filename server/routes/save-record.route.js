@@ -25,32 +25,18 @@ const AgeExemptionReasonLookup = {
   [AgeExemptionReasons.OTHER_REASON]: 881990009
 }
 
-const ExemptionType = {
-  MusicalInstrument: 881990000,
-  LessThan10pc: 881990001,
-  PortraitMiniature: 881990002,
-  SellingToAMuseum: 881990003,
-  RareAndMostImportant: 881990004
-}
-
 const ExemptionTypeLookup = {
-  [ItemType.MUSICAL]: ExemptionType.MusicalInstrument,
-  [ItemType.TEN_PERCENT]: ExemptionType.LessThan10pc,
-  [ItemType.MINIATURE]: ExemptionType.PortraitMiniature,
-  [ItemType.MUSEUM]: ExemptionType.SellingToAMuseum,
-  [ItemType.HIGH_VALUE]: ExemptionType.RareAndMostImportant
-}
-
-const IntentionType = {
-  SellIt: 881990000,
-  HireItOut: 881990001,
-  NotSure: 881990002
+  [ItemType.MUSICAL]: 881990000,
+  [ItemType.TEN_PERCENT]: 881990001,
+  [ItemType.MINIATURE]: 881990002,
+  [ItemType.MUSEUM]: 881990003,
+  [ItemType.HIGH_VALUE]: 881990004
 }
 
 const IntentionLookup = {
-  [Intention.SELL]: IntentionType.SellIt,
-  [Intention.HIRE]: IntentionType.HireItOut,
-  [Intention.NOT_SURE_YET]: IntentionType.NotSure
+  [Intention.SELL]: 881990000,
+  [Intention.HIRE]: 881990001,
+  [Intention.NOT_SURE_YET]: 881990002
 }
 
 const IvoryIntegralLookup = {
@@ -93,12 +79,15 @@ const handlers = {
     const isSection2 = itemType === ItemType.HIGH_VALUE
 
     const body = isSection2
-      ? await _createSection2Body(request)
+      ? await _createSection2Body(request, itemType)
       : await _createSection10Body(request, itemType)
 
     // TODO handle errors
-    // TODO upload images 2-6 if available
     ODataService.createRecord(body, isSection2)
+
+    // TODO handle errors
+    // TODO upload images 2-6 if available
+    // ODataService.updateRecord(body, isSection2)
 
     // if (_recordCreationFailed(state)) {
     return h.redirect(Paths.SERVICE_COMPLETE)
@@ -114,21 +103,12 @@ module.exports = [
   }
 ]
 
-const _createBody = async (request, itemType) => {
-  // TODO refactor
-}
+// TODO handle unhappy path
+// const _recordCreationFailed = state => {
+//   return state && state.status && state.status === PaymentResult.FAILED
+// }
 
 const _createSection10Body = async (request, itemType) => {
-  const now = new Date().toISOString()
-
-  const itemDescription = JSON.parse(
-    await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
-  )
-
-  const ivoryAge = JSON.parse(
-    await RedisService.get(request, RedisKeys.IVORY_AGE)
-  )
-
   const ivoryVolumeStringified = await RedisService.get(
     request,
     RedisKeys.IVORY_VOLUME
@@ -139,48 +119,19 @@ const _createSection10Body = async (request, itemType) => {
     : null
 
   const body = {
-    ..._getCommonFields(),
-
-    // createdon: now,
-    // cre2c_datestatusapplied: now,
-    // statuscode: 1,
-    // statecode: 0,
-    // cre2c_status: Status.New,
-
-    cre2c_submissiondate: await RedisService.get(
-      request,
-      RedisKeys.SUBMISSION_DATE
-    ),
+    ...(await _getCommonFields(request)),
 
     cre2c_submissionreference: await RedisService.get(
       request,
       RedisKeys.SUBMISSION_REFERENCE
     ),
-
-    cre2c_paymentreference: await RedisService.get(
-      request,
-      RedisKeys.PAYMENT_ID
-    ),
-
     cre2c_exemptiontype: _getExemptionCategoryCode(itemType),
-    cre2c_whyageexempt: _getAgeExemptionReasonCodes(ivoryAge),
-    cre2c_whyageexemptotherreason: ivoryAge.otherReason,
-
     cre2c_whyivoryexempt: ivoryVolume
       ? _getIvoryVolumeReasonCode(ivoryVolume.ivoryVolume)
       : null,
-
     cre2c_whyivoryexemptotherreason: ivoryVolume
       ? ivoryVolume.otherReason
-      : null,
-
-    cre2c_wherestheivory: itemDescription.whereIsIvory,
-    cre2c_itemsummary: itemDescription.whatIsItem,
-    cre2c_uniquefeatures: itemDescription.uniqueFeatures,
-
-    cre2c_intention: _getIntentionCategoryCode(
-      await RedisService.get(request, RedisKeys.INTENTION_FOR_ITEM)
-    )
+      : null
   }
 
   if (itemType === ItemType.TEN_PERCENT) {
@@ -191,130 +142,126 @@ const _createSection10Body = async (request, itemType) => {
     body.cre2c_whyivoryintegral = WhyIvoryIntegral.NotApplicable
   }
 
-  await _addPhoto(request, body)
-  await _addOwnerAndApplicantDetails(request, body)
-
   // console.log('section 10 body', body)
 
   return body
 }
 
-const _createSection2Body = async request => {
+const _createSection2Body = async (request, itemType) => {
   const itemDescription = JSON.parse(
     await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
   )
 
-  const ivoryAge = JSON.parse(
-    await RedisService.get(request, RedisKeys.IVORY_AGE)
-  )
-
   const body = {
-    ..._getCommonFields(),
-    // createdon: now,
-    // cre2c_datestatusapplied: now,
-    // statuscode: 1,
-    // statecode: 0,
-    // cre2c_status: Status.New,
-
-    cre2c_submissiondate: await RedisService.get(
-      request,
-      RedisKeys.SUBMISSION_DATE
-    ),
+    ...(await _getCommonFields(request)),
 
     cre2c_targetcompletiondate: await RedisService.get(
       request,
       RedisKeys.TARGET_COMPLETION_DATE
     ),
-
-    cre2c_paymentreference: await RedisService.get(
-      request,
-      RedisKeys.PAYMENT_ID
-    ),
-
     cre2c_name: await RedisService.get(request, RedisKeys.SUBMISSION_REFERENCE),
-
-    cre2c_exemptioncategory: ExemptionType.RareAndMostImportant,
-    cre2c_whyageexempt: _getAgeExemptionReasonCodes(ivoryAge),
-    cre2c_whyageexemptotherreason: ivoryAge.otherReason,
-
-    cre2c_wherestheivory: itemDescription.whereIsIvory,
-    cre2c_itemsummary: itemDescription.whatIsItem,
-    cre2c_uniquefeatures: itemDescription.uniqueFeatures,
+    cre2c_exemptioncategory: _getExemptionCategoryCode(itemType),
     cre2c_whereitwasmade: itemDescription.whereMade,
     cre2c_whenitwasmade: itemDescription.whenMade,
-
     cre2c_whyoutstandinglyvaluable: await RedisService.get(
       request,
       RedisKeys.WHY_IS_ITEM_RMI
     ),
-
-    cre2c_intention: _getIntentionCategoryCode(
-      await RedisService.get(request, RedisKeys.INTENTION_FOR_ITEM)
-    )
+    ...(await _addSupportingInformation(request))
   }
-
-  await _addPhoto(request, body)
-  await _addSupportingInformation(request, body)
-  await _addOwnerAndApplicantDetails(request, body)
 
   // console.log('section 2 body', body)
 
   return body
 }
 
-const _getCommonFields = () => {
+const _getCommonFields = async request => {
   const now = new Date().toISOString()
 
-  return {
+  const ivoryAge = JSON.parse(
+    await RedisService.get(request, RedisKeys.IVORY_AGE)
+  )
+
+  const itemDescription = JSON.parse(
+    await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
+  )
+
+  const commonFields = {
     createdon: now,
     cre2c_datestatusapplied: now,
     statuscode: 1,
     statecode: 0,
-    cre2c_status: Status.New
+    cre2c_status: Status.New,
+    cre2c_submissiondate: await RedisService.get(
+      request,
+      RedisKeys.SUBMISSION_DATE
+    ),
+    cre2c_paymentreference: await RedisService.get(
+      request,
+      RedisKeys.PAYMENT_ID
+    ),
+    cre2c_whyageexempt: _getAgeExemptionReasonCodes(ivoryAge),
+    cre2c_whyageexemptotherreason: ivoryAge.otherReason,
+    cre2c_wherestheivory: itemDescription.whereIsIvory,
+    cre2c_itemsummary: itemDescription.whatIsItem,
+    cre2c_uniquefeatures: itemDescription.uniqueFeatures,
+    cre2c_intention: _getIntentionCategoryCode(
+      await RedisService.get(request, RedisKeys.INTENTION_FOR_ITEM)
+    ),
+    ...(await _addPhoto(request)),
+    ...(await _addOwnerAndApplicantDetails(request))
   }
+
+  return commonFields
 }
 
 const _addOwnerAndApplicantDetails = async (request, body) => {
-  body.cre2c_ownername = await RedisService.get(request, RedisKeys.OWNER_NAME)
-  body.cre2c_owneremail = await RedisService.get(
-    request,
-    RedisKeys.OWNER_EMAIL_ADDRESS
-  )
-  body.cre2c_owneraddress = await RedisService.get(
-    request,
-    RedisKeys.OWNER_ADDRESS
-  )
+  return {
+    cre2c_ownername: await RedisService.get(request, RedisKeys.OWNER_NAME),
+    cre2c_owneremail: await RedisService.get(
+      request,
+      RedisKeys.OWNER_EMAIL_ADDRESS
+    ),
+    cre2c_owneraddress: await RedisService.get(
+      request,
+      RedisKeys.OWNER_ADDRESS
+    ),
 
-  body.cre2c_applicantname = await RedisService.get(
-    request,
-    RedisKeys.APPLICANT_NAME
-  )
-  body.cre2c_applicantemail = await RedisService.get(
-    request,
-    RedisKeys.APPLICANT_EMAIL_ADDRESS
-  )
-  body.cre2c_applicantaddress = await RedisService.get(
-    request,
-    RedisKeys.APPLICANT_ADDRESS
-  )
+    cre2c_applicantname: await RedisService.get(
+      request,
+      RedisKeys.APPLICANT_NAME
+    ),
+    cre2c_applicantemail: await RedisService.get(
+      request,
+      RedisKeys.APPLICANT_EMAIL_ADDRESS
+    ),
+    cre2c_applicantaddress: await RedisService.get(
+      request,
+      RedisKeys.APPLICANT_ADDRESS
+    )
+  }
 }
 
-const _addPhoto = async (request, body) => {
+const _addPhoto = async request => {
   const photos = JSON.parse(
     await RedisService.get(request, RedisKeys.UPLOAD_PHOTOS)
   )
 
-  body.cre2c_photo1 = photos && photos.fileData ? photos.fileData[0] : null
+  return {
+    cre2c_photo1: photos && photos.fileData ? photos.fileData[0] : null
+  }
 }
 
 // TODO - IVORY-367 - These fields will be added
-const _addSupportingInformation = async (request, body) => {
-  // const photos = JSON.parse(
+const _addSupportingInformation = async request => {
+  // const supportingInformation = JSON.parse(
   //   await RedisService.get(request, RedisKeys.SUPPORTING_INFORMATION)
   // )
 
-  body.re2c_supportingevidence1 = null
-  body.cre2c_supportingevidence1_name = null
+  return {
+    cre2c_supportingevidence1: null,
+    cre2c_supportingevidence1_name: null
+  }
 }
 
 const _getExemptionCategoryCode = itemType => {
@@ -340,7 +287,3 @@ const _getIvoryVolumeReasonCode = ivoryVolumeReason => {
 const _getIvoryIntegralReasonCode = ivoryIntegralReason => {
   return IvoryIntegralLookup[ivoryIntegralReason]
 }
-
-// const _recordCreationFailed = state => {
-//   return state && state.status && state.status === PaymentResult.FAILED
-// }
