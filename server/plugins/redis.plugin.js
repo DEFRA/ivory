@@ -3,25 +3,20 @@
 const config = require('../utils/config')
 
 const _getSettings = () => {
-  if (config.redisUseTls) {
-    return {
-      host: config.redisHost,
-      port: config.redisPort,
-      password: config.redisPassword,
-      tls: {}
-    }
-  } else if (config.redisPassword) {
-    return {
-      host: config.redisHost,
-      port: config.redisPort,
-      password: config.redisPassword
-    }
-  } else {
-    return {
-      host: config.redisHost,
-      port: config.redisPort
-    }
+  const settings = {
+    host: config.redisHost,
+    port: config.redisPort
   }
+
+  if (config.redisPassword) {
+    settings.password = config.redisPassword
+  }
+
+  if (config.redisUseTls) {
+    settings.tls = {}
+  }
+
+  return settings
 }
 
 module.exports = {
