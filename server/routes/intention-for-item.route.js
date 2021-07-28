@@ -37,20 +37,12 @@ const handlers = {
 const _getContext = () => {
   return {
     pageTitle: 'What do you intend to do with the item?',
-    items: [
-      {
-        value: Intention.SELL,
-        text: Intention.SELL
-      },
-      {
-        value: Intention.HIRE,
-        text: Intention.HIRE
-      },
-      {
-        value: Intention.NOT_SURE_YET,
-        text: Intention.NOT_SURE_YET
+    items: Object.values(Intention).map(intention => {
+      return {
+        value: intention,
+        text: intention
       }
-    ]
+    })
   }
 }
 
