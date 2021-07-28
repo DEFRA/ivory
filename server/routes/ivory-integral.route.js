@@ -45,7 +45,7 @@ const _getContext = async request => {
 
   return {
     pageTitle: 'How is the ivory integral to the item?',
-    options: await _getOptions(ivoryIsIntegral)
+    options: _getOptions(ivoryIsIntegral)
   }
 }
 
