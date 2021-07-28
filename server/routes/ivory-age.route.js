@@ -50,11 +50,13 @@ const _storeRedisValues = request => {
     request.payload.ivoryAge = [request.payload.ivoryAge]
   }
 
+  console.log(payload)
+
   return RedisService.set(request, RedisKeys.IVORY_AGE, JSON.stringify(payload))
 }
 
 const _getItemType = async request => {
-  return await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
+  return RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
 }
 
 const _getContext = async request => {
@@ -72,7 +74,10 @@ const _getContext = async request => {
     pageTitle: `How do you know the item was made before ${madeBeforeDate}?`,
     options: await _getCheckboxes(payload, itemType),
     otherReason:
-      payload && payload.ivoryAge.includes(AgeExemptionReasons.OTHER_REASON)
+      payload &&
+      payload.ivoryAge &&
+      Array.isArray(payload.ivoryAge) &&
+      payload.ivoryAge.includes(AgeExemptionReasons.OTHER_REASON)
         ? payload.otherReason
         : null
   }

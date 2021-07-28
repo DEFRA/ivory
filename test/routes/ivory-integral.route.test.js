@@ -81,7 +81,7 @@ describe('/ivory-integral route', () => {
       TestHelper.checkRadioOption(
         document,
         elementIds.ivoryIsIntegral3,
-        'Both reasons - You cannot remove the ivory easily or without risk of damage and the ivory is essential to the design or function of the item',
+        'Both of the above',
         'Both of the above'
       )
     })

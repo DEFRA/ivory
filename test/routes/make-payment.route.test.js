@@ -55,7 +55,13 @@ describe('/make-payment route', () => {
       PaymentService.makePayment = jest.fn().mockReturnValue(response)
     })
 
-    it('should redirect back to the "Service complete" page', async () => {
+    it('should redirect back to the "Service complete" page - Section 10', async () => {
+      RedisService.get = jest
+        .fn()
+        .mockResolvedValue(
+          'Musical instrument made before 1975 with less than 20% ivory'
+        )
+
       const response = await TestHelper.submitGetRequest(
         server,
         getOptions,
@@ -63,7 +69,7 @@ describe('/make-payment route', () => {
         false
       )
 
-      expect(RedisService.get).toBeCalledTimes(3)
+      expect(RedisService.get).toBeCalledTimes(4)
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
@@ -80,11 +86,93 @@ describe('/make-payment route', () => {
         'applicant.emailAddress'
       )
 
-      expect(RedisService.set).toBeCalledTimes(2)
+      expect(RedisService.get).toBeCalledWith(
+        expect.any(Object),
+        'what-type-of-item-is-it'
+      )
+
+      expect(RedisService.set).toBeCalledTimes(3)
 
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
-        'payment-reference',
+        'submission-date',
+        expect.any(String)
+        // TODO - mock current time
+        // paymentReference
+      )
+
+      expect(RedisService.set).toBeCalledWith(
+        expect.any(Object),
+        'submission-reference',
+        paymentReference
+      )
+
+      expect(RedisService.set).toBeCalledWith(
+        expect.any(Object),
+        'payment-id',
+        paymentId
+      )
+
+      expect(response.headers.location).toEqual(nextUrl)
+    })
+
+    it('should redirect back to the "Service complete" page - Section 2', async () => {
+      RedisService.get = jest
+        .fn()
+        .mockResolvedValue(
+          'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
+        )
+
+      const response = await TestHelper.submitGetRequest(
+        server,
+        getOptions,
+        302,
+        false
+      )
+
+      expect(RedisService.get).toBeCalledTimes(4)
+
+      expect(RedisService.get).toBeCalledWith(
+        expect.any(Object),
+        'payment-amount'
+      )
+
+      expect(RedisService.get).toBeCalledWith(
+        expect.any(Object),
+        'what-type-of-item-is-it'
+      )
+
+      expect(RedisService.get).toBeCalledWith(
+        expect.any(Object),
+        'applicant.emailAddress'
+      )
+
+      expect(RedisService.get).toBeCalledWith(
+        expect.any(Object),
+        'what-type-of-item-is-it'
+      )
+
+      expect(RedisService.set).toBeCalledTimes(4)
+
+      expect(RedisService.set).toBeCalledWith(
+        expect.any(Object),
+        'submission-date',
+        expect.any(String)
+        // TODO - mock current time
+        // paymentReference
+      )
+
+      expect(RedisService.set).toBeCalledWith(
+        expect.any(Object),
+        'target-completion-date',
+        expect.any(String)
+        // TODO - mock current time
+        // paymentReference
+      )
+
+      expect(RedisService.set).toBeCalledWith(
+        expect.any(Object),
+        'submission-reference',
         paymentReference
       )
 

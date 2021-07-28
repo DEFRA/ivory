@@ -56,7 +56,18 @@ describe('/ivory-age route', () => {
 
     describe('GET: Item is a musical instrument', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue(ItemType.MUSICAL)
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce(
+            JSON.stringify({
+              ivoryAge: [
+                'It has a stamp, serial number or signature to prove its age',
+                'Other reason'
+              ],
+              otherReason: 'Some other reason'
+            })
+          )
+          .mockResolvedValueOnce(ItemType.MUSICAL)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -88,7 +99,8 @@ describe('/ivory-age route', () => {
           document,
           elementIds.ivoryAge,
           'It has a stamp, serial number or signature to prove its age',
-          'It has a stamp, serial number or signature to prove its age'
+          'It has a stamp, serial number or signature to prove its age',
+          true
         )
 
         TestHelper.checkRadioOption(
@@ -130,7 +142,8 @@ describe('/ivory-age route', () => {
           document,
           elementIds.ivoryAge7,
           other,
-          other
+          other,
+          true
         )
       })
 
@@ -138,14 +151,23 @@ describe('/ivory-age route', () => {
         TestHelper.checkFormField(
           document,
           elementIds.otherReason,
-          'Give details'
+          'Give details',
+          '',
+          'Some other reason'
         )
       })
     })
 
     describe('GET: Item has < 10% ivory', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue(ItemType.TEN_PERCENT)
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce(
+            JSON.stringify({
+              ivoryAge: ['It’s been in the family since before 3 March 1947']
+            })
+          )
+          .mockResolvedValueOnce(ItemType.TEN_PERCENT)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -163,7 +185,8 @@ describe('/ivory-age route', () => {
           document,
           elementIds.ivoryAge4,
           'It’s been in the family since before 3 March 1947',
-          'It’s been in the family since before 3 March 1947'
+          'It’s been in the family since before 3 March 1947',
+          true
         )
 
         TestHelper.checkRadioOption(
@@ -184,7 +207,14 @@ describe('/ivory-age route', () => {
 
     describe('GET: Has correct details for a portrait miniature', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue(ItemType.MINIATURE)
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce(
+            JSON.stringify({
+              ivoryAge: ['It’s been in the family since before 1918']
+            })
+          )
+          .mockResolvedValueOnce(ItemType.MINIATURE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -202,7 +232,8 @@ describe('/ivory-age route', () => {
           document,
           elementIds.ivoryAge4,
           'It’s been in the family since before 1918',
-          'It’s been in the family since before 1918'
+          'It’s been in the family since before 1918',
+          true
         )
 
         TestHelper.checkRadioOption(
@@ -223,7 +254,14 @@ describe('/ivory-age route', () => {
 
     describe('GET: Has correct details for S2 (item of outstandingly high value)', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce(
+            JSON.stringify({
+              ivoryAge: ['It’s been in the family since before 1918']
+            })
+          )
+          .mockResolvedValueOnce(ItemType.HIGH_VALUE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -241,7 +279,8 @@ describe('/ivory-age route', () => {
           document,
           elementIds.ivoryAge4,
           'It’s been in the family since before 1918',
-          'It’s been in the family since before 1918'
+          'It’s been in the family since before 1918',
+          true
         )
 
         TestHelper.checkRadioOption(
@@ -274,7 +313,16 @@ describe('/ivory-age route', () => {
 
     describe('Success: Item is a musical instrument', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue(ItemType.MUSICAL)
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce(
+            JSON.stringify({
+              ivoryAge: [
+                'It has a stamp, serial number or signature to prove its age'
+              ]
+            })
+          )
+          .mockResolvedValueOnce(ItemType.MUSICAL)
       })
 
       it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
@@ -323,19 +371,25 @@ describe('/ivory-age route', () => {
       })
 
       it('should store the value in Redis and progress to the next route when the sixth option has been selected & Other text added', async () => {
-        postOptions.payload.otherReason = 'some text'
+        const otherReason = 'Some other reason'
+        postOptions.payload.otherReason = otherReason
         await _checkSelectedCheckboxAction(
           postOptions,
           server,
           other,
           nextUrlUploadPhotos,
-          'some text'
+          otherReason
         )
       })
     })
 
     describe('Success: Item has < 10% ivory', () => {
+      const selectedOption = 'It’s been in the family since before 3 March 1947'
+
       beforeEach(async () => {
+        postOptions.payload = {
+          ivoryAge: [selectedOption]
+        }
         RedisService.get = jest.fn().mockResolvedValue(ItemType.TEN_PERCENT)
       })
 
@@ -343,14 +397,19 @@ describe('/ivory-age route', () => {
         await _checkSelectedCheckboxAction(
           postOptions,
           server,
-          'It’s been in the family since before 3 March 1947',
+          selectedOption,
           nextUrl10percent
         )
       })
     })
 
     describe('Success: Item of outstandingly high value', () => {
+      const selectedOption = 'It’s been in the family since before 1918'
+
       beforeEach(async () => {
+        postOptions.payload = {
+          ivoryAge: [selectedOption]
+        }
         RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
       })
 
@@ -358,7 +417,7 @@ describe('/ivory-age route', () => {
         await _checkSelectedCheckboxAction(
           postOptions,
           server,
-          'It’s been in the family since before 1918',
+          selectedOption,
           nextUrlUploadPhotos
         )
       })
@@ -438,7 +497,7 @@ const _checkSelectedCheckboxAction = async (
   server,
   selectedOption,
   nextUrl,
-  otherText = ''
+  otherReason
 ) => {
   const redisKey = 'ivory-age'
   postOptions.payload.ivoryAge = selectedOption
@@ -447,11 +506,17 @@ const _checkSelectedCheckboxAction = async (
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
+  const expectedRedisValue = {}
+  if (otherReason) {
+    expectedRedisValue.otherReason = otherReason
+  }
+  expectedRedisValue.ivoryAge = [selectedOption]
+
   expect(RedisService.set).toBeCalledTimes(1)
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
     redisKey,
-    otherText === '' ? selectedOption : `${selectedOption}: ${otherText}`
+    JSON.stringify(expectedRedisValue)
   )
 
   expect(response.headers.location).toEqual(nextUrl)
