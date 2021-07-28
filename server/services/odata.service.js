@@ -45,9 +45,11 @@ module.exports = class ODataService {
     })
 
     if (response.status !== StatusCodes.CREATED) {
+      console.log(await response.json())
+
       const fieldName = isSection2 ? 'cre2c_name' : 'cre2c_submissionreference'
       throw new Error(
-        'Error creating record, submission reference: ' + body[fieldName]
+        `Error creating record: ${response.status}, submission reference: ${body[fieldName]}`
       )
     }
 

@@ -22,21 +22,29 @@ const handlers = {
 
     const isSection2 = itemType === ItemType.HIGH_VALUE
 
-    const body = isSection2
-      ? await _createSection2Body(request, itemType)
-      : await _createSection10Body(request, itemType)
+    const entity = await _createRecord(request, itemType, isSection2)
 
-    const entity = await ODataService.createRecord(body, isSection2)
-
-    const updateBody = await _addAdditionalPhotos(request)
-    const id = isSection2
-      ? entity.cre2c_ivorysection2caseid
-      : entity.cre2c_ivorysection10caseid
-
-    await ODataService.updateRecord(id, updateBody, isSection2)
+    await _updateRecord(request, entity, isSection2)
 
     return h.redirect(Paths.SERVICE_COMPLETE)
   }
+}
+
+const _createRecord = async (request, itemType, isSection2) => {
+  const body = isSection2
+    ? await _createSection2Body(request, itemType)
+    : await _createSection10Body(request, itemType)
+
+  return ODataService.createRecord(body, isSection2)
+}
+
+const _updateRecord = async (request, entity, isSection2) => {
+  const updateBody = await _addAdditionalPhotos(request)
+  const id = isSection2
+    ? entity.cre2c_ivorysection2caseid
+    : entity.cre2c_ivorysection10caseid
+
+  return ODataService.updateRecord(id, updateBody, isSection2)
 }
 
 module.exports = [
