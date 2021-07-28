@@ -51,28 +51,21 @@ const _getContext = async request => {
 
 const _getCheckboxes = async ivoryIsIntegral => {
   return [
-    {
-      text: IvoryIntegralReasons.ESSENTIAL_TO_DESIGN_OR_FUNCTION,
-      value: IvoryIntegralReasons.ESSENTIAL_TO_DESIGN_OR_FUNCTION,
-      checked:
-        ivoryIsIntegral &&
-        ivoryIsIntegral === IvoryIntegralReasons.ESSENTIAL_TO_DESIGN_OR_FUNCTION
-    },
-    {
-      text: IvoryIntegralReasons.CANNOT_EASILY_REMOVE,
-      value: IvoryIntegralReasons.CANNOT_EASILY_REMOVE,
-      checked:
-        ivoryIsIntegral &&
-        ivoryIsIntegral === IvoryIntegralReasons.CANNOT_EASILY_REMOVE
-    },
-    {
-      text: IvoryIntegralReasons.BOTH_OF_ABOVE,
-      value: IvoryIntegralReasons.BOTH_OF_ABOVE,
-      checked:
-        ivoryIsIntegral &&
-        ivoryIsIntegral === IvoryIntegralReasons.BOTH_OF_ABOVE
-    }
+    _getCheckbox(
+      ivoryIsIntegral,
+      IvoryIntegralReasons.ESSENTIAL_TO_DESIGN_OR_FUNCTION
+    ),
+    _getCheckbox(ivoryIsIntegral, IvoryIntegralReasons.CANNOT_EASILY_REMOVE),
+    _getCheckbox(ivoryIsIntegral, IvoryIntegralReasons.BOTH_OF_ABOVE)
   ]
+}
+
+const _getCheckbox = (ivoryIsIntegral, reason) => {
+  return {
+    text: reason,
+    value: reason,
+    checked: ivoryIsIntegral && ivoryIsIntegral === reason
+  }
 }
 
 const _validateForm = payload => {

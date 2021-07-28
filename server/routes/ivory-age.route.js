@@ -50,8 +50,6 @@ const _storeRedisValues = request => {
     request.payload.ivoryAge = [request.payload.ivoryAge]
   }
 
-  console.log(payload)
-
   return RedisService.set(request, RedisKeys.IVORY_AGE, JSON.stringify(payload))
 }
 
@@ -88,48 +86,26 @@ const _getCheckboxes = async (payload, itemType) => {
   const ivoryAge = payload ? payload.ivoryAge : null
 
   return [
-    {
-      label: AgeExemptionReasons.STAMP_OR_SERIAL,
-      checked:
-        ivoryAge && ivoryAge.includes(AgeExemptionReasons.STAMP_OR_SERIAL)
-    },
-    {
-      label: AgeExemptionReasons.DATED_RECEIPT,
-      checked: ivoryAge && ivoryAge.includes(AgeExemptionReasons.DATED_RECEIPT)
-    },
-    {
-      label: AgeExemptionReasons.DATED_PUBLICATION,
-      checked:
-        ivoryAge && ivoryAge.includes(AgeExemptionReasons.DATED_PUBLICATION)
-    },
-    {
-      label: madeBeforeOption,
-      checked: ivoryAge && ivoryAge.includes(madeBeforeOption)
-    },
-    {
-      label: AgeExemptionReasons.EXPERT_VERIFICATION,
-      checked:
-        ivoryAge && ivoryAge.includes(AgeExemptionReasons.EXPERT_VERIFICATION)
-    },
-    {
-      label: AgeExemptionReasons.PROFESSIONAL_OPINION,
-      checked:
-        ivoryAge && ivoryAge.includes(AgeExemptionReasons.PROFESSIONAL_OPINION)
-    },
-    {
-      label:
-        itemType === ItemType.HIGH_VALUE
-          ? AgeExemptionReasons.CARBON_DATED
-          : AgeExemptionReasons.OTHER_REASON,
-      checked:
-        ivoryAge &&
-        ivoryAge.includes(
-          itemType === ItemType.HIGH_VALUE
-            ? AgeExemptionReasons.CARBON_DATED
-            : AgeExemptionReasons.OTHER_REASON
-        )
-    }
+    _getCheckbox(ivoryAge, AgeExemptionReasons.STAMP_OR_SERIAL),
+    _getCheckbox(ivoryAge, AgeExemptionReasons.DATED_RECEIPT),
+    _getCheckbox(ivoryAge, AgeExemptionReasons.DATED_PUBLICATION),
+    _getCheckbox(ivoryAge, madeBeforeOption),
+    _getCheckbox(ivoryAge, AgeExemptionReasons.EXPERT_VERIFICATION),
+    _getCheckbox(ivoryAge, AgeExemptionReasons.PROFESSIONAL_OPINION),
+    _getCheckbox(
+      ivoryAge,
+      itemType === ItemType.HIGH_VALUE
+        ? AgeExemptionReasons.CARBON_DATED
+        : AgeExemptionReasons.OTHER_REASON
+    )
   ]
+}
+
+const _getCheckbox = (ivoryAge, reason) => {
+  return {
+    label: reason,
+    checked: ivoryAge && ivoryAge.includes(reason)
+  }
 }
 
 const _getMadeBeforeDate = itemType => {

@@ -75,23 +75,18 @@ const _getCheckboxes = async payload => {
   const ivoryVolume = payload ? payload.ivoryVolume : null
 
   return [
-    {
-      label: IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT,
-      checked: ivoryVolume === IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT
-    },
-    {
-      label: IvoryVolumeReasons.MEASURED_IT,
-      checked: ivoryVolume === IvoryVolumeReasons.MEASURED_IT
-    },
-    {
-      label: IvoryVolumeReasons.WRITTEN_VERIFICATION,
-      checked: ivoryVolume === IvoryVolumeReasons.WRITTEN_VERIFICATION
-    },
-    {
-      label: IvoryVolumeReasons.OTHER_REASON,
-      checked: ivoryVolume === IvoryVolumeReasons.OTHER_REASON
-    }
+    _getCheckbox(ivoryVolume, IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT),
+    _getCheckbox(ivoryVolume, IvoryVolumeReasons.MEASURED_IT),
+    _getCheckbox(ivoryVolume, IvoryVolumeReasons.WRITTEN_VERIFICATION),
+    _getCheckbox(ivoryVolume, IvoryVolumeReasons.OTHER_REASON)
   ]
+}
+
+const _getCheckbox = (ivoryVolume, reason) => {
+  return {
+    label: reason,
+    checked: ivoryVolume && ivoryVolume === reason
+  }
 }
 
 const _validateForm = payload => {
