@@ -210,6 +210,8 @@ const RedisKeys = {
 }
 
 const StatusCodes = {
+  CREATED: 201,
+  NO_CONTENT: 204,
   UNAUTHORIZED: 401,
   PAGE_NOT_FOUND: 404,
   REQUEST_TIMEOUT: 408,
