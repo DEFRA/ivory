@@ -34,10 +34,9 @@ const IntentionLookup = {
 }
 
 const IvoryIntegralLookup = {
-  [IvoryIntegralReasons.NOT_APPLICABLE]: 881990000,
-  [IvoryIntegralReasons.ESSENTIAL_TO_DESIGN_OR_FUNCTION]: 881990001,
-  [IvoryIntegralReasons.CANNOT_EASILY_REMOVE]: 881990002,
-  [IvoryIntegralReasons.BOTH_OF_ABOVE]: 881990003
+  [IvoryIntegralReasons.ESSENTIAL_TO_DESIGN_OR_FUNCTION]: 881990000,
+  [IvoryIntegralReasons.CANNOT_EASILY_REMOVE]: 881990001,
+  [IvoryIntegralReasons.BOTH_OF_ABOVE]: 881990002
 }
 
 const IvoryVolumeLookup = {

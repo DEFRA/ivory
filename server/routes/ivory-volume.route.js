@@ -12,7 +12,9 @@ const { formatNumberWithCommas } = require('../utils/general')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
-const other = 'Other reason'
+const MUSICAL_PERCENTAGE = 20
+const NON_MUSICAL_PERCENTAGE = 10
+const otherReason = 'Other reason'
 
 const handlers = {
   get: async (request, h) => {
@@ -58,12 +60,15 @@ const _getContext = async request => {
     )
   }
 
+  const ivoryVolume = payload ? payload.ivoryVolume : null
+
   const itemType = await _getItemType(request)
-  const percentage = itemType === ItemType.MUSICAL ? 20 : 10
+  const percentage =
+    itemType === ItemType.MUSICAL ? MUSICAL_PERCENTAGE : NON_MUSICAL_PERCENTAGE
 
   return {
     pageTitle: `How do you know the item has less than ${percentage}% ivory by volume?`,
-    options: await _getCheckboxes(payload),
+    options: _getOptions(ivoryVolume),
     otherReason:
       payload && payload.ivoryVolume === IvoryVolumeReasons.OTHER_REASON
         ? payload.otherReason
@@ -71,22 +76,13 @@ const _getContext = async request => {
   }
 }
 
-const _getCheckboxes = async payload => {
-  const ivoryVolume = payload ? payload.ivoryVolume : null
-
-  return [
-    _getCheckbox(ivoryVolume, IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT),
-    _getCheckbox(ivoryVolume, IvoryVolumeReasons.MEASURED_IT),
-    _getCheckbox(ivoryVolume, IvoryVolumeReasons.WRITTEN_VERIFICATION),
-    _getCheckbox(ivoryVolume, IvoryVolumeReasons.OTHER_REASON)
-  ]
-}
-
-const _getCheckbox = (ivoryVolume, reason) => {
-  return {
-    label: reason,
-    checked: ivoryVolume && ivoryVolume === reason
-  }
+const _getOptions = ivoryVolume => {
+  return Object.values(IvoryVolumeReasons).map(reason => {
+    return {
+      label: reason,
+      checked: ivoryVolume && ivoryVolume === reason
+    }
+  })
 }
 
 const _validateForm = payload => {
@@ -100,7 +96,7 @@ const _validateForm = payload => {
     })
   }
 
-  if (payload.ivoryVolume === other) {
+  if (payload.ivoryVolume === otherReason) {
     if (Validators.empty(payload.otherReason)) {
       errors.push({
         name: 'otherReason',

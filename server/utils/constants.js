@@ -49,7 +49,6 @@ const ItemType = {
 }
 
 const IvoryIntegralReasons = {
-  NOT_APPLICABLE: 'Not applicable',
   ESSENTIAL_TO_DESIGN_OR_FUNCTION:
     'The ivory is essential to the design or function of the item',
   CANNOT_EASILY_REMOVE:

@@ -37,13 +37,17 @@ const handlers = {
 const _getContext = () => {
   return {
     pageTitle: 'What do you intend to do with the item?',
-    items: Object.values(Intention).map(intention => {
-      return {
-        value: intention,
-        text: intention
-      }
-    })
+    items: _getOptions()
   }
+}
+
+const _getOptions = () => {
+  return Object.values(Intention).map(intention => {
+    return {
+      value: intention,
+      text: intention
+    }
+  })
 }
 
 const _validateForm = payload => {

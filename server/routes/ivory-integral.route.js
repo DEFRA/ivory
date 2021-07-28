@@ -45,27 +45,18 @@ const _getContext = async request => {
 
   return {
     pageTitle: 'How is the ivory integral to the item?',
-    options: await _getCheckboxes(ivoryIsIntegral)
+    options: await _getOptions(ivoryIsIntegral)
   }
 }
 
-const _getCheckboxes = async ivoryIsIntegral => {
-  return [
-    _getCheckbox(
-      ivoryIsIntegral,
-      IvoryIntegralReasons.ESSENTIAL_TO_DESIGN_OR_FUNCTION
-    ),
-    _getCheckbox(ivoryIsIntegral, IvoryIntegralReasons.CANNOT_EASILY_REMOVE),
-    _getCheckbox(ivoryIsIntegral, IvoryIntegralReasons.BOTH_OF_ABOVE)
-  ]
-}
-
-const _getCheckbox = (ivoryIsIntegral, reason) => {
-  return {
-    text: reason,
-    value: reason,
-    checked: ivoryIsIntegral && ivoryIsIntegral === reason
-  }
+const _getOptions = ivoryIsIntegral => {
+  return Object.values(IvoryIntegralReasons).map(reason => {
+    return {
+      text: reason,
+      value: reason,
+      checked: ivoryIsIntegral === reason
+    }
+  })
 }
 
 const _validateForm = payload => {

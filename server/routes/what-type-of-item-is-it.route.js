@@ -35,60 +35,44 @@ const handlers = {
 }
 
 const _getContext = async request => {
+  return {
+    pageTitle: 'What is your ivory item?',
+    items: await _getOptions(request)
+  }
+}
+
+const _getOptions = async request => {
   const whatTypeOfItemIsIt = await RedisService.get(
     request,
     RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
   )
 
-  return {
-    pageTitle: 'What is your ivory item?',
-    items: [
-      {
-        value: ItemType.MUSICAL,
-        text: ItemType.MUSICAL,
-        hint: {
-          text:
-            'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
-        },
-        checked: whatTypeOfItemIsIt === ItemType.MUSICAL
-      },
-      {
-        value: ItemType.TEN_PERCENT,
-        text: ItemType.TEN_PERCENT,
-        hint: {
-          text:
-            'The ivory must be integral to the item. Any replacement ivory must have been taken from an elephant before 1 January 1975.'
-        },
-        checked: whatTypeOfItemIsIt === ItemType.TEN_PERCENT
-      },
-      {
-        value: ItemType.MINIATURE,
-        text: ItemType.MINIATURE,
-        hint: {
-          text:
-            'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
-        },
-        checked: whatTypeOfItemIsIt === ItemType.MINIATURE
-      },
-      {
-        value: ItemType.MUSEUM,
-        text: ItemType.MUSEUM,
-        hint: {
-          text:
-            'This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum.'
-        },
-        checked: whatTypeOfItemIsIt === ItemType.MUSEUM
-      },
-      {
-        value: ItemType.HIGH_VALUE,
-        text: ItemType.HIGH_VALUE,
-        hint: {
-          text:
-            'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
-        },
-        checked: whatTypeOfItemIsIt === ItemType.HIGH_VALUE
-      }
-    ]
+  const options = Object.values(ItemType).map(itemType => {
+    return {
+      value: itemType,
+      text: itemType,
+      checked: whatTypeOfItemIsIt === itemType
+    }
+  })
+
+  _addHints(options)
+
+  return options
+}
+
+const _addHints = async options => {
+  const hints = [
+    'Any replacement ivory must have been taken from an elephant before 1 January 1975.',
+    'The ivory must be integral to the item. Any replacement ivory must have been taken from an elephant before 1 January 1975.',
+    'Any replacement ivory must have been taken from an elephant before 1 January 1975.',
+    'This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum.',
+    'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
+  ]
+
+  for (let index = 0; index < options.length; index++) {
+    options[index].hint = {
+      text: hints[index]
+    }
   }
 }
 
