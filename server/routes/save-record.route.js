@@ -30,9 +30,13 @@ const handlers = {
 }
 
 const _createRecord = async (request, itemType, isSection2) => {
+  const itemDescription = JSON.parse(
+    await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
+  )
+
   const body = isSection2
-    ? await _createSection2Body(request, itemType)
-    : await _createSection10Body(request, itemType)
+    ? await _createSection2Body(request, itemType, itemDescription)
+    : await _createSection10Body(request, itemType, itemDescription)
 
   return ODataService.createRecord(body, isSection2)
 }
@@ -54,7 +58,28 @@ module.exports = [
   }
 ]
 
-const _createSection10Body = async (request, itemType) => {
+const _createSection2Body = async (request, itemType, itemDescription) => {
+  const body = {
+    ...(await _getCommonFields(request, itemDescription)),
+    cre2c_targetcompletiondate: await RedisService.get(
+      request,
+      RedisKeys.TARGET_COMPLETION_DATE
+    ),
+    cre2c_name: await RedisService.get(request, RedisKeys.SUBMISSION_REFERENCE),
+    cre2c_exemptioncategory: _getExemptionCategoryCode(itemType),
+    cre2c_whereitwasmade: itemDescription.whereMade,
+    cre2c_whenitwasmade: itemDescription.whenMade,
+    cre2c_whyoutstandinglyvaluable: await RedisService.get(
+      request,
+      RedisKeys.WHY_IS_ITEM_RMI
+    ),
+    ...(await _addSupportingInformation(request))
+  }
+
+  return body
+}
+
+const _createSection10Body = async (request, itemType, itemDescription) => {
   const ivoryVolumeStringified = await RedisService.get(
     request,
     RedisKeys.IVORY_VOLUME
@@ -65,7 +90,7 @@ const _createSection10Body = async (request, itemType) => {
     : null
 
   const body = {
-    ...(await _getCommonFields(request)),
+    ...(await _getCommonFields(request, itemDescription)),
     cre2c_submissionreference: await RedisService.get(
       request,
       RedisKeys.SUBMISSION_REFERENCE
@@ -88,40 +113,11 @@ const _createSection10Body = async (request, itemType) => {
   return body
 }
 
-const _createSection2Body = async (request, itemType) => {
-  const itemDescription = JSON.parse(
-    await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
-  )
-
-  const body = {
-    ...(await _getCommonFields(request)),
-    cre2c_targetcompletiondate: await RedisService.get(
-      request,
-      RedisKeys.TARGET_COMPLETION_DATE
-    ),
-    cre2c_name: await RedisService.get(request, RedisKeys.SUBMISSION_REFERENCE),
-    cre2c_exemptioncategory: _getExemptionCategoryCode(itemType),
-    cre2c_whereitwasmade: itemDescription.whereMade,
-    cre2c_whenitwasmade: itemDescription.whenMade,
-    cre2c_whyoutstandinglyvaluable: await RedisService.get(
-      request,
-      RedisKeys.WHY_IS_ITEM_RMI
-    ),
-    ...(await _addSupportingInformation(request))
-  }
-
-  return body
-}
-
-const _getCommonFields = async request => {
+const _getCommonFields = async (request, itemDescription) => {
   const now = new Date().toISOString()
 
   const ivoryAge = JSON.parse(
     await RedisService.get(request, RedisKeys.IVORY_AGE)
-  )
-
-  const itemDescription = JSON.parse(
-    await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
   )
 
   const commonFields = {
@@ -185,7 +181,8 @@ const _addInitialPhoto = async request => {
   )
 
   return {
-    cre2c_photo1: photos && photos.fileData ? photos.fileData[0] : null
+    cre2c_photo1:
+      photos && photos.files && photos.files.length ? photos.fileData[0] : null
   }
 }
 
@@ -195,7 +192,7 @@ const _addAdditionalPhotos = async request => {
   )
 
   const additionalPhotos = {}
-  if (photos.fileData && photos.fileData.length > 1) {
+  if (photos && photos.files && photos.files.length > 1) {
     for (let index = 2; index <= photos.fileData.length; index++) {
       additionalPhotos[`cre2c_photo${index}`] = photos.fileData[index - 1]
     }

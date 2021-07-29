@@ -7,7 +7,7 @@ const { buildErrorSummary, Validators } = require('../utils/validation')
 const handlers = {
   get: (request, h) => {
     return h.view(Views.INTENTION_FOR_ITEM, {
-      ..._getContext(request)
+      ..._getContext()
     })
   },
 
@@ -18,7 +18,7 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.INTENTION_FOR_ITEM, {
-          ..._getContext(request),
+          ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
