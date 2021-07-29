@@ -135,9 +135,14 @@ describe('/save-record route', () => {
         ODataService.createRecord = jest.fn().mockResolvedValue({
           cre2c_ivorysection2caseid: 'THE_SECTION_2_CASE_ID'
         })
+
+        // TODO add mock return values
+        RedisService.get = jest.fn()
       })
 
-      // TODO - add tests
+      it('should redirect to ... - Section 2', async () => {
+        // TODO - add tests
+      })
     })
   })
 })
