@@ -7,8 +7,7 @@ const {
   IntentionLookup,
   IvoryIntegralLookup,
   IvoryVolumeLookup,
-  Status,
-  WhyIvoryIntegral
+  Status
 } = require('../services/dataverse-choice-lookups')
 const ODataService = require('../services/odata.service')
 const RedisService = require('../services/redis.service')
@@ -67,7 +66,6 @@ const _createSection10Body = async (request, itemType) => {
 
   const body = {
     ...(await _getCommonFields(request)),
-
     cre2c_submissionreference: await RedisService.get(
       request,
       RedisKeys.SUBMISSION_REFERENCE
@@ -84,7 +82,7 @@ const _createSection10Body = async (request, itemType) => {
         ? _getIvoryIntegralReasonCode(
             await RedisService.get(request, RedisKeys.IVORY_INTEGRAL)
           )
-        : WhyIvoryIntegral.NotApplicable
+        : null
   }
 
   return body
@@ -97,7 +95,6 @@ const _createSection2Body = async (request, itemType) => {
 
   const body = {
     ...(await _getCommonFields(request)),
-
     cre2c_targetcompletiondate: await RedisService.get(
       request,
       RedisKeys.TARGET_COMPLETION_DATE

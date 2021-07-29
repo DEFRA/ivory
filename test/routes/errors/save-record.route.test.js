@@ -4,22 +4,21 @@ const createServer = require('../../../server')
 
 const TestHelper = require('../../utils/test-helper')
 
-// jest.mock('randomstring')
-// const RandomString = require('randomstring')
+jest.mock('../../../server/services/redis.service')
+const RedisService = require('../../../server/services/redis.service')
 
-// jest.mock('../../server/services/redis.service')
-// const RedisService = require('../../server/services/redis.service')
+const {
+  ItemType,
+  IvoryVolumeReasons
+} = require('../../../server/utils/constants')
 
-// jest.mock('../../server/services/payment.service')
-// const PaymentService = require('../../server/services/payment.service')
-
-// const paymentReference = 'ABCDEF'
-// const paymentId = 'THE_PAYMENT_ID'
+jest.mock('../../../server/services/odata.service')
+const ODataService = require('../../../server/services/odata.service')
 
 describe('/save-record route', () => {
   let server
   const url = '/save-record'
-  const nextUrl = 'THE_NEXT_URL'
+  const nextUrl = '/service-complete'
 
   beforeAll(async () => {
     server = await createServer()
@@ -43,84 +42,114 @@ describe('/save-record route', () => {
       url
     }
 
-    beforeEach(async () => {
-      // const response = {
-      //   payment_id: paymentId,
-      //   _links: {
-      //     next_url: {
-      //       href: nextUrl
-      //     }
-      //   }
-      // }
-      // PaymentService.makePayment = jest.fn().mockReturnValue(response)
+    describe('GET: Section 10', () => {
+      beforeEach(async () => {
+        ODataService.createRecord = jest.fn().mockResolvedValue({
+          cre2c_ivorysection10caseid: 'THE_SECTION_10_CASE_ID'
+        })
+
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce(ItemType.MUSICAL)
+          .mockResolvedValueOnce(
+            JSON.stringify({
+              ivoryVolume: IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT
+            })
+          )
+          .mockResolvedValueOnce(
+            JSON.stringify({
+              ivoryAge: [
+                'It has a stamp, serial number or signature to prove its age',
+                'Other reason'
+              ],
+              otherReason: 'Some other reason'
+            })
+          )
+          .mockResolvedValueOnce(
+            JSON.stringify({
+              whatIsItem: 'chest of drawers',
+              whereIsIvory: 'chest has ivory knobs',
+              uniqueFeatures: 'one of the feet is cracked',
+              whereMade: 'Europe',
+              whenMade: 'Georgian era'
+            })
+          )
+          .mockResolvedValueOnce('SUBMISSION_DATE')
+          .mockResolvedValueOnce('PAYMENT_ID')
+          .mockResolvedValueOnce('Sell it')
+          .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
+          .mockResolvedValueOnce('OWNER_NAME')
+          .mockResolvedValueOnce('OWNER_EMAIL')
+          .mockResolvedValueOnce('OWNER_ADDRESS')
+          .mockResolvedValueOnce('APPLICANT_NAME')
+          .mockResolvedValueOnce('APPLICANT_EMAIL')
+          .mockResolvedValueOnce('APPLICANT_ADDRESS')
+          .mockResolvedValueOnce('SUBMISSION_REFERENCE')
+          .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
+      })
+
+      it('should redirect to ... - Section 10', async () => {
+        expect(ODataService.createRecord).toBeCalledTimes(0)
+        expect(ODataService.updateRecord).toBeCalledTimes(0)
+
+        const response = await TestHelper.submitGetRequest(
+          server,
+          getOptions,
+          302,
+          false
+        )
+
+        expect(ODataService.createRecord).toBeCalledTimes(1)
+        expect(ODataService.updateRecord).toBeCalledTimes(1)
+
+        // TODO assertions
+
+        // expect(RedisService.get).toBeCalledTimes(4)
+
+        // expect(RedisService.get).toBeCalledWith(
+        //   expect.any(Object),
+        //   'payment-amount'
+        // )
+
+        // expect(RedisService.get).toBeCalledWith(
+        //   expect.any(Object),
+        //   'what-type-of-item-is-it'
+        // )
+
+        // expect(RedisService.get).toBeCalledWith(
+        //   expect.any(Object),
+        //   'applicant.emailAddress'
+        // )
+
+        // expect(RedisService.get).toBeCalledWith(
+        //   expect.any(Object),
+        //   'what-type-of-item-is-it'
+        // )
+
+        expect(response.headers.location).toEqual(nextUrl)
+      })
     })
 
-    it('should redirect to ... - Section 10', async () => {
-      // RedisService.get = jest
-      //   .fn()
-      //   .mockResolvedValue(
-      //     'Musical instrument made before 1975 with less than 20% ivory'
-      //   )
+    describe('GET: Section 2', () => {
+      beforeEach(async () => {
+        ODataService.createRecord = jest.fn().mockResolvedValue({
+          cre2c_ivorysection2caseid: 'THE_SECTION_2_CASE_ID'
+        })
+      })
 
-      const response = await TestHelper.submitGetRequest(
-        server,
-        getOptions,
-        302,
-        false
-      )
-
-      console.log(response)
-      // expect(RedisService.get).toBeCalledTimes(4)
-
-      // expect(RedisService.get).toBeCalledWith(
-      //   expect.any(Object),
-      //   'payment-amount'
-      // )
-
-      // expect(RedisService.get).toBeCalledWith(
-      //   expect.any(Object),
-      //   'what-type-of-item-is-it'
-      // )
-
-      // expect(RedisService.get).toBeCalledWith(
-      //   expect.any(Object),
-      //   'applicant.emailAddress'
-      // )
-
-      // expect(RedisService.get).toBeCalledWith(
-      //   expect.any(Object),
-      //   'what-type-of-item-is-it'
-      // )
-
-      // expect(RedisService.set).toBeCalledTimes(3)
-
-      // expect(RedisService.set).toBeCalledWith(
-      //   expect.any(Object),
-      //   'submission-date',
-      //   expect.any(String)
-      //   // TODO - mock current time
-      //   // paymentReference
-      // )
-
-      // expect(RedisService.set).toBeCalledWith(
-      //   expect.any(Object),
-      //   'submission-reference',
-      //   paymentReference
-      // )
-
-      // expect(RedisService.set).toBeCalledWith(
-      //   expect.any(Object),
-      //   'payment-id',
-      //   paymentId
-      // )
-
-      // expect(response.headers.location).toEqual(nextUrl)
+      // TODO - add tests
     })
   })
 })
 
 const _createMocks = () => {
-  //   RandomString.generate = jest.fn().mockReturnValue(paymentReference)
-  //   RedisService.get = jest.fn()
-  //   RedisService.set = jest.fn()
+  ODataService.updateRecord = jest.fn()
+}
+
+const mockImageUploadData = {
+  files: ['lamp1.png', 'lamp2.png'],
+  fileData: [],
+  fileSizes: [100, 200],
+  thumbnails: ['lamp1-thumbnail.png', 'lamp2-thumbnail.png'],
+  thumbnailData: []
 }
