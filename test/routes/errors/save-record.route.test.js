@@ -102,30 +102,6 @@ describe('/save-record route', () => {
         expect(ODataService.createRecord).toBeCalledTimes(1)
         expect(ODataService.updateRecord).toBeCalledTimes(1)
 
-        // TODO assertions
-
-        // expect(RedisService.get).toBeCalledTimes(4)
-
-        // expect(RedisService.get).toBeCalledWith(
-        //   expect.any(Object),
-        //   'payment-amount'
-        // )
-
-        // expect(RedisService.get).toBeCalledWith(
-        //   expect.any(Object),
-        //   'what-type-of-item-is-it'
-        // )
-
-        // expect(RedisService.get).toBeCalledWith(
-        //   expect.any(Object),
-        //   'applicant.emailAddress'
-        // )
-
-        // expect(RedisService.get).toBeCalledWith(
-        //   expect.any(Object),
-        //   'what-type-of-item-is-it'
-        // )
-
         expect(response.headers.location).toEqual(nextUrl)
       })
     })
