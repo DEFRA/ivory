@@ -96,9 +96,8 @@ describe('/make-payment route', () => {
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
         'submission-date',
-        expect.any(String)
         // TODO - mock current time
-        // paymentReference
+        expect.any(String)
       )
 
       expect(RedisService.set).toBeCalledWith(
@@ -157,17 +156,15 @@ describe('/make-payment route', () => {
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
         'submission-date',
-        expect.any(String)
         // TODO - mock current time
-        // paymentReference
+        expect.any(String)
       )
 
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
         'target-completion-date',
-        expect.any(String)
         // TODO - mock current time
-        // paymentReference
+        expect.any(String)
       )
 
       expect(RedisService.set).toBeCalledWith(
