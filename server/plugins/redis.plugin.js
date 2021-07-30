@@ -2,19 +2,27 @@
 
 const config = require('../utils/config')
 
+const _getSettings = () => {
+  const settings = {
+    host: config.redisHost,
+    port: config.redisPort
+  }
+
+  if (config.redisPassword) {
+    settings.password = config.redisPassword
+  }
+
+  if (config.redisUseTls) {
+    settings.tls = {}
+  }
+
+  return settings
+}
+
 module.exports = {
   plugin: require('hapi-redis2'),
   options: {
-    settings: config.redisPassword
-      ? {
-          host: config.redisHost,
-          port: config.redisPort,
-          password: config.redisPassword
-        }
-      : {
-          host: config.redisHost,
-          port: config.redisPort
-        },
+    settings: _getSettings(),
     decorate: true
   }
 }
