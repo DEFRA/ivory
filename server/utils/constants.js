@@ -32,6 +32,41 @@ const AgeExemptionReasons = {
   OTHER_REASON: 'Other reason'
 }
 
+const DataVerseFieldName = {
+  SECTION_2_CASE_ID: 'cre2c_ivorysection2caseid',
+  SECTION_10_CASE_ID: 'cre2c_ivorysection10caseid',
+  TARGET_COMPLETION_DATE: 'cre2c_targetcompletiondate',
+  NAME: 'cre2c_name',
+  EXEMPTION_CATEGORY: 'cre2c_exemptioncategory',
+  WHERE_IT_WAS_MADE: 'cre2c_whereitwasmade',
+  WHEN_IT_WAS_MADE: 'cre2c_whenitwasmade',
+  WHY_OUTSTANDINLY_VALUABLE: 'cre2c_whyoutstandinglyvaluable',
+  SUBMISSION_REFERENCE: 'cre2c_submissionreference',
+  EXEMPTION_TYPE: 'cre2c_exemptiontype',
+  WHY_IVORY_EXEMPT: 'cre2c_whyivoryexempt',
+  WHY_IVORY_EXEMPT_OTHER_REASON: 'cre2c_whyivoryexemptotherreason',
+  WHY_IVORY_INTEGRAL: 'cre2c_whyivoryintegral',
+  DATE_STATUS_APPLIED: 'cre2c_datestatusapplied',
+  STATUS: 'cre2c_status',
+  SUBMISSION_REFERENCE_DATE: 'cre2c_submissiondate',
+  PAYMENT_REFERENCE: 'cre2c_paymentreference',
+  WHY_AGE_EXEMPT: 'cre2c_whyageexempt',
+  WHY_AGE_EXEMPT_OTHER_REASON: 'cre2c_whyageexemptotherreason',
+  WHERE_IS_THE_IVORY: 'cre2c_wherestheivory',
+  ITEM_SUMMARY: 'cre2c_itemsummary',
+  UNIQUE_FEATURES: 'cre2c_uniquefeatures',
+  INTENTION: 'cre2c_intention',
+  OWNER_NAME: 'cre2c_ownername',
+  OWNER_EMAIL: 'cre2c_owneremail',
+  OWNER_ADDRESS: 'cre2c_owneraddress',
+  APPLICANT_NAME: 'cre2c_applicantname',
+  APPLICANT_EMAIL: 'cre2c_applicantemail',
+  APPLICANT_ADDRESS: 'cre2c_applicantaddress',
+  PHOTO_1: 'cre2c_photo1',
+  SUPPORTING_EVIDENCE_1: 'cre2c_supportingevidence1',
+  SUPPORTING_EVIDENCE_1_NAME: 'cre2c_supportingevidence1_name'
+}
+
 const Intention = {
   SELL: 'Sell it',
   HIRE: 'Hire it out',
@@ -223,6 +258,7 @@ module.exports = Object.freeze({
   AddressType,
   AgeExemptionReasons,
   CharacterLimits,
+  DataVerseFieldName,
   DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession',
   Intention,
   ItemType,

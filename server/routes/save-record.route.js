@@ -1,6 +1,7 @@
 'use strict'
 
 const { Paths, RedisKeys, ItemType } = require('../utils/constants')
+const { DataVerseFieldName } = require('../utils/constants')
 const {
   AgeExemptionReasonLookup,
   ExemptionTypeLookup,
@@ -44,8 +45,8 @@ const _createRecord = async (request, itemType, isSection2) => {
 const _updateRecord = async (request, entity, isSection2) => {
   const updateBody = await _addAdditionalPhotos(request)
   const id = isSection2
-    ? entity.cre2c_ivorysection2caseid
-    : entity.cre2c_ivorysection10caseid
+    ? entity[DataVerseFieldName.SECTION_2_CASE_ID]
+    : entity[DataVerseFieldName.SECTION_10_CASE_ID]
 
   return ODataService.updateRecord(id, updateBody, isSection2)
 }
@@ -61,15 +62,20 @@ module.exports = [
 const _createSection2Body = async (request, itemType, itemDescription) => {
   const body = {
     ...(await _getCommonFields(request, itemDescription)),
-    cre2c_targetcompletiondate: await RedisService.get(
+    [DataVerseFieldName.TARGET_COMPLETION_DATE]: await RedisService.get(
       request,
       RedisKeys.TARGET_COMPLETION_DATE
     ),
-    cre2c_name: await RedisService.get(request, RedisKeys.SUBMISSION_REFERENCE),
-    cre2c_exemptioncategory: _getExemptionCategoryCode(itemType),
-    cre2c_whereitwasmade: itemDescription.whereMade,
-    cre2c_whenitwasmade: itemDescription.whenMade,
-    cre2c_whyoutstandinglyvaluable: await RedisService.get(
+    [DataVerseFieldName.NAME]: await RedisService.get(
+      request,
+      RedisKeys.SUBMISSION_REFERENCE
+    ),
+    [DataVerseFieldName.EXEMPTION_CATEGORY]: _getExemptionCategoryCode(
+      itemType
+    ),
+    [DataVerseFieldName.WHERE_IT_WAS_MADE]: itemDescription.whereMade,
+    [DataVerseFieldName.WHEN_IT_WAS_MADE]: itemDescription.whenMade,
+    [DataVerseFieldName.WHY_OUTSTANDINLY_VALUABLE]: await RedisService.get(
       request,
       RedisKeys.WHY_IS_ITEM_RMI
     ),
@@ -91,18 +97,18 @@ const _createSection10Body = async (request, itemType, itemDescription) => {
 
   const body = {
     ...(await _getCommonFields(request, itemDescription)),
-    cre2c_submissionreference: await RedisService.get(
+    [DataVerseFieldName.SUBMISSION_REFERENCE]: await RedisService.get(
       request,
       RedisKeys.SUBMISSION_REFERENCE
     ),
-    cre2c_exemptiontype: _getExemptionCategoryCode(itemType),
-    cre2c_whyivoryexempt: ivoryVolume
+    [DataVerseFieldName.EXEMPTION_TYPE]: _getExemptionCategoryCode(itemType),
+    [DataVerseFieldName.WHY_IVORY_EXEMPT]: ivoryVolume
       ? _getIvoryVolumeReasonCode(ivoryVolume.ivoryVolume)
       : null,
-    cre2c_whyivoryexemptotherreason: ivoryVolume
+    [DataVerseFieldName.WHY_IVORY_EXEMPT_OTHER_REASON]: ivoryVolume
       ? ivoryVolume.otherReason
       : null,
-    cre2c_whyivoryintegral:
+    [DataVerseFieldName.WHY_IVORY_INTEGRAL]:
       itemType === ItemType.TEN_PERCENT
         ? _getIvoryIntegralReasonCode(
             await RedisService.get(request, RedisKeys.IVORY_INTEGRAL)
@@ -122,24 +128,24 @@ const _getCommonFields = async (request, itemDescription) => {
 
   const commonFields = {
     createdon: now,
-    cre2c_datestatusapplied: now,
+    [DataVerseFieldName.DATE_STATUS_APPLIED]: now,
     statuscode: 1,
     statecode: 0,
-    cre2c_status: Status.New,
-    cre2c_submissiondate: await RedisService.get(
+    [DataVerseFieldName.STATUS]: Status.New,
+    [DataVerseFieldName.SUBMISSION_DATE]: await RedisService.get(
       request,
       RedisKeys.SUBMISSION_DATE
     ),
-    cre2c_paymentreference: await RedisService.get(
+    [DataVerseFieldName.PAYMENT_REFERENCE]: await RedisService.get(
       request,
       RedisKeys.PAYMENT_ID
     ),
-    cre2c_whyageexempt: _getAgeExemptionReasonCodes(ivoryAge),
-    cre2c_whyageexemptotherreason: ivoryAge.otherReason,
-    cre2c_wherestheivory: itemDescription.whereIsIvory,
-    cre2c_itemsummary: itemDescription.whatIsItem,
-    cre2c_uniquefeatures: itemDescription.uniqueFeatures,
-    cre2c_intention: _getIntentionCategoryCode(
+    [DataVerseFieldName.WHY_AGE_EXEMPT]: _getAgeExemptionReasonCodes(ivoryAge),
+    [DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON]: ivoryAge.otherReason,
+    [DataVerseFieldName.WHERE_IS_THE_IVORY]: itemDescription.whereIsIvory,
+    [DataVerseFieldName.ITEM_SUMMARY]: itemDescription.whatIsItem,
+    [DataVerseFieldName.UNIQUE_FEATURES]: itemDescription.uniqueFeatures,
+    [DataVerseFieldName.INTENTION]: _getIntentionCategoryCode(
       await RedisService.get(request, RedisKeys.INTENTION_FOR_ITEM)
     ),
     ...(await _addInitialPhoto(request)),
@@ -151,24 +157,27 @@ const _getCommonFields = async (request, itemDescription) => {
 
 const _addOwnerAndApplicantDetails = async (request, body) => {
   return {
-    cre2c_ownername: await RedisService.get(request, RedisKeys.OWNER_NAME),
-    cre2c_owneremail: await RedisService.get(
+    [DataVerseFieldName.OWNER_NAME]: await RedisService.get(
+      request,
+      RedisKeys.OWNER_NAME
+    ),
+    [DataVerseFieldName.OWNER_EMAIL]: await RedisService.get(
       request,
       RedisKeys.OWNER_EMAIL_ADDRESS
     ),
-    cre2c_owneraddress: await RedisService.get(
+    [DataVerseFieldName.OWNER_ADDRESS]: await RedisService.get(
       request,
       RedisKeys.OWNER_ADDRESS
     ),
-    cre2c_applicantname: await RedisService.get(
+    [DataVerseFieldName.APPLICANT_NAME]: await RedisService.get(
       request,
       RedisKeys.APPLICANT_NAME
     ),
-    cre2c_applicantemail: await RedisService.get(
+    [DataVerseFieldName.APPLICANT_EMAIL]: await RedisService.get(
       request,
       RedisKeys.APPLICANT_EMAIL_ADDRESS
     ),
-    cre2c_applicantaddress: await RedisService.get(
+    [DataVerseFieldName.APPLICANT_ADDRESS]: await RedisService.get(
       request,
       RedisKeys.APPLICANT_ADDRESS
     )
@@ -181,7 +190,7 @@ const _addInitialPhoto = async request => {
   )
 
   return {
-    cre2c_photo1:
+    [DataVerseFieldName.PHOTO_1]:
       photos && photos.files && photos.files.length ? photos.fileData[0] : null
   }
 }
@@ -208,8 +217,8 @@ const _addSupportingInformation = async request => {
   // )
 
   return {
-    cre2c_supportingevidence1: null,
-    cre2c_supportingevidence1_name: null
+    [DataVerseFieldName.SUPPORTING_EVIDENCE_1]: null,
+    [DataVerseFieldName.SUPPORTING_EVIDENCE_1_NAME]: null
   }
 }
 

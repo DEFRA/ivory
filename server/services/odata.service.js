@@ -3,7 +3,7 @@
 const fetch = require('node-fetch')
 
 const config = require('../utils/config')
-const { StatusCodes } = require('../utils/constants')
+const { DataVerseFieldName, StatusCodes } = require('../utils/constants')
 
 const ActiveDirectoryAuthService = require('../services/active-directory-auth.service')
 const authService = new ActiveDirectoryAuthService()
@@ -25,8 +25,8 @@ module.exports = class ODataService {
     headers.Prefer = 'return=representation'
 
     const idColumnName = isSection2
-      ? 'cre2c_ivorysection2caseid'
-      : 'cre2c_ivorysection10caseid'
+      ? DataVerseFieldName.SECTION_2_CASE_ID
+      : DataVerseFieldName.SECTION_10_CASE_ID
 
     const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
 
@@ -47,7 +47,9 @@ module.exports = class ODataService {
     if (response.status !== StatusCodes.CREATED) {
       console.log(await response.json())
 
-      const fieldName = isSection2 ? 'cre2c_name' : 'cre2c_submissionreference'
+      const fieldName = isSection2
+        ? DataVerseFieldName.NAME
+        : DataVerseFieldName.SUBMISSION_REFERENCE
       throw new Error(
         `Error creating record: ${response.status}, submission reference: ${body[fieldName]}`
       )
