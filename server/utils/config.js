@@ -27,11 +27,11 @@ const schema = joi.object().keys({
   redisPassword: joi.string(),
   serviceApiHost: joi.string().default('http://127.0.0.1'),
   serviceApiPort: joi.number().default(3010),
-  dataverseAuthorityHostUrl: joi.string(),
+  dataverseAuthorityHostUrl: joi.string().default('http://some-url'),
   dataverseTenant: joi.string(),
   dataverseClientId: joi.string(),
   dataverseClientSecret: joi.string(),
-  dataverseResource: joi.string(),
+  dataverseResource: joi.string().default('http://some-url'),
   dataverseApiEndpoint: joi.string(),
   redisUseTls: joi.bool(),
   addressLookupEnabled: joi
