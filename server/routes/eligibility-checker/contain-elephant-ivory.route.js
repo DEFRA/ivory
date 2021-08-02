@@ -19,7 +19,7 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.CONTAIN_ELEPHANT_IVORY, {
-          ...(await _getContext(request)),
+          ...(await _getContext()),
           ...buildErrorSummary(errors)
         })
         .code(400)
