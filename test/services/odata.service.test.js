@@ -55,11 +55,43 @@ describe('OData service', () => {
       })
     })
   })
-})
 
-describe('updateRecord method', () => {
-  it('should ...', () => {
-    // TODO
+  describe('updateRecord method', () => {
+    it('should update a Section 2 record', async () => {
+      const body = {
+        key1: 'value 1',
+        key2: 'value 2',
+        key3: 'value 3'
+      }
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)
+
+      await ODataService.updateRecord(
+        mockSection2Entity.cre2c_ivorysection2caseid,
+        body,
+        true
+      )
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
+    })
+
+    it('should update a Section 10 record', async () => {
+      const body = {
+        key1: 'value 1',
+        key2: 'value 2',
+        key3: 'value 3'
+      }
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)
+
+      await ODataService.updateRecord(
+        mockSection10Entity.cre2c_ivorysection10caseid,
+        body,
+        false
+      )
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
+    })
   })
 })
 
@@ -75,6 +107,14 @@ const _createMocks = () => {
       `/${config.dataverseApiEndpoint}/cre2c_ivorysection10cases?$select=cre2c_ivorysection10caseid`
     )
     .reply(201, JSON.stringify(mockSection10Entity))
+    .patch(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(${mockSection2Entity.cre2c_ivorysection2caseid})`
+    )
+    .reply(204)
+    .patch(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection10cases(${mockSection10Entity.cre2c_ivorysection10caseid})`
+    )
+    .reply(204)
 }
 
 const mockSection2Entity = {
