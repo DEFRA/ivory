@@ -10,6 +10,8 @@ const getBoolean = value => {
   return String(value).toLowerCase() === 'true'
 }
 
+const defaultUrl = 'http://some-url'
+
 // Define config schema
 const schema = joi.object().keys({
   env: joi
@@ -27,24 +29,24 @@ const schema = joi.object().keys({
   redisPassword: joi.string(),
   serviceApiHost: joi.string().default('http://127.0.0.1'),
   serviceApiPort: joi.number().default(3010),
-  dataverseAuthorityHostUrl: joi.string(),
+  dataverseAuthorityHostUrl: joi.string().default(defaultUrl),
   dataverseTenant: joi.string(),
   dataverseClientId: joi.string(),
   dataverseClientSecret: joi.string(),
-  dataverseResource: joi.string(),
+  dataverseResource: joi.string().default(defaultUrl),
   dataverseApiEndpoint: joi.string(),
   redisUseTls: joi.bool(),
   addressLookupEnabled: joi
     .bool()
     .valid(true, false)
     .default(false),
-  addressLookupUrl: joi.string().default('http://some-url'),
+  addressLookupUrl: joi.string().default(defaultUrl),
   addressLookupPassphrase: joi.string(),
   addressLookupPfxCert: joi.string(),
   cookieValidationPassword: joi
     .string()
     .default('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-  paymentUrl: joi.string().default('http://some-url'),
+  paymentUrl: joi.string().default(defaultUrl),
   paymentApiKey: joi.string(),
   paymentAmountBandA: joi.number().default(2000),
   paymentAmountBandB: joi.number().default(25000),
