@@ -7,7 +7,7 @@ const config = require('./utils/config')
 const { options } = require('./utils/cookie-config')
 const { DEFRA_IVORY_SESSION_KEY, Paths } = require('./utils/constants')
 
-const { checkSessionCookie } = require('./utils/general')
+const CookieService = require('./services/cookie.service')
 
 const users = {
   defra: {
@@ -74,13 +74,14 @@ const _registerPlugins = async server => {
 const _checkSessionCookie = (request, h) => {
   const pathname = request.url.pathname
   const excludeCookieCheckUrls = ['/', Paths.SESSION_TIMED_OUT]
+
   if (
     pathname.startsWith('/assets/') ||
     excludeCookieCheckUrls.includes(pathname)
   ) {
     return h.continue
   } else {
-    if (!checkSessionCookie(request)) {
+    if (!CookieService.checkSessionCookie(request)) {
       return h.redirect(Paths.SESSION_TIMED_OUT).takeover()
     } else {
       return h.continue
