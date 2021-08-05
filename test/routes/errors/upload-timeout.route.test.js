@@ -25,10 +25,6 @@ describe('/errors/upload-timeout route', () => {
     await server.stop()
   })
 
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
   describe('GET', () => {
     const getOptions = {
       method: 'GET',
