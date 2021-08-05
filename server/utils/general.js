@@ -1,6 +1,6 @@
 'use strict'
 
-const { Options } = require('./constants')
+const { DEFRA_IVORY_SESSION_KEY, Options } = require('./constants')
 
 const addPayloadToContext = (request, context = {}) => {
   if (request && request.payload) {
@@ -10,6 +10,14 @@ const addPayloadToContext = (request, context = {}) => {
   }
 
   return context
+}
+
+const checkSessionCookie = request => {
+  const sessionCookie = request.state[DEFRA_IVORY_SESSION_KEY]
+  if (!sessionCookie) {
+    console.log(`Session cookie not found for page ${request.url.pathname}`)
+  }
+  return sessionCookie
 }
 
 const convertToCommaSeparatedTitleCase = value => {
@@ -52,6 +60,7 @@ const getStandardOptions = (includeIdk = true) => {
 
 module.exports = {
   addPayloadToContext,
+  checkSessionCookie,
   convertToCommaSeparatedTitleCase,
   formatNumberWithCommas,
   getStandardOptions

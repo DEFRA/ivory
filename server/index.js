@@ -5,7 +5,9 @@ const Bcrypt = require('bcrypt')
 
 const config = require('./utils/config')
 const { options } = require('./utils/cookie-config')
-const { DEFRA_IVORY_SESSION_KEY } = require('./utils/constants')
+const { DEFRA_IVORY_SESSION_KEY, Paths } = require('./utils/constants')
+
+const { checkSessionCookie } = require('./utils/general')
 
 const users = {
   defra: {
@@ -30,6 +32,10 @@ const createServer = async () => {
   _registerPlugins(server)
 
   _createSessionCookie(server)
+
+  server.ext('onPreResponse', function (request, h) {
+    return _checkSessionCookie(request, h)
+  })
 
   return server
 }
@@ -65,6 +71,22 @@ const _registerPlugins = async server => {
   await server.register(require('./plugins/views.plugin'))
 }
 
+const _checkSessionCookie = (request, h) => {
+  const pathname = request.url.pathname
+  const excludeCookieCheckUrls = ['/', Paths.SESSION_TIMED_OUT]
+  if (
+    pathname.startsWith('/assets/') ||
+    excludeCookieCheckUrls.includes(pathname)
+  ) {
+    return h.continue
+  } else {
+    if (!checkSessionCookie(request)) {
+      return h.redirect(Paths.SESSION_TIMED_OUT).takeover()
+    } else {
+      return h.continue
+    }
+  }
+}
 const _createSessionCookie = server => {
   server.state(DEFRA_IVORY_SESSION_KEY)
 }
