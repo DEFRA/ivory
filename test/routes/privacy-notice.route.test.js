@@ -4,6 +4,9 @@ const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
 
+jest.mock('../../server/services/cookie.service')
+const CookieService = require('../../server/services/cookie.service')
+
 describe('/privacy-notice', () => {
   let server
   const url = '/privacy-notice'
@@ -68,6 +71,14 @@ describe('/privacy-notice', () => {
     await server.stop()
   })
 
+  beforeEach(() => {
+    _createMocks()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   describe('GET', () => {
     const getOptions = {
       method: 'GET',
@@ -101,3 +112,9 @@ describe('/privacy-notice', () => {
     })
   })
 })
+
+const _createMocks = () => {
+  CookieService.checkSessionCookie = jest
+    .fn()
+    .mockReturnValue('THE_SESSION_COOKIE')
+}

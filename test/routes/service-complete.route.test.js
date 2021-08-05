@@ -4,6 +4,9 @@ const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
 
+jest.mock('../../server/services/cookie.service')
+const CookieService = require('../../server/services/cookie.service')
+
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
@@ -29,6 +32,10 @@ describe('/service-complete route', () => {
 
   afterAll(async () => {
     await server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
   })
 
   afterEach(() => {
@@ -124,3 +131,9 @@ describe('/service-complete route', () => {
     })
   })
 })
+
+const _createMocks = () => {
+  CookieService.checkSessionCookie = jest
+    .fn()
+    .mockReturnValue('THE_SESSION_COOKIE')
+}

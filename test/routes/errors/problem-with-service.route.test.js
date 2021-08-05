@@ -24,6 +24,10 @@ describe('/errors/problem-with-service (500) route', () => {
     await server.stop()
   })
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   describe('GET', () => {
     const getOptions = {
       method: 'GET',

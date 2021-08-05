@@ -77,6 +77,7 @@ const _checkSessionCookie = (request, h) => {
 
   if (
     pathname.startsWith('/assets/') ||
+    pathname.startsWith('/errors/') ||
     excludeCookieCheckUrls.includes(pathname)
   ) {
     return h.continue

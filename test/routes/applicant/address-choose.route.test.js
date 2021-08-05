@@ -4,6 +4,9 @@ const createServer = require('../../../server')
 
 const TestHelper = require('../../utils/test-helper')
 
+jest.mock('../../../server/services/cookie.service')
+const CookieService = require('../../../server/services/cookie.service')
+
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
@@ -226,5 +229,9 @@ describe('/user-details/applicant/address-choose route', () => {
 })
 
 const _createMocks = () => {
+  CookieService.checkSessionCookie = jest
+    .fn()
+    .mockReturnValue('THE_SESSION_COOKIE')
+
   RedisService.set = jest.fn()
 }

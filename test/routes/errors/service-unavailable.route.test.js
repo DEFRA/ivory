@@ -23,6 +23,10 @@ describe('/errors/service-unavailable (503) route', () => {
     await server.stop()
   })
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   describe('GET', () => {
     const getOptions = {
       method: 'GET',

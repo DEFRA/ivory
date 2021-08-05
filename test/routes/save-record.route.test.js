@@ -1,19 +1,19 @@
 'use strict'
 
-const createServer = require('../../../server')
+const createServer = require('../../server')
 
-const TestHelper = require('../../utils/test-helper')
+const TestHelper = require('../utils/test-helper')
 
-jest.mock('../../../server/services/redis.service')
-const RedisService = require('../../../server/services/redis.service')
+const { ItemType, IvoryVolumeReasons } = require('../../server/utils/constants')
 
-const {
-  ItemType,
-  IvoryVolumeReasons
-} = require('../../../server/utils/constants')
+jest.mock('../../server/services/cookie.service')
+const CookieService = require('../../server/services/cookie.service')
 
-jest.mock('../../../server/services/odata.service')
-const ODataService = require('../../../server/services/odata.service')
+jest.mock('../../server/services/redis.service')
+const RedisService = require('../../server/services/redis.service')
+
+jest.mock('../../server/services/odata.service')
+const ODataService = require('../../server/services/odata.service')
 
 describe('/save-record route', () => {
   let server
@@ -170,6 +170,10 @@ describe('/save-record route', () => {
 })
 
 const _createMocks = () => {
+  CookieService.checkSessionCookie = jest
+    .fn()
+    .mockReturnValue('THE_SESSION_COOKIE')
+
   ODataService.updateRecord = jest.fn()
 }
 
