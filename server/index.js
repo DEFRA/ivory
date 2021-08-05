@@ -78,7 +78,8 @@ const _checkSessionCookie = (request, h) => {
   if (
     pathname.startsWith('/assets/') ||
     pathname.startsWith('/errors/') ||
-    excludeCookieCheckUrls.includes(pathname)
+    excludeCookieCheckUrls.includes(pathname) ||
+    _isUnknownRoute(pathname)
   ) {
     return h.continue
   } else {
@@ -89,8 +90,13 @@ const _checkSessionCookie = (request, h) => {
     }
   }
 }
+
 const _createSessionCookie = server => {
   server.state(DEFRA_IVORY_SESSION_KEY)
+}
+
+const _isUnknownRoute = pathname => {
+  return !Object.values(Paths).includes(pathname)
 }
 
 module.exports = createServer
