@@ -104,7 +104,6 @@ const Urls = {
 
 const Paths = {
   ACCESSIBILITY_STATEMENT: '/accessibility-statement',
-  API_TEST: '/api-test',
   APPLICANT_ADDRESS_CHOOSE: '/user-details/applicant/address-choose',
   APPLICANT_ADDRESS_CONFIRM: '/user-details/applicant/address-confirm',
   APPLICANT_ADDRESS_ENTER: '/user-details/applicant/address-enter',
@@ -164,7 +163,6 @@ const Paths = {
 
 const Views = {
   ACCESSIBILITY_STATEMENT: 'accessibility-statement',
-  API_TEST: 'api-test',
   ADDRESS_CHOOSE: 'user-details/address-choose',
   ADDRESS_CONFIRM: 'user-details/address-confirm',
   ADDRESS_ENTER: 'user-details/address-enter',
