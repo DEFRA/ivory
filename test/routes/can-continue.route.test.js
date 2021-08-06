@@ -320,7 +320,7 @@ describe('/ivory-volume route', () => {
           element = document.querySelector(`#${elementIds.additionalStep2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Pay a non-refundable administration fee of £20.'
+            'Pay an administration fee of £20.'
           )
         })
 
@@ -411,7 +411,7 @@ describe('/ivory-volume route', () => {
           element = document.querySelector(`#${elementIds.additionalStep2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Pay a non-refundable administration fee of £20.'
+            'Pay an administration fee of £20.'
           )
         })
 
