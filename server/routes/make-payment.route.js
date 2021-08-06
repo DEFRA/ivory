@@ -72,7 +72,7 @@ const handlers = {
 }
 
 /**
- * Generates an random 8 character uppercase alphanumeric reference
+ * Generates a random 8 character uppercase alphanumeric reference
  * @returns Reference
  */
 const _generateReference = () => {
