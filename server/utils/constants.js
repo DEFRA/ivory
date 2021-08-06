@@ -98,6 +98,8 @@ const IvoryVolumeReasons = {
   OTHER_REASON: 'Other reason'
 }
 
+const HOME_URL = '/'
+
 const Urls = {
   GOV_UK_HOME: 'https://www.gov.uk/'
 }
@@ -262,6 +264,7 @@ module.exports = Object.freeze({
   CharacterLimits,
   DataVerseFieldName,
   DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession',
+  HOME_URL,
   Intention,
   ItemType,
   IvoryIntegralReasons,

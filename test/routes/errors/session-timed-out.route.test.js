@@ -10,7 +10,8 @@ describe('/errors/session-timed-out route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    para1: 'para1'
+    para1: 'para1',
+    goToStart: 'go-to-start'
   }
 
   let document
@@ -41,8 +42,8 @@ describe('/errors/session-timed-out route', () => {
       TestHelper.checkBetaBanner(document)
     })
 
-    it('should have the Back link', () => {
-      TestHelper.checkBackLink(document)
+    it('should NOT have the Back link', () => {
+      TestHelper.checkBackLink(document, false)
     })
 
     it('should have the correct page heading', () => {
@@ -57,6 +58,12 @@ describe('/errors/session-timed-out route', () => {
       expect(TestHelper.getTextContent(element)).toEqual(
         'Either your session has expired or you have not started at the beginning.'
       )
+    })
+
+    it('should have the correct Call to Action button', () => {
+      const element = document.querySelector(`#${elementIds.goToStart}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual('Go to start')
     })
   })
 })
