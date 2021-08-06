@@ -54,7 +54,9 @@ describe('/errors/session-timed-out route', () => {
     it('should have the correct paragraphs', () => {
       const element = document.querySelector(`#${elementIds.para1}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Oh no time out.')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'Either your session has expired or you have not started at the beginning.'
+      )
     })
   })
 })
