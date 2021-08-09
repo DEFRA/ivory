@@ -7,6 +7,7 @@ const TestHelper = require('../../utils/test-helper')
 describe('/errors/session-timed-out route', () => {
   let server
   const url = '/errors/session-timed-out'
+  const nextUrl = '/'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -64,6 +65,25 @@ describe('/errors/session-timed-out route', () => {
       const element = document.querySelector(`#${elementIds.goToStart}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Go to start')
+    })
+  })
+
+  describe('POST', () => {
+    let postOptions
+
+    beforeEach(() => {
+      postOptions = {
+        method: 'POST',
+        url,
+        payload: {}
+      }
+    })
+
+    describe('Success', () => {
+      it('should progress to the next route', async () => {
+        const response = await TestHelper.submitPostRequest(server, postOptions)
+        expect(response.headers.location).toEqual(nextUrl)
+      })
     })
   })
 })

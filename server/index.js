@@ -73,7 +73,11 @@ const _registerPlugins = async server => {
 
 const _checkSessionCookie = (request, h) => {
   const pathname = request.url.pathname
-  const excludeCookieCheckUrls = ['/', Paths.SESSION_TIMED_OUT]
+  const excludeCookieCheckUrls = [
+    '/',
+    Paths.SERVICE_STATUS,
+    Paths.SESSION_TIMED_OUT
+  ]
 
   if (
     pathname.startsWith('/assets/') ||
