@@ -100,7 +100,10 @@ const _createSessionCookie = server => {
 }
 
 const _isUnknownRoute = pathname => {
-  return !Object.values(Paths).includes(pathname)
+  return (
+    !Object.values(Paths).includes(pathname) &&
+    !pathname.startsWith(Paths.GET_RECORD)
+  )
 }
 
 module.exports = createServer
