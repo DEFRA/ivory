@@ -177,14 +177,17 @@ describe('/upload-photos route', () => {
         expect(TestHelper.getTextContent(element)).toEqual('Add another photo')
       })
 
-      it('should not have the help text', () => {
+      it('should have the correct help text', () => {
         TestHelper.checkElementsDoNotExist(document, [
           `#${elementIds.helpText1}`,
           `#${elementIds.helpText2}`,
           `#${elementIds.helpText3}`,
           `#${elementIds.helpText4} > li:nth-child(1)`,
           `#${elementIds.helpText4} > li:nth-child(2)`,
-          `#${elementIds.helpTextSubHeading}`,
+          `#${elementIds.helpTextSubHeading}`
+        ])
+
+        TestHelper.checkElementsExist(document, [
           `#${elementIds.helpText5}`,
           `#${elementIds.helpText6} > li:nth-child(1)`,
           `#${elementIds.helpText6} > li:nth-child(2)`

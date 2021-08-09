@@ -108,7 +108,7 @@ module.exports = class TestHelper {
     if (elementIds && Array.isArray(elementIds) && elementIds.length) {
       for (let i = 0; i < elementIds.length; i++) {
         try {
-          expect(document.querySelector(`#${elementIds[i]}`)).toBeTruthy()
+          expect(document.querySelector(`${elementIds[i]}`)).toBeTruthy()
         } catch (e) {
           throw new Error(`Element with ID [${elementIds[i]}] does not exist`)
         }
