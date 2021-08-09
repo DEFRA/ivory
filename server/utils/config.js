@@ -43,6 +43,7 @@ const schema = joi.object().keys({
   addressLookupUrl: joi.string().default(defaultUrl),
   addressLookupPassphrase: joi.string(),
   addressLookupPfxCert: joi.string(),
+  cookieTimeout: joi.number(),
   cookieValidationPassword: joi
     .string()
     .default('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
@@ -78,6 +79,7 @@ const config = {
   addressLookupUrl: process.env.ADDRESS_LOOKUP_URL,
   addressLookupPassphrase: process.env.ADDRESS_LOOKUP_PASSPHRASE,
   addressLookupPfxCert: process.env.ADDRESS_LOOKUP_PFX_CERT,
+  cookieTimeout: process.env.COOKIE_TIMEOUT,
   cookieValidationPassword: process.env.COOKIE_VALIDATION_PASSWORD,
   paymentUrl: process.env.PAYMENT_URL,
   paymentApiKey: process.env.PAYMENT_API_KEY,

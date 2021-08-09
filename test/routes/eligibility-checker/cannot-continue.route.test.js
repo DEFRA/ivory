@@ -2,6 +2,9 @@
 
 const createServer = require('../../../server')
 
+jest.mock('../../../server/services/cookie.service')
+const CookieService = require('../../../server/services/cookie.service')
+
 const TestHelper = require('../../utils/test-helper')
 
 describe('/eligibility-checker/cannot-continue route', () => {
@@ -27,6 +30,14 @@ describe('/eligibility-checker/cannot-continue route', () => {
 
   afterAll(async () => {
     await server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('GET', () => {
@@ -122,4 +133,10 @@ const _checkPostAction = async (postOptions, server, nextUrl) => {
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
   expect(response.headers.location).toEqual(nextUrl)
+}
+
+const _createMocks = () => {
+  CookieService.checkSessionCookie = jest
+    .fn()
+    .mockReturnValue('THE_SESSION_COOKIE')
 }

@@ -1,5 +1,8 @@
 'use strict'
 
+jest.mock('../../../server/services/cookie.service')
+const CookieService = require('../../../server/services/cookie.service')
+
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
@@ -158,6 +161,10 @@ describe('/eligibility-checker/how-certain route', () => {
 })
 
 const _createMocks = () => {
+  CookieService.checkSessionCookie = jest
+    .fn()
+    .mockReturnValue('THE_SESSION_COOKIE')
+
   RedisService.set = jest.fn()
 }
 

@@ -2,6 +2,9 @@
 
 const createServer = require('../../server')
 
+jest.mock('../../server/services/cookie.service')
+const CookieService = require('../../server/services/cookie.service')
+
 const TestHelper = require('../utils/test-helper')
 
 describe('/accessibility-statement', () => {
@@ -53,6 +56,14 @@ describe('/accessibility-statement', () => {
     await server.stop()
   })
 
+  beforeEach(() => {
+    _createMocks()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   describe('GET', () => {
     const getOptions = {
       method: 'GET',
@@ -86,3 +97,9 @@ describe('/accessibility-statement', () => {
     })
   })
 })
+
+const _createMocks = () => {
+  CookieService.checkSessionCookie = jest
+    .fn()
+    .mockReturnValue('THE_SESSION_COOKIE')
+}
