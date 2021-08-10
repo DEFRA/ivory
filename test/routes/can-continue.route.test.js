@@ -18,12 +18,14 @@ describe('/ivory-volume route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
+    preListHeading: 'preListHeading',
     listHeading: 'listHeading',
     listItem1: 'listItem-1',
     listItem2: 'listItem-2',
     additionalStep1: 'additionalStep-1',
     additionalStep2: 'additionalStep-2',
     additionalStep3: 'additionalStep-3',
+    additionalStep4: 'additionalStep-4',
     timeoutParagraph: 'timeoutParagraph',
     finalParagraph: 'finalParagraph',
     cancelLink: 'cancelLink',
@@ -86,6 +88,16 @@ describe('/ivory-volume route', () => {
           )
         })
 
+        it('should have the correct pre-list heading', () => {
+          const element = document.querySelector(
+            `#${elementIds.preListHeading}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Based on your answers, it sounds like your item is exempt from the ivory ban.'
+          )
+        })
+
         it('should have the correct list heading', () => {
           const element = document.querySelector(`#${elementIds.listHeading}`)
           expect(element).toBeTruthy()
@@ -125,6 +137,12 @@ describe('/ivory-volume route', () => {
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Pay a non-refundable administration fee of £250.'
+          )
+
+          element = document.querySelector(`#${elementIds.additionalStep4}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Wait 30 days for your application to be approved by an expert.'
           )
         })
 
@@ -186,6 +204,13 @@ describe('/ivory-volume route', () => {
           )
         })
 
+        it('should NOT have the pre-list heading', () => {
+          const element = document.querySelector(
+            `#${elementIds.preListHeading}`
+          )
+          expect(element).toBeFalsy()
+        })
+
         it('should have the correct list heading', () => {
           const element = document.querySelector(`#${elementIds.listHeading}`)
           expect(element).toBeTruthy()
@@ -225,6 +250,12 @@ describe('/ivory-volume route', () => {
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Pay a non-refundable administration fee of £250.'
+          )
+
+          element = document.querySelector(`#${elementIds.additionalStep4}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Wait 30 days for your application to be approved by an expert.'
           )
         })
 
@@ -288,6 +319,16 @@ describe('/ivory-volume route', () => {
           )
         })
 
+        it('should have the correct pre-list heading', () => {
+          const element = document.querySelector(
+            `#${elementIds.preListHeading}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Based on your answers, it sounds like your item is exempt from the ivory ban.'
+          )
+        })
+
         it('should have the correct list heading', () => {
           const element = document.querySelector(`#${elementIds.listHeading}`)
           expect(element).toBeTruthy()
@@ -322,6 +363,12 @@ describe('/ivory-volume route', () => {
           expect(TestHelper.getTextContent(element)).toEqual(
             'Pay an administration fee of £20.'
           )
+
+          element = document.querySelector(`#${elementIds.additionalStep3}`)
+          expect(element).toBeFalsy()
+
+          element = document.querySelector(`#${elementIds.additionalStep4}`)
+          expect(element).toBeFalsy()
         })
 
         it('should have the correct timeout paragraph', () => {
@@ -379,6 +426,13 @@ describe('/ivory-volume route', () => {
           )
         })
 
+        it('should NOT have the pre-list heading', () => {
+          const element = document.querySelector(
+            `#${elementIds.preListHeading}`
+          )
+          expect(element).toBeFalsy()
+        })
+
         it('should have the correct list heading', () => {
           const element = document.querySelector(`#${elementIds.listHeading}`)
           expect(element).toBeTruthy()
@@ -413,6 +467,12 @@ describe('/ivory-volume route', () => {
           expect(TestHelper.getTextContent(element)).toEqual(
             'Pay an administration fee of £20.'
           )
+
+          element = document.querySelector(`#${elementIds.additionalStep3}`)
+          expect(element).toBeFalsy()
+
+          element = document.querySelector(`#${elementIds.additionalStep4}`)
+          expect(element).toBeFalsy()
         })
 
         it('should have the correct timeout paragraph', () => {

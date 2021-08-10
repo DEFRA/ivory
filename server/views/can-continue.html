@@ -9,6 +9,10 @@
     <div class="govuk-grid-column-two-thirds">
 
       <h1 class="govuk-heading-l" id="pageTitle">{{ pageTitle }}</h1>
+      
+        {% if usedChecker %}
+          <p class="govuk-body" id="preListHeading">Based on your answers, it sounds like your item is exempt from the ivory ban.</p>
+        {% endif %}
 
         <p class="govuk-body" id="listHeading">The following pages will guide you through the process.</p>
 
