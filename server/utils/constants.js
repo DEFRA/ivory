@@ -122,6 +122,7 @@ const Paths = {
   CONTAIN_ELEPHANT_IVORY: '/eligibility-checker/contain-elephant-ivory',
   DESCRIBE_THE_ITEM: '/describe-the-item',
   DO_NOT_NEED_SERVICE: '/eligibility-checker/do-not-need-service',
+  GET_RECORD: '/get-record',
   HOW_CERTAIN: '/eligibility-checker/how-certain',
   INTENTION_FOR_ITEM: '/intention-for-item',
   IS_IT_A_MUSICAL_INSTRUMENT: '/eligibility-checker/is-it-a-musical-instrument',
@@ -185,6 +186,7 @@ const Views = {
   CONTAIN_ELEPHANT_IVORY: 'eligibility-checker/contain-elephant-ivory',
   DESCRIBE_THE_ITEM: 'describe-the-item',
   DO_NOT_NEED_SERVICE: 'eligibility-checker/do-not-need-service',
+  GET_RECORD: 'get-record',
   HOW_CERTAIN: 'eligibility-checker/how-certain',
   INTENTION_FOR_ITEM: 'intention-for-item',
   IS_IT_A_MUSICAL_INSTRUMENT: 'eligibility-checker/is-it-a-musical-instrument',
@@ -257,6 +259,7 @@ const RedisKeys = {
 }
 
 const StatusCodes = {
+  OK: 200,
   CREATED: 201,
   NO_CONTENT: 204,
   UNAUTHORIZED: 401,

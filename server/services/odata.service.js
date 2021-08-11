@@ -50,7 +50,41 @@ module.exports = class ODataService {
         ? DataVerseFieldName.NAME
         : DataVerseFieldName.SUBMISSION_REFERENCE
       throw new Error(
-        `Error creating record: ${response.status}, submission reference: ${body[fieldName]}`
+        `Error creating record: ${response.status}, section ${
+          isSection2 ? '2' : '10'
+        } submission reference: ${body[fieldName]}`
+      )
+    }
+
+    return response.json()
+  }
+
+  static async getRecord (id, isSection2) {
+    const token = await ActiveDirectoryAuthService.getToken()
+
+    headers.Authorization = `Bearer ${token}`
+    headers.Prefer = 'return=representation'
+
+    const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
+
+    const url = `${apiEndpoint}/${
+      isSection2 ? SECTION_2_ENDPOINT : SECTION_10_ENDPOINT
+    }(${id})`
+
+    console.log(`Fetching URL: [${url}]`)
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers
+    })
+
+    if (response.status !== StatusCodes.OK) {
+      console.log(await response.json())
+
+      throw new Error(
+        `Error getting record: ${response.status}, section ${
+          isSection2 ? '2' : '10'
+        } case ID: ${id}`
       )
     }
 
@@ -80,7 +114,11 @@ module.exports = class ODataService {
     })
 
     if (response.status !== StatusCodes.NO_CONTENT) {
-      throw new Error('Error updating record: ' + id)
+      throw new Error(
+        `Error updating record: ${response.status}, section ${
+          isSection2 ? '2' : '10'
+        } case ID: ${id}`
+      )
     }
   }
 }
