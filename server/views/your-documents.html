@@ -1,0 +1,34 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block formContent %}
+
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
+      <p class="govuk-body" id="helpText">You can add up to {{ maxPhotos }} documents.</p>
+
+      {{ govukSummaryList({
+        rows: rows
+      }) }}
+
+      {% if allowMorePhotos %}
+        <p class="govuk-body govuk-!-margin-bottom-7"><a id="addAnotherDocument" class="govuk-link" href="{{ addPhotoUrl }}">Add another document</a></p>
+      {% endif %}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text: "Continue"
+        })
+      }}
+
+    </div>
+  </div>
+{% endblock %}

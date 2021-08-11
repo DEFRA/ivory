@@ -38,7 +38,7 @@ const handlers = {
     if ((await _getItemType(request)) === ItemType.TEN_PERCENT) {
       return h.redirect(Paths.IVORY_INTEGRAL)
     } else {
-      return h.redirect(Paths.UPLOAD_PHOTOS)
+      return h.redirect(Paths.UPLOAD_PHOTO)
     }
   }
 }

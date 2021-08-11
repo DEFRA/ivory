@@ -157,11 +157,14 @@ const Paths = {
   SERVICE_UNAVAILABLE: '/errors/service-unavailable',
   SESSION_TIMED_OUT: '/errors/session-timed-out',
   TAKEN_FROM_ELEPHANT: '/eligibility-checker/taken-from-elephant',
-  UPLOAD_PHOTOS: '/upload-photos',
+  UPLOAD_DOCUMENT: '/upload-document',
+  UPLOAD_PHOTO: '/upload-photo',
   UPLOAD_TIMEOUT: '/errors/upload-timeout',
+  WANT_TO_ADD_DOCUMENTS: '/want-to-add-documents',
   WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',
   WHO_OWNS_ITEM: '/who-owns-the-item',
   WHY_IS_ITEM_RMI: '/why-is-item-rmi',
+  YOUR_DOCUMENTS: '/your-documents',
   YOUR_PHOTOS: '/your-photos'
 }
 
@@ -208,11 +211,14 @@ const Views = {
   SERVICE_UNAVAILABLE: 'errors/service-unavailable',
   SESSION_TIMED_OUT: 'errors/session-timed-out',
   TAKEN_FROM_ELEPHANT: 'eligibility-checker/taken-from-elephant',
-  UPLOAD_PHOTOS: 'upload-photos',
+  UPLOAD_DOCUMENT: 'upload-document',
+  UPLOAD_PHOTO: 'upload-photo',
   UPLOAD_TIMEOUT: 'errors/upload-timeout',
+  WANT_TO_ADD_DOCUMENTS: 'want-to-add-documents',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHO_OWNS_ITEM: 'who-owns-the-item',
   WHY_IS_ITEM_RMI: 'why-is-item-rmi',
+  YOUR_DOCUMENTS: 'your-documents',
   YOUR_PHOTOS: 'your-photos'
 }
 
@@ -239,11 +245,14 @@ const RedisKeys = {
   SUBMISSION_DATE: 'submission-date',
   SUBMISSION_REFERENCE: 'submission-reference',
   TARGET_COMPLETION_DATE: 'target-completion-date',
-  UPLOAD_PHOTOS: 'upload-photos',
-  UPLOAD_PHOTOS_ERROR: 'upload-photos.error',
+  UPLOAD_DOCUMENT: 'upload-photo',
+  UPLOAD_DOCUMENT_ERROR: 'upload-document.error',
+  UPLOAD_PHOTO: 'upload-photo',
+  UPLOAD_PHOTO_ERROR: 'upload-photo.error',
   USED_CHECKER: 'used-checker',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHY_IS_ITEM_RMI: 'why-is-item-rmi',
+  YOUR_DOCUMENTS: 'your-documents',
   YOUR_PHOTOS: 'your-photos'
 }
 

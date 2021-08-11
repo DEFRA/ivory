@@ -15,7 +15,7 @@ const RedisService = require('../../server/services/redis.service')
 describe('/your-photos route', () => {
   let server
   const url = '/your-photos'
-  const nextUrl = '/who-owns-the-item'
+  const nextUrl = '/describe-the-item'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -79,7 +79,7 @@ describe('/your-photos route', () => {
 
       it('should have the "Add another photo" link', () => {
         const element = document.querySelector(`#${elementIds.addAnotherPhoto}`)
-        TestHelper.checkLink(element, 'Add another photo', '/upload-photos')
+        TestHelper.checkLink(element, 'Add another photo', '/upload-photo')
       })
 
       it('should have the correct Call to Action button', () => {

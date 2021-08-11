@@ -10,9 +10,9 @@ const CookieService = require('../../server/services/cookie.service')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-describe('/upload-photos route', () => {
+describe('/upload-photo route', () => {
   let server
-  const url = '/upload-photos'
+  const url = '/upload-photo'
   const nextUrl = '/your-photos'
 
   const elementIds = {
@@ -183,9 +183,14 @@ describe('/upload-photos route', () => {
           `#${elementIds.helpText2}`,
           `#${elementIds.helpText3}`,
           `#${elementIds.helpText4} > li:nth-child(1)`,
-          `#${elementIds.helpText4} > li:nth-child(2)`,
-          `#${elementIds.helpTextSubHeading}`
+          `#${elementIds.helpText4} > li:nth-child(2)`
         ])
+
+        const element = document.querySelector(
+          `#${elementIds.helpTextSubHeading}`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Upload photo')
 
         TestHelper.checkElementsExist(document, [
           `#${elementIds.helpText5}`,

@@ -13,7 +13,7 @@ const RedisService = require('../../server/services/redis.service')
 describe('/ivory-integral route', () => {
   let server
   const url = '/ivory-integral'
-  const nextUrlUploadPhotos = '/upload-photos'
+  const nextUrlUploadPhotos = '/upload-photo'
 
   const elementIds = {
     ivoryIsIntegral: 'ivoryIsIntegral',

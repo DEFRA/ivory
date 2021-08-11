@@ -7,7 +7,7 @@ const TestHelper = require('../../utils/test-helper')
 describe('/errors/upload-timeout route', () => {
   let server
   const url = '/errors/upload-timeout'
-  const nextUrl = '/upload-photos'
+  const nextUrl = '/upload-photo'
 
   const elementIds = {
     pageTitle: 'pageTitle',

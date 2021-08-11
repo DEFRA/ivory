@@ -9,7 +9,7 @@ const handlers = {
     })
   },
   post: (request, h) => {
-    return h.redirect(Paths.UPLOAD_PHOTOS)
+    return h.redirect(Paths.UPLOAD_PHOTO)
   }
 }
 

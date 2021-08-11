@@ -15,9 +15,9 @@ const RedisService = require('../../server/services/redis.service')
 describe('/remove-photo route', () => {
   let server
   const url = '/remove-photo'
-  const nextUrlNoPhotos = '/upload-photos'
+  const nextUrlNoPhotos = '/upload-photo'
   const nextUrlYourPhotos = '/your-photos'
-  const redisKey = 'upload-photos'
+  const redisKey = 'upload-photo'
 
   beforeAll(async () => {
     server = await createServer()

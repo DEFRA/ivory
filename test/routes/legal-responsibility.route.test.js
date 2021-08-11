@@ -14,7 +14,7 @@ const RedisService = require('../../server/services/redis.service')
 describe('/legal-responsibility route', () => {
   let server
   const url = '/legal-responsibility'
-  const nextUrlDescribeTheItem = '/describe-the-item'
+  const nextUrl = '/upload-photo'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -165,7 +165,7 @@ describe('/legal-responsibility route', () => {
     describe('Success', () => {
       it('should redirect', async () => {
         const response = await TestHelper.submitPostRequest(server, postOptions)
-        expect(response.headers.location).toEqual(nextUrlDescribeTheItem)
+        expect(response.headers.location).toEqual(nextUrl)
       })
     })
   })

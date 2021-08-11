@@ -29,7 +29,7 @@ describe('/describe-the-item route', () => {
   const nextUrls = {
     ivoryAge: '/ivory-age',
     ivoryVolume: '/ivory-volume',
-    uploadPhotos: '/upload-photos',
+    uploadPhotos: '/upload-photo',
     whyIsItemRMI: '/why-is-item-rmi'
   }
 

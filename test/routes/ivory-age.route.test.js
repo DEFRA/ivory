@@ -18,7 +18,7 @@ const other = 'Other reason'
 describe('/ivory-age route', () => {
   let server
   const url = '/ivory-age'
-  const nextUrlUploadPhotos = '/upload-photos'
+  const nextUrlUploadPhotos = '/upload-photo'
   const nextUrl10percent = '/ivory-integral'
 
   const elementIds = {

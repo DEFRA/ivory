@@ -1,0 +1,62 @@
+{% extends 'multipart-form-layout.html' %}
+
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block formContent %}
+
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
+      {% if (not hideHelpText) %}
+        <span id="hint" class="govuk-body">
+
+          <p id="helpText1" class="govuk-body">You must add files one at a time, up to a total of 6.</p>
+
+          {{ govukInsetText({
+            id: "helpText",
+            text: "Be careful not to upload too much material, as this could affect how long it takes an assessor to review it."
+          }) }}
+
+        </span>
+      {% endif %}
+        
+        <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload file</h2>
+
+        <p id="helpText5" class="govuk-body">The document must be:</p>
+
+        <ul id="helpText6" class="govuk-list govuk-list--bullet">
+          <li>in PDF or DOC format</li>
+          <li>smaller than {{ maximumFileSize }}mb</li>
+        </ul>
+
+      {{ govukFileUpload({
+        attributes: {
+          accept: accept
+        },
+        id: "files",
+        name: "files",
+        errorMessage: fieldErrors['files']
+      }) }}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text: "Continue"
+        })
+      }}
+
+      {% if hideHelpText %}
+        <p class="govuk-body">
+          <a id="cancel" class="govuk-link" href="{{ fileListUrl }}">Cancel</a>
+        </p>
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

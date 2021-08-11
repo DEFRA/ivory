@@ -35,11 +35,15 @@ module.exports = {
           }
 
           if (statusCode === StatusCodes.PAYLOAD_TOO_LARGE) {
-            if (request.route.path === Paths.UPLOAD_PHOTOS) {
-              RedisService.set(request, RedisKeys.UPLOAD_PHOTOS_ERROR, true)
-            }
+            if (request.route.path === Paths.UPLOAD_PHOTO) {
+              RedisService.set(request, RedisKeys.UPLOAD_PHOTO_ERROR, true)
 
-            return h.redirect(request.route.path)
+              return h.redirect(request.route.path)
+            } else {
+              RedisService.set(request, RedisKeys.UPLOAD_DOCUMENT_ERROR, true)
+
+              return h.redirect(request.route.path)
+            }
           }
 
           if (statusCode === StatusCodes.SERVICE_UNAVAILABLE) {

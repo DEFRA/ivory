@@ -188,7 +188,7 @@ const _addOwnerAndApplicantDetails = async (request, body) => {
 
 const _addInitialPhoto = async request => {
   const photos = JSON.parse(
-    await RedisService.get(request, RedisKeys.UPLOAD_PHOTOS)
+    await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
   )
 
   return {
@@ -199,7 +199,7 @@ const _addInitialPhoto = async request => {
 
 const _addAdditionalPhotos = async request => {
   const photos = JSON.parse(
-    await RedisService.get(request, RedisKeys.UPLOAD_PHOTOS)
+    await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
   )
 
   const additionalPhotos = {}
