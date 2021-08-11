@@ -10,12 +10,25 @@ const RedisService = require('../services/redis.service')
 const { Paths, RedisKeys, Views } = require('../utils/constants')
 const { buildErrorSummary } = require('../utils/validation')
 
-const MAX_FILES = 1
+const MAX_PHOTOS = 6
+const MAX_FILES_IN_REQUEST_PAYLOAD = 1
 const THUMBNAIL_WIDTH = 1000
 const ALLOWED_EXTENSIONS = ['.JPG', '.JPEG', '.PNG']
 
 const handlers = {
   get: async (request, h) => {
+    const uploadData = JSON.parse(
+      await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
+    )
+
+    if (
+      uploadData &&
+      uploadData.files &&
+      uploadData.files.length >= MAX_PHOTOS
+    ) {
+      return h.redirect(Paths.YOUR_PHOTOS)
+    }
+
     const errors = await _checkForFileSizeError(request)
 
     return h.view(Views.UPLOAD_PHOTO, {
@@ -128,7 +141,7 @@ const _validateForm = (payload, uploadData) => {
   if (
     payload.files &&
     Array.isArray(payload.files) &&
-    payload.files.length > MAX_FILES
+    payload.files.length > MAX_FILES_IN_REQUEST_PAYLOAD
   ) {
     // Note that this error should never happen because in the HTML we have not specified the attributes of:
     // - multiple: true
