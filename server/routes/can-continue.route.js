@@ -76,6 +76,12 @@ const _getContext = async request => {
     } administration fee of £${cost}.`
   )
 
+  if (isSection2) {
+    context.additionalSteps.push(
+      'Wait 30 days for your application to be approved by an expert.'
+    )
+  }
+
   return context
 }
 
