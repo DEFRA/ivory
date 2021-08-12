@@ -26,15 +26,15 @@
           </ul>
 
           <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload photo</h2>
-
-          <p id="helpText5" class="govuk-body">The photo must be:</p>
-
-          <ul id="helpText6" class="govuk-list govuk-list--bullet">
-            <li>in JPG or PNG format</li>
-            <li>smaller than {{ maximumFileSize }}mb</li>
-          </ul>
         </span>
       {% endif %}
+
+        <p id="helpText5" class="govuk-body">The photo must be:</p>
+
+        <ul id="helpText6" class="govuk-list govuk-list--bullet">
+          <li>in JPG or PNG format</li>
+          <li>smaller than {{ maximumFileSize }}mb</li>
+        </ul>
 
       {{ govukFileUpload({
         attributes: {

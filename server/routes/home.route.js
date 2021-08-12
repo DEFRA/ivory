@@ -1,7 +1,11 @@
 'use strict'
 
 const { v4: uuidv4 } = require('uuid')
-const { DEFRA_IVORY_SESSION_KEY, Paths } = require('../utils/constants')
+const {
+  HOME_URL,
+  DEFRA_IVORY_SESSION_KEY,
+  Paths
+} = require('../utils/constants')
 
 const handlers = {
   get: (request, h) => {
@@ -18,7 +22,7 @@ const _setCookieSessionId = h => {
 module.exports = [
   {
     method: 'GET',
-    path: '/',
+    path: HOME_URL,
     handler: handlers.get
   }
 ]

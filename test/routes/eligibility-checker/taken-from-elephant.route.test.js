@@ -2,6 +2,9 @@
 
 const createServer = require('../../../server')
 
+jest.mock('../../../server/services/cookie.service')
+const CookieService = require('../../../server/services/cookie.service')
+
 const TestHelper = require('../../utils/test-helper')
 
 describe('/eligibility-checker/taken-from-elephant route', () => {
@@ -26,6 +29,14 @@ describe('/eligibility-checker/taken-from-elephant route', () => {
 
   afterAll(async () => {
     await server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('GET', () => {
@@ -142,6 +153,12 @@ describe('/eligibility-checker/taken-from-elephant route', () => {
     })
   })
 })
+
+const _createMocks = () => {
+  CookieService.checkSessionCookie = jest
+    .fn()
+    .mockReturnValue('THE_SESSION_COOKIE')
+}
 
 const _checkSelectedRadioAction = async (
   postOptions,

@@ -141,7 +141,9 @@ const _getCommonFields = async (request, itemDescription) => {
       RedisKeys.PAYMENT_ID
     ),
     [DataVerseFieldName.WHY_AGE_EXEMPT]: _getAgeExemptionReasonCodes(ivoryAge),
-    [DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON]: ivoryAge.otherReason,
+    [DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON]: ivoryAge
+      ? ivoryAge.otherReason
+      : '',
     [DataVerseFieldName.WHERE_IS_THE_IVORY]: itemDescription.whereIsIvory,
     [DataVerseFieldName.ITEM_SUMMARY]: itemDescription.whatIsItem,
     [DataVerseFieldName.UNIQUE_FEATURES]: itemDescription.uniqueFeatures,
@@ -227,9 +229,12 @@ const _getExemptionCategoryCode = itemType => {
 }
 
 const _getAgeExemptionReasonCodes = ivoryAgeReasons => {
-  const ageExemptionReasonCodes = ivoryAgeReasons.ivoryAge
-    .map(ivoryAgeReason => AgeExemptionReasonLookup[ivoryAgeReason])
-    .join(',')
+  const ageExemptionReasonCodes =
+    ivoryAgeReasons && ivoryAgeReasons.ivoryAge
+      ? ivoryAgeReasons.ivoryAge
+          .map(ivoryAgeReason => AgeExemptionReasonLookup[ivoryAgeReason])
+          .join(',')
+      : ''
 
   return ageExemptionReasonCodes
 }

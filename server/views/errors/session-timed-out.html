@@ -1,0 +1,21 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
+      <p id="para1" class="govuk-body">Either your session has expired or you have not started at the beginning.</p>
+
+        {{ govukButton({
+          attributes: {
+            id: "go-to-start"
+          },
+          text: "Go to start"
+        })
+      }}
+    </div>
+  </div>
+{% endblock %}

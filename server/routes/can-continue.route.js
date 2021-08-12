@@ -41,6 +41,7 @@ const _getContext = async request => {
   const usedChecker = await _usedChecker(request)
 
   const itemType = await _getItemType(request)
+  const isSection2 = itemType === ItemType.HIGH_VALUE
 
   const context = {
     isSection2: itemType === ItemType.HIGH_VALUE,
@@ -50,8 +51,7 @@ const _getContext = async request => {
   }
 
   let cost
-  if (itemType === ItemType.HIGH_VALUE) {
-    // Section 2
+  if (isSection2) {
     context.pageTitle = usedChecker
       ? 'You can now apply for an exemption certificate'
       : 'You must now apply for an exemption certificate'
@@ -62,7 +62,6 @@ const _getContext = async request => {
 
     cost = config.paymentAmountBandB / 100
   } else {
-    // Section 10
     context.pageTitle = usedChecker
       ? 'You can now make a self-assessment to sell or hire out your item'
       : 'You must now make a self-assessment to sell or hire out your item'
@@ -72,8 +71,16 @@ const _getContext = async request => {
 
   context.additionalSteps.push('Provide contact details.')
   context.additionalSteps.push(
-    `Pay a non-refundable administration fee of £${cost}.`
+    `Pay ${
+      isSection2 ? 'a non-refundable' : 'an'
+    } administration fee of £${cost}.`
   )
+
+  if (isSection2) {
+    context.additionalSteps.push(
+      'Wait 30 days for your application to be approved by an expert.'
+    )
+  }
 
   return context
 }

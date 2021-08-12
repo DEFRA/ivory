@@ -98,6 +98,8 @@ const IvoryVolumeReasons = {
   OTHER_REASON: 'Other reason'
 }
 
+const HOME_URL = '/'
+
 const Urls = {
   GOV_UK_HOME: 'https://www.gov.uk/'
 }
@@ -119,6 +121,7 @@ const Paths = {
   CONTAIN_ELEPHANT_IVORY: '/eligibility-checker/contain-elephant-ivory',
   DESCRIBE_THE_ITEM: '/describe-the-item',
   DO_NOT_NEED_SERVICE: '/eligibility-checker/do-not-need-service',
+  GET_RECORD: '/get-record',
   HOW_CERTAIN: '/eligibility-checker/how-certain',
   INTENTION_FOR_ITEM: '/intention-for-item',
   IS_IT_A_MUSICAL_INSTRUMENT: '/eligibility-checker/is-it-a-musical-instrument',
@@ -152,6 +155,7 @@ const Paths = {
   SERVICE_COMPLETE: '/service-complete',
   SERVICE_STATUS: '/service-status',
   SERVICE_UNAVAILABLE: '/errors/service-unavailable',
+  SESSION_TIMED_OUT: '/errors/session-timed-out',
   TAKEN_FROM_ELEPHANT: '/eligibility-checker/taken-from-elephant',
   UPLOAD_PHOTOS: '/upload-photos',
   UPLOAD_TIMEOUT: '/errors/upload-timeout',
@@ -177,6 +181,7 @@ const Views = {
   CONTAIN_ELEPHANT_IVORY: 'eligibility-checker/contain-elephant-ivory',
   DESCRIBE_THE_ITEM: 'describe-the-item',
   DO_NOT_NEED_SERVICE: 'eligibility-checker/do-not-need-service',
+  GET_RECORD: 'get-record',
   HOW_CERTAIN: 'eligibility-checker/how-certain',
   INTENTION_FOR_ITEM: 'intention-for-item',
   IS_IT_A_MUSICAL_INSTRUMENT: 'eligibility-checker/is-it-a-musical-instrument',
@@ -201,6 +206,7 @@ const Views = {
   SERVICE_COMPLETE: 'service-complete',
   SERVICE_STATUS: 'service-status',
   SERVICE_UNAVAILABLE: 'errors/service-unavailable',
+  SESSION_TIMED_OUT: 'errors/session-timed-out',
   TAKEN_FROM_ELEPHANT: 'eligibility-checker/taken-from-elephant',
   UPLOAD_PHOTOS: 'upload-photos',
   UPLOAD_TIMEOUT: 'errors/upload-timeout',
@@ -242,6 +248,7 @@ const RedisKeys = {
 }
 
 const StatusCodes = {
+  OK: 200,
   CREATED: 201,
   NO_CONTENT: 204,
   UNAUTHORIZED: 401,
@@ -258,6 +265,7 @@ module.exports = Object.freeze({
   CharacterLimits,
   DataVerseFieldName,
   DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession',
+  HOME_URL,
   Intention,
   ItemType,
   IvoryIntegralReasons,
