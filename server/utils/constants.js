@@ -100,6 +100,15 @@ const IvoryVolumeReasons = {
 
 const HOME_URL = '/'
 
+const PaymentResult = {
+  SUCCESS: 'success',
+  FAILED: 'failed',
+  ERROR: 'error',
+  Codes: {
+    CANCELLED: 'P0030'
+  }
+}
+
 const Urls = {
   GOV_UK_HOME: 'https://www.gov.uk/'
 }
@@ -272,6 +281,7 @@ module.exports = Object.freeze({
   IvoryVolumeReasons,
   Options,
   Paths,
+  PaymentResult,
   RedisKeys,
   StatusCodes,
   Urls,

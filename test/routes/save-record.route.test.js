@@ -15,6 +15,9 @@ const RedisService = require('../../server/services/redis.service')
 jest.mock('../../server/services/odata.service')
 const ODataService = require('../../server/services/odata.service')
 
+jest.mock('../../server/services/payment.service')
+const PaymentService = require('../../server/services/payment.service')
+
 describe('/save-record route', () => {
   let server
   const url = '/save-record'
@@ -47,6 +50,9 @@ describe('/save-record route', () => {
         ODataService.createRecord = jest.fn().mockResolvedValue({
           cre2c_ivorysection10caseid: 'THE_SECTION_10_CASE_ID'
         })
+
+        const paymentData = { state: { status: 'success' } }
+        PaymentService.lookupPayment = jest.fn().mockResolvedValue(JSON.stringify(paymentData))
 
         RedisService.get = jest
           .fn()
@@ -175,6 +181,8 @@ const _createMocks = () => {
     .mockReturnValue('THE_SESSION_COOKIE')
 
   ODataService.updateRecord = jest.fn()
+
+  PaymentService.lookupPayment = jest.fn()
 }
 
 const mockImageUploadData = {

@@ -1,16 +1,8 @@
 'use strict'
 
-const { Paths, RedisKeys, Views } = require('../utils/constants')
+const { Paths, RedisKeys, Views, PaymentResult } = require('../utils/constants')
 const PaymentService = require('../services/payment.service')
 const RedisService = require('../services/redis.service')
-
-const PaymentResult = {
-  SUCCESS: 'success',
-  FAILED: 'failed',
-  Codes: {
-    CANCELLED: 'P0030'
-  }
-}
 
 const handlers = {
   get: async (request, h) => {
@@ -24,6 +16,10 @@ const handlers = {
 
     if (_paymentFailed(payment.state)) {
       return h.redirect(Paths.MAKE_PAYMENT)
+    }
+
+    if (_paymentError(payment.state)) {
+      return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
 
     return h.view(Views.SERVICE_COMPLETE, {
@@ -56,6 +52,10 @@ const _paymentCancelled = state => {
 
 const _paymentFailed = state => {
   return state && state.status && state.status === PaymentResult.FAILED
+}
+
+const _paymentError = state => {
+  return state && state.status && state.status === PaymentResult.ERROR
 }
 
 module.exports = [

@@ -1,6 +1,6 @@
 'use strict'
 
-const { Paths, RedisKeys, ItemType } = require('../utils/constants')
+const { Paths, RedisKeys, ItemType, PaymentResult } = require('../utils/constants')
 const { DataVerseFieldName } = require('../utils/constants')
 const {
   AgeExemptionReasonLookup,
@@ -12,9 +12,14 @@ const {
 } = require('../services/dataverse-choice-lookups')
 const ODataService = require('../services/odata.service')
 const RedisService = require('../services/redis.service')
+const PaymentService = require('../services/payment.service')
 
 const handlers = {
   get: async (request, h) => {
+    const paymentId = await RedisService.get(request, RedisKeys.PAYMENT_ID)
+
+    const payment = await PaymentService.lookupPayment(paymentId)
+
     const itemType = await RedisService.get(
       request,
       RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
@@ -22,10 +27,11 @@ const handlers = {
 
     const isSection2 = itemType === ItemType.HIGH_VALUE
 
-    const entity = await _createRecord(request, itemType, isSection2)
+    if (payment.state.status === PaymentResult.SUCCESS) {
+      const entity = await _createRecord(request, itemType, isSection2)
 
-    await _updateRecord(request, entity, isSection2)
-
+      await _updateRecord(request, entity, isSection2)
+    }
     return h.redirect(Paths.SERVICE_COMPLETE)
   }
 }
