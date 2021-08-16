@@ -14,7 +14,7 @@ const handlers = {
     const entity = await _getRecord(id, isSection2)
 
     return h.view(Views.GET_RECORD, {
-      ...(await _getContext(entity, section, isSection2))
+      // ...(await _getContext(entity, section, isSection2))
     })
   }
 }

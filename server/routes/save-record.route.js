@@ -26,6 +26,8 @@ const handlers = {
 
     await _updateRecord(request, entity, isSection2)
 
+    await _updateRecordAttachments(request, entity, isSection2)
+
     return h.redirect(Paths.SERVICE_COMPLETE)
   }
 }
@@ -49,6 +51,19 @@ const _updateRecord = async (request, entity, isSection2) => {
     : entity[DataVerseFieldName.SECTION_10_CASE_ID]
 
   return ODataService.updateRecord(id, updateBody, isSection2)
+}
+
+const _updateRecordAttachments = async (request, entity) => {
+  // const supportingInformation = JSON.parse(
+  //   await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
+  // )
+  // // console.log(supportingInformation)
+  // if (supportingInformation) {
+  //   const file = supportingInformation.fileData[0]
+  //   // const id = entity[DataVerseFieldName.SECTION_2_CASE_ID]
+  //   const id2 = '8c09c224-d3fa-eb11-94ef-000d3ad67dc2'
+  //   return ODataService.updateRecordAttachment(id2, file)
+  // }
 }
 
 module.exports = [
@@ -215,8 +230,19 @@ const _addAdditionalPhotos = async request => {
 // TODO - IVORY-367 - These fields will be added
 const _addSupportingInformation = async request => {
   // const supportingInformation = JSON.parse(
-  //   await RedisService.get(request, RedisKeys.SUPPORTING_INFORMATION)
+  //   await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
   // )
+
+  // console.log(supportingInformation)
+
+  // return {
+  //   [DataVerseFieldName.SUPPORTING_EVIDENCE_1]: supportingInformation
+  //     ? supportingInformation.fileData[0]
+  //     : null,
+  //   [DataVerseFieldName.SUPPORTING_EVIDENCE_1_NAME]: supportingInformation
+  //     ? supportingInformation.files[0]
+  //     : null
+  // }
 
   return {
     [DataVerseFieldName.SUPPORTING_EVIDENCE_1]: null,
