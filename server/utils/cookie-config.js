@@ -2,7 +2,7 @@
 const config = require('./config')
 
 const cookieOptions = {
-  ttl: undefined, // Session lifespan (deleted when browser closed)
+  ttl: config.cookieTimeout, // Timeout after number of milliseconds specified in the config
   isSecure: true, // Secure
   isHttpOnly: true, // and non-secure
   isSameSite: 'None', // Attach cookies on cross-site requests
