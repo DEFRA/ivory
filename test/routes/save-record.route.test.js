@@ -222,8 +222,6 @@ const _createMocks = () => {
     .mockReturnValue('THE_SESSION_COOKIE')
 
   ODataService.updateRecord = jest.fn()
-
-  PaymentService.lookupPayment = jest.fn()
 }
 
 const mockImageUploadData = {
