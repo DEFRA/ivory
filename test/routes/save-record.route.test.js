@@ -51,10 +51,9 @@ describe('/save-record route', () => {
           cre2c_ivorysection10caseid: 'THE_SECTION_10_CASE_ID'
         })
 
-        PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'success' } })
-
         RedisService.get = jest
           .fn()
+          .mockResolvedValueOnce('123456789')
           .mockResolvedValueOnce(ItemType.MUSICAL)
           .mockResolvedValueOnce(
             JSON.stringify({
@@ -91,9 +90,11 @@ describe('/save-record route', () => {
           .mockResolvedValueOnce('APPLICANT_ADDRESS')
           .mockResolvedValueOnce('SUBMISSION_REFERENCE')
           .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
+
+        PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'success' } })
       })
 
-      it.only('should save the record in the dataverse and redirect to the service complete page', async () => {
+      it('should save the record in the dataverse and redirect to the service complete page', async () => {
         expect(ODataService.createRecord).toBeCalledTimes(0)
         expect(ODataService.updateRecord).toBeCalledTimes(0)
 
@@ -119,6 +120,7 @@ describe('/save-record route', () => {
 
         RedisService.get = jest
           .fn()
+          .mockResolvedValueOnce('123456789')
           .mockResolvedValueOnce(ItemType.HIGH_VALUE)
           .mockResolvedValueOnce(
             JSON.stringify({
@@ -152,6 +154,8 @@ describe('/save-record route', () => {
           .mockResolvedValueOnce('SUBMISSION_REFERENCE')
           .mockResolvedValueOnce('RMI_REASON')
           .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
+
+        PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'success' } })
       })
 
       it('should save the record in the dataverse and redirect to the service complete page', async () => {
