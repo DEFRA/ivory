@@ -111,7 +111,7 @@ describe('/save-record route', () => {
         expect(response.headers.location).toEqual(nextUrl)
       })
 
-      it('should NOT save the record in the dataverse and redirect to the service complete page', async () => {
+      it('should NOT save the record in the dataverse when the payment has failed and redirect to the service complete page', async () => {
         PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'failure' } })
 
         expect(ODataService.createRecord).toBeCalledTimes(0)
@@ -194,7 +194,7 @@ describe('/save-record route', () => {
         expect(response.headers.location).toEqual(nextUrl)
       })
 
-      it('should NOT save the record in the dataverse and redirect to the service complete page', async () => {
+      it('should NOT save the record in the dataverse when the payment has failed and redirect to the service complete page', async () => {
         PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'failure' } })
 
         expect(ODataService.createRecord).toBeCalledTimes(0)
