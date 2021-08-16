@@ -35,10 +35,10 @@ const handlers = {
 
     await _storeRedisValues(request)
 
-    if ((await _getItemType(request)) === ItemType.TEN_PERCENT) {
-      return h.redirect(Paths.IVORY_INTEGRAL)
+    if ((await _getItemType(request)) === ItemType.HIGH_VALUE) {
+      return h.redirect(Paths.UPLOAD_DOCUMENT)
     } else {
-      return h.redirect(Paths.UPLOAD_PHOTO)
+      return h.redirect(Paths.WHO_OWNS_ITEM)
     }
   }
 }
