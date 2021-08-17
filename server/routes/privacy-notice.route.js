@@ -3,9 +3,7 @@
 const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
-  get: async (request, h) => {
-    return h.view(Views.PRIVACY_NOTICE)
-  }
+  get: async (request, h) => h.view(Views.PRIVACY_NOTICE)
 }
 
 module.exports = [

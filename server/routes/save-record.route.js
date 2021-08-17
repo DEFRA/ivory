@@ -88,7 +88,7 @@ module.exports = [
 ]
 
 const _createSection2Body = async (request, itemType, itemDescription) => {
-  const body = {
+  return {
     ...(await _getCommonFields(request, itemDescription)),
     [DataVerseFieldName.TARGET_COMPLETION_DATE]: await RedisService.get(
       request,
@@ -108,8 +108,6 @@ const _createSection2Body = async (request, itemType, itemDescription) => {
       RedisKeys.WHY_IS_ITEM_RMI
     )
   }
-
-  return body
 }
 
 const _createSection10Body = async (request, itemType, itemDescription) => {
@@ -122,7 +120,7 @@ const _createSection10Body = async (request, itemType, itemDescription) => {
     ? JSON.parse(ivoryVolumeStringified)
     : null
 
-  const body = {
+  return {
     ...(await _getCommonFields(request, itemDescription)),
     [DataVerseFieldName.SUBMISSION_REFERENCE]: await RedisService.get(
       request,
@@ -142,8 +140,6 @@ const _createSection10Body = async (request, itemType, itemDescription) => {
           )
         : null
   }
-
-  return body
 }
 
 const _getCommonFields = async (request, itemDescription) => {
@@ -184,7 +180,7 @@ const _getCommonFields = async (request, itemDescription) => {
   return commonFields
 }
 
-const _addOwnerAndApplicantDetails = async (request, body) => {
+const _addOwnerAndApplicantDetails = async request => {
   return {
     [DataVerseFieldName.OWNER_NAME]: await RedisService.get(
       request,
@@ -254,14 +250,10 @@ const _getAgeExemptionReasonCodes = ivoryAgeReasons => {
   return ageExemptionReasonCodes
 }
 
-const _getIntentionCategoryCode = intention => {
-  return IntentionLookup[intention]
-}
+const _getIntentionCategoryCode = intention => IntentionLookup[intention]
 
-const _getIvoryVolumeReasonCode = ivoryVolumeReason => {
-  return IvoryVolumeLookup[ivoryVolumeReason]
-}
+const _getIvoryVolumeReasonCode = ivoryVolumeReason =>
+  IvoryVolumeLookup[ivoryVolumeReason]
 
-const _getIvoryIntegralReasonCode = ivoryIntegralReason => {
-  return IvoryIntegralLookup[ivoryIntegralReason]
-}
+const _getIvoryIntegralReasonCode = ivoryIntegralReason =>
+  IvoryIntegralLookup[ivoryIntegralReason]

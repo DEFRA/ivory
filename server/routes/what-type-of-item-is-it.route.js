@@ -61,12 +61,15 @@ const _getOptions = async request => {
 }
 
 const _addHints = async options => {
-  const hints = [
-    'Any replacement ivory must have been taken from an elephant before 1 January 1975.',
-    'The ivory must be integral to the item. Any replacement ivory must have been taken from an elephant before 1 January 1975.',
-    'Any replacement ivory must have been taken from an elephant before 1 January 1975.',
-    'This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum.',
+  const before1975 =
     'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
+
+  const hints = [
+    before1975,
+    'The ivory must be integral to the item. Any replacement ivory must have been taken from an elephant before 1 January 1975.',
+    before1975,
+    'This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum.',
+    before1975
   ]
 
   for (let index = 0; index < options.length; index++) {

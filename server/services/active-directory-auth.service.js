@@ -10,7 +10,7 @@ module.exports = class ActiveDirectoryAuthService {
       const authorityHostUrl = config.dataverseAuthorityHostUrl
       const tenant = config.dataverseTenant
 
-      const authorityUrl = authorityHostUrl + '/' + tenant
+      const authorityUrl = `${authorityHostUrl}/${tenant}`
 
       // Application Id of app registered under AAD
       const clientId = config.dataverseClientId

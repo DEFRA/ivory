@@ -172,9 +172,8 @@ const _convertPostcodeToUpperCase = address => {
  * @param {*} value
  * @returns
  */
-const _convertToSearchFormat = value => {
-  return value.toUpperCase().replace(/[^A-Z0-9]/g, '')
-}
+const _convertToSearchFormat = value =>
+  value.toUpperCase().replace(/[^A-Z0-9]/g, '')
 
 /**
  * Check if the address lookup certificate is a file or a base64 string.
@@ -194,6 +193,4 @@ const _getCertificate = () => {
  * @param {*} value The value to check
  * @returns True if the value is numeric, otherwise false
  */
-const _isNumeric = value => {
-  return value && value.match(/^[0-9]*$/g)
-}
+const _isNumeric = value => value && value.match(/^[0-9]*$/g)

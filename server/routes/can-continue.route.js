@@ -29,13 +29,11 @@ const handlers = {
   }
 }
 
-const _getItemType = request => {
-  return RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
-}
+const _getItemType = request =>
+  RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
 
-const _usedChecker = async request => {
-  return (await RedisService.get(request, RedisKeys.USED_CHECKER)) === 'true'
-}
+const _usedChecker = async request =>
+  (await RedisService.get(request, RedisKeys.USED_CHECKER)) === 'true'
 
 const _getContext = async request => {
   const usedChecker = await _usedChecker(request)
@@ -44,8 +42,8 @@ const _getContext = async request => {
   const isSection2 = itemType === ItemType.HIGH_VALUE
 
   const context = {
-    isSection2: itemType === ItemType.HIGH_VALUE,
     usedChecker,
+    isSection2: itemType === ItemType.HIGH_VALUE,
     additionalSteps: [],
     cancelLink: Urls.GOV_UK_HOME
   }

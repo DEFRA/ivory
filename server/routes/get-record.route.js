@@ -19,9 +19,8 @@ const handlers = {
   }
 }
 
-const _getRecord = async (id, isSection2) => {
-  return ODataService.getRecord(id, isSection2)
-}
+const _getRecord = async (id, isSection2) =>
+  ODataService.getRecord(id, isSection2)
 
 const _getContext = (entity, section, isSection2) => {
   return {

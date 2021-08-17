@@ -53,9 +53,8 @@ const _storeRedisValues = request => {
   return RedisService.set(request, RedisKeys.IVORY_AGE, JSON.stringify(payload))
 }
 
-const _getItemType = async request => {
-  return RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
-}
+const _getItemType = async request =>
+  RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
 
 const _getContext = async request => {
   let payload

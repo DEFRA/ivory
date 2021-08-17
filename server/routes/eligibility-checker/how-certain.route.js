@@ -7,9 +7,7 @@ const { buildErrorSummary, Validators } = require('../../utils/validation')
 const completelyCertain = 'Completely'
 
 const handlers = {
-  get: (request, h) => {
-    return h.view(Views.HOW_CERTAIN)
-  },
+  get: (request, h) => h.view(Views.HOW_CERTAIN),
 
   post: async (request, h) => {
     const payload = request.payload

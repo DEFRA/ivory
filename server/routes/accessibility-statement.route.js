@@ -3,9 +3,7 @@
 const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
-  get: async (request, h) => {
-    return h.view(Views.ACCESSIBILITY_STATEMENT)
-  }
+  get: async (request, h) => h.view(Views.ACCESSIBILITY_STATEMENT)
 }
 
 module.exports = [

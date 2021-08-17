@@ -9,9 +9,7 @@ const handlers = {
     })
   },
 
-  post: async (request, h) => {
-    return h.redirect(HOME_URL)
-  }
+  post: async (request, h) => h.redirect(HOME_URL)
 }
 
 const _getContext = () => {

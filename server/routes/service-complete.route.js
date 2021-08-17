@@ -50,13 +50,11 @@ const _paymentCancelled = state => {
   )
 }
 
-const _paymentFailed = state => {
-  return state && state.status && state.status === PaymentResult.FAILED
-}
+const _paymentFailed = state =>
+  state && state.status && state.status === PaymentResult.FAILED
 
-const _paymentError = state => {
-  return state && state.status && state.status === PaymentResult.ERROR
-}
+const _paymentError = state =>
+  state && state.status && state.status === PaymentResult.ERROR
 
 module.exports = [
   {

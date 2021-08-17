@@ -283,7 +283,6 @@ module.exports = Object.freeze({
   AgeExemptionReasons,
   CharacterLimits,
   DataVerseFieldName,
-  DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession',
   HOME_URL,
   Intention,
   ItemType,
@@ -295,5 +294,6 @@ module.exports = Object.freeze({
   RedisKeys,
   StatusCodes,
   Urls,
-  Views
+  Views,
+  DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession'
 })

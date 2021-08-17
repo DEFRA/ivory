@@ -14,9 +14,8 @@ const { addPayloadToContext } = require('../../../utils/general')
 const pageTitle = 'Your contact details'
 
 const handlers = {
-  get: (request, h) => {
-    return h.view(Views.CONTACT_DETAILS, { ..._getContext(request) })
-  },
+  get: (request, h) =>
+    h.view(Views.CONTACT_DETAILS, { ..._getContext(request) }),
 
   post: async (request, h) => {
     const payload = request.payload

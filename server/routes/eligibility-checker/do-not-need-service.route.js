@@ -10,9 +10,7 @@ const handlers = {
     })
   },
 
-  post: (request, h) => {
-    return h.redirect(Urls.GOV_UK_HOME)
-  }
+  post: (request, h) => h.redirect(Urls.GOV_UK_HOME)
 }
 
 const _getContext = async request => {
