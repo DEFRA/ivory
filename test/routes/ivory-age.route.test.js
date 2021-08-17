@@ -18,8 +18,8 @@ const other = 'Other reason'
 describe('/ivory-age route', () => {
   let server
   const url = '/ivory-age'
-  const nextUrlUploadPhotos = '/upload-photo'
-  const nextUrl10percent = '/ivory-integral'
+  const nextUrlUploadDocument = '/upload-document'
+  const nextUrlWhoOwnsItem = '/who-owns-the-item'
 
   const elementIds = {
     ivoryAge: 'ivoryAge',
@@ -333,7 +333,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'It has a stamp, serial number or signature to prove its age',
-          nextUrlUploadPhotos
+          nextUrlWhoOwnsItem
         )
       })
 
@@ -342,7 +342,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'I have a dated receipt showing when it was bought or repaired',
-          nextUrlUploadPhotos
+          nextUrlWhoOwnsItem
         )
       })
 
@@ -351,7 +351,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'I have a dated publication that shows or describes the item',
-          nextUrlUploadPhotos
+          nextUrlWhoOwnsItem
         )
       })
 
@@ -360,7 +360,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'It’s been in the family since before 1975',
-          nextUrlUploadPhotos
+          nextUrlWhoOwnsItem
         )
       })
 
@@ -369,7 +369,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'I have written verification from a relevant expert',
-          nextUrlUploadPhotos
+          nextUrlWhoOwnsItem
         )
       })
 
@@ -380,7 +380,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           other,
-          nextUrlUploadPhotos,
+          nextUrlWhoOwnsItem,
           otherReason
         )
       })
@@ -401,7 +401,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           selectedOption,
-          nextUrl10percent
+          nextUrlWhoOwnsItem
         )
       })
     })
@@ -421,7 +421,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           selectedOption,
-          nextUrlUploadPhotos
+          nextUrlUploadDocument
         )
       })
 
@@ -430,7 +430,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'It’s been carbon-dated',
-          nextUrlUploadPhotos
+          nextUrlUploadDocument
         )
       })
     })
