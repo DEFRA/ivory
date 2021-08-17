@@ -72,7 +72,7 @@ const _updateRecordAttachments = async (request, entity) => {
   )
 
   if (supportingInformation) {
-    return ODataService.updateRecordAttachments(
+    ODataService.updateRecordAttachments(
       entity[DataVerseFieldName.SECTION_2_CASE_ID],
       supportingInformation
     )
