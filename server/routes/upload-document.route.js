@@ -8,6 +8,7 @@ const config = require('../utils/config')
 const RedisService = require('../services/redis.service')
 const { Paths, RedisKeys, Views } = require('../utils/constants')
 const { buildErrorSummary } = require('../utils/validation')
+const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
 
 const MAX_DOCUMENTS = 6
 const MAX_FILES_IN_REQUEST_PAYLOAD = 1
@@ -27,7 +28,10 @@ const handlers = {
       return h.redirect(Paths.YOUR_DOCUMENTS)
     }
 
-    const errors = await _checkForFileSizeError(request)
+    const errors = await checkForFileSizeError(
+      request,
+      RedisKeys.UPLOAD_DOCUMENT_ERROR
+    )
 
     return h.view(Views.UPLOAD_DOCUMENT, {
       ...(await _getContext(request)),
@@ -151,47 +155,12 @@ const _validateForm = (payload, uploadData) => {
       name: 'files',
       text: 'The file must be a PDF or Microsoft Word document (.DOC or .DOCX)'
     })
-  } else if (_checkForDuplicates(payload, uploadData)) {
+  } else if (checkForDuplicates(payload, uploadData)) {
     errors.push({
       name: 'files',
       text: "You've already uploaded that document. Choose a different one"
     })
   }
-
-  return errors
-}
-
-const _checkForDuplicates = (payload, uploadData) => {
-  let duplicateFound
-
-  if (uploadData.files && uploadData.fileSizes) {
-    for (let i = 0; i < uploadData.files.length; i++) {
-      if (
-        uploadData.files[i] === payload.files.filename &&
-        uploadData.fileSizes[i] === payload.files.bytes
-      ) {
-        duplicateFound = true
-        break
-      }
-    }
-  }
-
-  return duplicateFound
-}
-
-const _checkForFileSizeError = async request => {
-  const errors = []
-  if (
-    (await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT_ERROR)) ===
-    'true'
-  ) {
-    errors.push({
-      name: 'files',
-      text: `The file must be smaller than ${config.maximumFileSize}mb`
-    })
-  }
-
-  await RedisService.set(request, RedisKeys.UPLOAD_DOCUMENT_ERROR, false)
 
   return errors
 }
