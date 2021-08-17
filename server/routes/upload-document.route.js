@@ -42,7 +42,7 @@ const handlers = {
 
     const uploadData = context.uploadData
 
-    const errors = _validateForm(payload, uploadData)
+    let errors = _validateForm(payload, uploadData)
 
     if (errors.length) {
       return h
@@ -70,10 +70,8 @@ const handlers = {
         RedisKeys.UPLOAD_DOCUMENT,
         JSON.stringify(uploadData)
       )
-
-      return h.redirect(Paths.YOUR_DOCUMENTS)
     } catch (error) {
-      const errors = []
+      errors = []
       errors.push({
         name: 'files',
         text: error.message
@@ -88,6 +86,8 @@ const handlers = {
           .code(400)
       }
     }
+
+    return h.redirect(Paths.YOUR_DOCUMENTS)
   }
 }
 

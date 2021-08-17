@@ -44,7 +44,7 @@ const handlers = {
 
     const uploadData = context.uploadData
 
-    const errors = _validateForm(payload, uploadData)
+    let errors = _validateForm(payload, uploadData)
 
     if (errors.length) {
       return h
@@ -88,13 +88,11 @@ const handlers = {
         RedisKeys.UPLOAD_PHOTO,
         JSON.stringify(uploadData)
       )
-
-      return h.redirect(Paths.YOUR_PHOTOS)
     } catch (error) {
       if (error.message === 'Input buffer contains unsupported image format') {
         error.message = 'Unrecognised image file format'
       }
-      const errors = []
+      errors = []
       errors.push({
         name: 'files',
         text: error.message
@@ -109,6 +107,8 @@ const handlers = {
           .code(400)
       }
     }
+
+    return h.redirect(Paths.YOUR_PHOTOS)
   }
 }
 
