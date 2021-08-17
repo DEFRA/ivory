@@ -10,16 +10,24 @@ const ActiveDirectoryAuthService = require('../services/active-directory-auth.se
 const SECTION_2_ENDPOINT = 'cre2c_ivorysection2cases'
 const SECTION_10_ENDPOINT = 'cre2c_ivorysection10cases'
 
+const ContentTypes = {
+  APPLICATION_JSON: 'application/json',
+  APPLICATION_OCTET_STREAM: 'application/octet-stream'
+}
+
+const oDataVersion = '4.0'
+const PREFER_REPRESENTATION = 'return=representation'
+
 module.exports = class ODataService {
   static async createRecord (body, isSection2) {
     const token = await ActiveDirectoryAuthService.getToken()
 
     const headers = {
-      'OData-Version': '4.0',
-      'OData-MaxVersion': '4.0',
-      'Content-Type': 'application/json',
+      'OData-Version': oDataVersion,
+      'OData-MaxVersion': oDataVersion,
+      'Content-Type': ContentTypes.APPLICATION_JSON,
       Authorization: `Bearer ${token}`,
-      Prefer: 'return=representation'
+      Prefer: PREFER_REPRESENTATION
     }
 
     const idColumnName = isSection2
@@ -62,11 +70,11 @@ module.exports = class ODataService {
     const token = await ActiveDirectoryAuthService.getToken()
 
     const headers = {
-      'OData-Version': '4.0',
-      'OData-MaxVersion': '4.0',
-      'Content-Type': 'application/json',
+      'OData-Version': oDataVersion,
+      'OData-MaxVersion': oDataVersion,
+      'Content-Type': ContentTypes.APPLICATION_JSON,
       Authorization: `Bearer ${token}`,
-      Prefer: 'return=representation'
+      Prefer: PREFER_REPRESENTATION
     }
 
     const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
@@ -99,9 +107,9 @@ module.exports = class ODataService {
     const token = await ActiveDirectoryAuthService.getToken()
 
     const headers = {
-      'OData-Version': '4.0',
-      'OData-MaxVersion': '4.0',
-      'Content-Type': 'application/json',
+      'OData-Version': oDataVersion,
+      'OData-MaxVersion': oDataVersion,
+      'Content-Type': ContentTypes.APPLICATION_JSON,
       Authorization: `Bearer ${token}`
     }
 
@@ -140,11 +148,11 @@ module.exports = class ODataService {
       const url = `${apiEndpoint}/${SECTION_2_ENDPOINT}(${id})/${fieldName}`
 
       const headers = {
-        'OData-Version': '4.0',
-        'OData-MaxVersion': '4.0',
+        'OData-Version': oDataVersion,
+        'OData-MaxVersion': oDataVersion,
         Authorization: `Bearer ${token}`,
-        Prefer: 'return=representation',
-        'Content-Type': 'application/octet-stream',
+        Prefer: PREFER_REPRESENTATION,
+        'Content-Type': ContentTypes.APPLICATION_OCTET_STREAM,
         'x-ms-file-name': supportingInformation.files[i]
       }
 
