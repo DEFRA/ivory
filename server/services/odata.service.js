@@ -10,18 +10,17 @@ const ActiveDirectoryAuthService = require('../services/active-directory-auth.se
 const SECTION_2_ENDPOINT = 'cre2c_ivorysection2cases'
 const SECTION_10_ENDPOINT = 'cre2c_ivorysection10cases'
 
-const headers = {
-  'OData-Version': '4.0',
-  'OData-MaxVersion': '4.0',
-  'Content-Type': 'application/json'
-}
-
 module.exports = class ODataService {
   static async createRecord (body, isSection2) {
     const token = await ActiveDirectoryAuthService.getToken()
 
-    headers.Authorization = `Bearer ${token}`
-    headers.Prefer = 'return=representation'
+    const headers = {
+      'OData-Version': '4.0',
+      'OData-MaxVersion': '4.0',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      Prefer: 'return=representation'
+    }
 
     const idColumnName = isSection2
       ? DataVerseFieldName.SECTION_2_CASE_ID
@@ -62,8 +61,13 @@ module.exports = class ODataService {
   static async getRecord (id, isSection2) {
     const token = await ActiveDirectoryAuthService.getToken()
 
-    headers.Authorization = `Bearer ${token}`
-    headers.Prefer = 'return=representation'
+    const headers = {
+      'OData-Version': '4.0',
+      'OData-MaxVersion': '4.0',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      Prefer: 'return=representation'
+    }
 
     const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
 
@@ -94,8 +98,12 @@ module.exports = class ODataService {
   static async updateRecord (id, body, isSection2) {
     const token = await ActiveDirectoryAuthService.getToken()
 
-    headers.Authorization = `Bearer ${token}`
-    delete headers.Prefer
+    const headers = {
+      'OData-Version': '4.0',
+      'OData-MaxVersion': '4.0',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
 
     const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
 
@@ -105,7 +113,7 @@ module.exports = class ODataService {
 
     _setContentLength(headers, body)
 
-    console.log(`Fetching URL: [${url}]`)
+    console.log(`Patching URL: [${url}]`)
 
     const response = await fetch(url, {
       method: 'PATCH',
@@ -132,6 +140,8 @@ module.exports = class ODataService {
       const url = `${apiEndpoint}/${SECTION_2_ENDPOINT}(${id})/${fieldName}`
 
       const headers = {
+        'OData-Version': '4.0',
+        'OData-MaxVersion': '4.0',
         Authorization: `Bearer ${token}`,
         Prefer: 'return=representation',
         'Content-Type': 'application/octet-stream',
@@ -139,8 +149,6 @@ module.exports = class ODataService {
       }
 
       const body = Buffer.from(supportingInformation.fileData[i], 'base64')
-
-      _setContentLength(headers, body)
 
       console.log(`Patching URL: [${url}]`)
 

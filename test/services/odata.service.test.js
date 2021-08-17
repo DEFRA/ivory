@@ -93,6 +93,24 @@ describe('OData service', () => {
       expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
     })
   })
+
+  describe('updateRecordAttachments method', () => {
+    it('should add file attachments to a Section 2 record', async () => {
+      const id = mockSection2Entity.cre2c_ivorysection2caseid
+
+      const supportingInformation = {
+        files: ['document1.pdf', 'document2.pdf'],
+        fileData: ['document1', 'document12'],
+        fileSizes: [100, 200]
+      }
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)
+
+      await ODataService.updateRecordAttachments(id, supportingInformation)
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
+    })
+  })
 })
 
 const _createMocks = () => {
@@ -113,6 +131,14 @@ const _createMocks = () => {
     .reply(204)
     .patch(
       `/${config.dataverseApiEndpoint}/cre2c_ivorysection10cases(${mockSection10Entity.cre2c_ivorysection10caseid})`
+    )
+    .reply(204)
+    .patch(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(SECTION_2_CASE_ID)/cre2c_supportingevidence1`
+    )
+    .reply(204)
+    .patch(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(SECTION_2_CASE_ID)/cre2c_supportingevidence2`
     )
     .reply(204)
 }
