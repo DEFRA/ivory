@@ -12,12 +12,12 @@ const CookieService = require('../../server/services/cookie.service')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-describe('/remove-photo route', () => {
+describe('/remove-document route', () => {
   let server
-  const url = '/remove-photo'
-  const nextUrlNoPhotos = '/upload-photo'
-  const nextUrlYourPhotos = '/your-photos'
-  const redisKey = 'upload-photo'
+  const url = '/remove-document'
+  const nextUrlNoDocuments = '/upload-document'
+  const nextUrlYourDocuments = '/your-documents'
+  const redisKey = 'upload-document'
 
   beforeAll(async () => {
     server = await createServer()
@@ -40,12 +40,12 @@ describe('/remove-photo route', () => {
       method: 'GET'
     }
 
-    describe('GET: One photo', () => {
+    describe('GET: One document', () => {
       beforeEach(() => {
         RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
       })
 
-      it('should redirect to the "Upload photos" page', async () => {
+      it('should redirect to the "Upload documents" page', async () => {
         getOptions.url = `${url}/1`
 
         expect(RedisService.get).toBeCalledTimes(0)
@@ -70,24 +70,22 @@ describe('/remove-photo route', () => {
           JSON.stringify({
             files: [],
             fileData: [],
-            fileSizes: [],
-            thumbnails: [],
-            thumbnailData: []
+            fileSizes: []
           })
         )
 
-        expect(response.headers.location).toEqual(nextUrlNoPhotos)
+        expect(response.headers.location).toEqual(nextUrlNoDocuments)
       })
     })
 
-    describe('GET: Multiple photos', () => {
+    describe('GET: Multiple documents', () => {
       beforeEach(() => {
         RedisService.get = jest
           .fn()
           .mockResolvedValue(JSON.stringify(mockDataSixPhotos))
       })
 
-      it('should redirect to the "Your photos" page', async () => {
+      it('should redirect to the "Your documents" page', async () => {
         getOptions.url = `${url}/1`
 
         expect(RedisService.get).toBeCalledTimes(0)
@@ -112,28 +110,24 @@ describe('/remove-photo route', () => {
           JSON.stringify({
             files: mockDataSixPhotos.files.slice(1),
             fileData: mockDataSixPhotos.fileData.slice(1),
-            fileSizes: mockDataSixPhotos.fileSizes.slice(1),
-            thumbnails: mockDataSixPhotos.thumbnails.slice(1),
-            thumbnailData: mockDataSixPhotos.thumbnailData.slice(1)
+            fileSizes: mockDataSixPhotos.fileSizes.slice(1)
           })
         )
 
-        expect(response.headers.location).toEqual(nextUrlYourPhotos)
+        expect(response.headers.location).toEqual(nextUrlYourDocuments)
       })
     })
   })
 })
 
 const mockData = {
-  files: ['1.png'],
+  files: ['1.pdf'],
   fileData: ['file-data'],
-  fileSizes: [100],
-  thumbnails: ['1-thumbnail.png'],
-  thumbnailData: ['thumbnail-data']
+  fileSizes: [100]
 }
 
 const mockDataSixPhotos = {
-  files: ['1.png', '2.jpeg', '3.png', '4.jpeg', '5.png', '6.png'],
+  files: ['1.pdf', '2.pdf', '3.pdf', '4.pdf', '5.pdf', '6.pdf'],
   fileData: [
     'file-data-1',
     'file-data-2',
@@ -142,23 +136,7 @@ const mockDataSixPhotos = {
     'file-data-5',
     'file-data-6'
   ],
-  fileSizes: [100, 200, 300, 400, 500, 600],
-  thumbnails: [
-    '1-thumbnail.png',
-    '2-thumbnail.jpeg',
-    '3-thumbnail.png',
-    '4-thumbnail.jpeg',
-    '5-thumbnail.png',
-    '6-thumbnail.jpeg'
-  ],
-  thumbnailData: [
-    'thumbnail-data-1',
-    'thumbnail-data-2',
-    'thumbnail-data-3',
-    'thumbnail-data-4',
-    'thumbnail-data-5',
-    'thumbnail-data-6'
-  ]
+  fileSizes: [100, 200, 300, 400, 500, 600]
 }
 
 const _createMocks = () => {
