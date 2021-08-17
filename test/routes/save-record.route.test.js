@@ -15,6 +15,9 @@ const RedisService = require('../../server/services/redis.service')
 jest.mock('../../server/services/odata.service')
 const ODataService = require('../../server/services/odata.service')
 
+jest.mock('../../server/services/payment.service')
+const PaymentService = require('../../server/services/payment.service')
+
 describe('/save-record route', () => {
   let server
   const url = '/save-record'
@@ -50,6 +53,7 @@ describe('/save-record route', () => {
 
         RedisService.get = jest
           .fn()
+          .mockResolvedValueOnce('123456789')
           .mockResolvedValueOnce(ItemType.MUSICAL)
           .mockResolvedValueOnce(
             JSON.stringify({
@@ -89,6 +93,8 @@ describe('/save-record route', () => {
       })
 
       it('should save the record in the dataverse and redirect to the service complete page', async () => {
+        PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'success' } })
+
         expect(ODataService.createRecord).toBeCalledTimes(0)
         expect(ODataService.updateRecord).toBeCalledTimes(0)
 
@@ -104,6 +110,25 @@ describe('/save-record route', () => {
 
         expect(response.headers.location).toEqual(nextUrl)
       })
+
+      it('should NOT save the record in the dataverse when the payment has failed and redirect to the service complete page', async () => {
+        PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'failure' } })
+
+        expect(ODataService.createRecord).toBeCalledTimes(0)
+        expect(ODataService.updateRecord).toBeCalledTimes(0)
+
+        const response = await TestHelper.submitGetRequest(
+          server,
+          getOptions,
+          302,
+          false
+        )
+
+        expect(ODataService.createRecord).toBeCalledTimes(0)
+        expect(ODataService.updateRecord).toBeCalledTimes(0)
+
+        expect(response.headers.location).toEqual(nextUrl)
+      })
     })
 
     describe('GET: Section 2', () => {
@@ -114,6 +139,7 @@ describe('/save-record route', () => {
 
         RedisService.get = jest
           .fn()
+          .mockResolvedValueOnce('123456789')
           .mockResolvedValueOnce(ItemType.HIGH_VALUE)
           .mockResolvedValueOnce(
             JSON.stringify({
@@ -150,6 +176,8 @@ describe('/save-record route', () => {
       })
 
       it('should save the record in the dataverse and redirect to the service complete page', async () => {
+        PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'success' } })
+
         expect(ODataService.createRecord).toBeCalledTimes(0)
         expect(ODataService.updateRecord).toBeCalledTimes(0)
 
@@ -162,6 +190,25 @@ describe('/save-record route', () => {
 
         expect(ODataService.createRecord).toBeCalledTimes(1)
         expect(ODataService.updateRecord).toBeCalledTimes(1)
+
+        expect(response.headers.location).toEqual(nextUrl)
+      })
+
+      it('should NOT save the record in the dataverse when the payment has failed and redirect to the service complete page', async () => {
+        PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'failure' } })
+
+        expect(ODataService.createRecord).toBeCalledTimes(0)
+        expect(ODataService.updateRecord).toBeCalledTimes(0)
+
+        const response = await TestHelper.submitGetRequest(
+          server,
+          getOptions,
+          302,
+          false
+        )
+
+        expect(ODataService.createRecord).toBeCalledTimes(0)
+        expect(ODataService.updateRecord).toBeCalledTimes(0)
 
         expect(response.headers.location).toEqual(nextUrl)
       })

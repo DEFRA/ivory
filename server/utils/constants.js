@@ -100,13 +100,21 @@ const IvoryVolumeReasons = {
 
 const HOME_URL = '/'
 
+const PaymentResult = {
+  SUCCESS: 'success',
+  FAILED: 'failed',
+  ERROR: 'error',
+  Codes: {
+    CANCELLED: 'P0030'
+  }
+}
+
 const Urls = {
   GOV_UK_HOME: 'https://www.gov.uk/'
 }
 
 const Paths = {
   ACCESSIBILITY_STATEMENT: '/accessibility-statement',
-  API_TEST: '/api-test',
   APPLICANT_ADDRESS_CHOOSE: '/user-details/applicant/address-choose',
   APPLICANT_ADDRESS_CONFIRM: '/user-details/applicant/address-confirm',
   APPLICANT_ADDRESS_ENTER: '/user-details/applicant/address-enter',
@@ -172,7 +180,6 @@ const Paths = {
 
 const Views = {
   ACCESSIBILITY_STATEMENT: 'accessibility-statement',
-  API_TEST: 'api-test',
   ADDRESS_CHOOSE: 'user-details/address-choose',
   ADDRESS_CONFIRM: 'user-details/address-confirm',
   ADDRESS_ENTER: 'user-details/address-enter',
@@ -284,6 +291,7 @@ module.exports = Object.freeze({
   IvoryVolumeReasons,
   Options,
   Paths,
+  PaymentResult,
   RedisKeys,
   StatusCodes,
   Urls,

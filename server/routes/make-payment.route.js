@@ -72,14 +72,16 @@ const handlers = {
 }
 
 /**
- * Generates a random 6 character reference
+ * Generates a random 8 character uppercase alphanumeric reference
  * @returns Reference
  */
 const _generateReference = () => {
   return RandomString.generate({
-    length: 6,
-    charset: 'alphabetic'
-  }).toUpperCase()
+    length: 8,
+    readable: true,
+    charset: 'alphanumeric',
+    capitalization: 'uppercase'
+  })
 }
 
 module.exports = [
