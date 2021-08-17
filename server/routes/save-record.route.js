@@ -149,7 +149,7 @@ const _getCommonFields = async (request, itemDescription) => {
     await RedisService.get(request, RedisKeys.IVORY_AGE)
   )
 
-  const commonFields = {
+  return {
     createdon: now,
     [DataVerseFieldName.DATE_STATUS_APPLIED]: now,
     statuscode: 1,
@@ -176,8 +176,6 @@ const _getCommonFields = async (request, itemDescription) => {
     ...(await _addInitialPhoto(request)),
     ...(await _addOwnerAndApplicantDetails(request))
   }
-
-  return commonFields
 }
 
 const _addOwnerAndApplicantDetails = async request => {
@@ -235,20 +233,14 @@ const _addAdditionalPhotos = async request => {
   return additionalPhotos
 }
 
-const _getExemptionCategoryCode = itemType => {
-  return ExemptionTypeLookup[itemType]
-}
+const _getExemptionCategoryCode = itemType => ExemptionTypeLookup[itemType]
 
-const _getAgeExemptionReasonCodes = ivoryAgeReasons => {
-  const ageExemptionReasonCodes =
-    ivoryAgeReasons && ivoryAgeReasons.ivoryAge
-      ? ivoryAgeReasons.ivoryAge
-          .map(ivoryAgeReason => AgeExemptionReasonLookup[ivoryAgeReason])
-          .join(',')
-      : ''
-
-  return ageExemptionReasonCodes
-}
+const _getAgeExemptionReasonCodes = ivoryAgeReasons =>
+  ivoryAgeReasons && ivoryAgeReasons.ivoryAge
+    ? ivoryAgeReasons.ivoryAge
+        .map(ivoryAgeReason => AgeExemptionReasonLookup[ivoryAgeReason])
+        .join(',')
+    : ''
 
 const _getIntentionCategoryCode = intention => IntentionLookup[intention]
 

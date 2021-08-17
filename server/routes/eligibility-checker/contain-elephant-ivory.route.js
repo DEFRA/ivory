@@ -32,7 +32,7 @@ const handlers = {
         await RedisService.set(request, RedisKeys.CONTAIN_ELEPHANT_IVORY, false)
 
         return h.redirect(Paths.DO_NOT_NEED_SERVICE)
-      case Options.I_DONT_KNOW:
+      default:
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }

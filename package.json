@@ -52,13 +52,13 @@
     "nunjucks": "3.2.3",
     "postcode-validator": "^3.5.3",
     "randomstring": "^1.2.1",
-    "sharp": "^0.28.3",
+    "sharp": "^0.29.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "jest": "^27.0.6",
     "jest-junit": "^12.2.0",
-    "jsdom": "^16.7.0",
+    "jsdom": "^17.0.0",
     "nock": "^13.1.1",
     "standard": "^16.0.3"
   },
