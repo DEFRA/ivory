@@ -427,6 +427,7 @@ const _createMocks = () => {
   }
   RedisService.get = jest
     .fn()
+    .mockResolvedValueOnce(JSON.stringify(mockData))
     .mockResolvedValueOnce('false')
     .mockResolvedValueOnce(JSON.stringify(mockData))
 

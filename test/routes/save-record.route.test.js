@@ -93,7 +93,9 @@ describe('/save-record route', () => {
       })
 
       it('should save the record in the dataverse and redirect to the service complete page', async () => {
-        PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'success' } })
+        PaymentService.lookupPayment = jest
+          .fn()
+          .mockResolvedValue({ state: { status: 'success' } })
 
         expect(ODataService.createRecord).toBeCalledTimes(0)
         expect(ODataService.updateRecord).toBeCalledTimes(0)
@@ -112,7 +114,9 @@ describe('/save-record route', () => {
       })
 
       it('should NOT save the record in the dataverse when the payment has failed and redirect to the service complete page', async () => {
-        PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'failure' } })
+        PaymentService.lookupPayment = jest
+          .fn()
+          .mockResolvedValue({ state: { status: 'failure' } })
 
         expect(ODataService.createRecord).toBeCalledTimes(0)
         expect(ODataService.updateRecord).toBeCalledTimes(0)
@@ -173,13 +177,17 @@ describe('/save-record route', () => {
           .mockResolvedValueOnce('SUBMISSION_REFERENCE')
           .mockResolvedValueOnce('RMI_REASON')
           .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
+          .mockResolvedValueOnce(JSON.stringify(mockFileAttachmentData))
       })
 
       it('should save the record in the dataverse and redirect to the service complete page', async () => {
-        PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'success' } })
+        PaymentService.lookupPayment = jest
+          .fn()
+          .mockResolvedValue({ state: { status: 'success' } })
 
         expect(ODataService.createRecord).toBeCalledTimes(0)
         expect(ODataService.updateRecord).toBeCalledTimes(0)
+        expect(ODataService.updateRecordAttachments).toBeCalledTimes(0)
 
         const response = await TestHelper.submitGetRequest(
           server,
@@ -190,12 +198,15 @@ describe('/save-record route', () => {
 
         expect(ODataService.createRecord).toBeCalledTimes(1)
         expect(ODataService.updateRecord).toBeCalledTimes(1)
+        expect(ODataService.updateRecordAttachments).toBeCalledTimes(1)
 
         expect(response.headers.location).toEqual(nextUrl)
       })
 
       it('should NOT save the record in the dataverse when the payment has failed and redirect to the service complete page', async () => {
-        PaymentService.lookupPayment = jest.fn().mockResolvedValue({ state: { status: 'failure' } })
+        PaymentService.lookupPayment = jest
+          .fn()
+          .mockResolvedValue({ state: { status: 'failure' } })
 
         expect(ODataService.createRecord).toBeCalledTimes(0)
         expect(ODataService.updateRecord).toBeCalledTimes(0)
@@ -209,6 +220,7 @@ describe('/save-record route', () => {
 
         expect(ODataService.createRecord).toBeCalledTimes(0)
         expect(ODataService.updateRecord).toBeCalledTimes(0)
+        expect(ODataService.updateRecordAttachments).toBeCalledTimes(0)
 
         expect(response.headers.location).toEqual(nextUrl)
       })
@@ -222,6 +234,13 @@ const _createMocks = () => {
     .mockReturnValue('THE_SESSION_COOKIE')
 
   ODataService.updateRecord = jest.fn()
+  ODataService.updateRecordAttachments = jest.fn()
+}
+
+const mockFileAttachmentData = {
+  files: ['document1.pdf', 'document2.pdf'],
+  fileData: ['document1', 'document12'],
+  fileSizes: [100, 200]
 }
 
 const mockImageUploadData = {
