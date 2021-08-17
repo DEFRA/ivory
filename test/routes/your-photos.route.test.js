@@ -16,6 +16,7 @@ describe('/your-photos route', () => {
   let server
   const url = '/your-photos'
   const nextUrl = '/describe-the-item'
+  const nextUrlUploadPhoto = '/upload-photo'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -47,6 +48,25 @@ describe('/your-photos route', () => {
       method: 'GET',
       url
     }
+
+    describe('GET: 0 photos', () => {
+      beforeEach(async () => {
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValue(JSON.stringify(mockNoData))
+      })
+
+      it('should redirect back to the "Upload photo" page if there are no uploaded photos to display', async () => {
+        const response = await TestHelper.submitGetRequest(
+          server,
+          getOptions,
+          302,
+          false
+        )
+
+        expect(response.headers.location).toEqual(nextUrlUploadPhoto)
+      })
+    })
 
     describe('GET: 6 or less photos', () => {
       beforeEach(async () => {
@@ -89,7 +109,7 @@ describe('/your-photos route', () => {
       })
     })
 
-    describe('GET: 6 or less photos', () => {
+    describe('GET: 6 photos', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
@@ -127,6 +147,14 @@ describe('/your-photos route', () => {
     })
   })
 })
+
+const mockNoData = {
+  files: [],
+  fileData: [],
+  fileSizes: [],
+  thumbnails: [],
+  thumbnailData: []
+}
 
 const mockData = {
   files: ['1.png'],

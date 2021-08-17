@@ -16,6 +16,7 @@ describe('/your-documents route', () => {
   let server
   const url = '/your-documents'
   const nextUrl = '/who-owns-the-item'
+  const nextUrlUploadDocument = '/upload-document'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -47,6 +48,25 @@ describe('/your-documents route', () => {
       method: 'GET',
       url
     }
+
+    describe('GET: 0 documents', () => {
+      beforeEach(async () => {
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValue(JSON.stringify(mockNoData))
+      })
+
+      it('should redirect back to the "Upload photo" page if there are no uploaded photos to display', async () => {
+        const response = await TestHelper.submitGetRequest(
+          server,
+          getOptions,
+          302,
+          false
+        )
+
+        expect(response.headers.location).toEqual(nextUrlUploadDocument)
+      })
+    })
 
     describe('GET: 6 or less documents', () => {
       beforeEach(async () => {
@@ -95,7 +115,7 @@ describe('/your-documents route', () => {
       })
     })
 
-    describe('GET: 6 or less documents', () => {
+    describe('GET: 6 documents', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
@@ -135,6 +155,12 @@ describe('/your-documents route', () => {
     })
   })
 })
+
+const mockNoData = {
+  files: [],
+  fileData: [],
+  fileSizes: []
+}
 
 const mockData = {
   files: ['1.pdf'],
