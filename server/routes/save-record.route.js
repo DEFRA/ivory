@@ -26,7 +26,9 @@ const handlers = {
 
     await _updateRecord(request, entity, isSection2)
 
-    await _updateRecordAttachments(request, entity, isSection2)
+    if (isSection2) {
+      await _updateRecordAttachments(request, entity)
+    }
 
     return h.redirect(Paths.SERVICE_COMPLETE)
   }
@@ -54,16 +56,16 @@ const _updateRecord = async (request, entity, isSection2) => {
 }
 
 const _updateRecordAttachments = async (request, entity) => {
-  // const supportingInformation = JSON.parse(
-  //   await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
-  // )
-  // // console.log(supportingInformation)
-  // if (supportingInformation) {
-  //   const file = supportingInformation.fileData[0]
-  //   // const id = entity[DataVerseFieldName.SECTION_2_CASE_ID]
-  //   const id2 = '8c09c224-d3fa-eb11-94ef-000d3ad67dc2'
-  //   return ODataService.updateRecordAttachment(id2, file)
-  // }
+  const supportingInformation = JSON.parse(
+    await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
+  )
+
+  if (supportingInformation) {
+    return ODataService.updateRecordAttachments(
+      entity[DataVerseFieldName.SECTION_2_CASE_ID],
+      supportingInformation
+    )
+  }
 }
 
 module.exports = [
@@ -93,8 +95,7 @@ const _createSection2Body = async (request, itemType, itemDescription) => {
     [DataVerseFieldName.WHY_OUTSTANDINLY_VALUABLE]: await RedisService.get(
       request,
       RedisKeys.WHY_IS_ITEM_RMI
-    ),
-    ...(await _addSupportingInformation(request))
+    )
   }
 
   return body
@@ -225,29 +226,6 @@ const _addAdditionalPhotos = async request => {
   }
 
   return additionalPhotos
-}
-
-// TODO - IVORY-367 - These fields will be added
-const _addSupportingInformation = async request => {
-  // const supportingInformation = JSON.parse(
-  //   await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
-  // )
-
-  // console.log(supportingInformation)
-
-  // return {
-  //   [DataVerseFieldName.SUPPORTING_EVIDENCE_1]: supportingInformation
-  //     ? supportingInformation.fileData[0]
-  //     : null,
-  //   [DataVerseFieldName.SUPPORTING_EVIDENCE_1_NAME]: supportingInformation
-  //     ? supportingInformation.files[0]
-  //     : null
-  // }
-
-  return {
-    [DataVerseFieldName.SUPPORTING_EVIDENCE_1]: null,
-    [DataVerseFieldName.SUPPORTING_EVIDENCE_1_NAME]: null
-  }
 }
 
 const _getExemptionCategoryCode = itemType => {

@@ -1,6 +1,6 @@
 'use strict'
 
-const { Paths, Views } = require('../utils/constants')
+const { DataVerseFieldName, Paths, Views } = require('../utils/constants')
 
 const ODataService = require('../services/odata.service')
 
@@ -29,7 +29,9 @@ const _getContext = (entity, section, isSection2) => {
     section,
     id:
       entity[
-        isSection2 ? 'cre2c_ivorysection2caseid' : 'cre2c_ivorysection10caseid'
+        isSection2
+          ? DataVerseFieldName.SECTION_2_CASE_ID
+          : DataVerseFieldName.SECTION_10_CASE_ID
       ],
     entity: JSON.stringify(entity)
   }
