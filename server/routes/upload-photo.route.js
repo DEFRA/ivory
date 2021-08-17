@@ -126,10 +126,10 @@ const _getContext = async request => {
   const hideHelpText = uploadData.files.length
 
   return {
-    pageTitle: !hideHelpText ? 'Add a photo of your item' : 'Add another photo',
     hideHelpText,
-    accept: ALLOWED_EXTENSIONS.join(','),
     uploadData,
+    pageTitle: !hideHelpText ? 'Add a photo of your item' : 'Add another photo',
+    accept: ALLOWED_EXTENSIONS.join(','),
     fileListUrl: Paths.YOUR_PHOTOS,
     maximumFileSize: config.maximumFileSize
   }

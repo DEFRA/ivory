@@ -24,12 +24,9 @@ const handlers = {
         .code(400)
     }
 
-    switch (payload.wantToAddDocuments) {
-      case Options.YES:
-        return h.redirect(Paths.UPLOAD_DOCUMENT)
-      default:
-        return h.redirect(Paths.WHO_OWNS_ITEM)
-    }
+    return payload.wantToAddDocuments === Options.YES
+      ? h.redirect(Paths.UPLOAD_DOCUMENT)
+      : h.redirect(Paths.WHO_OWNS_ITEM)
   }
 }
 

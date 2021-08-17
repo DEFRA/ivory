@@ -18,9 +18,7 @@ const handlers = {
     })
   },
 
-  post: async (request, h) => {
-    return h.redirect(Paths.WHO_OWNS_ITEM)
-  }
+  post: async (request, h) => h.redirect(Paths.WHO_OWNS_ITEM)
 }
 
 const _getContext = async request => {
@@ -54,11 +52,11 @@ const _getContext = async request => {
   })
 
   return {
-    pageTitle: 'Your documents',
     uploadData,
+    rows,
+    pageTitle: 'Your documents',
     addPhotoUrl: Paths.UPLOAD_DOCUMENT,
     maxPhotos: MAX_PHOTOS,
-    rows,
     allowMorePhotos: uploadData.files.length < MAX_PHOTOS
   }
 }

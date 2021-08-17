@@ -103,12 +103,12 @@ const _getContext = async request => {
   const hideHelpText = uploadData.files.length
 
   return {
+    hideHelpText,
+    uploadData,
     pageTitle: !hideHelpText
       ? 'Add a document to support your case'
       : 'Add another document',
-    hideHelpText,
     accept: ALLOWED_EXTENSIONS.join(','),
-    uploadData,
     fileListUrl: Paths.YOUR_DOCUMENTS,
     maximumFileSize: config.maximumFileSize
   }

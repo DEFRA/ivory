@@ -21,9 +21,7 @@ const handlers = {
     })
   },
 
-  post: async (request, h) => {
-    return h.redirect(Paths.DESCRIBE_THE_ITEM)
-  }
+  post: async (request, h) => h.redirect(Paths.DESCRIBE_THE_ITEM)
 }
 
 const _getContext = async request => {
@@ -64,11 +62,11 @@ const _getContext = async request => {
   })
 
   return {
-    pageTitle: 'Your photos',
+    rows,
     uploadData,
+    pageTitle: 'Your photos',
     addPhotoUrl: Paths.UPLOAD_PHOTO,
     maxPhotos: MAX_PHOTOS,
-    rows,
     allowMorePhotos: uploadData.files.length < MAX_PHOTOS
   }
 }
