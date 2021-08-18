@@ -102,7 +102,7 @@ describe('/ivory-volume route', () => {
           const element = document.querySelector(`#${elementIds.listHeading}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'The following pages will guide you through the process.'
+            'Complete the process by following the steps below:'
           )
         })
 
@@ -215,7 +215,7 @@ describe('/ivory-volume route', () => {
           const element = document.querySelector(`#${elementIds.listHeading}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'The following pages will guide you through the process.'
+            'Complete the process by following the steps below:'
           )
         })
 
@@ -333,7 +333,7 @@ describe('/ivory-volume route', () => {
           const element = document.querySelector(`#${elementIds.listHeading}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'The following pages will guide you through the process.'
+            'Complete the process by following the steps below:'
           )
         })
 
@@ -437,7 +437,7 @@ describe('/ivory-volume route', () => {
           const element = document.querySelector(`#${elementIds.listHeading}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'The following pages will guide you through the process.'
+            'Complete the process by following the steps below:'
           )
         })
 
