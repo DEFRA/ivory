@@ -76,7 +76,7 @@ describe('/eligibility-checker/cannot-continue route', () => {
       const element = document.querySelector(`#${elementIds.callOutText}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'You may need to get an expert to check it for you, such as a registered antiques dealer or auctioneer that specialises in ivory.'
+        'You may need to get an expert to check it for you, such as an antiques dealer or auctioneer that specialises in ivory.'
       )
     })
 
