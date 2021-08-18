@@ -9,16 +9,13 @@
 
     <div class="govuk-grid-column-two-thirds">
 
+      <h1 class="govuk-heading-l" id="pageTitle">{{ pageTitle }}</h1>
+
+      <p class="govuk-body" id="introPara">Unless your item is to be sold or hired out to a qualifying museum, any replacement ivory must have been taken from an elephant before 1975 and used only to restore the item.</p>
+
       {{ govukRadios({
         idPrefix: "whatTypeOfItemIsIt",
         name: "whatTypeOfItemIsIt",
-        fieldset: {
-          legend: {
-            text: "What is your ivory item?",
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
         errorMessage: fieldErrors['whatTypeOfItemIsIt'],
         items: items
       }) }}

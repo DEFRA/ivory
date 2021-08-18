@@ -16,6 +16,8 @@ describe('/what-type-of-item-is-it route', () => {
   const nextUrl = '/can-continue'
 
   const elementIds = {
+    pageTitle: 'pageTitle',
+    introPara: 'introPara',
     whatTypeOfItemIsIt: 'whatTypeOfItemIsIt',
     whatTypeOfItemIsIt2: 'whatTypeOfItemIsIt-2',
     whatTypeOfItemIsIt3: 'whatTypeOfItemIsIt-3',
@@ -63,7 +65,7 @@ describe('/what-type-of-item-is-it route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector('.govuk-fieldset__heading')
+      const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'What is your ivory item?'
@@ -77,7 +79,7 @@ describe('/what-type-of-item-is-it route', () => {
         'Musical instrument made before 1975 with less than 20% ivory',
         'Musical instrument made before 1975 with less than 20% ivory',
         false,
-        'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
+        ''
       )
 
       TestHelper.checkRadioOption(
@@ -86,7 +88,7 @@ describe('/what-type-of-item-is-it route', () => {
         'Item made before 3 March 1947 with less than 10% ivory',
         'Item made before 3 March 1947 with less than 10% ivory',
         false,
-        'The ivory must be integral to the item. Any replacement ivory must have been taken from an elephant before 1 January 1975.'
+        'The ivory must be integral to the item.'
       )
 
       TestHelper.checkRadioOption(
@@ -95,7 +97,7 @@ describe('/what-type-of-item-is-it route', () => {
         'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
         'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
         false,
-        'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
+        ''
       )
 
       TestHelper.checkRadioOption(
@@ -113,7 +115,7 @@ describe('/what-type-of-item-is-it route', () => {
         'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
         'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
         false,
-        'Any replacement ivory must have been taken from an elephant before 1 January 1975.'
+        ''
       )
     })
 
