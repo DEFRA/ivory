@@ -16,10 +16,16 @@ const handlers = {
 
     const submissionReference = _generateReference()
 
-    const description = await RedisService.get(
+    const itemType = await RedisService.get(
       request,
       RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
     )
+
+    const isSection2 = itemType === ItemType.HIGH_VALUE
+
+    const description = isSection2
+      ? 'Ivory Act application for a certificate'
+      : 'Ivory Act self assessment'
 
     const email = await RedisService.get(
       request,
@@ -45,12 +51,6 @@ const handlers = {
       submissionDate.toISOString()
     )
 
-    const itemType = await RedisService.get(
-      request,
-      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
-    )
-
-    const isSection2 = itemType === ItemType.HIGH_VALUE
     if (isSection2) {
       await RedisService.set(
         request,

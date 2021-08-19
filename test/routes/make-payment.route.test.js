@@ -72,16 +72,11 @@ describe('/make-payment route', () => {
         false
       )
 
-      expect(RedisService.get).toBeCalledTimes(4)
+      expect(RedisService.get).toBeCalledTimes(3)
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
         'payment-amount'
-      )
-
-      expect(RedisService.get).toBeCalledWith(
-        expect.any(Object),
-        'what-type-of-item-is-it'
       )
 
       expect(RedisService.get).toBeCalledWith(
@@ -132,16 +127,11 @@ describe('/make-payment route', () => {
         false
       )
 
-      expect(RedisService.get).toBeCalledTimes(4)
+      expect(RedisService.get).toBeCalledTimes(3)
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
         'payment-amount'
-      )
-
-      expect(RedisService.get).toBeCalledWith(
-        expect.any(Object),
-        'what-type-of-item-is-it'
       )
 
       expect(RedisService.get).toBeCalledWith(
