@@ -7,7 +7,10 @@ const { buildErrorSummary, Validators } = require('../../utils/validation')
 const completelyCertain = 'Completely'
 
 const handlers = {
-  get: (request, h) => h.view(Views.HOW_CERTAIN),
+  get: (request, h) =>
+    h.view(Views.HOW_CERTAIN, {
+      ..._getContext(request)
+    }),
 
   post: async (request, h) => {
     const payload = request.payload
@@ -16,6 +19,7 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.HOW_CERTAIN, {
+          ..._getContext(),
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -32,6 +36,13 @@ const handlers = {
         ? Paths.WHAT_TYPE_OF_ITEM_IS_IT
         : Paths.CONTAIN_ELEPHANT_IVORY
     )
+  }
+}
+
+const _getContext = () => {
+  return {
+    pageTitle:
+      'How certain are you that your item is exempt from the ivory ban?'
   }
 }
 

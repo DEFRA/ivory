@@ -212,7 +212,11 @@ describe('/upload-photo route', () => {
 
       it('should have the Cancel link', () => {
         const element = document.querySelector(`#${elementIds.cancel}`)
-        TestHelper.checkLink(element, 'Cancel', '/your-photos')
+        TestHelper.checkLink(
+          element,
+          'Cancel and return to ‘Your photos’',
+          '/your-photos'
+        )
       })
     })
   })

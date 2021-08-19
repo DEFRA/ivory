@@ -203,7 +203,11 @@ describe('/upload-document route', () => {
 
       it('should have the Cancel link', () => {
         const element = document.querySelector(`#${elementIds.cancel}`)
-        TestHelper.checkLink(element, 'Cancel', '/your-documents')
+        TestHelper.checkLink(
+          element,
+          'Cancel and return to ‘Your documents‘',
+          '/your-documents'
+        )
       })
     })
   })

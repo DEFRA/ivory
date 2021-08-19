@@ -142,7 +142,7 @@ describe('/what-type-of-item-is-it route', () => {
       TestHelper.checkLink(
         element,
         'check if you can sell or hire out your item',
-        '/eligibility-checker/how-certain'
+        '/eligibility-checker/contain-elephant-ivory'
       )
     })
 

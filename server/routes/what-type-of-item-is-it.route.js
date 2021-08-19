@@ -37,7 +37,8 @@ const handlers = {
 const _getContext = async request => {
   return {
     pageTitle: 'What is your ivory item?',
-    items: await _getOptions(request)
+    items: await _getOptions(request),
+    linkUrl: Paths.CONTAIN_ELEPHANT_IVORY
   }
 }
 
