@@ -9,7 +9,7 @@ const completelyCertain = 'Completely'
 const handlers = {
   get: (request, h) =>
     h.view(Views.HOW_CERTAIN, {
-      ..._getContext(request)
+      ..._getContext()
     }),
 
   post: async (request, h) => {
