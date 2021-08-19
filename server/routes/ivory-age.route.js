@@ -67,9 +67,21 @@ const _getContext = async request => {
   const itemType = await _getItemType(request)
   const madeBeforeDate = _getMadeBeforeDate(itemType)
 
+  const options = await _getCheckboxes(payload, itemType)
+  const otherCheckbox = options.pop()
+
+  const items = options.map(option => {
+    return {
+      value: option.label,
+      text: option.label,
+      checked: option.checked
+    }
+  })
+
   return {
+    items,
+    otherCheckbox,
     pageTitle: `How do you know the item was made before ${madeBeforeDate}?`,
-    options: await _getCheckboxes(payload, itemType),
     helpText: _getHelpText(itemType),
     otherReason:
       payload &&
@@ -77,8 +89,7 @@ const _getContext = async request => {
       Array.isArray(payload.ivoryAge) &&
       payload.ivoryAge.includes(AgeExemptionReasons.OTHER_REASON)
         ? payload.otherReason
-        : null,
-    otherReasonCheckboxIndex: 7
+        : null
   }
 }
 
@@ -93,13 +104,6 @@ const _getCheckboxes = async (payload, itemType) => {
     _getCheckbox(ivoryAge, madeBeforeOption),
     _getCheckbox(ivoryAge, AgeExemptionReasons.EXPERT_VERIFICATION),
     _getCheckbox(ivoryAge, AgeExemptionReasons.PROFESSIONAL_OPINION)
-    // _getCheckbox(
-    //   ivoryAge,
-    //   itemType === ItemType.HIGH_VALUE
-    //     ? AgeExemptionReasons.CARBON_DATED
-    //     : AgeExemptionReasons.OTHER_REASON
-    // )
-    // _getCheckbox(ivoryAge, AgeExemptionReasons.OTHER_REASON)
   ]
 
   if (itemType === ItemType.HIGH_VALUE) {
@@ -107,8 +111,6 @@ const _getCheckboxes = async (payload, itemType) => {
   }
 
   checkboxes.push(_getCheckbox(ivoryAge, AgeExemptionReasons.OTHER_REASON))
-
-  // console.log(checkboxes)
 
   return checkboxes
 }
@@ -150,16 +152,18 @@ const _getMadeBeforeOption = itemType => {
 const _validateForm = payload => {
   const errors = []
 
+  const errorMessage = 'You must tell us how you know the item’s age'
+
   if (Validators.empty(payload.ivoryAge)) {
     errors.push({
       name: 'ivoryAge',
-      text: 'You must tell us how you know the item’s age'
+      text: errorMessage
     })
   } else if (payload.ivoryAge.includes(AgeExemptionReasons.OTHER_REASON)) {
     if (Validators.empty(payload.otherReason)) {
       errors.push({
         name: 'otherReason',
-        text: 'You must tell us how you know the item’s age'
+        text: errorMessage
       })
     }
 

@@ -99,69 +99,6 @@ describe('/ivory-age route', () => {
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual('Continue')
       })
-
-      // it('should have the correct checkboxes', () => {
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge,
-      //     'It has a stamp, serial number or signature to prove its age',
-      //     'It has a stamp, serial number or signature to prove its age',
-      //     true
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge2,
-      //     'I have a dated receipt showing when it was bought or repaired',
-      //     'I have a dated receipt showing when it was bought or repaired'
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge3,
-      //     'I have a dated publication that shows or describes the item',
-      //     'I have a dated publication that shows or describes the item'
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge4,
-      //     'It’s been in the family since before 1975',
-      //     'It’s been in the family since before 1975'
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge5,
-      //     'I have written verification from a relevant expert',
-      //     'I have written verification from a relevant expert'
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge6,
-      //     'I am an expert, and it’s my professional opinion',
-      //     'I am an expert, and it’s my professional opinion'
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge7,
-      //     other,
-      //     other,
-      //     true
-      //   )
-      // })
-
-      // it('should have the other detail form field', () => {
-      //   TestHelper.checkFormField(
-      //     document,
-      //     elementIds.otherReason,
-      //     'Give details',
-      //     '',
-      //     'Some other reason'
-      //   )
-      // })
     })
 
     describe('GET: Item has < 10% ivory', () => {
@@ -185,30 +122,6 @@ describe('/ivory-age route', () => {
           'How do you know the item was made before 3 March 1947?'
         )
       })
-
-      // it('should have the correct checkboxes', () => {
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge4,
-      //     'It’s been in the family since before 3 March 1947',
-      //     'It’s been in the family since before 3 March 1947',
-      //     true
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge6,
-      //     'I am an expert, and it’s my professional opinion',
-      //     'I am an expert, and it’s my professional opinion'
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge7,
-      //     other,
-      //     other
-      //   )
-      // })
     })
 
     describe('GET: Has correct details for a portrait miniature', () => {
@@ -232,30 +145,6 @@ describe('/ivory-age route', () => {
           'How do you know the item was made before 1918?'
         )
       })
-
-      // it('should have the correct checkboxes', () => {
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge4,
-      //     'It’s been in the family since before 1918',
-      //     'It’s been in the family since before 1918',
-      //     true
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge6,
-      //     'I am an expert, and it’s my professional opinion',
-      //     'I am an expert, and it’s my professional opinion'
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge7,
-      //     other,
-      //     other
-      //   )
-      // })
     })
 
     describe('GET: Has correct details for S2 (item of outstandingly high value)', () => {
@@ -279,67 +168,123 @@ describe('/ivory-age route', () => {
           'How do you know the item was made before 1918?'
         )
       })
-
-      // it('should have the correct checkboxes', () => {
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge4,
-      //     'It’s been in the family since before 1918',
-      //     'It’s been in the family since before 1918',
-      //     true
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge6,
-      //     'I am an expert, and it’s my professional opinion',
-      //     'I am an expert, and it’s my professional opinion'
-      //   )
-
-      //   TestHelper.checkRadioOption(
-      //     document,
-      //     elementIds.ivoryAge7,
-      //     'It’s been carbon-dated',
-      //     'It’s been carbon-dated'
-      //   )
-      // })
     })
 
-    describe('Checkboxes: S2 (item of outstandingly high value)', () => {
-      // const ItemType = {
-      //   MUSICAL: 'Musical instrument made before 1975 with less than 20% ivory',
-      //   TEN_PERCENT: 'Item made before 3 March 1947 with less than 10% ivory',
-      //   MINIATURE:
-      //     'Portrait miniature made before 1918 with a surface area less than 320 square centimetres',
-      //   MUSEUM: 'Item to be sold or hired out to a qualifying museum',
-      //   HIGH_VALUE:
-      //     'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
-      // }
+    describe('GET: Checkboxes', () => {
+      describe('Item type of MUSICAL', () => {
+        beforeEach(async () => {
+          RedisService.get = jest
+            .fn()
+            .mockResolvedValueOnce(
+              JSON.stringify({
+                ivoryAge: [
+                  'It’s been in the family since before 1975',
+                  'Other reason'
+                ],
+                otherReason: 'Some other reason'
+              })
+            )
+            .mockResolvedValueOnce(ItemType.MUSICAL)
 
-      beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockResolvedValueOnce(
-            JSON.stringify({
-              ivoryAge: ['It’s been in the family since before 1918']
-            })
-          )
-          .mockResolvedValueOnce(ItemType.HIGH_VALUE)
+          document = await TestHelper.submitGetRequest(server, getOptions)
+        })
 
-        document = await TestHelper.submitGetRequest(server, getOptions)
+        it('should have the correct checkboxes', () => {
+          _testCheckboxes(document, false, '1975')
+        })
       })
 
-      it.only('should have the correct checkboxes', () => {
-        _testCheckboxes(
-          document,
-          'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
-          '1918'
-        )
-      })
-    })
+      describe('Item type of TEN_PERCENT', () => {
+        beforeEach(async () => {
+          RedisService.get = jest
+            .fn()
+            .mockResolvedValueOnce(
+              JSON.stringify({
+                ivoryAge: [
+                  'It’s been in the family since before 3 March 1947',
+                  'Other reason'
+                ],
+                otherReason: 'Some other reason'
+              })
+            )
+            .mockResolvedValueOnce(ItemType.TEN_PERCENT)
 
-    describe('Checkboxes: S10 (other items)', () => {
-      // TODO
+          document = await TestHelper.submitGetRequest(server, getOptions)
+        })
+
+        it('should have the correct checkboxes', () => {
+          _testCheckboxes(document, false, '3 March 1947')
+        })
+      })
+
+      describe('Item type of MINIATURE', () => {
+        beforeEach(async () => {
+          RedisService.get = jest
+            .fn()
+            .mockResolvedValueOnce(
+              JSON.stringify({
+                ivoryAge: [
+                  'It’s been in the family since before 1918',
+                  'Other reason'
+                ],
+                otherReason: 'Some other reason'
+              })
+            )
+            .mockResolvedValueOnce(ItemType.MINIATURE)
+
+          document = await TestHelper.submitGetRequest(server, getOptions)
+        })
+
+        it('should have the correct checkboxes', () => {
+          _testCheckboxes(document, false, '1918')
+        })
+      })
+
+      describe('Item type of MUSEUM', () => {
+        beforeEach(async () => {
+          RedisService.get = jest
+            .fn()
+            .mockResolvedValueOnce(
+              JSON.stringify({
+                ivoryAge: [
+                  'It’s been in the family since before 1918',
+                  'Other reason'
+                ],
+                otherReason: 'Some other reason'
+              })
+            )
+            .mockResolvedValueOnce(ItemType.MUSEUM)
+
+          document = await TestHelper.submitGetRequest(server, getOptions)
+        })
+
+        it('should have the correct checkboxes', () => {
+          _testCheckboxes(document, false, '1918')
+        })
+      })
+
+      describe('Item type of HIGH_VALUE', () => {
+        beforeEach(async () => {
+          RedisService.get = jest
+            .fn()
+            .mockResolvedValueOnce(
+              JSON.stringify({
+                ivoryAge: [
+                  'It’s been in the family since before 1918',
+                  'Other reason'
+                ],
+                otherReason: 'Some other reason'
+              })
+            )
+            .mockResolvedValueOnce(ItemType.HIGH_VALUE)
+
+          document = await TestHelper.submitGetRequest(server, getOptions)
+        })
+
+        it('should have the correct checkboxes', () => {
+          _testCheckboxes(document, true, '1918')
+        })
+      })
     })
   })
 
@@ -569,13 +514,12 @@ const _checkSelectedCheckboxAction = async (
   expect(response.headers.location).toEqual(nextUrl)
 }
 
-const _testCheckboxes = (document, itemType, date) => {
+const _testCheckboxes = (document, isSection2, date) => {
   TestHelper.checkRadioOption(
     document,
     elementIds.ivoryAge,
     'It has a stamp, serial number or signature to prove its age',
-    'It has a stamp, serial number or signature to prove its age',
-    true
+    'It has a stamp, serial number or signature to prove its age'
   )
 
   TestHelper.checkRadioOption(
@@ -596,7 +540,8 @@ const _testCheckboxes = (document, itemType, date) => {
     document,
     elementIds.ivoryAge4,
     `It’s been in the family since before ${date}`,
-    `It’s been in the family since before ${date}`
+    `It’s been in the family since before ${date}`,
+    true
   )
 
   TestHelper.checkRadioOption(
@@ -613,20 +558,30 @@ const _testCheckboxes = (document, itemType, date) => {
     'I am an expert, and it’s my professional opinion'
   )
 
-  TestHelper.checkRadioOption(
-    document,
-    elementIds.ivoryAge7,
-    'It’s been carbon-dated',
-    'It’s been carbon-dated'
-  )
+  if (isSection2) {
+    TestHelper.checkRadioOption(
+      document,
+      elementIds.ivoryAge7,
+      'It’s been carbon-dated',
+      'It’s been carbon-dated'
+    )
 
-  TestHelper.checkRadioOption(
-    document,
-    elementIds.ivoryAge8,
-    other,
-    other,
-    true
-  )
+    TestHelper.checkRadioOption(
+      document,
+      elementIds.ivoryAge8,
+      other,
+      other,
+      true
+    )
+  } else {
+    TestHelper.checkRadioOption(
+      document,
+      elementIds.ivoryAge7,
+      other,
+      other,
+      true
+    )
+  }
 
   TestHelper.checkFormField(
     document,

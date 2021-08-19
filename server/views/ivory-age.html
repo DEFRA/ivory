@@ -9,20 +9,30 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      {% if options[otherReasonCheckboxIndex].label == 'Other reason' %}
-        {% set otherHtml %}
-          {{ govukTextarea({
-            name: "otherReason",
-            id: "otherReason",
-            label: {
-              text: "Give details"
-            },
-            value: otherReason,
-            rows: 2,
-            errorMessage: fieldErrors['otherReason']
-          }) }}
-        {% endset -%}
-      {% endif %}
+      {% set otherHtml %}
+        {{ govukTextarea({
+          name: "otherReason",
+          id: "otherReason",
+          label: {
+            text: "Give details"
+          },
+          value: otherReason,
+          rows: 2,
+          errorMessage: fieldErrors['otherReason']
+        }) }}
+      {% endset -%}
+
+      {% set otherItem = {
+        value: otherCheckbox.label,
+        text: otherCheckbox.label,
+        checked: otherCheckbox.checked,
+        conditional: {
+          html: otherHtml
+        }
+      }
+      %}
+
+      {% set items = (items.push(otherItem), items) %}
 
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
@@ -35,54 +45,7 @@
           text: "Select all that apply"
         },
         errorMessage: fieldErrors['ivoryAge'],
-        items: [
-        {
-          value: options[0].label,
-          text: options[0].label,
-          checked: options[0].checked
-        },
-        {
-          value: options[1].label,
-          text: options[1].label,
-          checked: options[1].checked
-        },
-        {
-          value: options[2].label,
-          text: options[2].label,
-          checked: options[2].checked
-        },
-        {
-          value: options[3].label,
-          text: options[3].label,
-          checked: options[3].checked
-        },
-        {
-          value: options[4].label,
-          text: options[4].label,
-          checked: options[4].checked
-        },
-        {
-          value: options[5].label,
-          text: options[5].label,
-          checked: options[5].checked
-        },
-        {
-          value: options[6].label,
-          text: options[6].label,
-          checked: options[6].checked,
-          conditional: {
-            html: otherHtml
-          }
-        },
-        {
-          value: options[7].label,
-          text: options[7].label,
-          checked: options[7].checked,
-          conditional: {
-            html: otherHtml
-          }
-        }
-      ]
+        items: items
       }) }}
 
       {{ govukButton({
