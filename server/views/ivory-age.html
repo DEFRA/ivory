@@ -9,7 +9,7 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      {% if options[6].label == 'Other reason' %}
+      {% if options[otherReasonCheckboxIndex].label == 'Other reason' %}
         {% set otherHtml %}
           {{ govukTextarea({
             name: "otherReason",
@@ -24,16 +24,13 @@
         {% endset -%}
       {% endif %}
 
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
+      <p id="helpText" class="govuk-body">{{ helpText }}</p>
+
       {{ govukCheckboxes({
         idPrefix: "ivoryAge",
         name: "ivoryAge",
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
         hint: {
           text: "Select all that apply"
         },
@@ -73,6 +70,14 @@
           value: options[6].label,
           text: options[6].label,
           checked: options[6].checked,
+          conditional: {
+            html: otherHtml
+          }
+        },
+        {
+          value: options[7].label,
+          text: options[7].label,
+          checked: options[7].checked,
           conditional: {
             html: otherHtml
           }
