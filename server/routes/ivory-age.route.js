@@ -36,7 +36,7 @@ const handlers = {
     await _storeRedisValues(request)
 
     if ((await _getItemType(request)) === ItemType.HIGH_VALUE) {
-      return h.redirect(Paths.UPLOAD_DOCUMENT)
+      return h.redirect(Paths.WANT_TO_ADD_DOCUMENTS)
     } else {
       return h.redirect(Paths.WHO_OWNS_ITEM)
     }

@@ -33,7 +33,7 @@ const elementIds = {
 describe('/ivory-age route', () => {
   let server
   const url = '/ivory-age'
-  const nextUrlUploadDocument = '/upload-document'
+  const nextUrlUploadDocument = '/want-to-add-documents'
   const nextUrlWhoOwnsItem = '/who-owns-the-item'
 
   let document
