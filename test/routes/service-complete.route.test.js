@@ -147,6 +147,12 @@ describe('/service-complete route', () => {
         const element = document.querySelector(`#${elementIds.helpText5}`)
         expect(element).toBeFalsy()
       })
+
+      it('should have the correct Call to Action button', () => {
+        const element = document.querySelector(`#${elementIds.finish}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Finish')
+      })
     })
 
     describe('GET: Failure', () => {
