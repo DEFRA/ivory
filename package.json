@@ -1,6 +1,6 @@
 {
   "name": "ivory",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Digital service to support the Ivory Act",
   "main": "index.js",
   "scripts": {
@@ -59,7 +59,7 @@
     "jest": "^27.0.6",
     "jest-junit": "^12.2.0",
     "jsdom": "^17.0.0",
-    "nock": "^13.1.1",
+    "nock": "^13.1.2",
     "standard": "^16.0.3"
   },
   "standard": {
