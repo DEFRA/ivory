@@ -1,6 +1,13 @@
 'use strict'
 
-const { ItemType, Paths, Views, RedisKeys } = require('../utils/constants')
+const {
+  ItemType,
+  Paths,
+  Views,
+  RedisKeys,
+  Options
+} = require('../utils/constants')
+const { getIvoryVolumePercentage } = require('../utils/general')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
@@ -62,6 +69,7 @@ const LEGAL_ASSERTIONS = {
 }
 
 const NOTHING_ENTERED = 'Nothing entered'
+const NO_DOCUMENTS_ADDED = 'No documents added'
 
 const handlers = {
   get: async (request, h) => {
@@ -100,16 +108,6 @@ const _getContext = async request => {
     JSON.parse(await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)) ||
     {}
 
-  const ivoryAge =
-    JSON.parse(await RedisService.get(request, RedisKeys.IVORY_AGE)) || {}
-
-  // TODO format as HTML UL
-  let ivoryAgeFormatted =
-    ivoryAge && ivoryAge.ivoryAge ? ivoryAge.ivoryAge.join(', ') : ''
-  if (ivoryAge.otherReason) {
-    ivoryAgeFormatted += ` REASON: ${ivoryAge.otherReason}`
-  }
-
   const exemptionTypeSummary = [
     _getSummaryListRow(
       'Type of exemption',
@@ -121,7 +119,7 @@ const _getContext = async request => {
     )
   ]
 
-  const uploadData = JSON.parse(
+  const uploadPhotos = JSON.parse(
     await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
   ) || {
     files: [],
@@ -131,14 +129,14 @@ const _getContext = async request => {
     thumbnailData: []
   }
 
-  const imageRows = uploadData.thumbnails.map((imageThumbnailFile, index) => {
-    return `<img src="assets\\${imageThumbnailFile}" alt="Photo of item ${index}" width="200">`
+  const imageRows = uploadPhotos.thumbnails.map((file, index) => {
+    return `<img id="image-${index}" class="govuk-!-padding-bottom-5" src="assets\\${file}" alt="Photo of item ${index}" width="200">`
   })
 
   const photoSummary = [
     _getSummaryListRow(
       'Your photos',
-      imageRows[0],
+      imageRows && imageRows.length ? imageRows.join('') : '',
       _getChangeItems(Paths.YOUR_PHOTOS, CHANGE_LINK_HINT.YourPhotos),
       true
     )
@@ -180,20 +178,41 @@ const _getContext = async request => {
   }
 
   const whyRmi = await RedisService.get(request, RedisKeys.WHY_IS_ITEM_RMI)
-  // const ivoryVolume = await RedisService.get(request, RedisKeys.IVORY_VOLUME)
-  // const ivoryAge = ivoryAgeFormatted
+  const ivoryVolume = JSON.parse(
+    (await RedisService.get(request, RedisKeys.IVORY_VOLUME)) || '{}'
+  )
+  const ivoryVolumeFormatted =
+    ivoryVolume.ivoryVolume === 'Other reason'
+      ? ivoryVolume.otherReason
+      : ivoryVolume.ivoryVolume
   const ivoryIntegral = await RedisService.get(
     request,
     RedisKeys.IVORY_INTEGRAL
   )
+
+  const ivoryVolumePercentage = getIvoryVolumePercentage(exemptionType)
+
+  const ivoryAge =
+    JSON.parse(await RedisService.get(request, RedisKeys.IVORY_AGE)) || {}
+
+  if (ivoryAge.otherReason) {
+    ivoryAge.ivoryAge.pop()
+    ivoryAge.ivoryAge.push(ivoryAge.otherReason)
+  }
+  const ivoryAgeFormatted = ivoryAge.ivoryAge.map((reason, index) => {
+    return `<li id="ivory-age-reason-${index}">${reason}</li>`
+  })
+
+  const ivoryAgeList = `<ul>${ivoryAgeFormatted.join('')}</ul>`
 
   let exemptionReasonSummary
   if (!isMesuem) {
     exemptionReasonSummary = [
       _getSummaryListRow(
         'Proof of item’s age',
-        ivoryAgeFormatted,
-        _getChangeItems(Paths.IVORY_AGE, CHANGE_LINK_HINT.ItemAge)
+        ivoryAgeList,
+        _getChangeItems(Paths.IVORY_AGE, CHANGE_LINK_HINT.ItemAge),
+        true
       )
     ]
 
@@ -208,9 +227,15 @@ const _getContext = async request => {
     } else {
       exemptionReasonSummary.push(
         _getSummaryListRow(
-          'Proof it has less than [##PERCENTAGE##]% ivory',
-          'percent-proof',
-          _getChangeItems(Paths.IVORY_VOLUME, CHANGE_LINK_HINT.IvoryVolme)
+          `Proof it has less than ${ivoryVolumePercentage}% ivory`,
+          ivoryVolumeFormatted,
+          _getChangeItems(
+            Paths.IVORY_VOLUME,
+            CHANGE_LINK_HINT.IvoryVolme.replace(
+              '[##PERCENTAGE##]',
+              ivoryVolumePercentage
+            )
+          )
         )
       )
     }
@@ -231,21 +256,41 @@ const _getContext = async request => {
 
   let documentSummary
   if (isSection2) {
-    // const imageRows = uploadData.thumbnails.map((imageThumbnailFile, index) => {
-    //   return `<img src="assets\\${imageThumbnailFile}" alt="Photo of item ${index}" width="200">`
-    // })
+    const uploadDocuments = JSON.parse(
+      await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
+    ) || {
+      files: [],
+      fileData: [],
+      fileSizes: []
+    }
+
+    const documentRows = uploadDocuments.files.map((file, index) => {
+      return `<p id="document-${index}">${file}</p>`
+    })
 
     documentSummary = [
       _getSummaryListRow(
         'Your documents',
-        'TODO',
+        documentRows && documentRows.length
+          ? documentRows.join('')
+          : NO_DOCUMENTS_ADDED,
         _getChangeItems(Paths.YOUR_DOCUMENTS, CHANGE_LINK_HINT.YourDocuments),
         true
       )
     ]
   }
 
-  // TODO owner and applicant
+  const ownedByApplicant =
+    (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
+    Options.YES
+
+  if (ownedByApplicant) {
+    // TODO owner details
+  } else {
+    // TODO owner and applicant details
+  }
+
+  console.log('owned by applicant?', ownedByApplicant)
 
   const saleIntentionSummary = [
     _getSummaryListRow(
@@ -262,6 +307,7 @@ const _getContext = async request => {
     exemptionReasonSummary,
     documentSummary,
     saleIntentionSummary,
+    ownedByApplicant,
     pageTitle: 'Check your answers',
     legalAssertions: LEGAL_ASSERTIONS[exemptionType],
 

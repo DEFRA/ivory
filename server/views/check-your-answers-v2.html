@@ -22,7 +22,7 @@
       <h2 id="subHeading2" class="govuk-heading-m">Photos of the item</h2>
 
       {{ govukSummaryList({
-        classes: 'govuk-!-margin-bottom-9',
+        classes: 'govuk-!-margin-bottom-9 ivory-summary-list',
         rows: photoSummary
       }) }}
 
@@ -40,12 +40,14 @@
         rows: exemptionReasonSummary
       }) }}
 
-      <h2 id="subHeading5" class="govuk-heading-m">Documents to support application</h2>
+      {% if documentSummary %}
+        <h2 id="subHeading5" class="govuk-heading-m">Documents to support application</h2>
 
-      {{ govukSummaryList({
-        classes: 'govuk-!-margin-bottom-9',
-        rows: documentSummary
-      }) }}
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-9',
+          rows: documentSummary
+        }) }}
+      {% endif %}
 
       <h2 id="subHeading6" class="govuk-heading-m">Owner’s details</h2>
       todo - add owner details
@@ -201,13 +203,14 @@
         rows: saleIntentionSummary
       }) }}
 
-      <h2 class="govuk-heading-m">Legal declaration</h2>
+      <h2 id="legalDeclarationHeading" class="govuk-heading-m">Legal declaration</h2>
 
-      <p class="govuk-body">Before you continue, you must agree that you have permission to act on the owner’s behalf.</p>
-      <p>You must also agree that the owner confirms the following:</p>
-
-      {# if I OWN IT:
-       <p>Before you continue, you must agree to the following:</p> #}
+      {% if ownedByApplicant %}
+        <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree to the following:</p>
+      {% else %}
+        <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree that you have permission to act on the owner’s behalf.</p>
+        <p id="legalDeclarationPara2" class="govuk-body">You must also agree that the owner confirms the following:</p>
+      {% endif %}
 
       <ul class="govuk-list govuk-list--bullet">
         {% for legalAssertion in legalAssertions %}

@@ -2,18 +2,18 @@
 
 const {
   CharacterLimits,
-  ItemType,
   IvoryVolumeReasons,
   Paths,
   RedisKeys,
   Views
 } = require('../utils/constants')
-const { formatNumberWithCommas } = require('../utils/general')
+const {
+  formatNumberWithCommas,
+  getIvoryVolumePercentage
+} = require('../utils/general')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
-const MUSICAL_PERCENTAGE = 20
-const NON_MUSICAL_PERCENTAGE = 10
 const otherReason = 'Other reason'
 
 const handlers = {
@@ -34,6 +34,10 @@ const handlers = {
           ...buildErrorSummary(errors)
         })
         .code(400)
+    }
+
+    if (payload.ivoryVolume !== 'Other reason') {
+      delete payload.otherReason
     }
 
     await RedisService.set(
@@ -62,8 +66,7 @@ const _getContext = async request => {
   const ivoryVolume = payload ? payload.ivoryVolume : null
 
   const itemType = await _getItemType(request)
-  const percentage =
-    itemType === ItemType.MUSICAL ? MUSICAL_PERCENTAGE : NON_MUSICAL_PERCENTAGE
+  const percentage = getIvoryVolumePercentage(itemType)
 
   return {
     pageTitle: `How do you know the item has less than ${percentage}% ivory by volume?`,
