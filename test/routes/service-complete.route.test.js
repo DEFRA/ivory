@@ -35,6 +35,7 @@ describe('/service-complete route', () => {
     finish: 'finish'
   }
 
+  const paymentReference = 'PAYMENT_REFERENCE'
   const submissionReference = '1234ABCD'
   const applicantEmail = 'applicant@test.com'
   const ownerEmail = 'owner@test.com'
@@ -65,7 +66,7 @@ describe('/service-complete route', () => {
 
     beforeEach(async () => {
       RedisService.get = jest.fn()
-        .mockResolvedValueOnce('PAYMENT_REFERENCE')
+        .mockResolvedValueOnce(paymentReference)
         .mockResolvedValueOnce(ItemType.MUSICAL)
         .mockResolvedValueOnce(submissionReference)
         .mockResolvedValueOnce(applicantEmail)
