@@ -241,14 +241,6 @@ describe('/service-complete route', () => {
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
-      it('should have the Beta banner', () => {
-        TestHelper.checkBetaBanner(document)
-      })
-
-      it('should NOT have the Back link', () => {
-        TestHelper.checkBackLink(document, false)
-      })
-
       it('should have the correct page heading', () => {
         const element = document.querySelector(
           `#${elementIds.pageTitle} .govuk-panel__title`
