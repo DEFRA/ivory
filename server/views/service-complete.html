@@ -10,8 +10,8 @@
         attributes: {
           id: "pageTitle"
         },
-        titleText: panelTitle,
-        html: "Submission reference<br><strong id='referenceNumber'>" + submissionReference + "</strong>"
+        titleText: pageTitle,
+        html: "Submission reference<br><strong id='submissionReference'>" + submissionReference + "</strong>"
       }) }}
 
       <p class="govuk-body" id="helpText1">{{ helpText1 }}</p>
@@ -38,8 +38,11 @@
       {% endif %}
 
       {{ govukButton({
-        text: "Finish",
-        href: "#/feedback survey"
+          attributes: {
+            id: "finish"
+          },
+          text: "Finish",
+          href: "#/feedback survey"
       }) }}
 
     </div>

@@ -52,8 +52,7 @@ const _getContext = async request => {
   )
 
   return {
-    pageTitle: 'Service complete',
-    panelTitle: isSection2
+    pageTitle: isSection2
       ? 'Application received'
       : 'Self-assessment complete',
     submissionReference,
