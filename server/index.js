@@ -62,6 +62,7 @@ const _registerPlugins = async server => {
   await server.register(require('./plugins/blipp.plugin'))
   await server.register(require('./plugins/disinfect.plugin'))
   await server.register(require('./plugins/error-pages.plugin'))
+  await server.register(require('./plugins/hapi-gapi.plugin'))
   await server.register(require('./plugins/hapi-sanitize-payload.plugin'))
   await server.register(require('./plugins/inert.plugin'))
   await server.register(require('./plugins/logging.plugin'))
