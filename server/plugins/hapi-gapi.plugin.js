@@ -13,10 +13,8 @@ module.exports = {
         hitTypes: ['pageview', 'event', 'ecommerce']
       }
     ],
-    sessionIdProducer: async request => {
-      // Would normally use the request object to retrieve the proper session identifier
-      return request.state[DEFRA_IVORY_SESSION_KEY]
-    },
+    // Would normally use the request object to retrieve the proper session identifier
+    sessionIdProducer: async request => request.state[DEFRA_IVORY_SESSION_KEY],
     batchSize: 20,
     batchInterval: 15000
   }
