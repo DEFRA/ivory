@@ -82,11 +82,9 @@ describe('/save-record route', () => {
           .mockResolvedValueOnce('PAYMENT_REFERENCE')
           .mockResolvedValueOnce('Sell it')
           .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
-          .mockResolvedValueOnce('OWNER_NAME')
-          .mockResolvedValueOnce('OWNER_EMAIL')
+          .mockResolvedValueOnce(JSON.stringify(mockOwnerData))
+          .mockResolvedValueOnce(JSON.stringify(mockApplicantData))
           .mockResolvedValueOnce('OWNER_ADDRESS')
-          .mockResolvedValueOnce('APPLICANT_NAME')
-          .mockResolvedValueOnce('APPLICANT_EMAIL')
           .mockResolvedValueOnce('APPLICANT_ADDRESS')
           .mockResolvedValueOnce('SUBMISSION_REFERENCE')
           .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
@@ -167,11 +165,9 @@ describe('/save-record route', () => {
           .mockResolvedValueOnce('PAYMENT_REFERENCE')
           .mockResolvedValueOnce('Sell it')
           .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
-          .mockResolvedValueOnce('OWNER_NAME')
-          .mockResolvedValueOnce('OWNER_EMAIL')
+          .mockResolvedValueOnce(JSON.stringify(mockOwnerData))
+          .mockResolvedValueOnce(JSON.stringify(mockApplicantData))
           .mockResolvedValueOnce('OWNER_ADDRESS')
-          .mockResolvedValueOnce('APPLICANT_NAME')
-          .mockResolvedValueOnce('APPLICANT_EMAIL')
           .mockResolvedValueOnce('APPLICANT_ADDRESS')
           .mockResolvedValueOnce('TARGET_COMPLETION_DATE')
           .mockResolvedValueOnce('SUBMISSION_REFERENCE')
@@ -235,6 +231,16 @@ const _createMocks = () => {
 
   ODataService.updateRecord = jest.fn()
   ODataService.updateRecordAttachments = jest.fn()
+}
+
+const mockOwnerData = {
+  name: 'THE_OWNER',
+  emailAddress: 'OWNER_EMAIL_ADDRESS'
+}
+
+const mockApplicantData = {
+  name: 'THE_APPLICANT',
+  emailAddress: 'APPLICANT_EMAIL_ADDRESS'
 }
 
 const mockFileAttachmentData = {

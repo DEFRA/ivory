@@ -61,8 +61,15 @@ describe('/make-payment route', () => {
     it('should redirect back to the "Service complete" page - Section 10', async () => {
       RedisService.get = jest
         .fn()
-        .mockResolvedValue(
+        .mockResolvedValueOnce('2000')
+        .mockResolvedValueOnce(
           'Musical instrument made before 1975 with less than 20% ivory'
+        )
+        .mockResolvedValueOnce(
+          JSON.stringify({
+            name: 'OWNER_NAME',
+            emailAddress: 'OWNER_EMAIL_ADDRESS'
+          })
         )
 
       const response = await TestHelper.submitGetRequest(
@@ -81,7 +88,7 @@ describe('/make-payment route', () => {
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'applicant.emailAddress'
+        'applicant-contact-details'
       )
 
       expect(RedisService.get).toBeCalledWith(
@@ -116,8 +123,15 @@ describe('/make-payment route', () => {
     it('should redirect back to the "Service complete" page - Section 2', async () => {
       RedisService.get = jest
         .fn()
-        .mockResolvedValue(
+        .mockResolvedValueOnce('25000')
+        .mockResolvedValueOnce(
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
+        )
+        .mockResolvedValueOnce(
+          JSON.stringify({
+            name: 'OWNER_NAME',
+            emailAddress: 'OWNER_EMAIL_ADDRESS'
+          })
         )
 
       const response = await TestHelper.submitGetRequest(
@@ -136,7 +150,7 @@ describe('/make-payment route', () => {
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'applicant.emailAddress'
+        'applicant-contact-details'
       )
 
       expect(RedisService.get).toBeCalledWith(

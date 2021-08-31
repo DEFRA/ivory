@@ -179,27 +179,33 @@ const _getCommonFields = async (request, itemDescription) => {
 }
 
 const _addOwnerAndApplicantDetails = async request => {
+  let ownerContactDetails = await RedisService.get(
+    request,
+    RedisKeys.OWNER_CONTACT_DETAILS
+  )
+
+  if (ownerContactDetails) {
+    ownerContactDetails = JSON.parse(ownerContactDetails)
+  }
+
+  let applicantContactDetails = await RedisService.get(
+    request,
+    RedisKeys.APPLICANT_CONTACT_DETAILS
+  )
+
+  if (applicantContactDetails) {
+    applicantContactDetails = JSON.parse(applicantContactDetails)
+  }
+
   return {
-    [DataVerseFieldName.OWNER_NAME]: await RedisService.get(
-      request,
-      RedisKeys.OWNER_NAME
-    ),
-    [DataVerseFieldName.OWNER_EMAIL]: await RedisService.get(
-      request,
-      RedisKeys.OWNER_EMAIL_ADDRESS
-    ),
+    [DataVerseFieldName.OWNER_NAME]: ownerContactDetails.name,
+    [DataVerseFieldName.OWNER_EMAIL]: ownerContactDetails.emailAddress,
     [DataVerseFieldName.OWNER_ADDRESS]: await RedisService.get(
       request,
       RedisKeys.OWNER_ADDRESS
     ),
-    [DataVerseFieldName.APPLICANT_NAME]: await RedisService.get(
-      request,
-      RedisKeys.APPLICANT_NAME
-    ),
-    [DataVerseFieldName.APPLICANT_EMAIL]: await RedisService.get(
-      request,
-      RedisKeys.APPLICANT_EMAIL_ADDRESS
-    ),
+    [DataVerseFieldName.APPLICANT_NAME]: applicantContactDetails.name,
+    [DataVerseFieldName.APPLICANT_EMAIL]: applicantContactDetails.emailAddress,
     [DataVerseFieldName.APPLICANT_ADDRESS]: await RedisService.get(
       request,
       RedisKeys.APPLICANT_ADDRESS
