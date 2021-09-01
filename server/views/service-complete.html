@@ -1,6 +1,7 @@
 {% extends 'form-layout.html' %}
 
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block formContent %}
   <div class="govuk-grid-row">
@@ -9,9 +10,41 @@
         attributes: {
           id: "pageTitle"
         },
-        titleText: "Application complete",
-        html: "Your reference number<br><strong id='referenceNumber'>" + submissionReference + "</strong>"
+        titleText: pageTitle,
+        html: "Submission reference<br><strong id='submissionReference'>" + submissionReference + "</strong>"
       }) }}
+
+      <p class="govuk-body" id="helpText1">{{ helpText1 }}</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li id="applicantEmail">{{ applicantEmail }}</li>
+        {% if applicantEmail !==  ownerEmail %}
+          <li id="ownerEmail">{{ ownerEmail }}</li>
+        {% endif %}
+      </ul>
+
+      <h2 id="heading2" class="govuk-heading-m">What happens next</h2>
+
+      <p class="govuk-body" id="helpText2">{{ helpText2 }}</p>
+
+      <p class="govuk-body" id="helpText3">{{ helpText3 }}</p>
+
+      <p class="govuk-body" id="helpText4">{{ helpText4 }}</p>
+
+      {% if helpText5 %}
+        <p class="govuk-body" id="helpText5">
+          If you have not heard from us within 30 days, you can contact us at <a href="mailto:ivory@apha.gov.uk">ivory@apha.gov.uk</a>. Make sure you have your submission reference number, so we can find your details.
+        </p>
+      {% endif %}
+
+      {{ govukButton({
+          attributes: {
+            id: "finish"
+          },
+          text: "Finish",
+          href: "#/feedback survey"
+      }) }}
+
     </div>
   </div>
 {% endblock %}
