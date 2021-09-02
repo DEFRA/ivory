@@ -169,30 +169,31 @@ const _checkSelectedRadioAction = async (
   server,
   selectedOption,
   nextUrl,
-  redisValue
+  itemType
 ) => {
   const redisKeyTypeOfItem = 'what-type-of-item-is-it'
+  const redisKeyAreYouAMuseum = 'eligibility-checker.are-you-a-museum'
   postOptions.payload.areYouAMuseum = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(0)
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
-  if (redisValue) {
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    redisKeyAreYouAMuseum,
+    selectedOption === 'Yes'
+  )
+
+  if (selectedOption === 'No') {
     expect(RedisService.set).toBeCalledTimes(2)
-
     expect(RedisService.set).toBeCalledWith(
       expect.any(Object),
       redisKeyTypeOfItem,
-      redisValue
+      itemType
     )
-
-    expect(RedisService.set).toBeCalledWith(
-      expect.any(Object),
-      redisKeyTypeOfItem,
-      redisValue
-    )
-    // await RedisService.set(request, RedisKeys.ARE_YOU_A_MUSEUM, true)
+  } else {
+    expect(RedisService.set).toBeCalledTimes(1)
   }
 
   expect(response.headers.location).toEqual(nextUrl)

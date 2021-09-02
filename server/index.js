@@ -100,11 +100,6 @@ const _createSessionCookie = server => {
   server.state(DEFRA_IVORY_SESSION_KEY)
 }
 
-const _isUnknownRoute = pathname => {
-  return (
-    !Object.values(Paths).includes(pathname) &&
-    !pathname.startsWith(Paths.GET_RECORD)
-  )
-}
+const _isUnknownRoute = pathname => !Object.values(Paths).includes(pathname)
 
 module.exports = createServer
