@@ -192,15 +192,12 @@ const _checkSelectedRadioAction = async (
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
-  if (selectedOption === 'No') {
-    expect(RedisService.set).toBeCalledWith(
-      expect.any(Object),
-      'eligibility-checker.contain-elephant-ivory',
-      false
-    )
-  } else {
-    expect(RedisService.set).toBeCalledTimes(0)
-  }
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    'eligibility-checker.contain-elephant-ivory',
+    selectedOption
+  )
+  expect(RedisService.set).toBeCalledTimes(1)
 
   expect(response.headers.location).toEqual(nextUrl)
 }
