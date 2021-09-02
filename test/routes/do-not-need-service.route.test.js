@@ -113,7 +113,7 @@ describe('Eligibility checker - do not need service route', () => {
         const element = document.querySelector(`#${elementIds.finish}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Finish and return to guidance'
+          'Finish and return to GOV.UK'
         )
       })
     })
