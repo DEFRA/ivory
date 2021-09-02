@@ -198,6 +198,4 @@ const _createMocks = () => {
   CookieService.checkSessionCookie = jest
     .fn()
     .mockReturnValue('THE_SESSION_COOKIE')
-
-  RedisService.get = jest.fn().mockResolvedValue('TODO')
 }
