@@ -12,55 +12,76 @@
 
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
-      <h2 id="subHeading1" class="govuk-heading-m">The item</h2>
+      <h2 id="exemptionTypeHeading" class="govuk-heading-m">The item</h2>
 
       {{ govukSummaryList({
         classes: 'govuk-!-margin-bottom-9',
-        rows: exemptionTypeSummary
+        rows: exemptionTypeSummary,
+        attributes: {
+          id: "exemptionTypeSummary"
+        }
       }) }}
 
-      <h2 id="subHeading2" class="govuk-heading-m">Photos of the item</h2>
+      <h2 id="photosSubHeading" class="govuk-heading-m">Photos of the item</h2>
 
       {{ govukSummaryList({
         classes: 'govuk-!-margin-bottom-9 ivory-summary-list',
-        rows: photoSummary
+        rows: photoSummary,
+        attributes: {
+          id: "photoSummary"
+        }
       }) }}
 
-      <h2 id="subHeading3" class="govuk-heading-m">Description of the item</h2>
+      <h2 id="itemDescriptionSubHeading" class="govuk-heading-m">Description of the item</h2>
 
       {{ govukSummaryList({
         classes: 'govuk-!-margin-bottom-9',
-        rows: itemDescriptionSummary
+        rows: itemDescriptionSummary,
+        attributes: {
+          id: "itemDescriptionSummary"
+        }
       }) }}
 
-      <h2 id="subHeading4" class="govuk-heading-m">Reasons why item is exempt</h2>
+      <h2 id="exemptionReasonHeading" class="govuk-heading-m">Reasons why item is exempt</h2>
 
       {{ govukSummaryList({
         classes: 'govuk-!-margin-bottom-9',
-        rows: exemptionReasonSummary
+        rows: exemptionReasonSummary,
+        attributes: {
+          id: "exemptionReasonSummary"
+        }
       }) }}
 
       {% if documentSummary %}
-        <h2 id="subHeading5" class="govuk-heading-m">Documents to support application</h2>
+        <h2 id="documentsSummaryHeading" class="govuk-heading-m">Documents to support application</h2>
 
         {{ govukSummaryList({
           classes: 'govuk-!-margin-bottom-9',
-          rows: documentSummary
+          rows: documentSummary,
+          attributes: {
+            id: "documentSummary"
+          }
         }) }}
       {% endif %}
 
-      <h2 id="subHeading6" class="govuk-heading-m">{{ 'Owner’s details' if ownedByApplicant else 'Owner and applicant details' }}</h2>
+      <h2 id="ownerSubHeading" class="govuk-heading-m">{{ 'Owner’s details' if ownedByApplicant else 'Owner and applicant details' }}</h2>
 
       {{ govukSummaryList({
         classes: 'govuk-!-margin-bottom-9',
-        rows: ownerSummary
+        rows: ownerSummary,
+        attributes: {
+          id: "ownerSummary"
+        }
       }) }}
 
-      <h2 id="subHeading8" class="govuk-heading-m">What will happen to the item</h2>
+      <h2 id="saleIntentionSubHeading" class="govuk-heading-m">What will happen to the item</h2>
 
       {{ govukSummaryList({
         classes: 'govuk-!-margin-bottom-9',
-        rows: saleIntentionSummary
+        rows: saleIntentionSummary,
+        attributes: {
+          id: "saleIntentionSummary"
+        }
       }) }}
 
       <h2 id="legalDeclarationHeading" class="govuk-heading-m">Legal declaration</h2>
@@ -74,7 +95,7 @@
 
       <ul class="govuk-list govuk-list--bullet">
         {% for legalAssertion in legalAssertions %}
-          <li id="legalAssertion-{{ loop.index }}">{{ legalAssertion }}</li>
+          <li id="legalAssertion{{ loop.index }}">{{ legalAssertion }}</li>
         {% endfor %}
       </ul>
 
@@ -92,7 +113,7 @@
 
       {{ govukButton({
           attributes: {
-            id: "agree-and-submit"
+            id: "agreeAndSubmit"
           },
           text: "Agree and submit"
         })

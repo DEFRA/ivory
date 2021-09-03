@@ -130,7 +130,7 @@ const _getContext = async request => {
   }
 
   const imageRows = uploadPhotos.thumbnails.map((file, index) => {
-    return `<img id="image-${index}" class="govuk-!-padding-bottom-5" src="assets\\${file}" alt="Photo of item ${index}" width="200">`
+    return `<img id="photo${index}" class="govuk-!-padding-bottom-5" src="assets\\${file}" alt="Photo of item ${index}" width="200">`
   })
 
   const photoSummary = [
@@ -151,7 +151,7 @@ const _getContext = async request => {
     _getSummaryListRow(
       'Where’s the ivory?',
       itemDescription.whereIsIvory,
-      _getChangeItems(Paths.DESCRIBE_THE_ITEM, CHANGE_LINK_HINT.ItemDescription)
+      _getChangeItems(Paths.DESCRIBE_THE_ITEM, CHANGE_LINK_HINT.WhereIsIvory)
     ),
     _getSummaryListRow(
       'Unique, identifying features (optional)',
@@ -185,6 +185,7 @@ const _getContext = async request => {
     ivoryVolume.ivoryVolume === 'Other reason'
       ? ivoryVolume.otherReason
       : ivoryVolume.ivoryVolume
+
   const ivoryIntegral = await RedisService.get(
     request,
     RedisKeys.IVORY_INTEGRAL
@@ -199,9 +200,13 @@ const _getContext = async request => {
     ivoryAge.ivoryAge.pop()
     ivoryAge.ivoryAge.push(ivoryAge.otherReason)
   }
-  const ivoryAgeFormatted = ivoryAge.ivoryAge.map((reason, index) => {
-    return `<li id="ivory-age-reason-${index}">${reason}</li>`
-  })
+
+  const ivoryAgeFormatted =
+    ivoryAge && ivoryAge.ivoryAge
+      ? ivoryAge.ivoryAge.map((reason, index) => {
+          return `<li id="ivoryAgeReason${index}">${reason}</li>`
+        })
+      : []
 
   const ivoryAgeList = `<ul>${ivoryAgeFormatted.join('')}</ul>`
 
@@ -265,7 +270,7 @@ const _getContext = async request => {
     }
 
     const documentRows = uploadDocuments.files.map((file, index) => {
-      return `<p id="document-${index}">${file}</p>`
+      return `<p id="document${index}">${file}</p>`
     })
 
     documentSummary = [
@@ -284,13 +289,15 @@ const _getContext = async request => {
     (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
     Options.YES
 
-  const ownerContactDetails = JSON.parse(
-    await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)
-  )
+  const ownerContactDetails =
+    JSON.parse(
+      await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)
+    ) || {}
 
-  const applicantContactDetails = JSON.parse(
-    await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)
-  )
+  const applicantContactDetails =
+    JSON.parse(
+      await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)
+    ) || {}
 
   const ownerSummary = [
     _getSummaryListRow(
@@ -313,7 +320,10 @@ const _getContext = async request => {
       _getSummaryListRow(
         'Business name (optional)',
         ownerContactDetails.businessName || NOTHING_ENTERED,
-        _getChangeItems(Paths.OWNER_CONTACT_DETAILS, CHANGE_LINK_HINT.YourName)
+        _getChangeItems(
+          Paths.OWNER_CONTACT_DETAILS,
+          CHANGE_LINK_HINT.BusinessName
+        )
       )
     )
 
@@ -377,7 +387,7 @@ const _getContext = async request => {
         NOTHING_ENTERED,
         _getChangeItems(
           Paths.APPLICANT_CONTACT_DETAILS,
-          CHANGE_LINK_HINT.YourName
+          CHANGE_LINK_HINT.BusinessName
         )
       )
     )
@@ -388,7 +398,7 @@ const _getContext = async request => {
         applicantContactDetails.emailAddress,
         _getChangeItems(
           Paths.APPLICANT_CONTACT_DETAILS,
-          CHANGE_LINK_HINT.YourName
+          CHANGE_LINK_HINT.YourEmail
         )
       )
     )
@@ -397,7 +407,10 @@ const _getContext = async request => {
       _getSummaryListRow(
         'Your address',
         await RedisService.get(request, RedisKeys.APPLICANT_ADDRESS),
-        _getChangeItems(Paths.APPLICANT_ADDRESS_FIND, CHANGE_LINK_HINT.YourName)
+        _getChangeItems(
+          Paths.APPLICANT_ADDRESS_FIND,
+          CHANGE_LINK_HINT.YourAddress
+        )
       )
     )
   }

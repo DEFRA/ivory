@@ -44,9 +44,9 @@ describe('/describe-the-item route', () => {
   }
 
   const itemDescription = {
-    whatIsItem: 'chest of drawers',
-    whereIsIvory: 'chest has ivory knobs',
-    uniqueFeatures: 'one of the feet is cracked',
+    whatIsItem: 'Chest of drawers',
+    whereIsIvory: 'Chest has ivory knobs',
+    uniqueFeatures: 'One of the feet is cracked',
     whereMade: 'Europe',
     whenMade: 'Georgian era'
   }

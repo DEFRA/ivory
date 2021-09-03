@@ -154,7 +154,7 @@ const _getCommonFields = async (request, itemDescription) => {
     [DataVerseFieldName.DATE_STATUS_APPLIED]: now,
     statuscode: 1,
     statecode: 0,
-    [DataVerseFieldName.STATUS]: Status.New,
+    [DataVerseFieldName.STATUS]: Status.Logged,
     [DataVerseFieldName.SUBMISSION_DATE]: await RedisService.get(
       request,
       RedisKeys.SUBMISSION_DATE
