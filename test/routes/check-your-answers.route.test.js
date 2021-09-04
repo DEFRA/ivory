@@ -83,7 +83,7 @@ describe('/check-your-answers route', () => {
       url
     }
 
-    describe('GET: Owned by applicant', () => {
+    describe('GET: Common content', () => {
       beforeEach(async () => {
         _createMocks(ItemType.HIGH_VALUE, true)
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -107,37 +107,6 @@ describe('/check-your-answers route', () => {
         const element = document.querySelector(`#${elementIds.agreeAndSubmit}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual('Agree and submit')
-      })
-    })
-
-    describe('GET: Not owned by applicant', () => {
-      beforeEach(async () => {
-        _createMocks(ItemType.HIGH_VALUE, false)
-        document = await TestHelper.submitGetRequest(server, getOptions)
-      })
-
-      it('should have the correct "owner and applicant" sub heading', () => {
-        const element = document.querySelector(
-          `#${elementIds.subHeadings.owner}`
-        )
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'Owner and applicant details'
-        )
-      })
-    })
-
-    describe('GET: Non-RMI', () => {
-      beforeEach(async () => {
-        _createMocks(ItemType.MUSICAL, false)
-        document = await TestHelper.submitGetRequest(server, getOptions)
-      })
-
-      it('should NOT have the "Documents" sub heading', () => {
-        const element = document.querySelector(
-          `#${elementIds.subHeadings.documentSummary}`
-        )
-        expect(element).toBeFalsy()
       })
     })
 
@@ -445,10 +414,17 @@ describe('/check-your-answers route', () => {
       })
     })
 
-    describe('GET: Page sections - Non-RMI', () => {
+    describe('GET: Page sections - non-RMI', () => {
       beforeEach(async () => {
         _createMocks(ItemType.MUSICAL, false)
         document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should NOT have the "Documents" sub heading', () => {
+        const element = document.querySelector(
+          `#${elementIds.subHeadings.documentSummary}`
+        )
+        expect(element).toBeFalsy()
       })
 
       it('should NOT have the "Documents" summary section', () => {
