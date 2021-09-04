@@ -61,7 +61,7 @@ const elementIds = {
 describe('/check-your-answers route', () => {
   let server
   const url = '/check-your-answers'
-  // const nextUrl = '/todo'
+  const nextUrl = '/make-payment'
 
   let document
 
@@ -71,6 +71,10 @@ describe('/check-your-answers route', () => {
 
   afterAll(async () => {
     await server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
   })
 
   afterEach(() => {
@@ -647,14 +651,13 @@ describe('/check-your-answers route', () => {
 
     describe('Success', () => {
       beforeEach(async () => {
-        // postOptions.payload = {
-        //   ivoryAge: [selectedOption]
-        // }
-        // RedisService.get = jest.fn().mockResolvedValue(ItemType.TEN_PERCENT)
+        postOptions.payload.agree = 'agree'
       })
 
-      it('should store the value in Redis and progress to the next route', async () => {
-        // TODO
+      it('should progress to the next route', async () => {
+        const response = await TestHelper.submitPostRequest(server, postOptions)
+
+        expect(response.headers.location).toEqual(nextUrl)
       })
     })
 
@@ -770,6 +773,7 @@ const _createMocks = (itemType, ownedByApplicant = true) => {
     .fn()
     .mockReturnValue('THE_SESSION_COOKIE')
 
+  // TODO refactor into Map
   RedisService.get = jest.fn((request, redisKey) => {
     let returnValue
 
@@ -852,32 +856,32 @@ const _checkSummary = (document, id) => {
 }
 
 const _checkSummaryKeys = (document, id, expectedValue) => {
+  const keyClass = 'govuk-summary-list__key'
+
   if (Array.isArray(expectedValue)) {
-    const elements = document.querySelectorAll(
-      `#${id} .govuk-summary-list__key`
-    )
+    const elements = document.querySelectorAll(`#${id} .${keyClass}`)
     expect(elements).toBeTruthy()
     elements.forEach((element, index) => {
       expect(TestHelper.getTextContent(element)).toEqual(expectedValue[index])
     })
   } else {
-    const element = document.querySelector(`#${id} .govuk-summary-list__key`)
+    const element = document.querySelector(`#${id} .${keyClass}`)
     expect(element).toBeTruthy()
     expect(TestHelper.getTextContent(element)).toEqual(expectedValue)
   }
 }
 
 const _checkSummaryValues = (document, id, expectedValue) => {
+  const valueClass = 'govuk-summary-list__value'
+
   if (Array.isArray(expectedValue)) {
-    const elements = document.querySelectorAll(
-      `#${id} .govuk-summary-list__value`
-    )
+    const elements = document.querySelectorAll(`#${id} .${valueClass}`)
     expect(elements).toBeTruthy()
     elements.forEach((element, index) => {
       expect(TestHelper.getTextContent(element)).toEqual(expectedValue[index])
     })
   } else {
-    const element = document.querySelector(`#${id} .govuk-summary-list__value`)
+    const element = document.querySelector(`#${id} .${valueClass}`)
     expect(element).toBeTruthy()
     expect(TestHelper.getTextContent(element)).toEqual(expectedValue)
   }
@@ -889,14 +893,16 @@ const _checkSummaryChangeLinks = (
   expectedValue,
   expectedPath
 ) => {
+  const linkClass = 'govuk-link'
+
   if (Array.isArray(expectedValue)) {
-    const elements = document.querySelectorAll(`#${id} .govuk-link`)
+    const elements = document.querySelectorAll(`#${id} .${linkClass}`)
     expect(elements).toBeTruthy()
     elements.forEach((element, index) => {
       TestHelper.checkLink(element, expectedValue[index], expectedPath[index])
     })
   } else {
-    const element = document.querySelector(`#${id} .govuk-link`)
+    const element = document.querySelector(`#${id} .${linkClass}`)
     TestHelper.checkLink(element, expectedValue, expectedPath)
   }
 }
