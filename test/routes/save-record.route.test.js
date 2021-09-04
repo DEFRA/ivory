@@ -4,7 +4,11 @@ const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
 
-const { ItemType, IvoryVolumeReasons } = require('../../server/utils/constants')
+const {
+  ItemType,
+  IvoryVolumeReasons,
+  RedisKeys
+} = require('../../server/utils/constants')
 
 jest.mock('../../server/services/cookie.service')
 const CookieService = require('../../server/services/cookie.service')
@@ -51,43 +55,7 @@ describe('/save-record route', () => {
           cre2c_ivorysection10caseid: 'THE_SECTION_10_CASE_ID'
         })
 
-        RedisService.get = jest
-          .fn()
-          .mockResolvedValueOnce('123456789')
-          .mockResolvedValueOnce(ItemType.MUSICAL)
-          .mockResolvedValueOnce(
-            JSON.stringify({
-              whatIsItem: 'chest of drawers',
-              whereIsIvory: 'chest has ivory knobs',
-              uniqueFeatures: 'one of the feet is cracked',
-              whereMade: 'Europe',
-              whenMade: 'Georgian era'
-            })
-          )
-          .mockResolvedValueOnce(
-            JSON.stringify({
-              ivoryVolume: IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT
-            })
-          )
-          .mockResolvedValueOnce(
-            JSON.stringify({
-              ivoryAge: [
-                'It has a stamp, serial number or signature to prove its age',
-                'Other reason'
-              ],
-              otherReason: 'Some other reason'
-            })
-          )
-          .mockResolvedValueOnce('SUBMISSION_DATE')
-          .mockResolvedValueOnce('PAYMENT_REFERENCE')
-          .mockResolvedValueOnce('Sell it')
-          .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
-          .mockResolvedValueOnce(JSON.stringify(mockOwnerData))
-          .mockResolvedValueOnce(JSON.stringify(mockApplicantData))
-          .mockResolvedValueOnce('OWNER_ADDRESS')
-          .mockResolvedValueOnce('APPLICANT_ADDRESS')
-          .mockResolvedValueOnce('SUBMISSION_REFERENCE')
-          .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
+        _createSection10RedisMock()
       })
 
       it('should save the record in the dataverse and redirect to the service complete page', async () => {
@@ -139,41 +107,7 @@ describe('/save-record route', () => {
           cre2c_ivorysection2caseid: 'THE_SECTION_2_CASE_ID'
         })
 
-        RedisService.get = jest
-          .fn()
-          .mockResolvedValueOnce('123456789')
-          .mockResolvedValueOnce(ItemType.HIGH_VALUE)
-          .mockResolvedValueOnce(
-            JSON.stringify({
-              whatIsItem: 'chest of drawers',
-              whereIsIvory: 'chest has ivory knobs',
-              uniqueFeatures: 'one of the feet is cracked',
-              whereMade: 'Europe',
-              whenMade: 'Georgian era'
-            })
-          )
-          .mockResolvedValueOnce(
-            JSON.stringify({
-              ivoryAge: [
-                'It has a stamp, serial number or signature to prove its age',
-                'It’s been carbon-dated'
-              ],
-              otherReason: null
-            })
-          )
-          .mockResolvedValueOnce('SUBMISSION_DATE')
-          .mockResolvedValueOnce('PAYMENT_REFERENCE')
-          .mockResolvedValueOnce('Sell it')
-          .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
-          .mockResolvedValueOnce(JSON.stringify(mockOwnerData))
-          .mockResolvedValueOnce(JSON.stringify(mockApplicantData))
-          .mockResolvedValueOnce('OWNER_ADDRESS')
-          .mockResolvedValueOnce('APPLICANT_ADDRESS')
-          .mockResolvedValueOnce('TARGET_COMPLETION_DATE')
-          .mockResolvedValueOnce('SUBMISSION_REFERENCE')
-          .mockResolvedValueOnce('RMI_REASON')
-          .mockResolvedValueOnce(JSON.stringify(mockImageUploadData))
-          .mockResolvedValueOnce(JSON.stringify(mockFileAttachmentData))
+        _createSection2RedisMock()
       })
 
       it('should save the record in the dataverse and redirect to the service complete page', async () => {
@@ -233,6 +167,32 @@ const _createMocks = () => {
   ODataService.updateRecordAttachments = jest.fn()
 }
 
+const _createSection10RedisMock = () => {
+  RedisService.get = jest.fn(
+    (request, redisKey) => section10RedisMockDataMap[redisKey]
+  )
+}
+
+const _createSection2RedisMock = () => {
+  RedisService.get = jest.fn(
+    (request, redisKey) => section2RedisMockDataMap[redisKey]
+  )
+}
+
+const mockItemDescriptionSection10 = {
+  whatIsItem: 'Piano',
+  whereIsIvory: 'On the keys',
+  uniqueFeatures: 'one of the keys is cracked'
+}
+
+const mockItemDescriptionSection2 = {
+  whatIsItem: 'Chest of drawers',
+  whereIsIvory: 'Chest has ivory knobs',
+  uniqueFeatures: 'One of the feet is cracked',
+  whereMade: 'Europe',
+  whenMade: 'Georgian era'
+}
+
 const mockOwnerData = {
   name: 'THE_OWNER',
   emailAddress: 'OWNER_EMAIL_ADDRESS'
@@ -255,4 +215,56 @@ const mockImageUploadData = {
   fileSizes: [100, 200],
   thumbnails: ['lamp1-thumbnail.png', 'lamp2-thumbnail.png'],
   thumbnailData: ['lamp-thumbnail-data1', 'lamp-thumbnail-data2']
+}
+
+const section10RedisMockDataMap = {
+  [RedisKeys.PAYMENT_ID]: '123456789',
+  [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.MUSICAL,
+  [RedisKeys.DESCRIBE_THE_ITEM]: JSON.stringify(mockItemDescriptionSection10),
+  [RedisKeys.IVORY_VOLUME]: JSON.stringify({
+    ivoryVolume: IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT
+  }),
+  [RedisKeys.IVORY_AGE]: JSON.stringify({
+    ivoryAge: [
+      'It has a stamp, serial number or signature to prove its age',
+      'Other reason'
+    ],
+    otherReason: 'Some other reason'
+  }),
+  [RedisKeys.SUBMISSION_DATE]: 'SUBMISSION_DATE',
+  [RedisKeys.SUBMISSION_REFERENCE]: 'SUBMISSION_REFERENCE',
+  [RedisKeys.INTENTION_FOR_ITEM]: 'Sell it',
+  [RedisKeys.UPLOAD_PHOTO]: JSON.stringify(mockImageUploadData),
+
+  [RedisKeys.OWNER_CONTACT_DETAILS]: JSON.stringify(mockOwnerData),
+  [RedisKeys.OWNER_ADDRESS]: 'OWNER_ADDRESS',
+  [RedisKeys.APPLICANT_CONTACT_DETAILS]: JSON.stringify(mockApplicantData),
+  [RedisKeys.APPLICANT_ADDRESS]: 'APPLICANT_ADDRESS'
+}
+
+const section2RedisMockDataMap = {
+  [RedisKeys.PAYMENT_ID]: '123456789',
+  [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+  [RedisKeys.DESCRIBE_THE_ITEM]: JSON.stringify(mockItemDescriptionSection2),
+  [RedisKeys.IVORY_VOLUME]: JSON.stringify({
+    ivoryVolume: IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT
+  }),
+  [RedisKeys.IVORY_AGE]: JSON.stringify({
+    ivoryAge: [
+      'It has a stamp, serial number or signature to prove its age',
+      'Other reason'
+    ],
+    otherReason: 'Some other reason'
+  }),
+  [RedisKeys.SUBMISSION_DATE]: 'SUBMISSION_DATE',
+  [RedisKeys.SUBMISSION_REFERENCE]: 'SUBMISSION_REFERENCE',
+  [RedisKeys.INTENTION_FOR_ITEM]: 'Hire it out',
+  [RedisKeys.UPLOAD_PHOTO]: JSON.stringify(mockImageUploadData),
+  [RedisKeys.OWNER_CONTACT_DETAILS]: JSON.stringify(mockOwnerData),
+  [RedisKeys.OWNER_ADDRESS]: 'OWNER_ADDRESS',
+  [RedisKeys.APPLICANT_CONTACT_DETAILS]: JSON.stringify(mockApplicantData),
+  [RedisKeys.APPLICANT_ADDRESS]: 'APPLICANT_ADDRESS',
+  [RedisKeys.TARGET_COMPLETION_DATE]: 'TARGET_COMPLETION_DATE',
+  [RedisKeys.UPLOAD_DOCUMENT]: JSON.stringify(mockFileAttachmentData),
+  [RedisKeys.WHY_IS_ITEM_RMI]: 'RMI_REASON'
 }
