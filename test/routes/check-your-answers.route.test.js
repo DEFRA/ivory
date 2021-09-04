@@ -797,21 +797,6 @@ const _createMocks = (itemType, ownedByApplicant = true) => {
   RedisService.get = jest.fn((request, redisKey) => {
     let returnValue
 
-    // .mockResolvedValueOnce(itemType)
-    // .mockResolvedValueOnce(JSON.stringify(mockItemDescription))
-    // .mockResolvedValueOnce(JSON.stringify(mockPhotos))
-    // .mockResolvedValueOnce(whyRmi)
-    // .mockResolvedValueOnce(JSON.stringify(mockIvoryVolume))
-    // .mockResolvedValueOnce(ivoryIntegral)
-    // .mockResolvedValueOnce(JSON.stringify(mockIvoryAge))
-    // .mockResolvedValueOnce(JSON.stringify(mockDocuments))
-    // .mockResolvedValueOnce(mockOwnedByApplicant)
-    // .mockResolvedValueOnce(JSON.stringify(mockOwnerContactDetails))
-    // .mockResolvedValueOnce(JSON.stringify(mockApplicantContactDetails))
-    // .mockResolvedValueOnce(ownerAddress)
-    // .mockResolvedValueOnce(applicantAddress)
-    // .mockResolvedValueOnce(saleIntention)
-
     switch (redisKey) {
       case RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT:
         returnValue = itemType
