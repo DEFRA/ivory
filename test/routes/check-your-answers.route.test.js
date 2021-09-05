@@ -46,6 +46,7 @@ const elementIds = {
   photo3: 'photo3',
   photo4: 'photo4',
   photo5: 'photo5',
+  ivoryAgeReason: 'ivoryAgeReason',
   legalDeclarationHeading: 'legalDeclarationHeading',
   legalDeclarationPara1: 'legalDeclarationPara1',
   legalDeclarationPara2: 'legalDeclarationPara2',
@@ -232,11 +233,29 @@ describe('/check-your-answers route', () => {
           'Why it’s of outstandingly high value'
         ])
 
-        // TODO check values
-        // _checkSummaryValues(document, elementIds.summaries.exemptionReason, [
-        //   [],
-        //   whyRmi
-        // ])
+        const elements = document.querySelectorAll(
+          `#${elementIds.summaries.exemptionReason} .${VALUE_CLASS}`
+        )
+        expect(elements[0]).toBeTruthy()
+
+        for (let i = 0; i < mockIvoryAge.ivoryAge.length - 1; i++) {
+          const element = document.querySelector(
+            `#${elementIds.ivoryAgeReason}${i}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            mockIvoryAge.ivoryAge[i]
+          )
+        }
+
+        const element = document.querySelector(`#${elementIds.ivoryAgeReason}6`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          mockIvoryAge.otherReason
+        )
+
+        expect(elements[1]).toBeTruthy()
+        expect(TestHelper.getTextContent(elements[1])).toEqual(whyRmi)
 
         _checkSummaryChangeLinks(
           document,
@@ -679,6 +698,9 @@ describe('/check-your-answers route', () => {
   })
 })
 
+const KEY_CLASS = 'govuk-summary-list__key'
+const VALUE_CLASS = 'govuk-summary-list__value'
+
 const mockItemDescription = {
   whatIsItem: 'Chest of drawers',
   whereIsIvory: 'Chest has ivory knobs',
@@ -723,6 +745,10 @@ const mockIvoryAge = {
   ivoryAge: [
     'It has a stamp, serial number or signature to prove its age',
     'I have a dated receipt showing when it was bought or repaired',
+    'I have a dated publication that shows or describes the item',
+    'It’s been in the family since before 1918',
+    'I have written verification from a relevant expert',
+    'I am an expert, and it’s my professional opinion',
     'Other reason'
   ],
   otherReason: 'Ivory age reason'
@@ -856,32 +882,28 @@ const _checkSummary = (document, id) => {
 }
 
 const _checkSummaryKeys = (document, id, expectedValue) => {
-  const keyClass = 'govuk-summary-list__key'
-
   if (Array.isArray(expectedValue)) {
-    const elements = document.querySelectorAll(`#${id} .${keyClass}`)
+    const elements = document.querySelectorAll(`#${id} .${KEY_CLASS}`)
     expect(elements).toBeTruthy()
     elements.forEach((element, index) => {
       expect(TestHelper.getTextContent(element)).toEqual(expectedValue[index])
     })
   } else {
-    const element = document.querySelector(`#${id} .${keyClass}`)
+    const element = document.querySelector(`#${id} .${KEY_CLASS}`)
     expect(element).toBeTruthy()
     expect(TestHelper.getTextContent(element)).toEqual(expectedValue)
   }
 }
 
 const _checkSummaryValues = (document, id, expectedValue) => {
-  const valueClass = 'govuk-summary-list__value'
-
   if (Array.isArray(expectedValue)) {
-    const elements = document.querySelectorAll(`#${id} .${valueClass}`)
+    const elements = document.querySelectorAll(`#${id} .${VALUE_CLASS}`)
     expect(elements).toBeTruthy()
     elements.forEach((element, index) => {
       expect(TestHelper.getTextContent(element)).toEqual(expectedValue[index])
     })
   } else {
-    const element = document.querySelector(`#${id} .${valueClass}`)
+    const element = document.querySelector(`#${id} .${VALUE_CLASS}`)
     expect(element).toBeTruthy()
     expect(TestHelper.getTextContent(element)).toEqual(expectedValue)
   }
