@@ -700,6 +700,7 @@ describe('/check-your-answers route', () => {
 
 const KEY_CLASS = 'govuk-summary-list__key'
 const VALUE_CLASS = 'govuk-summary-list__value'
+const LINK_CLASS = 'govuk-link'
 
 const mockItemDescription = {
   whatIsItem: 'Chest of drawers',
@@ -795,6 +796,7 @@ const businessName = 'Nothing entered'
 const saleIntention = 'Sell it'
 
 const _createMocks = (itemType, ownedByApplicant = true) => {
+  // TODO use refactored mock
   CookieService.checkSessionCookie = jest
     .fn()
     .mockReturnValue('THE_SESSION_COOKIE')
@@ -915,16 +917,14 @@ const _checkSummaryChangeLinks = (
   expectedValue,
   expectedPath
 ) => {
-  const linkClass = 'govuk-link'
-
   if (Array.isArray(expectedValue)) {
-    const elements = document.querySelectorAll(`#${id} .${linkClass}`)
+    const elements = document.querySelectorAll(`#${id} .${LINK_CLASS}`)
     expect(elements).toBeTruthy()
     elements.forEach((element, index) => {
       TestHelper.checkLink(element, expectedValue[index], expectedPath[index])
     })
   } else {
-    const element = document.querySelector(`#${id} .${linkClass}`)
+    const element = document.querySelector(`#${id} .${LINK_CLASS}`)
     TestHelper.checkLink(element, expectedValue, expectedPath)
   }
 }
