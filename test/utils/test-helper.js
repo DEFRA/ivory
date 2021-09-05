@@ -3,6 +3,9 @@
 const jsdom = require('jsdom')
 const { JSDOM } = jsdom
 
+const CookieService = require('../../server/services/cookie.service')
+const RedisService = require('../../server/services/redis.service')
+
 const elementIds = {
   backLink: 'back-link'
 }
@@ -10,6 +13,14 @@ const elementIds = {
 const DEFAULT_VALIDATION_SUMMARY_HEADING = 'There is a problem'
 
 module.exports = class TestHelper {
+  static createMocks () {
+    CookieService.checkSessionCookie = jest
+      .fn()
+      .mockReturnValue('THE_SESSION_COOKIE')
+
+    RedisService.set = jest.fn()
+  }
+
   /**
    * Retreives the HTML document contained within an HTTP response object
    * @param response - The HTTP response object containing the document
