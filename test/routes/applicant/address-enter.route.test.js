@@ -430,6 +430,4 @@ const _checkFormFields = (document, expectedValues) => {
 
 const _createMocks = () => {
   TestHelper.createMocks()
-
-  RedisService.set = jest.fn()
 }
