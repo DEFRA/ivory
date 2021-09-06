@@ -73,6 +73,7 @@ const _getContext = async request => {
     saleIntentionSummary,
     ownerSummary,
     ownedByApplicant,
+    isMesuem,
     pageTitle: 'Check your answers',
     legalAssertions: LEGAL_ASSERTIONS[exemptionType]
   }
@@ -159,10 +160,11 @@ const _getExemptionReasonSummary = async (
       ? ivoryVolume.otherReason
       : ivoryVolume.ivoryVolume
 
-  const ivoryIntegral = await RedisService.get(
-    request,
-    RedisKeys.IVORY_INTEGRAL
-  )
+  let ivoryIntegral = await RedisService.get(request, RedisKeys.IVORY_INTEGRAL)
+  if (ivoryIntegral === 'Both of the above') {
+    ivoryIntegral =
+      'The ivory is essential to the design or function of the item and you cannot remove the ivory easily or without damaging the item'
+  }
 
   const ivoryVolumePercentage = getIvoryVolumePercentage(exemptionType)
 
@@ -361,17 +363,6 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
         _getChangeItems(
           Paths.APPLICANT_CONTACT_DETAILS,
           CHANGE_LINK_HINT.YourName
-        )
-      )
-    )
-
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Business name (optional)',
-        NOTHING_ENTERED,
-        _getChangeItems(
-          Paths.APPLICANT_CONTACT_DETAILS,
-          CHANGE_LINK_HINT.BusinessName
         )
       )
     )

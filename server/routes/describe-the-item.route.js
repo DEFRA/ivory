@@ -56,7 +56,7 @@ const handlers = {
       case ItemType.MINIATURE:
         return h.redirect(Paths.IVORY_AGE)
       case ItemType.MUSEUM:
-        return h.redirect(Paths.UPLOAD_PHOTO)
+        return h.redirect(Paths.WHO_OWNS_ITEM)
       default:
         return h.redirect(Paths.IVORY_VOLUME)
     }

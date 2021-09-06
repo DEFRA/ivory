@@ -313,7 +313,6 @@ describe('/check-your-answers route', () => {
           'Owner’s email',
           'Owner’s address',
           'Your name',
-          'Business name (optional)',
           'Your email',
           'Your address'
         ])
@@ -324,7 +323,6 @@ describe('/check-your-answers route', () => {
           mockOwnerContactDetails.emailAddress,
           ownerAddress,
           mockApplicantContactDetails.name,
-          businessName,
           mockApplicantContactDetails.emailAddress,
           applicantAddress
         ])
@@ -338,7 +336,6 @@ describe('/check-your-answers route', () => {
             'Change Change owner’s email',
             'Change Change owner’s address',
             'Change Change your name',
-            'Change Change business name',
             'Change Change your email',
             'Change Change your address'
           ],
@@ -347,7 +344,6 @@ describe('/check-your-answers route', () => {
             Paths.OWNER_CONTACT_DETAILS,
             Paths.OWNER_CONTACT_DETAILS,
             Paths.OWNER_ADDRESS_FIND,
-            Paths.APPLICANT_CONTACT_DETAILS,
             Paths.APPLICANT_CONTACT_DETAILS,
             Paths.APPLICANT_CONTACT_DETAILS,
             Paths.APPLICANT_ADDRESS_FIND
@@ -437,7 +433,7 @@ describe('/check-your-answers route', () => {
       })
     })
 
-    describe('GET: Page sections - non-RMI', () => {
+    describe('GET: Page sections - non-RMI item type', () => {
       beforeEach(async () => {
         _createMocks(ItemType.MUSICAL, false)
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -455,6 +451,67 @@ describe('/check-your-answers route', () => {
           `#${elementIds.summaries.documents}`
         )
         expect(element).toBeFalsy()
+      })
+    })
+
+    describe('GET: Page sections for ItemType = MUSEUM', () => {
+      beforeEach(async () => {
+        _createMocks(ItemType.MUSEUM, false)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should NOT have the "Exemption Reason" sub heading', () => {
+        const element = document.querySelector(
+          `#${elementIds.subHeadings.exemptionReason}`
+        )
+        expect(element).toBeFalsy()
+      })
+
+      it('should NOT have the "Exemption Reason" summary section', () => {
+        const element = document.querySelector(
+          `#${elementIds.summaries.exemptionReason}`
+        )
+        expect(element).toBeFalsy()
+      })
+    })
+
+    describe('GET: Page sections for ItemType = TEN_PERCENT', () => {
+      beforeEach(async () => {
+        _createMocks(ItemType.TEN_PERCENT, false)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the correct "Exemption Reason" summary section', () => {
+        _checkSubheading(
+          document,
+          elementIds.subHeadings.exemptionReason,
+          'Reasons why item is exempt'
+        )
+
+        _checkSummary(document, elementIds.summaries.exemptionReason)
+
+        _checkSummaryKeys(document, elementIds.summaries.exemptionReason, [
+          'Proof of item’s age',
+          'Proof it has less than 10% ivory',
+          'Why all ivory is integral'
+        ])
+
+        _checkSummaryValues(document, elementIds.summaries.exemptionReason, [
+          'It has a stamp, serial number or signature to prove its ageI have a dated receipt showing when it was bought or repairedI have a dated publication that shows or describes the itemIt’s been in the family since before 1918I have written verification from a relevant expertI am an expert, and it’s my professional opinionIvory age reason',
+          mockIvoryVolume.otherReason,
+          ivoryIntegral
+        ])
+
+        _checkSummaryChangeLinks(
+          document,
+          elementIds.summaries.exemptionReason,
+          [
+            'Change Change your proof of age',
+            'Change Change your proof that item has less than 10% ivory',
+            'Change Change reason why all ivory is integral to item'
+          ],
+          [Paths.IVORY_AGE, Paths.IVORY_VOLUME, Paths.IVORY_INTEGRAL]
+        )
       })
     })
 
@@ -739,8 +796,12 @@ const mockPhotos = {
   ]
 }
 const whyRmi = 'RMI_REASON'
-const mockIvoryVolume = {}
-const ivoryIntegral = ''
+const mockIvoryVolume = {
+  ivoryVolume: 'Other reason',
+  otherReason: 'IVORY VOLUME REASON'
+}
+const ivoryIntegral =
+  'The ivory is essential to the design or function of the item'
 
 const mockIvoryAge = {
   ivoryAge: [
@@ -790,83 +851,38 @@ const mockApplicantContactDetails = {
 const ownerAddress = 'OWNER_ADDRESS'
 const applicantAddress = 'APPLICANT_ADDRESS'
 
-// TODO confirm this for owner/applicant - bug?
 const businessName = 'Nothing entered'
 
 const saleIntention = 'Sell it'
 
 const _createMocks = (itemType, ownedByApplicant = true) => {
-  // TODO use refactored mock
   CookieService.checkSessionCookie = jest
     .fn()
     .mockReturnValue('THE_SESSION_COOKIE')
 
-  // TODO refactor into Map
   RedisService.get = jest.fn((request, redisKey) => {
-    let returnValue
-
-    switch (redisKey) {
-      case RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT:
-        returnValue = itemType
-        break
-
-      case RedisKeys.DESCRIBE_THE_ITEM:
-        returnValue = JSON.stringify(mockItemDescription)
-        break
-
-      case RedisKeys.UPLOAD_PHOTO:
-        returnValue = JSON.stringify(mockPhotos)
-        break
-
-      case RedisKeys.WHY_IS_ITEM_RMI:
-        returnValue = whyRmi
-        break
-
-      case RedisKeys.IVORY_VOLUME:
-        returnValue = JSON.stringify(mockIvoryVolume)
-        break
-
-      case RedisKeys.IVORY_INTEGRAL:
-        returnValue = ivoryIntegral
-        break
-
-      case RedisKeys.IVORY_AGE:
-        returnValue = JSON.stringify(mockIvoryAge)
-        break
-
-      case RedisKeys.UPLOAD_DOCUMENT:
-        returnValue = JSON.stringify(mockDocuments)
-        break
-
-      case RedisKeys.OWNED_BY_APPLICANT:
-        returnValue = ownedByApplicant ? 'Yes' : 'No'
-        break
-
-      case RedisKeys.OWNER_CONTACT_DETAILS:
-        returnValue = JSON.stringify(mockOwnerContactDetails)
-        break
-
-      case RedisKeys.APPLICANT_CONTACT_DETAILS:
-        returnValue = JSON.stringify(mockApplicantContactDetails)
-        break
-
-      case RedisKeys.OWNER_ADDRESS:
-        returnValue = ownerAddress
-        break
-
-      case RedisKeys.APPLICANT_ADDRESS:
-        returnValue = applicantAddress
-        break
-
-      case RedisKeys.INTENTION_FOR_ITEM:
-        returnValue = saleIntention
-        break
-
-      default:
-        break
+    const mockDataMap = {
+      [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: itemType,
+      [RedisKeys.DESCRIBE_THE_ITEM]: JSON.stringify(mockItemDescription),
+      [RedisKeys.UPLOAD_PHOTO]: JSON.stringify(mockPhotos),
+      [RedisKeys.WHY_IS_ITEM_RMI]: whyRmi,
+      [RedisKeys.IVORY_VOLUME]: JSON.stringify(mockIvoryVolume),
+      [RedisKeys.IVORY_INTEGRAL]: ivoryIntegral,
+      [RedisKeys.IVORY_AGE]: JSON.stringify(mockIvoryAge),
+      [RedisKeys.UPLOAD_DOCUMENT]: JSON.stringify(mockDocuments),
+      [RedisKeys.OWNED_BY_APPLICANT]: ownedByApplicant ? 'Yes' : 'No',
+      [RedisKeys.OWNER_CONTACT_DETAILS]: JSON.stringify(
+        mockOwnerContactDetails
+      ),
+      [RedisKeys.APPLICANT_CONTACT_DETAILS]: JSON.stringify(
+        mockApplicantContactDetails
+      ),
+      [RedisKeys.OWNER_ADDRESS]: ownerAddress,
+      [RedisKeys.APPLICANT_ADDRESS]: applicantAddress,
+      [RedisKeys.INTENTION_FOR_ITEM]: saleIntention
     }
 
-    return returnValue
+    return mockDataMap[redisKey]
   })
 
   RedisService.set = jest.fn()
@@ -897,13 +913,22 @@ const _checkSummaryKeys = (document, id, expectedValue) => {
   }
 }
 
-const _checkSummaryValues = (document, id, expectedValue) => {
+const _checkSummaryValues = (document, id, expectedValue, indicies) => {
   if (Array.isArray(expectedValue)) {
     const elements = document.querySelectorAll(`#${id} .${VALUE_CLASS}`)
     expect(elements).toBeTruthy()
-    elements.forEach((element, index) => {
-      expect(TestHelper.getTextContent(element)).toEqual(expectedValue[index])
-    })
+
+    if (indicies && indicies.length) {
+      indicies.forEach(index => {
+        expect(TestHelper.getTextContent(elements[index])).toEqual(
+          expectedValue[index]
+        )
+      })
+    } else {
+      elements.forEach((element, index) => {
+        expect(TestHelper.getTextContent(element)).toEqual(expectedValue[index])
+      })
+    }
   } else {
     const element = document.querySelector(`#${id} .${VALUE_CLASS}`)
     expect(element).toBeTruthy()
