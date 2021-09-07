@@ -25,12 +25,16 @@ const handlers = {
         .code(400)
     }
 
+    await RedisService.set(
+      request,
+      RedisKeys.CONTAIN_ELEPHANT_IVORY,
+      payload.containElephantIvory
+    )
+
     switch (payload.containElephantIvory) {
       case Options.YES:
         return h.redirect(Paths.SELLING_TO_MUSEUM)
       case Options.NO:
-        await RedisService.set(request, RedisKeys.CONTAIN_ELEPHANT_IVORY, false)
-
         return h.redirect(Paths.DO_NOT_NEED_SERVICE)
       default:
         return h.redirect(Paths.CANNOT_CONTINUE)

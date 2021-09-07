@@ -5,8 +5,6 @@ const createServer = require('../../server')
 const TestHelper = require('../utils/test-helper')
 
 jest.mock('../../server/services/cookie.service')
-const CookieService = require('../../server/services/cookie.service')
-
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
@@ -408,9 +406,7 @@ describe('/upload-document route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
+  TestHelper.createMocks()
 
   const mockData = {
     files: [],
@@ -424,8 +420,6 @@ const _createMocks = () => {
     .mockResolvedValueOnce(JSON.stringify(mockData))
     .mockResolvedValueOnce('false')
     .mockResolvedValueOnce(JSON.stringify(mockData))
-
-  RedisService.set = jest.fn()
 }
 
 const _checkValidation = async (

@@ -3,8 +3,6 @@
 const createServer = require('../../server')
 
 jest.mock('../../server/services/cookie.service')
-const CookieService = require('../../server/services/cookie.service')
-
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
@@ -113,7 +111,7 @@ describe('Eligibility checker - do not need service route', () => {
         const element = document.querySelector(`#${elementIds.finish}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Finish and return to guidance'
+          'Finish and return to GOV.UK'
         )
       })
     })
@@ -157,7 +155,5 @@ describe('Eligibility checker - do not need service route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
+  TestHelper.createMocks()
 }

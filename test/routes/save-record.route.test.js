@@ -7,7 +7,6 @@ const TestHelper = require('../utils/test-helper')
 const { ItemType, IvoryVolumeReasons } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/cookie.service')
-const CookieService = require('../../server/services/cookie.service')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
@@ -229,9 +228,7 @@ describe('/save-record route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
+  TestHelper.createMocks()
 
   ODataService.updateRecord = jest.fn()
   ODataService.updateRecordAttachments = jest.fn()

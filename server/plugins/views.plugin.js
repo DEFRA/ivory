@@ -39,7 +39,7 @@ module.exports = {
       appVersion: pkg.version,
       assetPath: '/assets',
       serviceName: config.serviceName,
-      pageTitle: 'Tell us you want to sell or hire out ivory - GOV.UK',
+      pageTitle: `${config.serviceName} - GOV.UK`,
       analyticsAccount: analyticsAccount
     }
   }

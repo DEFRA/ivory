@@ -7,7 +7,6 @@ const createServer = require('../../server')
 const TestHelper = require('../utils/test-helper')
 
 jest.mock('../../server/services/cookie.service')
-const CookieService = require('../../server/services/cookie.service')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
@@ -65,7 +64,8 @@ describe('/service-complete route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn()
+      RedisService.get = jest
+        .fn()
         .mockResolvedValueOnce(paymentReference)
         .mockResolvedValueOnce(ItemType.MUSICAL)
         .mockResolvedValueOnce(submissionReference)
@@ -104,7 +104,9 @@ describe('/service-complete route', () => {
       })
 
       it('should have the correct reference number', () => {
-        const element = document.querySelector(`#${elementIds.submissionReference}`)
+        const element = document.querySelector(
+          `#${elementIds.submissionReference}`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(submissionReference)
       })
@@ -112,7 +114,9 @@ describe('/service-complete route', () => {
       it('should have the correct text in helpText1', () => {
         const element = document.querySelector(`#${elementIds.helpText1}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('We’ve also sent these details to:')
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'We’ve also sent these details to:'
+        )
       })
 
       it('should have the correct applicant email address', () => {
@@ -129,19 +133,25 @@ describe('/service-complete route', () => {
       it('should have the correct text in helpText2', () => {
         const element = document.querySelector(`#${elementIds.helpText2}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('You can sell or hire out the item at your own risk.')
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'You can sell or hire out the item at your own risk.'
+        )
       })
 
       it('should have the correct text in helpText3', () => {
         const element = document.querySelector(`#${elementIds.helpText3}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('If you do so, and we later discover that you’ve given us false information, you could be fined or prosecuted.')
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'If you do so, and we later discover that you’ve given us false information, you could be fined or prosecuted.'
+        )
       })
 
       it('should have the correct text in helpText4', () => {
         const element = document.querySelector(`#${elementIds.helpText4}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('This self-assessment lasts until the owner of the item changes.')
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'This self-assessment lasts until the owner of the item changes.'
+        )
       })
 
       it('should NOT have any text in helpText5', () => {
@@ -221,7 +231,8 @@ describe('/service-complete route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn()
+      RedisService.get = jest
+        .fn()
         .mockResolvedValueOnce('PAYMENT_REFERENCE')
         .mockResolvedValueOnce(ItemType.HIGH_VALUE)
         .mockResolvedValueOnce(submissionReference)
@@ -252,7 +263,9 @@ describe('/service-complete route', () => {
       })
 
       it('should have the correct reference number', () => {
-        const element = document.querySelector(`#${elementIds.submissionReference}`)
+        const element = document.querySelector(
+          `#${elementIds.submissionReference}`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(submissionReference)
       })
@@ -260,7 +273,9 @@ describe('/service-complete route', () => {
       it('should have the correct text in helpText1', () => {
         const element = document.querySelector(`#${elementIds.helpText1}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('We’ve sent confirmation of this application to:')
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'We’ve sent confirmation of this application to:'
+        )
       })
 
       it('should have the correct applicant email address', () => {
@@ -278,32 +293,38 @@ describe('/service-complete route', () => {
       it('should have the correct text in helpText2', () => {
         const element = document.querySelector(`#${elementIds.helpText2}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('An expert will now check your application.')
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'An expert will now check your application.'
+        )
       })
 
       it('should have the correct text in helpText3', () => {
         const element = document.querySelector(`#${elementIds.helpText3}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('Checks usually happen within 30 days, and we may contact you during this time if we require more information.')
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Checks usually happen within 30 days, and we may contact you during this time if we require more information.'
+        )
       })
 
       it('should have the correct text in helpText4', () => {
         const element = document.querySelector(`#${elementIds.helpText4}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('If your application is approved, we will send you an exemption certificate so you can sell or hire out your item.')
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'If your application is approved, we will send you an exemption certificate so you can sell or hire out your item.'
+        )
       })
 
       it('should have the correct text in helpText5', () => {
         const element = document.querySelector(`#${elementIds.helpText5}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('If you have not heard from us within 30 days, you can contact us at ivory@apha.gov.uk. Make sure you have your submission reference number, so we can find your details.')
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'If you have not heard from us within 30 days, you can contact us at ivory@apha.gov.uk. Make sure you have your submission reference number, so we can find your details.'
+        )
       })
     })
   })
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
+  TestHelper.createMocks()
 }

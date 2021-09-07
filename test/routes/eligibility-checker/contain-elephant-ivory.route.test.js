@@ -3,7 +3,6 @@
 const createServer = require('../../../server')
 
 jest.mock('../../../server/services/cookie.service')
-const CookieService = require('../../../server/services/cookie.service')
 
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
@@ -192,23 +191,16 @@ const _checkSelectedRadioAction = async (
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
-  if (selectedOption === 'No') {
-    expect(RedisService.set).toBeCalledWith(
-      expect.any(Object),
-      'eligibility-checker.contain-elephant-ivory',
-      false
-    )
-  } else {
-    expect(RedisService.set).toBeCalledTimes(0)
-  }
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    'eligibility-checker.contain-elephant-ivory',
+    selectedOption
+  )
+  expect(RedisService.set).toBeCalledTimes(1)
 
   expect(response.headers.location).toEqual(nextUrl)
 }
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
-
-  RedisService.set = jest.fn()
+  TestHelper.createMocks()
 }
