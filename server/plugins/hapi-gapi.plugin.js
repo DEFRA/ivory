@@ -10,12 +10,10 @@ module.exports = {
     propertySettings: [
       {
         id: config.googleAnalyticsId,
-        hitTypes: ['pageview', 'event', 'ecommerce']
+        hitTypes: ['pageview', 'event']
       }
     ],
     // Would normally use the request object to retrieve the proper session identifier
-    sessionIdProducer: async request => request.state[DEFRA_IVORY_SESSION_KEY],
-    batchSize: 20,
-    batchInterval: 15000
+    sessionIdProducer: async request => request.state[DEFRA_IVORY_SESSION_KEY]
   }
 }

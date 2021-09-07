@@ -31,10 +31,8 @@ const handlers = {
       payload.howCertain !== completelyCertain
     )
     await request.ga.event({
-      category: 'Test Event',
-      action: 'Record selection',
-      label: 'How certain are you',
-      value: payload.howCertain
+      category: 'How certain are you that your item is exempt?',
+      action: payload.howCertain
     })
 
     return h.redirect(
