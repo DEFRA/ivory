@@ -31,8 +31,9 @@ const handlers = {
       payload.howCertain !== completelyCertain
     )
     await request.ga.event({
-      category: 'How certain are you that your item is exempt?',
-      action: payload.howCertain
+      category: 'Main Questions',
+      action: `Selected: ${payload.howCertain}`,
+      label: 'How certain are you that your item is exempt?'
     })
 
     return h.redirect(
