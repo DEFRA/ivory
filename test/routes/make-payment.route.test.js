@@ -8,7 +8,6 @@ jest.mock('randomstring')
 const RandomString = require('randomstring')
 
 jest.mock('../../server/services/cookie.service')
-const CookieService = require('../../server/services/cookie.service')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
@@ -61,8 +60,15 @@ describe('/make-payment route', () => {
     it('should redirect back to the "Service complete" page - Section 10', async () => {
       RedisService.get = jest
         .fn()
-        .mockResolvedValue(
+        .mockResolvedValueOnce('2000')
+        .mockResolvedValueOnce(
           'Musical instrument made before 1975 with less than 20% ivory'
+        )
+        .mockResolvedValueOnce(
+          JSON.stringify({
+            name: 'OWNER_NAME',
+            emailAddress: 'OWNER_EMAIL_ADDRESS'
+          })
         )
 
       const response = await TestHelper.submitGetRequest(
@@ -81,7 +87,7 @@ describe('/make-payment route', () => {
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'applicant.emailAddress'
+        'applicant-contact-details'
       )
 
       expect(RedisService.get).toBeCalledWith(
@@ -116,8 +122,15 @@ describe('/make-payment route', () => {
     it('should redirect back to the "Service complete" page - Section 2', async () => {
       RedisService.get = jest
         .fn()
-        .mockResolvedValue(
+        .mockResolvedValueOnce('25000')
+        .mockResolvedValueOnce(
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
+        )
+        .mockResolvedValueOnce(
+          JSON.stringify({
+            name: 'OWNER_NAME',
+            emailAddress: 'OWNER_EMAIL_ADDRESS'
+          })
         )
 
       const response = await TestHelper.submitGetRequest(
@@ -136,7 +149,7 @@ describe('/make-payment route', () => {
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'applicant.emailAddress'
+        'applicant-contact-details'
       )
 
       expect(RedisService.get).toBeCalledWith(
@@ -178,11 +191,8 @@ describe('/make-payment route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
+  TestHelper.createMocks()
 
   RandomString.generate = jest.fn().mockReturnValue(paymentReference)
   RedisService.get = jest.fn()
-  RedisService.set = jest.fn()
 }

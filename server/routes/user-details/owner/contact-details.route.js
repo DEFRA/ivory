@@ -21,6 +21,7 @@ const handlers = {
     )
 
     return h.view(Views.CONTACT_DETAILS, {
+      ...(await _getContext(request, ownedByApplicant)),
       pageTitle: _getPageHeading(ownedByApplicant),
       ownerApplicant: ownedByApplicant === Options.YES
     })
@@ -40,37 +41,17 @@ const handlers = {
         .view(Views.CONTACT_DETAILS, {
           pageTitle: _getPageHeading(ownedByApplicant),
           ownerApplicant: ownedByApplicant === Options.YES,
-          ..._getContext(request),
+          ..._getContext(request, ownedByApplicant),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    if (ownedByApplicant === Options.YES) {
-      await RedisService.set(
-        request,
-        RedisKeys.OWNER_NAME,
-        payload.businessName ?? payload.name
-      )
-      await RedisService.set(
-        request,
-        RedisKeys.OWNER_EMAIL_ADDRESS,
-        payload.emailAddress
-      )
-      await RedisService.set(request, RedisKeys.APPLICANT_NAME, payload.name)
-      await RedisService.set(
-        request,
-        RedisKeys.APPLICANT_EMAIL_ADDRESS,
-        payload.emailAddress
-      )
-    } else {
-      await RedisService.set(request, RedisKeys.OWNER_NAME, payload.name)
-      await RedisService.set(
-        request,
-        RedisKeys.OWNER_EMAIL_ADDRESS,
-        payload.emailAddress
-      )
-    }
+    await RedisService.set(
+      request,
+      RedisKeys.OWNER_CONTACT_DETAILS,
+      JSON.stringify(payload)
+    )
 
     return h.redirect(Paths.OWNER_ADDRESS_FIND)
   }
@@ -82,8 +63,24 @@ const _getPageHeading = ownedByApplicant => {
     : "Owner's contact details"
 }
 
-const _getContext = request => {
-  return addPayloadToContext(request)
+const _getContext = async (request, ownedByApplicant) => {
+  let contactDetails = await RedisService.get(
+    request,
+    RedisKeys.OWNER_CONTACT_DETAILS
+  )
+
+  if (contactDetails) {
+    contactDetails = JSON.parse(contactDetails)
+  }
+
+  const context = {
+    pageTitle: _getPageHeading(ownedByApplicant),
+    applicant: true,
+    ownedByApplicant: ownedByApplicant === Options.YES,
+    ...contactDetails
+  }
+
+  return addPayloadToContext(request, context)
 }
 
 const _validateForm = (payload, ownedByApplicant) => {

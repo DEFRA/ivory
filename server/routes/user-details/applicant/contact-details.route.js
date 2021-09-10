@@ -14,8 +14,11 @@ const { addPayloadToContext } = require('../../../utils/general')
 const pageTitle = 'Your contact details'
 
 const handlers = {
-  get: (request, h) =>
-    h.view(Views.CONTACT_DETAILS, { ..._getContext(request) }),
+  get: async (request, h) => {
+    return h.view(Views.CONTACT_DETAILS, {
+      ...(await _getContext(request))
+    })
+  },
 
   post: async (request, h) => {
     const payload = request.payload
@@ -24,25 +27,33 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.CONTACT_DETAILS, {
-          ..._getContext(request),
+          ...(await _getContext(request)),
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    await RedisService.set(request, RedisKeys.APPLICANT_NAME, payload.name)
     await RedisService.set(
       request,
-      RedisKeys.APPLICANT_EMAIL_ADDRESS,
-      payload.emailAddress
+      RedisKeys.APPLICANT_CONTACT_DETAILS,
+      JSON.stringify(payload)
     )
 
     return h.redirect(Paths.APPLICANT_ADDRESS_FIND)
   }
 }
 
-const _getContext = request => {
-  const context = { pageTitle, applicant: true }
+const _getContext = async request => {
+  let contactDetails = await RedisService.get(
+    request,
+    RedisKeys.APPLICANT_CONTACT_DETAILS
+  )
+
+  if (contactDetails) {
+    contactDetails = JSON.parse(contactDetails)
+  }
+
+  const context = { pageTitle, applicant: true, ...contactDetails }
 
   addPayloadToContext(request, context)
 

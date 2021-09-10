@@ -47,12 +47,7 @@ const IvoryVolumeLookup = {
 }
 
 const Status = {
-  New: 881990000,
-  InProgress: 881990001,
-  RequestedMoreInformation: 881990002,
-  SentToInstitute: 881990003,
-  Certified: 881990004,
-  Rejected: 881990005
+  Logged: 881990000
 }
 
 const WhyIvoryIntegral = {

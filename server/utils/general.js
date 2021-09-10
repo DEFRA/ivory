@@ -1,6 +1,9 @@
 'use strict'
 
-const { Options } = require('./constants')
+const { ItemType, Options } = require('./constants')
+
+const MUSICAL_PERCENTAGE = 20
+const NON_MUSICAL_PERCENTAGE = 10
 
 const addPayloadToContext = (request, context = {}) => {
   if (request && request.payload) {
@@ -30,6 +33,9 @@ const formatNumberWithCommas = num => {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
 
+const getIvoryVolumePercentage = itemType =>
+  itemType === ItemType.MUSICAL ? MUSICAL_PERCENTAGE : NON_MUSICAL_PERCENTAGE
+
 const getStandardOptions = (includeIdk = true) => {
   const items = [
     {
@@ -54,5 +60,6 @@ module.exports = {
   addPayloadToContext,
   convertToCommaSeparatedTitleCase,
   formatNumberWithCommas,
+  getIvoryVolumePercentage,
   getStandardOptions
 }

@@ -5,7 +5,6 @@ const createServer = require('../../server')
 const TestHelper = require('../utils/test-helper')
 
 jest.mock('../../server/services/cookie.service')
-const CookieService = require('../../server/services/cookie.service')
 
 describe('/want-to-add-documents route', () => {
   let server
@@ -141,9 +140,7 @@ describe('/want-to-add-documents route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
+  TestHelper.createMocks()
 }
 
 const _checkSelectedRadioAction = async (

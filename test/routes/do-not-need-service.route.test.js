@@ -3,8 +3,6 @@
 const createServer = require('../../server')
 
 jest.mock('../../server/services/cookie.service')
-const CookieService = require('../../server/services/cookie.service')
-
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
@@ -157,7 +155,5 @@ describe('Eligibility checker - do not need service route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
+  TestHelper.createMocks()
 }

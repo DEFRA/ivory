@@ -5,7 +5,6 @@ const createServer = require('../../../server')
 const TestHelper = require('../../utils/test-helper')
 
 jest.mock('../../../server/services/cookie.service')
-const CookieService = require('../../../server/services/cookie.service')
 
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
@@ -53,7 +52,7 @@ describe('user-details/applicant/contact-details route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockResolvedValue('Yes')
+      RedisService.get = jest.fn().mockResolvedValue(JSON.stringify({}))
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -112,7 +111,7 @@ describe('user-details/applicant/contact-details route', () => {
 
     describe('Success', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('No')
+        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify({}))
       })
 
       it('should store the value in Redis and progress to the next route when all fields have been entered correctly', async () => {
@@ -130,7 +129,12 @@ describe('user-details/applicant/contact-details route', () => {
           302
         )
 
-        expect(RedisService.set).toBeCalledTimes(2)
+        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          'applicant-contact-details',
+          JSON.stringify(postOptions.payload)
+        )
 
         expect(response.headers.location).toEqual(nextUrl)
       })
@@ -138,7 +142,7 @@ describe('user-details/applicant/contact-details route', () => {
 
     describe('Failure', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('Yes')
+        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify({}))
       })
 
       it('should display a validation error message if the user does not enter the full name', async () => {
@@ -243,9 +247,5 @@ describe('user-details/applicant/contact-details route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
-
-  RedisService.set = jest.fn()
+  TestHelper.createMocks()
 }

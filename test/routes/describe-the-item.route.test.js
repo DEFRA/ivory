@@ -5,8 +5,6 @@ const createServer = require('../../server')
 const TestHelper = require('../utils/test-helper')
 
 jest.mock('../../server/services/cookie.service')
-const CookieService = require('../../server/services/cookie.service')
-
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
@@ -29,7 +27,7 @@ describe('/describe-the-item route', () => {
   const nextUrls = {
     ivoryAge: '/ivory-age',
     ivoryVolume: '/ivory-volume',
-    uploadPhotos: '/upload-photo',
+    whoOwnsTheItem: '/who-owns-the-item',
     whyIsItemRMI: '/why-is-item-rmi'
   }
 
@@ -44,9 +42,9 @@ describe('/describe-the-item route', () => {
   }
 
   const itemDescription = {
-    whatIsItem: 'chest of drawers',
-    whereIsIvory: 'chest has ivory knobs',
-    uniqueFeatures: 'one of the feet is cracked',
+    whatIsItem: 'Chest of drawers',
+    whereIsIvory: 'Chest has ivory knobs',
+    uniqueFeatures: 'One of the feet is cracked',
     whereMade: 'Europe',
     whenMade: 'Georgian era'
   }
@@ -220,7 +218,7 @@ describe('/describe-the-item route', () => {
           itemDescription,
           postOptions,
           server,
-          nextUrls.uploadPhotos
+          nextUrls.whoOwnsTheItem
         )
       })
 
@@ -362,11 +360,7 @@ describe('/describe-the-item route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
-
-  RedisService.set = jest.fn()
+  TestHelper.createMocks()
 }
 
 const _checkSuccessfulPost = async (

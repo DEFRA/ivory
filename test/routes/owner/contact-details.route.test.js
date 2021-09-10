@@ -5,7 +5,6 @@ const createServer = require('../../../server')
 const TestHelper = require('../../utils/test-helper')
 
 jest.mock('../../../server/services/cookie.service')
-const CookieService = require('../../../server/services/cookie.service')
 
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
@@ -53,7 +52,10 @@ describe('user-details/owner/contact-details route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockResolvedValue('Yes')
+      RedisService.get = jest
+        .fn()
+        .mockResolvedValueOnce('Yes')
+        .mockResolvedValueOnce(JSON.stringify({}))
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -115,7 +117,10 @@ describe('user-details/owner/contact-details route', () => {
     }
 
     beforeEach(async () => {
-      RedisService.get = jest.fn().mockResolvedValue('No')
+      RedisService.get = jest
+        .fn()
+        .mockResolvedValueOnce('No')
+        .mockResolvedValueOnce(JSON.stringify({}))
 
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
@@ -137,11 +142,7 @@ describe('user-details/owner/contact-details route', () => {
     })
 
     it('should have the "Full name or business name" form field', () => {
-      TestHelper.checkFormField(
-        document,
-        elementIds.name,
-        'Full name or business name'
-      )
+      TestHelper.checkFormField(document, elementIds.name, 'Full name')
     })
 
     it('should have the "Email address" form field', () => {
@@ -180,7 +181,10 @@ describe('user-details/owner/contact-details route', () => {
 
     describe('Success: Owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('Yes')
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce('Yes')
+          .mockResolvedValueOnce(JSON.stringify({}))
       })
 
       it('should store the value in Redis and progress to the next route when all fields have been entered correctly', async () => {
@@ -198,7 +202,12 @@ describe('user-details/owner/contact-details route', () => {
           302
         )
 
-        expect(RedisService.set).toBeCalledTimes(4)
+        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          'owner-contact-details',
+          JSON.stringify(postOptions.payload)
+        )
 
         expect(response.headers.location).toEqual(nextUrl)
       })
@@ -206,7 +215,10 @@ describe('user-details/owner/contact-details route', () => {
 
     describe('Success: Not owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('No')
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce('No')
+          .mockResolvedValueOnce(JSON.stringify({}))
       })
 
       it('should store the value in Redis and progress to the next route when all fields have been entered correctly', async () => {
@@ -224,7 +236,12 @@ describe('user-details/owner/contact-details route', () => {
           302
         )
 
-        expect(RedisService.set).toBeCalledTimes(2)
+        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          'owner-contact-details',
+          JSON.stringify(postOptions.payload)
+        )
 
         expect(response.headers.location).toEqual(nextUrl)
       })
@@ -232,7 +249,10 @@ describe('user-details/owner/contact-details route', () => {
 
     describe('Failure: Owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('Yes')
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce('Yes')
+          .mockResolvedValueOnce(JSON.stringify({}))
       })
 
       it('should display a validation error message if the user does not enter the full name', async () => {
@@ -336,7 +356,10 @@ describe('user-details/owner/contact-details route', () => {
 
     describe('Failure: Not owned by applicant', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('No')
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce('No')
+          .mockResolvedValueOnce(JSON.stringify({}))
       })
 
       it('should display a validation error message if the user does not enter the full name', async () => {
@@ -441,9 +464,5 @@ describe('user-details/owner/contact-details route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
-
-  RedisService.set = jest.fn()
+  TestHelper.createMocks()
 }

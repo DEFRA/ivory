@@ -27,16 +27,15 @@ const handlers = {
       ? 'Ivory Act application for a certificate'
       : 'Ivory Act self assessment'
 
-    const email = await RedisService.get(
-      request,
-      RedisKeys.APPLICANT_EMAIL_ADDRESS
+    const applicantContactDetails = JSON.parse(
+      await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)
     )
 
     const response = await PaymentService.makePayment(
       amount,
       submissionReference,
       description,
-      email
+      applicantContactDetails.emailAddress
     )
 
     const submissionDate = new Date()

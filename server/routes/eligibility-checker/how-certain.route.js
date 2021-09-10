@@ -30,6 +30,11 @@ const handlers = {
       RedisKeys.USED_CHECKER,
       payload.howCertain !== completelyCertain
     )
+    await request.ga.event({
+      category: 'Main Questions',
+      action: `Selected: ${payload.howCertain}`,
+      label: 'How certain are you that your item is exempt?'
+    })
 
     return h.redirect(
       payload.howCertain === completelyCertain

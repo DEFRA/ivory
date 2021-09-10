@@ -3,7 +3,6 @@
 const createServer = require('../../../server')
 
 jest.mock('../../../server/services/cookie.service')
-const CookieService = require('../../../server/services/cookie.service')
 
 const TestHelper = require('../../utils/test-helper')
 
@@ -206,9 +205,7 @@ describe('/eligibility-checker/less-than-10-ivory route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
+  TestHelper.createMocks()
 }
 
 const _checkSelectedRadioAction = async (
