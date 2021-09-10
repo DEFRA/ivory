@@ -6,17 +6,30 @@ const {
   Paths,
   RedisKeys,
   Views,
-  Urls
+  Urls,
+  Analytics
 } = require('../../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
+    await request.ga.event({
+      category: Analytics.Category.SERVICE_COMPLETE,
+      action: Analytics.Action.DROPOUT,
+      label: _getContext(request).pageTitle
+    })
+
     return h.view(Views.CANNOT_CONTINUE, {
       ...(await _getContext(request))
     })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
+    await request.ga.event({
+      category: Analytics.Category.SERVICE_COMPLETE,
+      action: `${Analytics.Action.SELECTED} Finish & redirect button`,
+      label: _getContext(request).pageTitle
+    })
+
     return h.redirect(Urls.GOV_UK_HOME)
   }
 }

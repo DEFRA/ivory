@@ -1,6 +1,6 @@
 'use strict'
 
-const { Paths, Views, Options } = require('../../utils/constants')
+const { Paths, Views, Options, Analytics } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
@@ -23,6 +23,12 @@ const handlers = {
         })
         .code(400)
     }
+
+    await request.ga.event({
+      category: Analytics.Category.ELIGIBILITY_CHECKER,
+      action: `${Analytics.Action.SELECTED} ${payload.sellingToMuseum}`,
+      label: _getContext().pageTitle
+    })
 
     switch (payload.sellingToMuseum) {
       case Options.YES:
