@@ -856,9 +856,7 @@ const businessName = 'Nothing entered'
 const saleIntention = 'Sell it'
 
 const _createMocks = (itemType, ownedByApplicant = true) => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
+  TestHelper.createMocks()
 
   RedisService.get = jest.fn((request, redisKey) => {
     const mockDataMap = {
