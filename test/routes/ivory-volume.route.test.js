@@ -6,8 +6,6 @@ const TestHelper = require('../utils/test-helper')
 const { ItemType } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/cookie.service')
-const CookieService = require('../../server/services/cookie.service')
-
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
@@ -262,11 +260,7 @@ describe('/ivory-volume route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
-
-  RedisService.set = jest.fn()
+  TestHelper.createMocks()
 }
 
 const _checkSelectedRadioAction = async (

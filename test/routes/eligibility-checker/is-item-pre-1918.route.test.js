@@ -6,7 +6,6 @@ const TestHelper = require('../../utils/test-helper')
 const { ItemType } = require('../../../server/utils/constants')
 
 jest.mock('../../../server/services/cookie.service')
-const CookieService = require('../../../server/services/cookie.service')
 
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
@@ -188,9 +187,7 @@ describe('/eligibility-checker/is-item-pre-1918 route', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
+  TestHelper.createMocks()
 }
 
 const _checkSelectedRadioAction = async (

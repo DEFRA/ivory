@@ -3,7 +3,6 @@
 const createServer = require('../../server')
 
 jest.mock('../../server/services/cookie.service')
-const CookieService = require('../../server/services/cookie.service')
 
 const TestHelper = require('../utils/test-helper')
 
@@ -99,7 +98,5 @@ describe('/accessibility-statement', () => {
 })
 
 const _createMocks = () => {
-  CookieService.checkSessionCookie = jest
-    .fn()
-    .mockReturnValue('THE_SESSION_COOKIE')
+  TestHelper.createMocks()
 }

@@ -27,6 +27,7 @@ The default values will be used if the environment variables are missing or comm
 | ADDRESS_LOOKUP_URL         | Address lookup URL         |    no    | http://some-url |                                    |       |
 | ADDRESS_LOOKUP_PASSPHRASE  | Address lookup passphrase  |    no    |                 |                                    |       |
 | ADDRESS_LOOKUP_PFX_CERT    | Address lookup certificate |    no    |                 | PFX file location or Base64 string |       |
+| GOOGLE_ANALYTICS_ID        | GA Tracking ID             |    no    | UA-YYYYYY-YY    |   A Google Analytics Tracking ID   |       |
 
 # Prerequisites
 
