@@ -1,11 +1,25 @@
 'use strict'
 
-const { Paths, RedisKeys, Views, PaymentResult, ItemType } = require('../utils/constants')
+const {
+  Paths,
+  RedisKeys,
+  Views,
+  PaymentResult,
+  ItemType
+} = require('../utils/constants')
+const NotificationService = require('../services/notification.service')
 const PaymentService = require('../services/payment.service')
 const RedisService = require('../services/redis.service')
 
 const handlers = {
   get: async (request, h) => {
+    const itemType = await RedisService.get(
+      request,
+      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
+    )
+
+    const isSection2 = itemType === ItemType.HIGH_VALUE
+
     const paymentId = await RedisService.get(request, RedisKeys.PAYMENT_ID)
 
     const payment = await PaymentService.lookupPayment(paymentId)
@@ -22,23 +36,30 @@ const handlers = {
       return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
 
+    const context = await _getContext(request, isSection2)
+
+    const data = {
+      fullName: context.applicantContactDetails,
+      exemptionType: itemType,
+      submissionReference: context.submissionReference
+    }
+    _sendConfirmationEmail(context.applicantEmail, isSection2, data)
+
     return h.view(Views.SERVICE_COMPLETE, {
-      ...(await _getContext(request))
+      ...context
     })
   }
 }
 
-const _getContext = async request => {
-  const itemType = await RedisService.get(
-    request,
-    RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
-  )
-
-  const isSection2 = itemType === ItemType.HIGH_VALUE
-
+const _getContext = async (request, isSection2) => {
   const submissionReference = await RedisService.get(
     request,
     RedisKeys.SUBMISSION_REFERENCE
+  )
+
+  const applicantContactDetails = await RedisService.get(
+    request,
+    RedisKeys.APPLICANT_NAME
   )
 
   const applicantEmail = await RedisService.get(
@@ -52,10 +73,9 @@ const _getContext = async request => {
   )
 
   return {
-    pageTitle: isSection2
-      ? 'Application received'
-      : 'Self-assessment complete',
+    applicantContactDetails,
     submissionReference,
+    pageTitle: isSection2 ? 'Application received' : 'Self-assessment complete',
     helpText1: isSection2
       ? 'We’ve sent confirmation of this application to:'
       : 'We’ve also sent these details to:',
@@ -89,6 +109,10 @@ const _paymentFailed = state =>
 
 const _paymentError = state =>
   state && state.status && state.status === PaymentResult.ERROR
+
+const _sendConfirmationEmail = async (email, isSection2, data) => {
+  NotificationService.sendConfirmationEmail(email, isSection2, data)
+}
 
 module.exports = [
   {

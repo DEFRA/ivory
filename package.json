@@ -49,6 +49,7 @@
     "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
     "node-sass": "^6.0.1",
+    "notifications-node-client": "^5.1.0",
     "nunjucks": "3.2.3",
     "postcode-validator": "^3.5.3",
     "randomstring": "^1.2.1",
