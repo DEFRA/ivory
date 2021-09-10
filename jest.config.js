@@ -3,7 +3,6 @@ module.exports = {
   collectCoverageFrom: [
     '**/*.js',
     '!index.js',
-    '!**/check-your-answers.*.js',
     '!**/*.test.js',
     '!**/*.config.js',
     '!gulpfile.js'
