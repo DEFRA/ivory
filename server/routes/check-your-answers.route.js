@@ -474,35 +474,40 @@ const CHANGE_LINK_HINT = {
   SaleIntention: 'Change what owner intends to do'
 }
 
+const BEFORE_1975 =
+  'any replacement ivory was taken from an elephant before 1 January 1975'
+const COMPLETE_AND_CORRECT =
+  'the information you’ve provided is complete and correct'
+
 const LEGAL_ASSERTIONS = {
   [ItemType.MUSICAL]: [
     'the musical instrument was made before 1975',
     'the instrument contains less than 20% ivory by volume',
-    'any replacement ivory was taken from an elephant before 1 January 1975',
-    'the information you’ve provided is complete and correct'
+    BEFORE_1975,
+    COMPLETE_AND_CORRECT
   ],
   [ItemType.TEN_PERCENT]: [
     'the item was made before 3 March 1947',
     'the item contains less than 10% ivory by volume',
     'all the ivory in the item is integral to it',
-    'any replacement ivory was taken from an elephant before 1 January 1975',
-    'the information you’ve provided is complete and correct'
+    BEFORE_1975,
+    COMPLETE_AND_CORRECT
   ],
   [ItemType.MINIATURE]: [
     'the portrait miniature was made before 1918',
     'the surface area of ivory on the miniature is less than 320 square centimetres',
-    'any replacement ivory was taken from an elephant before 1 January 1975',
-    'the information you’ve provided is complete and correct'
+    BEFORE_1975,
+    COMPLETE_AND_CORRECT
   ],
   [ItemType.MUSEUM]: [
     'you are selling or hiring out the ivory item to a qualifying museum',
-    'the information you’ve provided is complete and correct'
+    COMPLETE_AND_CORRECT
   ],
   [ItemType.HIGH_VALUE]: [
     'the item was made before 1918',
     'the item is of outstandingly high artistic, cultural or historical value',
-    'any replacement ivory was taken from an elephant before 1 January 1975',
-    'the information you’ve provided is complete and correct'
+    BEFORE_1975,
+    COMPLETE_AND_CORRECT
   ]
 }
 
