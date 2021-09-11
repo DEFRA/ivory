@@ -22,23 +22,17 @@ class NotificationService {
         `Sending Section 10 confirmation email to: [${recipientEmail}]`
       )
 
-      if (config.govNotifyKey) {
-        await notifyClient.sendEmail(
-          config.govNotifyTemplateIdConfirmSection10,
-          recipientEmail,
-          {
-            personalisation,
-            reference,
-            emailReplyToId
-          }
-        )
+      await notifyClient.sendEmail(
+        config.govNotifyTemplateIdConfirmSection10,
+        recipientEmail,
+        {
+          personalisation,
+          reference,
+          emailReplyToId
+        }
+      )
 
-        return true
-      } else {
-        console.log(
-          `GOV Notify API key not found - unable to send message [${reference}]`
-        )
-      }
+      return true
     } catch (error) {
       console.log(`Error sending message [${reference}]`, error)
     }
