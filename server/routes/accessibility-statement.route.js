@@ -1,9 +1,13 @@
 'use strict'
 
+const config = require('../utils/config')
 const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
-  get: async (request, h) => h.view(Views.ACCESSIBILITY_STATEMENT)
+  get: async (request, h) =>
+    h.view(Views.ACCESSIBILITY_STATEMENT, {
+      ..._getContext(request)
+    })
 }
 
 module.exports = [
@@ -13,3 +17,10 @@ module.exports = [
     handler: handlers.get
   }
 ]
+
+const _getContext = request => {
+  return {
+    pageTitle: `Accessibility statement for ‘${config.serviceName}’`,
+    serviceName: config.serviceName
+  }
+}
