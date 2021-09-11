@@ -100,7 +100,7 @@ describe('/privacy-notice', () => {
       const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Privacy notice: Declare elephant ivory you want to sell or hire out'
+        'Privacy notice: Declare elephant ivory you intend to sell or hire out'
       )
     })
 
