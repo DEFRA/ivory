@@ -1,6 +1,6 @@
 'use strict'
 
-const { ItemType } = require('../../server/utils/constants')
+const { ItemType, RedisKeys } = require('../../server/utils/constants')
 
 const createServer = require('../../server')
 
@@ -13,6 +13,9 @@ const RedisService = require('../../server/services/redis.service')
 
 jest.mock('../../server/services/payment.service')
 const PaymentService = require('../../server/services/payment.service')
+
+jest.mock('../../server/services/notification.service')
+const NotificationService = require('../../server/services/notification.service')
 
 describe('/service-complete route', () => {
   let server
@@ -34,11 +37,6 @@ describe('/service-complete route', () => {
     finish: 'finish'
   }
 
-  const paymentReference = 'PAYMENT_REFERENCE'
-  const submissionReference = '1234ABCD'
-  const applicantEmail = 'applicant@test.com'
-  const ownerEmail = 'owner@test.com'
-
   let document
 
   beforeAll(async () => {
@@ -57,20 +55,14 @@ describe('/service-complete route', () => {
     jest.clearAllMocks()
   })
 
-  describe('GET - NON RMI application. Applicant is the owner', () => {
+  describe('GET - Section 10 application. Applicant is the owner', () => {
     const getOptions = {
       method: 'GET',
       url
     }
 
     beforeEach(async () => {
-      RedisService.get = jest
-        .fn()
-        .mockResolvedValueOnce(paymentReference)
-        .mockResolvedValueOnce(ItemType.MUSICAL)
-        .mockResolvedValueOnce(submissionReference)
-        .mockResolvedValueOnce(applicantEmail)
-        .mockResolvedValueOnce(applicantEmail) // Owner email set same as applicant
+      _createSection10RedisMock()
     })
 
     describe('GET: Success', () => {
@@ -122,7 +114,9 @@ describe('/service-complete route', () => {
       it('should have the correct applicant email address', () => {
         const element = document.querySelector(`#${elementIds.applicantEmail}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(applicantEmail)
+        expect(TestHelper.getTextContent(element)).toEqual(
+          mockOwnerContactDetails.emailAddress
+        )
       })
 
       it('should NOT display owner email address as same as applicants', () => {
@@ -163,6 +157,23 @@ describe('/service-complete route', () => {
         const element = document.querySelector(`#${elementIds.finish}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual('Finish')
+      })
+    })
+
+    describe('GET: Confirmation email', () => {
+      beforeEach(async () => {
+        const payment = {
+          state: {
+            status: 'success'
+          }
+        }
+        PaymentService.lookupPayment = jest.fn().mockReturnValue(payment)
+      })
+
+      it('should send a confirmation email', async () => {
+        expect(NotificationService.sendConfirmationEmail).toBeCalledTimes(0)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+        expect(NotificationService.sendConfirmationEmail).toBeCalledTimes(1)
       })
     })
 
@@ -224,20 +235,14 @@ describe('/service-complete route', () => {
     })
   })
 
-  describe('GET - RMI application. Applicant is NOT the owner', () => {
+  describe('GET - Section 2 application. Applicant is NOT the owner', () => {
     const getOptions = {
       method: 'GET',
       url
     }
 
     beforeEach(async () => {
-      RedisService.get = jest
-        .fn()
-        .mockResolvedValueOnce('PAYMENT_REFERENCE')
-        .mockResolvedValueOnce(ItemType.HIGH_VALUE)
-        .mockResolvedValueOnce(submissionReference)
-        .mockResolvedValueOnce(applicantEmail)
-        .mockResolvedValueOnce(ownerEmail)
+      _createSection2RedisMock()
     })
 
     describe('GET: Success', () => {
@@ -281,13 +286,17 @@ describe('/service-complete route', () => {
       it('should have the correct applicant email address', () => {
         const element = document.querySelector(`#${elementIds.applicantEmail}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(applicantEmail)
+        expect(TestHelper.getTextContent(element)).toEqual(
+          mockApplicantContactDetails.emailAddress
+        )
       })
 
       it('should have the correct owner email address', () => {
         const element = document.querySelector(`#${elementIds.ownerEmail}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(ownerEmail)
+        expect(TestHelper.getTextContent(element)).toEqual(
+          mockOwnerContactDetails.emailAddress
+        )
       })
 
       it('should have the correct text in helpText2', () => {
@@ -322,9 +331,73 @@ describe('/service-complete route', () => {
         )
       })
     })
+
+    describe('GET: Confirmation email', () => {
+      beforeEach(async () => {
+        const payment = {
+          state: {
+            status: 'success'
+          }
+        }
+        PaymentService.lookupPayment = jest.fn().mockReturnValue(payment)
+      })
+
+      it('should NOT send a confirmation email', async () => {
+        expect(NotificationService.sendConfirmationEmail).toBeCalledTimes(0)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+        expect(NotificationService.sendConfirmationEmail).toBeCalledTimes(0)
+      })
+    })
   })
 })
 
+const paymentReference = 'PAYMENT_REFERENCE'
+const submissionReference = '1234ABCD'
+
+const mockOwnerContactDetails = {
+  name: 'OWNER_NAME',
+  emailAddress: 'OWNER@EMAIL.COM',
+  confirmEmailAddress: 'OWNER@EMAIL.COM'
+}
+
+const mockApplicantContactDetails = {
+  name: 'APPLICANT_NAME',
+  emailAddress: 'APPLICANT@EMAIL.COM',
+  confirmEmailAddress: 'APPLICANT@EMAIL.COM'
+}
+
+const section2RedismockDataMap = {
+  [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+  [RedisKeys.PAYMENT_ID]: paymentReference,
+  [RedisKeys.SUBMISSION_REFERENCE]: submissionReference,
+  [RedisKeys.OWNER_CONTACT_DETAILS]: JSON.stringify(mockOwnerContactDetails),
+  [RedisKeys.APPLICANT_CONTACT_DETAILS]: JSON.stringify(
+    mockApplicantContactDetails
+  )
+}
+
+const section10RedismockDataMap = {
+  [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.MUSICAL,
+  [RedisKeys.PAYMENT_ID]: paymentReference,
+  [RedisKeys.SUBMISSION_REFERENCE]: submissionReference,
+  [RedisKeys.OWNER_CONTACT_DETAILS]: JSON.stringify(mockOwnerContactDetails),
+  [RedisKeys.APPLICANT_CONTACT_DETAILS]: JSON.stringify(mockOwnerContactDetails)
+}
+
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  NotificationService.sendConfirmationEmail = jest.fn()
+}
+
+const _createSection2RedisMock = () => {
+  RedisService.get = jest.fn((request, redisKey) => {
+    return section2RedismockDataMap[redisKey]
+  })
+}
+
+const _createSection10RedisMock = () => {
+  RedisService.get = jest.fn((request, redisKey) => {
+    return section10RedismockDataMap[redisKey]
+  })
 }

@@ -38,12 +38,9 @@ const handlers = {
 
     const context = await _getContext(request, isSection2)
 
-    const data = {
-      fullName: context.applicantContactDetails,
-      exemptionType: itemType,
-      submissionReference: context.submissionReference
+    if (!isSection2) {
+      _sendConfirmationEmail(request, context, itemType)
     }
-    _sendConfirmationEmail(context.applicantEmail, isSection2, data)
 
     return h.view(Views.SERVICE_COMPLETE, {
       ...context
@@ -57,30 +54,23 @@ const _getContext = async (request, isSection2) => {
     RedisKeys.SUBMISSION_REFERENCE
   )
 
-  const applicantContactDetails = await RedisService.get(
-    request,
-    RedisKeys.APPLICANT_NAME
+  const ownerContactDetails = JSON.parse(
+    await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)
   )
 
-  const applicantEmail = await RedisService.get(
-    request,
-    RedisKeys.APPLICANT_EMAIL_ADDRESS
-  )
-
-  const ownerEmail = await RedisService.get(
-    request,
-    RedisKeys.OWNER_EMAIL_ADDRESS
+  const applicantContactDetails = JSON.parse(
+    await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)
   )
 
   return {
     applicantContactDetails,
     submissionReference,
+    ownerEmail: ownerContactDetails.emailAddress,
+    applicantEmail: applicantContactDetails.emailAddress,
     pageTitle: isSection2 ? 'Application received' : 'Self-assessment complete',
     helpText1: isSection2
       ? 'We’ve sent confirmation of this application to:'
       : 'We’ve also sent these details to:',
-    applicantEmail,
-    ownerEmail,
     helpText2: isSection2
       ? 'An expert will now check your application.'
       : 'You can sell or hire out the item at your own risk.',
@@ -95,14 +85,11 @@ const _getContext = async (request, isSection2) => {
   }
 }
 
-const _paymentCancelled = state => {
-  return (
-    state &&
-    state.status &&
-    state.status === PaymentResult.FAILED &&
-    state.code === PaymentResult.Codes.CANCELLED
-  )
-}
+const _paymentCancelled = state =>
+  state &&
+  state.status &&
+  state.status === PaymentResult.FAILED &&
+  state.code === PaymentResult.Codes.CANCELLED
 
 const _paymentFailed = state =>
   state && state.status && state.status === PaymentResult.FAILED
@@ -110,8 +97,30 @@ const _paymentFailed = state =>
 const _paymentError = state =>
   state && state.status && state.status === PaymentResult.ERROR
 
-const _sendConfirmationEmail = async (email, isSection2, data) => {
-  NotificationService.sendConfirmationEmail(email, isSection2, data)
+const _sendConfirmationEmail = async (request, context, itemType) => {
+  let messageSent = await RedisService.get(
+    request,
+    RedisKeys.CONFIRMATION_EMAIL_SENT
+  )
+
+  if (!messageSent) {
+    const data = {
+      fullName: context.applicantContactDetails.name,
+      exemptionType: itemType,
+      submissionReference: context.submissionReference
+    }
+
+    messageSent = await NotificationService.sendConfirmationEmail(
+      context.applicantEmail,
+      data
+    )
+
+    await RedisService.set(
+      request,
+      RedisKeys.CONFIRMATION_EMAIL_SENT,
+      messageSent
+    )
+  }
 }
 
 module.exports = [

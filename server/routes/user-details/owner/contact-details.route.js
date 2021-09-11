@@ -53,6 +53,14 @@ const handlers = {
       JSON.stringify(payload)
     )
 
+    if (ownedByApplicant === Options.YES) {
+      await RedisService.set(
+        request,
+        RedisKeys.APPLICANT_CONTACT_DETAILS,
+        JSON.stringify(payload)
+      )
+    }
+
     return h.redirect(Paths.OWNER_ADDRESS_FIND)
   }
 }

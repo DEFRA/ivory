@@ -7,17 +7,9 @@ const config = require('../utils/config')
 const NotifyClient = require('notifications-node-client').NotifyClient
 
 class NotificationService {
-  static sendConfirmationEmail (email, isSection2, data) {
+  static async sendConfirmationEmail (recipientEmail, data) {
     const notifyClient = new NotifyClient(config.govNotifyKey)
 
-    const templateId = isSection2
-      ? config.govNotifyTemplateIdConfirmSection2
-      : config.govNotifyTemplateIdConfirmSection10
-
-    NotificationService._sendMessage(notifyClient, templateId, email, data)
-  }
-
-  static _sendMessage (notifyClient, templateId, recipientEmail, data) {
     const personalisation = {
       fullName: data.fullName,
       exemptionType: data.exemptionType,
@@ -26,20 +18,32 @@ class NotificationService {
     const reference = uuidv4()
     const emailReplyToId = null
     try {
-      // logger.info(
-      //   `Sending document request ID: [${reference}] to email: [${recipientEmail}] using template ID :[${templateId}] for permit number: [${personalisation.permitNumber}] furtherInformation: [${personalisation.furtherInformation}]`
-      // )
       console.log(
-        `Sending email to: [${recipientEmail}] using template ID :[${templateId}]`
+        `Sending Section 10 confirmation email to: [${recipientEmail}]`
       )
-      notifyClient.sendEmail(templateId, recipientEmail, {
-        personalisation,
-        reference,
-        emailReplyToId
-      })
+
+      if (config.govNotifyKey) {
+        await notifyClient.sendEmail(
+          config.govNotifyTemplateIdConfirmSection10,
+          recipientEmail,
+          {
+            personalisation,
+            reference,
+            emailReplyToId
+          }
+        )
+
+        return true
+      } else {
+        console.log(
+          `GOV Notify API key not found - unable to send message [${reference}]`
+        )
+      }
     } catch (error) {
       console.log(`Error sending message [${reference}]`, error)
     }
+
+    return false
   }
 }
 
