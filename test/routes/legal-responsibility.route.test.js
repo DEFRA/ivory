@@ -12,7 +12,8 @@ const RedisService = require('../../server/services/redis.service')
 describe('/legal-responsibility route', () => {
   let server
   const url = '/legal-responsibility'
-  const nextUrl = '/upload-photo'
+  const nextUrlNoPhotos = '/upload-photo'
+  const nextUrlSomePhotos = '/your-photos'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -152,13 +153,32 @@ describe('/legal-responsibility route', () => {
     })
 
     describe('Success', () => {
-      it('should redirect', async () => {
+      it('should redirect the correct route when there are no uploaded photos', async () => {
+        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify({}))
+
         const response = await TestHelper.submitPostRequest(server, postOptions)
-        expect(response.headers.location).toEqual(nextUrl)
+        expect(response.headers.location).toEqual(nextUrlNoPhotos)
+      })
+
+      it('should redirect the correct route when there are some uploaded photos', async () => {
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValue(JSON.stringify(mockPhotos))
+
+        const response = await TestHelper.submitPostRequest(server, postOptions)
+        expect(response.headers.location).toEqual(nextUrlSomePhotos)
       })
     })
   })
 })
+
+const mockPhotos = {
+  files: ['1.png'],
+  fileData: ['file-data'],
+  fileSizes: [100],
+  thumbnails: ['1-thumbnail.png'],
+  thumbnailData: ['thumbnail-data']
+}
 
 const _createMocks = () => {
   TestHelper.createMocks()
