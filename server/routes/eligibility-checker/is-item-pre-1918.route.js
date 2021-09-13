@@ -1,6 +1,6 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views, Options } = require('../../utils/constants')
+const { ItemType, Paths, RedisKeys, Views, Options, Analytics } = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
@@ -18,6 +18,12 @@ const handlers = {
     const whatIsItem = await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: _getContext().pageTitle
+      })
+
       return h
         .view(Views.IS_ITEM_PRE_1918, {
           ..._getContext(),
@@ -25,6 +31,12 @@ const handlers = {
         })
         .code(400)
     }
+
+    await request.ga.event({
+      category: Analytics.Category.ELIGIBILITY_CHECKER,
+      action: `${Analytics.Action.SELECTED} ${payload.isItemPre1918}`,
+      label: _getContext().pageTitle
+    })
 
     switch (payload.isItemPre1918) {
       case Options.YES:

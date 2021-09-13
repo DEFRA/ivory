@@ -17,6 +17,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: _getContext().pageTitle
+      })
+
       return h
         .view(Views.HOW_CERTAIN, {
           ..._getContext(),
@@ -30,11 +36,6 @@ const handlers = {
       RedisKeys.USED_CHECKER,
       payload.howCertain !== completelyCertain
     )
-    await request.ga.event({
-      category: 'Main Questions',
-      action: `Selected: ${payload.howCertain}`,
-      label: 'How certain are you that your item is exempt?'
-    })
 
     await request.ga.event({
       category: Analytics.Category.ELIGIBILITY_CHECKER,

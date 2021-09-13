@@ -15,7 +15,7 @@ const handlers = {
     await request.ga.event({
       category: Analytics.Category.SERVICE_COMPLETE,
       action: Analytics.Action.DROPOUT,
-      label: _getContext(request).pageTitle
+      label: (await _getContext(request)).pageTitle
     })
 
     return h.view(Views.CANNOT_CONTINUE, {
@@ -26,8 +26,8 @@ const handlers = {
   post: async (request, h) => {
     await request.ga.event({
       category: Analytics.Category.SERVICE_COMPLETE,
-      action: `${Analytics.Action.SELECTED} Finish & redirect button`,
-      label: _getContext(request).pageTitle
+      action: `${Analytics.Action.SELECTED} Finish and redirect button`,
+      label: (await _getContext(request)).pageTitle
     })
 
     return h.redirect(Urls.GOV_UK_HOME)

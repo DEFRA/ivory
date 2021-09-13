@@ -8,6 +8,7 @@ const AddressType = {
 const Analytics = {
   Category: {
     ELIGIBILITY_CHECKER: 'Eligibilty Checker',
+    ERROR: 'Page validation error',
     EXEMPTION_TYPE: 'Exemption Type',
     MAIN_QUESTIONS: 'Main Questions',
     SERVICE_COMPLETE: 'Service Complete'

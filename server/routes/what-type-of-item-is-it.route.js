@@ -1,6 +1,6 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views } = require('../utils/constants')
+const { ItemType, Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
@@ -16,6 +16,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request)).pageTitle
+      })
+
       return h
         .view(Views.WHAT_TYPE_OF_ITEM_IS_IT, {
           ...(await _getContext(request)),

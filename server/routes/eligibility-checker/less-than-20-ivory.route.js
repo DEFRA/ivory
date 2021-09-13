@@ -1,6 +1,6 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views, Options } = require('../../utils/constants')
+const { ItemType, Paths, RedisKeys, Views, Options, Analytics } = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
@@ -17,6 +17,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: _getContext().pageTitle
+      })
+
       return h
         .view(Views.LESS_THAN_20_IVORY, {
           ..._getContext(),
@@ -24,6 +30,12 @@ const handlers = {
         })
         .code(400)
     }
+
+    await request.ga.event({
+      category: Analytics.Category.ELIGIBILITY_CHECKER,
+      action: `${Analytics.Action.SELECTED} ${payload.lessThan20Ivory}`,
+      label: _getContext().pageTitle
+    })
 
     switch (payload.lessThan20Ivory) {
       case Options.YES:

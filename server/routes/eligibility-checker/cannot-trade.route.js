@@ -1,16 +1,31 @@
 'use strict'
 
-const { Paths, Views, Urls } = require('../../utils/constants')
+const { Paths, Views, Urls, Analytics } = require('../../utils/constants')
 
 const handlers = {
-  get: (request, h) => {
+  get: async (request, h) => {
     const referringUrl = request.headers.referer
+    await request.ga.event({
+      category: Analytics.Category.SERVICE_COMPLETE,
+      action: Analytics.Action.DROPOUT,
+      label: _getContext(referringUrl).pageTitle
+    })
+
     return h.view(Views.CANNOT_TRADE, {
       ..._getContext(referringUrl)
     })
   },
 
-  post: (request, h) => h.redirect(Urls.GOV_UK_HOME)
+  post: async (request, h) => {
+    const referringUrl = request.headers.referer
+    await request.ga.event({
+      category: Analytics.Category.SERVICE_COMPLETE,
+      action: `${Analytics.Action.SELECTED} Finish and redirect button`,
+      label: _getContext(referringUrl).pageTitle
+    })
+
+    return h.redirect(Urls.GOV_UK_HOME)
+  }
 }
 
 const _getContext = referringUrl => {
