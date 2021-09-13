@@ -17,11 +17,10 @@ const handlers = {
   },
 
   post: async (request, h) => {
-    const referringUrl = request.headers.referer
     await request.ga.event({
       category: Analytics.Category.SERVICE_COMPLETE,
       action: `${Analytics.Action.SELECTED} Finish and redirect button`,
-      label: _getContext(referringUrl).pageTitle
+      label: 'Cannot Trade'
     })
 
     return h.redirect(Urls.GOV_UK_HOME)
