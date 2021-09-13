@@ -22,16 +22,13 @@
         }) }}
       {% endset -%}
 
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
+      <p class="govuk-body" id="para1">You must keep any physical evidence that supports your answer. We may ask for it at a later date, if we decide to check your self-assessment.</p>
+
       {{ govukRadios({
         idPrefix: "ivoryVolume",
         name: "ivoryVolume",
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
         errorMessage: fieldErrors['ivoryVolume'],
         items: [
           {
