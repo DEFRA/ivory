@@ -34,7 +34,7 @@ const handlers = {
       RedisKeys.IVORY_INTEGRAL,
       payload.ivoryIsIntegral
     )
-    return h.redirect(Paths.UPLOAD_PHOTO)
+    return h.redirect(Paths.IVORY_AGE)
   }
 }
 

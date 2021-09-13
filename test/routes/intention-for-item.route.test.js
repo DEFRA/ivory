@@ -69,21 +69,24 @@ describe('/intention-for-item route', () => {
         document,
         elementIds.intentionForItem,
         'Sell it',
-        'Sell it'
+        'Sell it',
+        true
       )
 
       TestHelper.checkRadioOption(
         document,
         elementIds.intentionForItem2,
         'Hire it out',
-        'Hire it out'
+        'Hire it out',
+        false
       )
 
       TestHelper.checkRadioOption(
         document,
         elementIds.intentionForItem3,
         "I'm not sure yet",
-        "I'm not sure yet"
+        "I'm not sure yet",
+        false
       )
     })
 
@@ -150,6 +153,8 @@ describe('/intention-for-item route', () => {
 
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  RedisService.get = jest.fn().mockResolvedValue('Sell it')
 }
 
 const _checkSelectedRadioAction = async (

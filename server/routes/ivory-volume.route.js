@@ -2,6 +2,7 @@
 
 const {
   CharacterLimits,
+  ItemType,
   IvoryVolumeReasons,
   Paths,
   RedisKeys,
@@ -46,7 +47,14 @@ const handlers = {
       JSON.stringify(payload)
     )
 
-    return h.redirect(Paths.IVORY_AGE)
+    const itemType = await RedisService.get(
+      request,
+      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
+    )
+
+    return h.redirect(
+      itemType === ItemType.TEN_PERCENT ? Paths.IVORY_INTEGRAL : Paths.IVORY_AGE
+    )
   }
 }
 

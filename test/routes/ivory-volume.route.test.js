@@ -19,6 +19,8 @@ describe('/ivory-volume route', () => {
   const nextUrl = '/ivory-age'
 
   const elementIds = {
+    pageTitle: 'pageTitle',
+    para1: 'para1',
     ivoryVolume: 'ivoryVolume',
     ivoryVolume2: 'ivoryVolume-2',
     ivoryVolume3: 'ivoryVolume-3',
@@ -70,10 +72,18 @@ describe('/ivory-volume route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector('.govuk-fieldset__legend')
+        const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'How do you know the item has less than 10% ivory by volume?'
+        )
+      })
+
+      it('should have the correct help text', () => {
+        const element = document.querySelector(`#${elementIds.para1}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'You must keep any physical evidence that supports your answer. We may ask for it at a later date, if we decide to check your self-assessment.'
         )
       })
 
@@ -133,7 +143,7 @@ describe('/ivory-volume route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector('.govuk-fieldset__legend')
+        const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'How do you know the item has less than 20% ivory by volume?'
