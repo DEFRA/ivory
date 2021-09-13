@@ -245,6 +245,7 @@ const RedisKeys = {
   IVORY_AGE: 'ivory-age',
   IVORY_INTEGRAL: 'ivory-integral',
   IVORY_VOLUME: 'ivory-volume',
+  CONFIRMATION_EMAIL_SENT: 'confirmation-email-sent',
   OWNED_BY_APPLICANT: 'owned-by-applicant',
   OWNER_ADDRESS: 'owner.address',
   OWNER_CONTACT_DETAILS: 'owner-contact-details',

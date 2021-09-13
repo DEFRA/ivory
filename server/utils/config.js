@@ -43,6 +43,9 @@ const schema = joi.object().keys({
   cookieValidationPassword: joi
     .string()
     .default('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
+  govNotifyKey: joi.string(),
+  govNotifyTemplateIdConfirmSection2: joi.string(),
+  govNotifyTemplateIdConfirmSection10: joi.string(),
   paymentUrl: joi.string().default(defaultUrl),
   paymentApiKey: joi.string(),
   paymentAmountBandA: joi.number().default(2000),
@@ -76,6 +79,11 @@ const config = {
   addressLookupPfxCert: process.env.ADDRESS_LOOKUP_PFX_CERT,
   cookieTimeout: process.env.COOKIE_TIMEOUT,
   cookieValidationPassword: process.env.COOKIE_VALIDATION_PASSWORD,
+  govNotifyKey: process.env.GOV_NOTIFY_KEY,
+  govNotifyTemplateIdConfirmSection2:
+    process.env.GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_2,
+  govNotifyTemplateIdConfirmSection10:
+    process.env.GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_10,
   paymentUrl: process.env.PAYMENT_URL,
   paymentApiKey: process.env.PAYMENT_API_KEY,
   paymentAmountBandA: process.env.PAYMENT_AMOUNT_BAND_A,
