@@ -246,7 +246,7 @@ const _getAgeExemptionReasonCodes = ivoryAgeReasons =>
     ? ivoryAgeReasons.ivoryAge
         .map(ivoryAgeReason => AgeExemptionReasonLookup[ivoryAgeReason])
         .join(',')
-    : ''
+    : null
 
 const _getIntentionCategoryCode = intention => IntentionLookup[intention]
 
