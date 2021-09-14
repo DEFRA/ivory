@@ -15,39 +15,38 @@
 
       <p class="govuk-body" id="para2">We use cookies to make this service work.</p>
 
-      <h2 class="govuk-heading-m">Essential cookies</h2>
+      <h2 class="govuk-heading-m" id="subHeading">Essential cookies</h2>
 
       <p class="govuk-body" id="para3">
         Essential cookies keep your information secure while you use this service. We do not need to ask permission to use them.
       </p>
 
-
-        {{ govukTable({
-          firstCellIsHeader: false,
-          head: [
+      {{ govukTable({
+        firstCellIsHeader: false,
+        head: [
+          {
+            text: "Name"
+          },
+          {
+            text: "Purpose"
+          },
+          {
+            text: "Expires"
+          }
+        ],
+        rows: [
+          [
             {
-              text: "Name"
+              text: "DefraIvorySession"
             },
             {
-              text: "Purpose"
+              text: "Used to identify you as you progress through the pages of the service"
             },
             {
-              text: "Expires"
+              text: "24 hours"
             }
-          ],
-          rows: [
-            [
-              {
-                text: "DefraIvorySession"
-              },
-              {
-                text: "Used to identify you as you progress through the pages of the service"
-              },
-              {
-                text: "24 hours"
-              }
-            ]
           ]
-        }) }}
+        ]
+      }) }}
   </div>
 {% endblock %}
