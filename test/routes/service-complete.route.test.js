@@ -342,10 +342,10 @@ describe('/service-complete route', () => {
         PaymentService.lookupPayment = jest.fn().mockReturnValue(payment)
       })
 
-      it('should NOT send a confirmation email', async () => {
+      it('should send a confirmation email', async () => {
         expect(NotificationService.sendConfirmationEmail).toBeCalledTimes(0)
         document = await TestHelper.submitGetRequest(server, getOptions)
-        expect(NotificationService.sendConfirmationEmail).toBeCalledTimes(0)
+        expect(NotificationService.sendConfirmationEmail).toBeCalledTimes(1)
       })
     })
   })

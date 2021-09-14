@@ -23,6 +23,7 @@ describe('Address service', () => {
     const RECIPIENT_NAME = 'RECIPIENT_NAME'
     it('should make payments using the payment service', async () => {
       const result = await NotificationService.sendConfirmationEmail(
+        false,
         RECIPIENT_EMAIL,
         {
           fullName: RECIPIENT_NAME,

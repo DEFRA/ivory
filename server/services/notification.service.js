@@ -7,7 +7,7 @@ const config = require('../utils/config')
 const NotifyClient = require('notifications-node-client').NotifyClient
 
 class NotificationService {
-  static async sendConfirmationEmail (recipientEmail, data) {
+  static async sendConfirmationEmail (isSection2, recipientEmail, data) {
     const notifyClient = new NotifyClient(config.govNotifyKey)
 
     const personalisation = {
@@ -23,7 +23,9 @@ class NotificationService {
       )
 
       await notifyClient.sendEmail(
-        config.govNotifyTemplateIdConfirmSection10,
+        isSection2
+          ? config.govNotifyTemplateIdConfirmSection2
+          : config.govNotifyTemplateIdConfirmSection10,
         recipientEmail,
         {
           personalisation,

@@ -38,9 +38,7 @@ const handlers = {
 
     const context = await _getContext(request, isSection2)
 
-    if (!isSection2) {
-      _sendConfirmationEmail(request, context, itemType)
-    }
+    _sendConfirmationEmail(request, isSection2, context, itemType)
 
     return h.view(Views.SERVICE_COMPLETE, {
       ...context
@@ -97,7 +95,12 @@ const _paymentFailed = state =>
 const _paymentError = state =>
   state && state.status && state.status === PaymentResult.ERROR
 
-const _sendConfirmationEmail = async (request, context, itemType) => {
+const _sendConfirmationEmail = async (
+  request,
+  isSection2,
+  context,
+  itemType
+) => {
   let messageSent = await RedisService.get(
     request,
     RedisKeys.CONFIRMATION_EMAIL_SENT
@@ -111,6 +114,7 @@ const _sendConfirmationEmail = async (request, context, itemType) => {
     }
 
     messageSent = await NotificationService.sendConfirmationEmail(
+      isSection2,
       context.applicantEmail,
       data
     )
