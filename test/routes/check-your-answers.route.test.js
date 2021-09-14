@@ -881,8 +881,6 @@ const _createMocks = (itemType, ownedByApplicant = true) => {
 
     return mockDataMap[redisKey]
   })
-
-  RedisService.set = jest.fn()
 }
 
 const _checkSubheading = (document, id, expectedValue) => {

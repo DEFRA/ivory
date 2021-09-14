@@ -1,11 +1,10 @@
 'use strict'
 
-const config = require('../utils/config')
 const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
   get: async (request, h) =>
-    h.view(Views.ACCESSIBILITY_STATEMENT, {
+    h.view(Views.COOKIE_POLICY, {
       ..._getContext(request)
     })
 }
@@ -13,14 +12,13 @@ const handlers = {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.ACCESSIBILITY_STATEMENT}`,
+    path: `${Paths.COOKIE_POLICY}`,
     handler: handlers.get
   }
 ]
 
 const _getContext = request => {
   return {
-    pageTitle: `Accessibility statement for ‘${config.serviceName}’`,
-    serviceName: config.serviceName
+    pageTitle: 'Cookies'
   }
 }

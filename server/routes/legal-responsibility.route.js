@@ -17,7 +17,13 @@ const handlers = {
       label: (await _getContext(request)).pageTitle
     })
 
-    return h.redirect(Paths.UPLOAD_PHOTO)
+    const uploadData = JSON.parse(
+      await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
+    )
+
+    return uploadData && uploadData.files && uploadData.files.length
+      ? h.redirect(Paths.YOUR_PHOTOS)
+      : h.redirect(Paths.UPLOAD_PHOTO)
   }
 }
 

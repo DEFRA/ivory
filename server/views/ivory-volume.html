@@ -22,16 +22,11 @@
         }) }}
       {% endset -%}
 
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
       {{ govukRadios({
         idPrefix: "ivoryVolume",
         name: "ivoryVolume",
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
         errorMessage: fieldErrors['ivoryVolume'],
         items: [
           {

@@ -5,9 +5,9 @@ const { Paths, RedisKeys, Intention, Views } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
-  get: (request, h) => {
+  get: async (request, h) => {
     return h.view(Views.INTENTION_FOR_ITEM, {
-      ..._getContext()
+      ...(await _getContext(request))
     })
   },
 
@@ -18,7 +18,7 @@ const handlers = {
     if (errors.length) {
       return h
         .view(Views.INTENTION_FOR_ITEM, {
-          ..._getContext(),
+          ...(await _getContext(request)),
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -34,18 +34,24 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
+const _getContext = async request => {
   return {
     pageTitle: 'What do you intend to do with the item?',
-    items: _getOptions()
+    items: await _getOptions(request)
   }
 }
 
-const _getOptions = () => {
+const _getOptions = async request => {
+  const intentionForItem = await RedisService.get(
+    request,
+    RedisKeys.INTENTION_FOR_ITEM
+  )
+
   return Object.values(Intention).map(intention => {
     return {
       value: intention,
-      text: intention
+      text: intention,
+      checked: intention === intentionForItem
     }
   })
 }
