@@ -18,7 +18,9 @@ const schema = joi.object().keys({
     .default(envs[0]),
   serviceHost: joi.string(),
   servicePort: joi.number().default(3000),
-  serviceName: joi.string().default('No service name in .env'),
+  serviceName: joi
+    .string()
+    .default('Declare elephant ivory you intend to sell or hire out'),
   logLevel: joi.string().default('warn'),
   requestTimeout: joi.number(),
   maximumFileSize: joi.number().default(30),
