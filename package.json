@@ -1,6 +1,6 @@
 {
   "name": "ivory",
-  "version": "0.14.1",
+  "version": "0.14.4",
   "description": "Digital service to support the Ivory Act",
   "main": "index.js",
   "scripts": {

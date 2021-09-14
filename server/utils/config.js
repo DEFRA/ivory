@@ -20,7 +20,7 @@ const schema = joi.object().keys({
   servicePort: joi.number().default(3000),
   serviceName: joi.string().default('No service name in .env'),
   logLevel: joi.string().default('warn'),
-  requestTimeout: joi.number().default(120000),
+  requestTimeout: joi.number(),
   maximumFileSize: joi.number().default(30),
   redisHost: joi.string(),
   redisPort: joi.number(),

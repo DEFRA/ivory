@@ -166,7 +166,7 @@ const _getCommonFields = async (request, itemDescription) => {
     [DataVerseFieldName.WHY_AGE_EXEMPT]: _getAgeExemptionReasonCodes(ivoryAge),
     [DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON]: ivoryAge
       ? ivoryAge.otherReason
-      : '',
+      : null,
     [DataVerseFieldName.WHERE_IS_THE_IVORY]: itemDescription.whereIsIvory,
     [DataVerseFieldName.ITEM_SUMMARY]: itemDescription.whatIsItem,
     [DataVerseFieldName.UNIQUE_FEATURES]: itemDescription.uniqueFeatures,
@@ -246,7 +246,7 @@ const _getAgeExemptionReasonCodes = ivoryAgeReasons =>
     ? ivoryAgeReasons.ivoryAge
         .map(ivoryAgeReason => AgeExemptionReasonLookup[ivoryAgeReason])
         .join(',')
-    : ''
+    : null
 
 const _getIntentionCategoryCode = intention => IntentionLookup[intention]
 
