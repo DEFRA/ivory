@@ -6,7 +6,7 @@ const path = require('path')
 
 const config = require('../utils/config')
 const RedisService = require('../services/redis.service')
-const { Paths, RedisKeys, Views } = require('../utils/constants')
+const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
 const { buildErrorSummary } = require('../utils/validation')
 const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
 
@@ -41,6 +41,7 @@ const handlers = {
 
   post: async (request, h) => {
     const payload = request.payload
+    const filename = payload.files.filename
 
     const context = await _getContext(request)
 
@@ -49,6 +50,12 @@ const handlers = {
     let errors = _validateForm(payload, uploadData)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request)).pageTitle
+      })
+
       return h
         .view(Views.UPLOAD_DOCUMENT, {
           ...context,
@@ -58,8 +65,6 @@ const handlers = {
     }
 
     try {
-      const filename = payload.files.filename
-
       const file = await fs.promises.readFile(payload.files.path)
 
       uploadData.files.push(filename)
@@ -82,6 +87,12 @@ const handlers = {
       })
 
       if (errors.length) {
+        await request.ga.event({
+          category: Analytics.Category.ERROR,
+          action: JSON.stringify(errors),
+          label: (await _getContext(request)).pageTitle
+        })
+
         return h
           .view(Views.UPLOAD_DOCUMENT, {
             ...(await _getContext(request)),
@@ -90,6 +101,13 @@ const handlers = {
           .code(400)
       }
     }
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: (await _getContext(request)).pageTitle,
+      label: `${filename} ${(payload.files.bytes / Math.pow(1024, 2)).toFixed(2)}MB`,
+      value: (payload.files.bytes / 1024).toFixed()
+    })
 
     return h.redirect(Paths.YOUR_DOCUMENTS)
   }

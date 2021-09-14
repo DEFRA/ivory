@@ -5,7 +5,8 @@ const {
   IvoryIntegralReasons,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  Analytics
 } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
@@ -21,6 +22,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request)).pageTitle
+      })
+
       return h
         .view(Views.IVORY_INTEGRAL, {
           ...(await _getContext(request)),
@@ -34,6 +41,13 @@ const handlers = {
       RedisKeys.IVORY_INTEGRAL,
       payload.ivoryIsIntegral
     )
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${Analytics.Action.SELECTED} ${payload.ivoryIsIntegral}`,
+      label: (await _getContext(request)).pageTitle
+    })
+
     return h.redirect(Paths.IVORY_AGE)
   }
 }

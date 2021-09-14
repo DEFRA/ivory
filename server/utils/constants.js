@@ -9,14 +9,18 @@ const Analytics = {
   Category: {
     ELIGIBILITY_CHECKER: 'Eligibilty Checker',
     ERROR: 'Page validation error',
+    ERROR_PAGE: 'Error page',
     EXEMPTION_TYPE: 'Exemption Type',
     MAIN_QUESTIONS: 'Main Questions',
     SERVICE_COMPLETE: 'Service Complete'
   },
   Action: {
+    CONFIRM: 'Confirm and continue',
     CONTINUE: 'Continue',
     DROPOUT: 'Dropout',
+    ENTERED: 'Details entered',
     REDIRECT: 'Redirected to:',
+    REFERRED: 'Referred by:',
     SELECTED: 'Selected:'
   }
 }

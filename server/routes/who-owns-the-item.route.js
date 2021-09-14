@@ -2,7 +2,7 @@
 
 const RedisService = require('../services/redis.service')
 
-const { Options, Paths, Views, RedisKeys } = require('../utils/constants')
+const { Options, Paths, Views, RedisKeys, Analytics } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
@@ -17,6 +17,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request)).pageTitle
+      })
+
       return h
         .view(Views.WHO_OWNS_ITEM, {
           ...(await _getContext(request)),
@@ -30,6 +36,12 @@ const handlers = {
       RedisKeys.OWNED_BY_APPLICANT,
       payload.whoOwnsItem === 'I own it' ? Options.YES : Options.NO
     )
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${Analytics.Action.SELECTED} ${payload.whoOwnsItem}`,
+      label: (await _getContext(request)).pageTitle
+    })
 
     return h.redirect(Paths.OWNER_CONTACT_DETAILS)
   }

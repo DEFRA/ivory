@@ -5,7 +5,8 @@ const {
   Options,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  Analytics
 } = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 
@@ -31,6 +32,12 @@ const handlers = {
       request,
       RedisKeys.OWNED_BY_APPLICANT
     )
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: Analytics.Action.CONFIRM,
+      label: context.pageTitle
+    })
 
     await RedisService.set(
       request,

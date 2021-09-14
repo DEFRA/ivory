@@ -6,7 +6,8 @@ const {
   Paths,
   RedisKeys,
   Views,
-  Options
+  Options,
+  Analytics
 } = require('../../utils/constants')
 const { formatNumberWithCommas } = require('../../utils/general')
 const AddressService = require('../../services/address.service')
@@ -42,6 +43,12 @@ const handlers = {
     const errors = _validateForm(payload, addressType, ownedByApplicant)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request, addressType, ownedByApplicant)).pageTitle
+      })
+
       return h
         .view(Views.ADDRESS_FIND, {
           ...(await _getContext(request, addressType, ownedByApplicant)),
@@ -54,6 +61,12 @@ const handlers = {
       payload.nameOrNumber,
       payload.postcode
     )
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${payload.nameOrNumber ? 'Property name or number' : 'Postcode only'} entered`,
+      label: (await _getContext(request, addressType, ownedByApplicant)).pageTitle
+    })
 
     await RedisService.set(
       request,

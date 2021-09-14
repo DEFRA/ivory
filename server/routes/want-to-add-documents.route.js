@@ -1,6 +1,6 @@
 'use strict'
 
-const { Paths, Views, Options } = require('../utils/constants')
+const { Paths, Views, Options, Analytics } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 const { getStandardOptions } = require('../utils/general')
 
@@ -16,6 +16,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: _getContext().pageTitle
+      })
+
       return h
         .view(Views.WANT_TO_ADD_DOCUMENTS, {
           ..._getContext(),
@@ -23,6 +29,12 @@ const handlers = {
         })
         .code(400)
     }
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${Analytics.Action.SELECTED} ${payload.wantToAddDocuments}`,
+      label: _getContext().pageTitle
+    })
 
     return payload.wantToAddDocuments === Options.YES
       ? h.redirect(Paths.UPLOAD_DOCUMENT)

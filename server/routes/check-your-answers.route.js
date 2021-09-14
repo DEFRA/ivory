@@ -5,7 +5,8 @@ const {
   Paths,
   Views,
   RedisKeys,
-  Options
+  Options,
+  Analytics
 } = require('../utils/constants')
 const { getIvoryVolumePercentage } = require('../utils/general')
 const RedisService = require('../services/redis.service')
@@ -23,6 +24,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request)).pageTitle
+      })
+
       return h
         .view(Views.CHECK_YOUR_ANSWERS, {
           ...(await _getContext(request)),
@@ -30,6 +37,12 @@ const handlers = {
         })
         .code(400)
     }
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: Analytics.Action.CONFIRM,
+      label: (await _getContext(request)).pageTitle
+    })
 
     return h.redirect(Paths.MAKE_PAYMENT)
   }

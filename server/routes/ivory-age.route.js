@@ -6,7 +6,8 @@ const {
   ItemType,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  Analytics
 } = require('../utils/constants')
 const { formatNumberWithCommas } = require('../utils/general')
 const RedisService = require('../services/redis.service')
@@ -24,6 +25,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request)).pageTitle
+      })
+
       return h
         .view(Views.IVORY_AGE, {
           ...(await _getContext(request)),
@@ -34,6 +41,12 @@ const handlers = {
     }
 
     await _storeRedisValues(request)
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${Analytics.Action.SELECTED} ${payload.ivoryAge}`,
+      label: (await _getContext(request)).pageTitle
+    })
 
     if ((await _getItemType(request)) === ItemType.HIGH_VALUE) {
       return h.redirect(Paths.WANT_TO_ADD_DOCUMENTS)

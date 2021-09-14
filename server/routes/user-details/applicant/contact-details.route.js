@@ -5,7 +5,8 @@ const {
   CharacterLimits,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  Analytics
 } = require('../../../utils/constants')
 const { formatNumberWithCommas } = require('../../../utils/general')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
@@ -25,6 +26,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request)).pageTitle
+      })
+
       return h
         .view(Views.CONTACT_DETAILS, {
           ...(await _getContext(request)),
@@ -38,6 +45,12 @@ const handlers = {
       RedisKeys.APPLICANT_CONTACT_DETAILS,
       JSON.stringify(payload)
     )
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: Analytics.Action.ENTERED,
+      label: (await _getContext(request)).pageTitle
+    })
 
     return h.redirect(Paths.APPLICANT_ADDRESS_FIND)
   }

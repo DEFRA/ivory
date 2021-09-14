@@ -1,7 +1,7 @@
 'use strict'
 
 const RedisService = require('../services/redis.service')
-const { Paths, RedisKeys, Intention, Views } = require('../utils/constants')
+const { Paths, RedisKeys, Intention, Views, Analytics } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
@@ -16,6 +16,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request)).pageTitle
+      })
+
       return h
         .view(Views.INTENTION_FOR_ITEM, {
           ...(await _getContext(request)),
@@ -29,6 +35,12 @@ const handlers = {
       RedisKeys.INTENTION_FOR_ITEM,
       payload.intentionForItem
     )
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${Analytics.Action.SELECTED} ${payload.intentionForItem}`,
+      label: (await _getContext(request)).pageTitle
+    })
 
     return h.redirect(Paths.CHECK_YOUR_ANSWERS)
   }

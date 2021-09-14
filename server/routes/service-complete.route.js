@@ -5,7 +5,8 @@ const {
   RedisKeys,
   Views,
   PaymentResult,
-  ItemType
+  ItemType,
+  Analytics
 } = require('../utils/constants')
 const NotificationService = require('../services/notification.service')
 const PaymentService = require('../services/payment.service')
@@ -39,6 +40,12 @@ const handlers = {
     const context = await _getContext(request, isSection2)
 
     _sendConfirmationEmail(request, isSection2, context, itemType)
+
+    await request.ga.event({
+      category: Analytics.Category.SERVICE_COMPLETE,
+      action: context.pageTitle,
+      label: context.pageTitle
+    })
 
     return h.view(Views.SERVICE_COMPLETE, {
       ...context

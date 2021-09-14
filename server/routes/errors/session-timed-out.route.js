@@ -1,15 +1,29 @@
 'use strict'
 
-const { HOME_URL, Paths, Views } = require('../../utils/constants')
+const { HOME_URL, Paths, Views, Analytics } = require('../../utils/constants')
 
 const handlers = {
-  get: (request, h) => {
+  get: async (request, h) => {
+    await request.ga.event({
+      category: Analytics.Category.ERROR_PAGE,
+      action: `${Analytics.Action.REFERRED} ${request.headers.referer}`,
+      label: _getContext().pageTitle
+    })
+
     return h.view(Views.SESSION_TIMED_OUT, {
       ..._getContext()
     })
   },
 
-  post: async (request, h) => h.redirect(HOME_URL)
+  post: async (request, h) => {
+    await request.ga.event({
+      category: Analytics.Category.ERROR_PAGE,
+      action: `${Analytics.Action.REDIRECT} ${HOME_URL}`,
+      label: _getContext().pageTitle
+    })
+
+    return h.redirect(HOME_URL)
+  }
 }
 
 const _getContext = () => {

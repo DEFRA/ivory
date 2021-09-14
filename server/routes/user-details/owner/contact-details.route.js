@@ -5,7 +5,8 @@ const {
   Options,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  Analytics
 } = require('../../../utils/constants')
 const { formatNumberWithCommas } = require('../../../utils/general')
 
@@ -37,6 +38,12 @@ const handlers = {
     const errors = _validateForm(payload, ownedByApplicant)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: _getPageHeading(ownedByApplicant)
+      })
+
       return h
         .view(Views.CONTACT_DETAILS, {
           pageTitle: _getPageHeading(ownedByApplicant),
@@ -60,6 +67,12 @@ const handlers = {
         JSON.stringify(payload)
       )
     }
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: Analytics.Action.ENTERED,
+      label: _getPageHeading(ownedByApplicant)
+    })
 
     return h.redirect(Paths.OWNER_ADDRESS_FIND)
   }

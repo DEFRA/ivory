@@ -5,7 +5,8 @@ const {
   Options,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  Analytics
 } = require('../../utils/constants')
 const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
@@ -29,6 +30,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: `Address choose - ${addressType}`
+      })
+
       return h
         .view(Views.ADDRESS_CHOOSE, {
           ...(await _getContext(request, addressType)),
@@ -41,6 +48,12 @@ const handlers = {
       request,
       RedisKeys.OWNED_BY_APPLICANT
     )
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${Analytics.Action.SELECTED} address`,
+      label: `Address choose - ${addressType}`
+    })
 
     await RedisService.set(
       request,

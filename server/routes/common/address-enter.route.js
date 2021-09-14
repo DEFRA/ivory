@@ -6,7 +6,8 @@ const {
   Options,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  Analytics
 } = require('../../utils/constants')
 const { formatNumberWithCommas } = require('../../utils/general')
 const RedisService = require('../../services/redis.service')
@@ -34,11 +35,18 @@ const handlers = {
     const addressType = getAddressType(request)
     const payload = request.payload
     const errors = _validateForm(payload)
+    const context = await _getContext(request, addressType, false)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: context.pageTitle
+      })
+
       return h
         .view(Views.ADDRESS_ENTER, {
-          ...(await _getContext(request, addressType, false)),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -48,6 +56,12 @@ const handlers = {
       request,
       RedisKeys.OWNED_BY_APPLICANT
     )
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: Analytics.Action.ENTERED,
+      label: context.pageTitle
+    })
 
     _updateAddressFieldCasing(payload)
     const address = _concatenateAddressFields(payload)

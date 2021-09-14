@@ -7,7 +7,8 @@ const {
   Options,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  Analytics
 } = require('../../utils/constants')
 const { formatNumberWithCommas } = require('../../utils/general')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
@@ -37,6 +38,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request, addressType)).pageTitle
+      })
+
       return h
         .view(Views.ADDRESS_INTERNATIONAL, {
           ...(await _getContext(request, addressType)),
@@ -52,6 +59,12 @@ const handlers = {
     payload.internationalAddress = convertToCommaSeparatedTitleCase(
       payload.internationalAddress
     )
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: Analytics.Action.ENTERED,
+      label: (await _getContext(request, addressType)).pageTitle
+    })
 
     await RedisService.set(
       request,
