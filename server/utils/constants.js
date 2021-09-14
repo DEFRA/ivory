@@ -14,6 +14,7 @@ const Analytics = {
     SERVICE_COMPLETE: 'Service Complete'
   },
   Action: {
+    CONTINUE: 'Continue',
     DROPOUT: 'Dropout',
     REDIRECT: 'Redirected to:',
     SELECTED: 'Selected:'

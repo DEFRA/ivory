@@ -32,6 +32,12 @@ const handlers = {
       label: `Eligibility Checker Used: ${await _usedChecker(request)}`
     })
 
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: Analytics.Action.CONTINUE,
+      label: (await _getContext(request)).pageTitle
+    })
+
     return h.redirect(Paths.LEGAL_REPONSIBILITY)
   }
 }

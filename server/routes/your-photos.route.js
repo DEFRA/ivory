@@ -4,7 +4,7 @@ const os = require('os')
 const { writeFileSync } = require('fs')
 
 const RedisService = require('../services/redis.service')
-const { Paths, Views, RedisKeys } = require('../utils/constants')
+const { Paths, Views, RedisKeys, Analytics } = require('../utils/constants')
 
 const MAX_PHOTOS = 6
 
@@ -13,6 +13,12 @@ const handlers = {
     const context = await _getContext(request)
 
     if (!context.uploadData || !context.uploadData.files.length) {
+      await request.ga.event({
+        category: Analytics.Category.MAIN_QUESTIONS,
+        action: `${Analytics.Action.REDIRECT} ${Paths.UPLOAD_PHOTO}`,
+        label: (await _getContext(request)).pageTitle
+      })
+
       return h.redirect(Paths.UPLOAD_PHOTO)
     }
 
@@ -21,7 +27,15 @@ const handlers = {
     })
   },
 
-  post: async (request, h) => h.redirect(Paths.DESCRIBE_THE_ITEM)
+  post: async (request, h) => {
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: Analytics.Action.CONTINUE,
+      label: (await _getContext(request)).pageTitle
+    })
+
+    return h.redirect(Paths.DESCRIBE_THE_ITEM)
+  }
 }
 
 const _getContext = async request => {

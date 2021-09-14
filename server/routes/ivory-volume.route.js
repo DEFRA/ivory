@@ -5,7 +5,8 @@ const {
   IvoryVolumeReasons,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  Analytics
 } = require('../utils/constants')
 const {
   formatNumberWithCommas,
@@ -28,6 +29,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request)).pageTitle
+      })
+
       return h
         .view(Views.IVORY_VOLUME, {
           ...(await _getContext(request)),
@@ -38,6 +45,17 @@ const handlers = {
 
     if (payload.ivoryVolume !== 'Other reason') {
       delete payload.otherReason
+      await request.ga.event({
+        category: Analytics.Category.MAIN_QUESTIONS,
+        action: `${Analytics.Action.SELECTED} ${payload.ivoryVolume}`,
+        label: (await _getContext(request)).pageTitle
+      })
+    } else {
+      await request.ga.event({
+        category: Analytics.Category.MAIN_QUESTIONS,
+        action: `${Analytics.Action.SELECTED} ${payload.ivoryVolume} - ${payload.otherReason}`,
+        label: (await _getContext(request)).pageTitle
+      })
     }
 
     await RedisService.set(

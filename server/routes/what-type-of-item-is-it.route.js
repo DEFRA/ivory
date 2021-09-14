@@ -36,6 +36,12 @@ const handlers = {
       payload.whatTypeOfItemIsIt
     )
 
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${Analytics.Action.SELECTED} ${payload.whatTypeOfItemIsIt}`,
+      label: (await _getContext(request)).pageTitle
+    })
+
     return h.redirect(Paths.CAN_CONTINUE)
   }
 }

@@ -1,7 +1,7 @@
 'use strict'
 
 const RedisService = require('../services/redis.service')
-const { ItemType, Paths, RedisKeys, Views } = require('../utils/constants')
+const { ItemType, Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
@@ -10,7 +10,13 @@ const handlers = {
     })
   },
 
-  post: (request, h) => {
+  post: async (request, h) => {
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: Analytics.Action.CONTINUE,
+      label: (await _getContext(request)).pageTitle
+    })
+
     return h.redirect(Paths.UPLOAD_PHOTO)
   }
 }

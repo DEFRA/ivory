@@ -5,7 +5,8 @@ const {
   ItemType,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  Analytics
 } = require('../utils/constants')
 const {
   addPayloadToContext,
@@ -13,6 +14,8 @@ const {
 } = require('../utils/general')
 const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
+
+const pageTitle = 'Tell us about the item'
 
 const handlers = {
   get: async (request, h) => {
@@ -36,6 +39,12 @@ const handlers = {
     )
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: pageTitle
+      })
+
       return h
         .view(Views.DESCRIBE_THE_ITEM, {
           ...(await _getContext(request, itemType)),
@@ -49,6 +58,12 @@ const handlers = {
       RedisKeys.DESCRIBE_THE_ITEM,
       JSON.stringify(payload)
     )
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: JSON.stringify(payload),
+      label: pageTitle
+    })
 
     switch (itemType) {
       case ItemType.HIGH_VALUE:
@@ -65,7 +80,7 @@ const handlers = {
 
 const _getContext = async (request, itemType) => {
   const context = {
-    pageTitle: 'Tell us about the item',
+    pageTitle,
     isSection2: itemType === ItemType.HIGH_VALUE
   }
 

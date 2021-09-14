@@ -5,7 +5,8 @@ const {
   CharacterLimits,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  Analytics
 } = require('../utils/constants')
 const { formatNumberWithCommas } = require('../utils/general')
 const { buildErrorSummary, Validators } = require('../utils/validation')
@@ -22,6 +23,12 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
+      await request.ga.event({
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: (await _getContext(request)).pageTitle
+      })
+
       return h
         .view(Views.WHY_IS_ITEM_RMI, {
           ...(await _getContext(request)),
@@ -31,6 +38,12 @@ const handlers = {
     }
 
     await RedisService.set(request, RedisKeys.WHY_IS_ITEM_RMI, payload.whyRmi)
+
+    await request.ga.event({
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: payload.whyRmi,
+      label: (await _getContext(request)).pageTitle
+    })
 
     return h.redirect(Paths.IVORY_AGE)
   }
