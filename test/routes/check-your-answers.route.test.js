@@ -1,9 +1,5 @@
 'use strict'
 
-jest.mock('@defra/hapi-gapi')
-
-const createServer = require('../../server')
-
 const TestHelper = require('../utils/test-helper')
 const { ItemType, Paths, RedisKeys } = require('../../server/utils/constants')
 
@@ -65,7 +61,7 @@ describe('/check-your-answers route', () => {
   let document
 
   beforeAll(async () => {
-    server = await createServer()
+    server = await TestHelper.createServer()
   })
 
   afterAll(async () => {

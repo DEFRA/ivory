@@ -1,9 +1,5 @@
 'use strict'
 
-jest.mock('@defra/hapi-gapi')
-
-const createServer = require('../../../server')
-
 const RedisService = require('../../../server/services/redis.service')
 const TestHelper = require('../../utils/test-helper')
 
@@ -26,7 +22,7 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
   let document
 
   beforeAll(async () => {
-    server = await createServer()
+    server = await TestHelper.createServer()
   })
 
   afterAll(async () => {

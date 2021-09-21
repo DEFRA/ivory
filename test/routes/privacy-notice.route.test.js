@@ -1,9 +1,5 @@
 'use strict'
 
-jest.mock('@defra/hapi-gapi')
-
-const createServer = require('../../server')
-
 const TestHelper = require('../utils/test-helper')
 
 describe('/privacy-notice', () => {
@@ -63,7 +59,7 @@ describe('/privacy-notice', () => {
   let document
 
   beforeAll(async () => {
-    server = await createServer()
+    server = await TestHelper.createServer()
   })
 
   afterAll(async () => {

@@ -1,9 +1,5 @@
 'use strict'
 
-jest.mock('@defra/hapi-gapi')
-
-const createServer = require('../../../server')
-
 const TestHelper = require('../../utils/test-helper')
 const AddressService = require('../../../server/services/address.service')
 const RedisService = require('../../../server/services/redis.service')
@@ -45,7 +41,7 @@ describe('/user-details/owner/address-choose route', () => {
   }
 
   beforeAll(async () => {
-    server = await createServer()
+    server = await TestHelper.createServer()
   })
 
   afterAll(async () => {

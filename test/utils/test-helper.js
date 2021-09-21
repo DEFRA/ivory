@@ -7,6 +7,8 @@ const CookieService = require('../../server/services/cookie.service')
 const RedisService = require('../../server/services/redis.service')
 const AnalyticsService = require('../../server/services/analytics.service')
 
+const createServer = require('../../server')
+
 const elementIds = {
   backLink: 'back-link'
 }
@@ -27,6 +29,12 @@ module.exports = class TestHelper {
 
     jest.mock('../../server/services/analytics.service')
     AnalyticsService.sendEvent = jest.fn()
+  }
+
+  static createServer () {
+    jest.mock('@defra/hapi-gapi')
+
+    return createServer()
   }
 
   /**

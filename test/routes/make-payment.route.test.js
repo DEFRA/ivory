@@ -1,9 +1,5 @@
 'use strict'
 
-jest.mock('@defra/hapi-gapi')
-
-const createServer = require('../../server')
-
 const TestHelper = require('../utils/test-helper')
 
 jest.mock('randomstring')
@@ -23,7 +19,7 @@ describe('/make-payment route', () => {
   const nextUrl = 'THE_NEXT_URL'
 
   beforeAll(async () => {
-    server = await createServer()
+    server = await TestHelper.createServer()
   })
 
   afterAll(async () => {

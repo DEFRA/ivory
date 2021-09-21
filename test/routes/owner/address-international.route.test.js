@@ -1,11 +1,6 @@
 'use strict'
 
-jest.mock('@defra/hapi-gapi')
-
-const createServer = require('../../../server')
-
 const RedisService = require('../../../server/services/redis.service')
-
 const TestHelper = require('../../utils/test-helper')
 const CharacterLimits = require('../../mock-data/character-limits')
 
@@ -25,7 +20,7 @@ describe('/user-details/owner/address-international route', () => {
   let document
 
   beforeAll(async () => {
-    server = await createServer()
+    server = await TestHelper.createServer()
   })
 
   afterAll(async () => {

@@ -1,7 +1,5 @@
 'use strict'
 
-const createServer = require('../../../server')
-
 const TestHelper = require('../../utils/test-helper')
 
 describe('/errors/session-timed-out route', () => {
@@ -18,11 +16,15 @@ describe('/errors/session-timed-out route', () => {
   let document
 
   beforeAll(async () => {
-    server = await createServer()
+    server = await TestHelper.createServer()
   })
 
   afterAll(async () => {
     await server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
   })
 
   afterEach(() => {
@@ -87,3 +89,7 @@ describe('/errors/session-timed-out route', () => {
     })
   })
 })
+
+const _createMocks = () => {
+  TestHelper.createMocks()
+}

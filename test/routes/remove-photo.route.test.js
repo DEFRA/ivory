@@ -1,10 +1,6 @@
 'use strict'
 
-jest.mock('@defra/hapi-gapi')
-
 const fs = require('fs')
-
-const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
 
@@ -18,7 +14,7 @@ describe('/remove-photo route', () => {
   const redisKey = 'upload-photo'
 
   beforeAll(async () => {
-    server = await createServer()
+    server = await TestHelper.createServer()
   })
 
   afterAll(async () => {
