@@ -29,8 +29,10 @@ const handlers = {
   get: async (request, h) => {
     const addressType = getAddressType(request)
 
+    const context = await _getContext(request, addressType)
+
     return h.view(Views.ADDRESS_ENTER, {
-      ...(await _getContext(request, addressType, true))
+      ...context
     })
   },
 
@@ -95,7 +97,7 @@ const handlers = {
   }
 }
 
-const _getContext = async (request, addressType, isGet) => {
+const _getContext = async (request, addressType, isGet = true) => {
   const context = {}
 
   const ownedByApplicant = await RedisService.get(

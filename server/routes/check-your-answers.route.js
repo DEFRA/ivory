@@ -16,8 +16,10 @@ const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
   get: async (request, h) => {
+    const context = await _getContext(request)
+
     return h.view(Views.CHECK_YOUR_ANSWERS, {
-      ...(await _getContext(request))
+      ...context
     })
   },
 

@@ -29,8 +29,14 @@ const handlers = {
       RedisKeys.OWNED_BY_APPLICANT
     )
 
+    const context = await _getContext(
+      request,
+      getAddressType(request),
+      ownedByApplicant
+    )
+
     return h.view(Views.ADDRESS_FIND, {
-      ...(await _getContext(request, getAddressType(request), ownedByApplicant))
+      ...context
     })
   },
 
@@ -54,7 +60,7 @@ const handlers = {
 
       return h
         .view(Views.ADDRESS_FIND, {
-          ...(await _getContext(request, addressType, ownedByApplicant)),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -70,8 +76,7 @@ const handlers = {
       action: `${
         payload.nameOrNumber ? 'Property name or number' : 'Postcode only'
       } entered`,
-      label: (await _getContext(request, addressType, ownedByApplicant))
-        .pageTitle
+      label: context.pageTitle
     })
 
     await RedisService.set(

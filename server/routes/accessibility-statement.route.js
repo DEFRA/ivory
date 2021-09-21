@@ -7,10 +7,13 @@ const config = require('../utils/config')
 const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
-  get: async (request, h) =>
-    h.view(Views.ACCESSIBILITY_STATEMENT, {
-      ..._getContext(request)
+  get: (request, h) => {
+    const context = _getContext(request)
+
+    return h.view(Views.ACCESSIBILITY_STATEMENT, {
+      ...context
     })
+  }
 }
 
 module.exports = [

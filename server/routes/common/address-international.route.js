@@ -28,9 +28,10 @@ const getAddressType = request =>
 const handlers = {
   get: async (request, h) => {
     const addressType = getAddressType(request)
+    const context = await _getContext(request, addressType)
 
     return h.view(Views.ADDRESS_INTERNATIONAL, {
-      ...(await _getContext(request, addressType))
+      ...context
     })
   },
 

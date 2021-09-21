@@ -15,8 +15,10 @@ const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
+    const context = _getContext()
+
     return h.view(Views.CONTAIN_ELEPHANT_IVORY, {
-      ..._getContext()
+      ...context
     })
   },
 

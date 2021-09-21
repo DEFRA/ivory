@@ -82,12 +82,6 @@ const handlers = {
   }
 }
 
-const _getPageHeading = ownedByApplicant => {
-  return ownedByApplicant === Options.YES
-    ? 'Your contact details'
-    : "Owner's contact details"
-}
-
 const _getContext = async (request, ownedByApplicant) => {
   let contactDetails = await RedisService.get(
     request,
@@ -106,6 +100,12 @@ const _getContext = async (request, ownedByApplicant) => {
   }
 
   return addPayloadToContext(request, context)
+}
+
+const _getPageHeading = ownedByApplicant => {
+  return ownedByApplicant === Options.YES
+    ? 'Your contact details'
+    : "Owner's contact details"
 }
 
 const _validateForm = (payload, ownedByApplicant) => {
