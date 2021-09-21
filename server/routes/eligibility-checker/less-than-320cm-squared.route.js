@@ -1,39 +1,44 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
+
 const { Paths, Views, Options, Analytics } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
+    const context = _getContext()
+
     return h.view(Views.LESS_THAN_320CM_SQUARED, {
-      ..._getContext()
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = _getContext()
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: _getContext().pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.LESS_THAN_320CM_SQUARED, {
-          ..._getContext(),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.lessThan320cmSquared}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     switch (payload.lessThan320cmSquared) {
@@ -49,8 +54,10 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Does the portrait miniature have an ivory surface area of less than 320 square centimetres?',
-    helpText: 'Only measure the parts of the portrait you can see. Do not include the frame or areas covered by the frame.',
+    pageTitle:
+      'Does the portrait miniature have an ivory surface area of less than 320 square centimetres?',
+    helpText:
+      'Only measure the parts of the portrait you can see. Do not include the frame or areas covered by the frame.',
     items: getStandardOptions()
   }
 }
@@ -60,7 +67,8 @@ const _validateForm = payload => {
   if (Validators.empty(payload.lessThan320cmSquared)) {
     errors.push({
       name: 'lessThan320cmSquared',
-      text: 'Tell us whether your portrait miniature has an ivory surface area of less than 320 square centimetres'
+      text:
+        'Tell us whether your portrait miniature has an ivory surface area of less than 320 square centimetres'
     })
   }
   return errors

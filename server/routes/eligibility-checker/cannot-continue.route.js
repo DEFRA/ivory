@@ -1,6 +1,8 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
+
 const {
   Options,
   Paths,
@@ -12,22 +14,26 @@ const {
 
 const handlers = {
   get: async (request, h) => {
-    await request.ga.event({
+    const context = await _getContext(request)
+
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.SERVICE_COMPLETE,
       action: Analytics.Action.DROPOUT,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     return h.view(Views.CANNOT_CONTINUE, {
-      ...(await _getContext(request))
+      ...context
     })
   },
 
   post: async (request, h) => {
-    await request.ga.event({
+    const context = await _getContext(request)
+
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.SERVICE_COMPLETE,
       action: `${Analytics.Action.SELECTED} Finish and redirect button`,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     return h.redirect(Urls.GOV_UK_HOME)

@@ -1,6 +1,8 @@
 'use strict'
 
+const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+
 const { Paths, Views, RedisKeys, Analytics } = require('../utils/constants')
 
 const MAX_PHOTOS = 6
@@ -19,10 +21,12 @@ const handlers = {
   },
 
   post: async (request, h) => {
-    await request.ga.event({
+    const context = await _getContext(request)
+
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.CONTINUE,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     return h.redirect(Paths.WHO_OWNS_ITEM)

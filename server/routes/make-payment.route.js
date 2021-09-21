@@ -2,9 +2,12 @@
 
 const RandomString = require('randomstring')
 
-const { ItemType, Paths, RedisKeys } = require('../utils/constants')
+// TODO GA
+// const AnalyticsService = require('../services/analytics.service')
 const PaymentService = require('../services/payment.service')
 const RedisService = require('../services/redis.service')
+
+const { ItemType, Paths, RedisKeys } = require('../utils/constants')
 
 const TARGET_COMPLETION_DATE_PERIOD_DAYS = 30
 

@@ -1,39 +1,44 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
+
 const { Paths, Views, Options, Analytics } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
+    const context = _getContext()
+
     return h.view(Views.LESS_THAN_10_IVORY, {
-      ..._getContext()
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = _getContext()
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: _getContext().pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.LESS_THAN_10_IVORY, {
-          ..._getContext(),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.lessThan10Ivory}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     switch (payload.lessThan10Ivory) {
@@ -50,10 +55,14 @@ const handlers = {
 const _getContext = () => {
   return {
     pageTitle: 'Is your item less than 10% ivory?',
-    callOutText: 'The ivory must be integral to the design or function of the item.',
-    helpText: 'You must give a reasonable assessment of the volume of ivory in your item. In some cases, it’s easy to do this by eye. In others, you’ll need to take measurements.',
-    helpText2: 'If it’s difficult to do this without damaging the item, you can make an assessment based on knowledge of similar items.',
-    helpText3: 'Do not include any empty spaces, for instance, the space within a chest of drawers or a teapot.',
+    callOutText:
+      'The ivory must be integral to the design or function of the item.',
+    helpText:
+      'You must give a reasonable assessment of the volume of ivory in your item. In some cases, it’s easy to do this by eye. In others, you’ll need to take measurements.',
+    helpText2:
+      'If it’s difficult to do this without damaging the item, you can make an assessment based on knowledge of similar items.',
+    helpText3:
+      'Do not include any empty spaces, for instance, the space within a chest of drawers or a teapot.',
     items: getStandardOptions()
   }
 }

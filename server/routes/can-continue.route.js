@@ -1,7 +1,9 @@
 'use strict'
 
-const config = require('../utils/config')
+const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+
+const config = require('../utils/config')
 const {
   ItemType,
   Paths,
@@ -13,12 +15,16 @@ const {
 
 const handlers = {
   get: async (request, h) => {
+    const context = await _getContext(request)
+
     return h.view(Views.CAN_CONTINUE, {
-      ...(await _getContext(request))
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = await _getContext(request)
+
     const cost =
       (await _getItemType(request)) !== ItemType.HIGH_VALUE
         ? config.paymentAmountBandA
@@ -26,16 +32,16 @@ const handlers = {
 
     await RedisService.set(request, RedisKeys.PAYMENT_AMOUNT, cost)
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.EXEMPTION_TYPE,
       action: await _getItemType(request),
       label: `Eligibility Checker Used: ${await _usedChecker(request)}`
     })
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.CONTINUE,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     return h.redirect(Paths.LEGAL_REPONSIBILITY)

@@ -1,25 +1,31 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
+
 const { Paths, Views, Analytics } = require('../../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
-    await request.ga.event({
+    const context = _getContext()
+
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ERROR_PAGE,
       action: `${Analytics.Action.REFERRED} ${request.headers.referer}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     return h.view(Views.UPLOAD_TIMEOUT, {
-      ..._getContext()
+      ...context
     })
   },
 
   post: async (request, h) => {
-    await request.ga.event({
+    const context = _getContext()
+
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ERROR_PAGE,
       action: `${Analytics.Action.REDIRECT} ${Paths.UPLOAD_PHOTO}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     return h.redirect(Paths.UPLOAD_PHOTO)

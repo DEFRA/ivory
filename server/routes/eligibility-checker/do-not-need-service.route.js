@@ -1,26 +1,38 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
-const { Paths, RedisKeys, Views, Urls, Analytics } = require('../../utils/constants')
+
+const {
+  Paths,
+  RedisKeys,
+  Views,
+  Urls,
+  Analytics
+} = require('../../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
-    await request.ga.event({
+    const context = await _getContext(request)
+
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.SERVICE_COMPLETE,
       action: Analytics.Action.DROPOUT,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     return h.view(Views.DO_NOT_NEED_SERVICE, {
-      ...(await _getContext(request))
+      ...context
     })
   },
 
   post: async (request, h) => {
-    await request.ga.event({
+    const context = await _getContext(request)
+
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.SERVICE_COMPLETE,
       action: `${Analytics.Action.SELECTED} Finish and redirect button`,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     return h.redirect(Urls.GOV_UK_HOME)
@@ -32,7 +44,8 @@ const _getContext = async request => {
     (await RedisService.get(request, RedisKeys.ARE_YOU_A_MUSEUM)) === 'true'
 
   const notContainingIvory =
-    (await RedisService.get(request, RedisKeys.CONTAIN_ELEPHANT_IVORY)) === 'false'
+    (await RedisService.get(request, RedisKeys.CONTAIN_ELEPHANT_IVORY)) ===
+    'false'
 
   return {
     pageTitle: 'You don’t need to tell us about this item',

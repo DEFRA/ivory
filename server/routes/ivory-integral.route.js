@@ -1,6 +1,8 @@
 'use strict'
 
+const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+
 const {
   IvoryIntegralReasons,
   Paths,
@@ -12,25 +14,28 @@ const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
   get: async (request, h) => {
+    const context = await _getContext(request)
+
     return h.view(Views.IVORY_INTEGRAL, {
-      ...(await _getContext(request))
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = await _getContext(request)
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: (await _getContext(request)).pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.IVORY_INTEGRAL, {
-          ...(await _getContext(request)),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -42,10 +47,10 @@ const handlers = {
       payload.ivoryIsIntegral
     )
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: `${Analytics.Action.SELECTED} ${payload.ivoryIsIntegral}`,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     return h.redirect(Paths.IVORY_AGE)

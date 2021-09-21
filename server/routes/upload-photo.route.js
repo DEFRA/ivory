@@ -5,8 +5,10 @@ const fs = require('fs')
 const path = require('path')
 const sharp = require('sharp')
 
-const config = require('../utils/config')
+const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+
+const config = require('../utils/config')
 const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
 const { buildErrorSummary } = require('../utils/validation')
 const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
@@ -18,6 +20,8 @@ const ALLOWED_EXTENSIONS = ['.JPG', '.JPEG', '.PNG']
 
 const handlers = {
   get: async (request, h) => {
+    const context = await _getContext(request)
+
     const uploadData = JSON.parse(
       await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
     )
@@ -36,26 +40,25 @@ const handlers = {
     )
 
     return h.view(Views.UPLOAD_PHOTO, {
-      ...(await _getContext(request)),
+      ...context,
       ...buildErrorSummary(errors)
     })
   },
 
   post: async (request, h) => {
+    const context = await _getContext(request)
     const payload = request.payload
     const filename = payload.files.filename
-
-    const context = await _getContext(request)
 
     const uploadData = context.uploadData
 
     let errors = _validateForm(payload, uploadData)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: (await _getContext(request)).pageTitle
+        label: context.pageTitle
       })
 
       return h
@@ -109,25 +112,27 @@ const handlers = {
       })
 
       if (errors.length) {
-        await request.ga.event({
+        AnalyticsService.sendEvent(request, {
           category: Analytics.Category.ERROR,
           action: JSON.stringify(errors),
-          label: (await _getContext(request)).pageTitle
+          label: context.pageTitle
         })
 
         return h
           .view(Views.UPLOAD_PHOTO, {
-            ...(await _getContext(request)),
+            ...context,
             ...buildErrorSummary(errors)
           })
           .code(400)
       }
     }
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
-      action: (await _getContext(request)).pageTitle,
-      label: `${filename} ${(payload.files.bytes / Math.pow(1024, 2)).toFixed(2)}MB`,
+      action: context.pageTitle,
+      label: `${filename} ${(payload.files.bytes / Math.pow(1024, 2)).toFixed(
+        2
+      )}MB`,
       value: (payload.files.bytes / 1024).toFixed()
     })
 

@@ -1,10 +1,10 @@
 'use strict'
 
+jest.mock('@defra/hapi-gapi')
+
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
-
-jest.mock('../../server/services/cookie.service')
 
 describe('/privacy-notice', () => {
   let server

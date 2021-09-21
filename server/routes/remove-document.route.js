@@ -2,7 +2,10 @@
 
 const Hoek = require('@hapi/hoek')
 
+// TODO GA
+// const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+
 const { Paths, RedisKeys } = require('../utils/constants')
 
 const handlers = {

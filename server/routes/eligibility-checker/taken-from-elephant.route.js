@@ -1,39 +1,44 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
+
 const { Paths, Views, Options, Analytics } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
+    const context = _getContext()
+
     return h.view(Views.TAKEN_FROM_ELEPHANT, {
-      ..._getContext()
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = _getContext()
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: _getContext().pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.TAKEN_FROM_ELEPHANT, {
-          ..._getContext(),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.takenFromElephant}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     switch (payload.takenFromElephant) {
@@ -49,7 +54,8 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Was the replacement ivory taken from an elephant on or after 1 January 1975?',
+    pageTitle:
+      'Was the replacement ivory taken from an elephant on or after 1 January 1975?',
     items: getStandardOptions()
   }
 }
@@ -59,7 +65,8 @@ const _validateForm = payload => {
   if (Validators.empty(payload.takenFromElephant)) {
     errors.push({
       name: 'takenFromElephant',
-      text: 'You must tell us whether the replacement ivory was taken from an elephant on or after 1 January 1975'
+      text:
+        'You must tell us whether the replacement ivory was taken from an elephant on or after 1 January 1975'
     })
   }
   return errors

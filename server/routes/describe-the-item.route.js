@@ -1,5 +1,8 @@
 'use strict'
 
+const AnalyticsService = require('../services/analytics.service')
+const RedisService = require('../services/redis.service')
+
 const {
   CharacterLimits,
   ItemType,
@@ -12,7 +15,6 @@ const {
   addPayloadToContext,
   formatNumberWithCommas
 } = require('../utils/general')
-const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const pageTitle = 'Tell us about the item'
@@ -24,30 +26,33 @@ const handlers = {
       RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
     )
 
+    const context = await _getContext(request, itemType)
+
     return h.view(Views.DESCRIBE_THE_ITEM, {
-      ...(await _getContext(request, itemType))
+      ...context
     })
   },
 
   post: async (request, h) => {
-    const payload = request.payload
-    const errors = _validateForm(payload)
-
     const itemType = await RedisService.get(
       request,
       RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
     )
 
+    const context = await _getContext(request, itemType)
+    const payload = request.payload
+    const errors = _validateForm(payload)
+
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.DESCRIBE_THE_ITEM, {
-          ...(await _getContext(request, itemType)),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -59,10 +64,10 @@ const handlers = {
       JSON.stringify(payload)
     )
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: JSON.stringify(payload),
-      label: pageTitle
+      label: context.pageTitle
     })
 
     switch (itemType) {

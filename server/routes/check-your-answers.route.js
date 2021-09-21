@@ -1,15 +1,17 @@
 'use strict'
 
+const AnalyticsService = require('../services/analytics.service')
+const RedisService = require('../services/redis.service')
+
 const {
+  Analytics,
   ItemType,
   Paths,
   Views,
   RedisKeys,
-  Options,
-  Analytics
+  Options
 } = require('../utils/constants')
 const { getIvoryVolumePercentage } = require('../utils/general')
-const RedisService = require('../services/redis.service')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
@@ -20,28 +22,29 @@ const handlers = {
   },
 
   post: async (request, h) => {
+    const context = await _getContext(request)
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: (await _getContext(request)).pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.CHECK_YOUR_ANSWERS, {
-          ...(await _getContext(request)),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.CONFIRM,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     return h.redirect(Paths.MAKE_PAYMENT)

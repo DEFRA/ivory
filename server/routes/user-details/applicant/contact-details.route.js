@@ -1,6 +1,8 @@
 'use strict'
 
+const AnalyticsService = require('../../../services/analytics.service')
 const RedisService = require('../../../services/redis.service')
+
 const {
   CharacterLimits,
   Paths,
@@ -16,25 +18,28 @@ const pageTitle = 'Your contact details'
 
 const handlers = {
   get: async (request, h) => {
+    const context = await _getContext(request)
+
     return h.view(Views.CONTACT_DETAILS, {
-      ...(await _getContext(request))
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = await _getContext(request)
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: (await _getContext(request)).pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.CONTACT_DETAILS, {
-          ...(await _getContext(request)),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -46,10 +51,10 @@ const handlers = {
       JSON.stringify(payload)
     )
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.ENTERED,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     return h.redirect(Paths.APPLICANT_ADDRESS_FIND)

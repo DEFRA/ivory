@@ -1,14 +1,13 @@
 'use strict'
 
+jest.mock('@defra/hapi-gapi')
+
 const { ItemType, RedisKeys } = require('../../server/utils/constants')
 
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
 
-jest.mock('../../server/services/cookie.service')
-
-jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
 jest.mock('../../server/services/payment.service')

@@ -1,13 +1,11 @@
 'use strict'
 
+jest.mock('@defra/hapi-gapi')
+
 const createServer = require('../../../server')
 
-const TestHelper = require('../../utils/test-helper')
-
-jest.mock('../../../server/services/cookie.service')
-
-jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
+const TestHelper = require('../../utils/test-helper')
 
 describe('/eligibility-checker/is-it-a-portrait-miniature route', () => {
   let server

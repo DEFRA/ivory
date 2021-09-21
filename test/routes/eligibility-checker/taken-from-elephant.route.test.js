@@ -1,8 +1,8 @@
 'use strict'
 
-const createServer = require('../../../server')
+jest.mock('@defra/hapi-gapi')
 
-jest.mock('../../../server/services/cookie.service')
+const createServer = require('../../../server')
 
 const TestHelper = require('../../utils/test-helper')
 

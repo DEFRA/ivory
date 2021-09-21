@@ -1,5 +1,8 @@
 'use strict'
 
+const AnalyticsService = require('../../../services/analytics.service')
+const RedisService = require('../../../services/redis.service')
+
 const {
   CharacterLimits,
   Options,
@@ -9,8 +12,6 @@ const {
   Analytics
 } = require('../../../utils/constants')
 const { formatNumberWithCommas } = require('../../../utils/general')
-
-const RedisService = require('../../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
 const { addPayloadToContext } = require('../../../utils/general')
 
@@ -21,8 +22,10 @@ const handlers = {
       RedisKeys.OWNED_BY_APPLICANT
     )
 
+    const context = await _getContext(request, ownedByApplicant)
+
     return h.view(Views.CONTACT_DETAILS, {
-      ...(await _getContext(request, ownedByApplicant)),
+      ...context,
       pageTitle: _getPageHeading(ownedByApplicant),
       ownerApplicant: ownedByApplicant === Options.YES
     })
@@ -34,11 +37,12 @@ const handlers = {
       RedisKeys.OWNED_BY_APPLICANT
     )
 
+    const context = await _getContext(request, ownedByApplicant)
     const payload = request.payload
     const errors = _validateForm(payload, ownedByApplicant)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
         label: _getPageHeading(ownedByApplicant)
@@ -48,7 +52,7 @@ const handlers = {
         .view(Views.CONTACT_DETAILS, {
           pageTitle: _getPageHeading(ownedByApplicant),
           ownerApplicant: ownedByApplicant === Options.YES,
-          ..._getContext(request, ownedByApplicant),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -68,7 +72,7 @@ const handlers = {
       )
     }
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.ENTERED,
       label: _getPageHeading(ownedByApplicant)

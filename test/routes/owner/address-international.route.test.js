@@ -1,14 +1,12 @@
 'use strict'
 
+jest.mock('@defra/hapi-gapi')
+
 const createServer = require('../../../server')
 
-const TestHelper = require('../../utils/test-helper')
-
-jest.mock('../../../server/services/cookie.service')
-
-jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
+const TestHelper = require('../../utils/test-helper')
 const CharacterLimits = require('../../mock-data/character-limits')
 
 describe('/user-details/owner/address-international route', () => {

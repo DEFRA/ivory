@@ -1,12 +1,18 @@
 'use strict'
 
+// TODO GA
+// const AnalyticsService = require('../services/analytics.service')
+
 const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
-  get: async (request, h) =>
-    h.view(Views.COOKIE_POLICY, {
-      ..._getContext(request)
+  get: async (request, h) => {
+    const context = _getContext(request)
+
+    return h.view(Views.COOKIE_POLICY, {
+      ...context
     })
+  }
 }
 
 module.exports = [

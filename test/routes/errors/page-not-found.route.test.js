@@ -1,5 +1,7 @@
 'use strict'
 
+jest.mock('@defra/hapi-gapi')
+
 const createServer = require('../../../server')
 
 const TestHelper = require('../../utils/test-helper')
@@ -22,6 +24,14 @@ describe('/errors/page-not-found (404) route', () => {
 
   afterAll(async () => {
     await server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('GET', () => {
@@ -63,3 +73,7 @@ describe('/errors/page-not-found (404) route', () => {
     })
   })
 })
+
+const _createMocks = () => {
+  TestHelper.createMocks()
+}

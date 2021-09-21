@@ -1,40 +1,52 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views, Options, Analytics } = require('../../utils/constants')
+const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
+
+const {
+  ItemType,
+  Paths,
+  RedisKeys,
+  Views,
+  Options,
+  Analytics
+} = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
+    const context = _getContext()
+
     return h.view(Views.RMI_AND_PRE_1918, {
-      ..._getContext()
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = _getContext()
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: _getContext().pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.RMI_AND_PRE_1918, {
-          ..._getContext(),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.rmiAndPre1918}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     switch (payload.rmiAndPre1918) {
@@ -55,7 +67,8 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Is it a pre-1918 item of outstandingly high artistic, cultural or historical value?',
+    pageTitle:
+      'Is it a pre-1918 item of outstandingly high artistic, cultural or historical value?',
     helpText: 'The item must:',
     items: getStandardOptions()
   }
@@ -66,7 +79,8 @@ const _validateForm = payload => {
   if (Validators.empty(payload.rmiAndPre1918)) {
     errors.push({
       name: 'rmiAndPre1918',
-      text: 'Tell us whether your item is a pre-1918 item of outstandingly high artistic, cultural or historical value'
+      text:
+        'Tell us whether your item is a pre-1918 item of outstandingly high artistic, cultural or historical value'
     })
   }
   return errors

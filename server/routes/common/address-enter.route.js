@@ -1,5 +1,8 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
+const RedisService = require('../../services/redis.service')
+
 const {
   AddressType,
   CharacterLimits,
@@ -9,9 +12,9 @@ const {
   Views,
   Analytics
 } = require('../../utils/constants')
-const { formatNumberWithCommas } = require('../../utils/general')
-const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
+const { formatNumberWithCommas } = require('../../utils/general')
+
 const {
   addPayloadToContext,
   convertToCommaSeparatedTitleCase
@@ -38,7 +41,7 @@ const handlers = {
     const context = await _getContext(request, addressType, false)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
         label: context.pageTitle
@@ -57,7 +60,7 @@ const handlers = {
       RedisKeys.OWNED_BY_APPLICANT
     )
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.ENTERED,
       label: context.pageTitle

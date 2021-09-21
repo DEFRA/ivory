@@ -1,40 +1,52 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views, Options, Analytics } = require('../../utils/constants')
+const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
+
+const {
+  Analytics,
+  ItemType,
+  Options,
+  Paths,
+  RedisKeys,
+  Views
+} = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
+    const context = _getContext()
+
     return h.view(Views.LESS_THAN_20_IVORY, {
-      ..._getContext()
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = _getContext()
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: _getContext().pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.LESS_THAN_20_IVORY, {
-          ..._getContext(),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.lessThan20Ivory}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     switch (payload.lessThan20Ivory) {
@@ -56,9 +68,12 @@ const handlers = {
 const _getContext = () => {
   return {
     pageTitle: 'Is the whole item less than 20% ivory?',
-    helpText: 'You must give a reasonable assessment of the volume of ivory in your whole item. In some cases, it’s easy to do this by eye. In others, you’ll need to take measurements.',
-    helpText2: 'If it’s difficult to do this without damaging the item, you can make an assessment based on knowledge of similar items.',
-    helpText3: 'Do not include any empty spaces, for instance the space within a violin or piano.',
+    helpText:
+      'You must give a reasonable assessment of the volume of ivory in your whole item. In some cases, it’s easy to do this by eye. In others, you’ll need to take measurements.',
+    helpText2:
+      'If it’s difficult to do this without damaging the item, you can make an assessment based on knowledge of similar items.',
+    helpText3:
+      'Do not include any empty spaces, for instance the space within a violin or piano.',
     items: getStandardOptions()
   }
 }

@@ -1,20 +1,32 @@
 'use strict'
 
+const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
-const { ItemType, Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
+
+const {
+  ItemType,
+  Paths,
+  RedisKeys,
+  Views,
+  Analytics
+} = require('../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
+    const context = await _getContext(request)
+
     return h.view(Views.LEGAL_REPONSIBILITY, {
-      ...(await _getContext(request))
+      ...context
     })
   },
 
   post: async (request, h) => {
-    await request.ga.event({
+    const context = await _getContext(request)
+
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.CONTINUE,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     const uploadData = JSON.parse(
@@ -26,9 +38,6 @@ const handlers = {
       : h.redirect(Paths.UPLOAD_PHOTO)
   }
 }
-
-const _getItemType = async request =>
-  RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
 
 const _getContext = async request => {
   if ((await _getItemType(request)) === ItemType.HIGH_VALUE) {
@@ -55,6 +64,9 @@ const _getContext = async request => {
     }
   }
 }
+
+const _getItemType = async request =>
+  RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
 
 module.exports = [
   {

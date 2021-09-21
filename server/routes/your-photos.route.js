@@ -3,7 +3,9 @@
 const os = require('os')
 const { writeFileSync } = require('fs')
 
+const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+
 const { Paths, Views, RedisKeys, Analytics } = require('../utils/constants')
 
 const MAX_PHOTOS = 6
@@ -13,10 +15,10 @@ const handlers = {
     const context = await _getContext(request)
 
     if (!context.uploadData || !context.uploadData.files.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.MAIN_QUESTIONS,
         action: `${Analytics.Action.REDIRECT} ${Paths.UPLOAD_PHOTO}`,
-        label: (await _getContext(request)).pageTitle
+        label: context.pageTitle
       })
 
       return h.redirect(Paths.UPLOAD_PHOTO)
@@ -28,10 +30,12 @@ const handlers = {
   },
 
   post: async (request, h) => {
-    await request.ga.event({
+    const context = await _getContext(request)
+
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.CONTINUE,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     return h.redirect(Paths.DESCRIBE_THE_ITEM)

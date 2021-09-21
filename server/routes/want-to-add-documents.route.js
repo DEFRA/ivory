@@ -1,22 +1,27 @@
 'use strict'
 
+const AnalyticsService = require('../services/analytics.service')
+
 const { Paths, Views, Options, Analytics } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 const { getStandardOptions } = require('../utils/general')
 
 const handlers = {
   get: (request, h) => {
+    const context = _getContext()
+
     return h.view(Views.WANT_TO_ADD_DOCUMENTS, {
-      ..._getContext()
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = _getContext()
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
         label: _getContext().pageTitle
@@ -24,16 +29,16 @@ const handlers = {
 
       return h
         .view(Views.WANT_TO_ADD_DOCUMENTS, {
-          ..._getContext(),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: `${Analytics.Action.SELECTED} ${payload.wantToAddDocuments}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     return payload.wantToAddDocuments === Options.YES

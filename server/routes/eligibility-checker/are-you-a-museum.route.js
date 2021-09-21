@@ -1,38 +1,43 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
+const RedisService = require('../../services/redis.service')
+
 const {
+  Analytics,
   ItemType,
   Paths,
   RedisKeys,
   Views,
-  Options,
-  Analytics
+  Options
 } = require('../../utils/constants')
-const RedisService = require('../../services/redis.service')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
+    const context = _getContext(request)
+
     return h.view(Views.ARE_YOU_A_MUSEUM, {
-      ..._getContext()
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = _getContext(request)
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: _getContext().pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.ARE_YOU_A_MUSEUM, {
-          ..._getContext(),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -44,10 +49,10 @@ const handlers = {
       payload.areYouAMuseum === Options.YES
     )
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.areYouAMuseum}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     switch (payload.areYouAMuseum) {

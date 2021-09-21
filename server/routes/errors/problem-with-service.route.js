@@ -1,17 +1,21 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
+
 const { Paths, Views, Analytics } = require('../../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
-    await request.ga.event({
+    const context = _getContext()
+
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ERROR_PAGE,
       action: `${Analytics.Action.REFERRED} ${request.headers.referer}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     return h.view(Views.PROBLEM_WITH_SERVICE, {
-      ..._getContext()
+      ...context
     })
   }
 }

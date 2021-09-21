@@ -1,5 +1,11 @@
 'use strict'
 
+// TODO GA
+// const AnalyticsService = require('../services/analytics.service')
+const ODataService = require('../services/odata.service')
+const RedisService = require('../services/redis.service')
+const PaymentService = require('../services/payment.service')
+
 const {
   Paths,
   RedisKeys,
@@ -15,9 +21,6 @@ const {
   IvoryVolumeLookup,
   Status
 } = require('../services/dataverse-choice-lookups')
-const ODataService = require('../services/odata.service')
-const RedisService = require('../services/redis.service')
-const PaymentService = require('../services/payment.service')
 
 const handlers = {
   get: async (request, h) => {

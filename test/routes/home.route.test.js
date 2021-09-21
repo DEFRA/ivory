@@ -1,5 +1,7 @@
 'use strict'
 
+jest.mock('@defra/hapi-gapi')
+
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')

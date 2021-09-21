@@ -1,30 +1,42 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
+const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+
+const {
+  ItemType,
+  Paths,
+  RedisKeys,
+  Views,
+  Analytics
+} = require('../utils/constants')
+
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
   get: async (request, h) => {
+    const context = await _getContext(request)
+
     return h.view(Views.WHAT_TYPE_OF_ITEM_IS_IT, {
-      ...(await _getContext(request))
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = await _getContext(request)
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: (await _getContext(request)).pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.WHAT_TYPE_OF_ITEM_IS_IT, {
-          ...(await _getContext(request)),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -36,10 +48,10 @@ const handlers = {
       payload.whatTypeOfItemIsIt
     )
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: `${Analytics.Action.SELECTED} ${payload.whatTypeOfItemIsIt}`,
-      label: (await _getContext(request)).pageTitle
+      label: context.pageTitle
     })
 
     return h.redirect(Paths.CAN_CONTINUE)

@@ -1,5 +1,7 @@
 'use strict'
 
+jest.mock('@defra/hapi-gapi')
+
 const createServer = require('../../../server')
 
 const TestHelper = require('../../utils/test-helper')
@@ -23,6 +25,14 @@ describe('/errors/upload-timeout route', () => {
 
   afterAll(async () => {
     await server.stop()
+  })
+
+  beforeEach(() => {
+    _createMocks()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('GET', () => {
@@ -86,3 +96,7 @@ describe('/errors/upload-timeout route', () => {
     })
   })
 })
+
+const _createMocks = () => {
+  TestHelper.createMocks()
+}

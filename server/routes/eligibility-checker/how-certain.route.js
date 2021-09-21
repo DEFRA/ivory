@@ -1,31 +1,37 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
-const { Paths, Views, RedisKeys, Analytics } = require('../../utils/constants')
+
+const { Analytics, Paths, Views, RedisKeys } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const completelyCertain = 'Completely'
 
 const handlers = {
-  get: (request, h) =>
-    h.view(Views.HOW_CERTAIN, {
-      ..._getContext()
-    }),
+  get: (request, h) => {
+    const context = _getContext()
+
+    return h.view(Views.HOW_CERTAIN, {
+      ...context
+    })
+  },
 
   post: async (request, h) => {
+    const context = _getContext()
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: _getContext().pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.HOW_CERTAIN, {
-          ..._getContext(),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
@@ -37,10 +43,10 @@ const handlers = {
       payload.howCertain !== completelyCertain
     )
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.howCertain}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     return h.redirect(

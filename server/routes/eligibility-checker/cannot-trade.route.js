@@ -1,23 +1,26 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
+
 const { Paths, Views, Urls, Analytics } = require('../../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
-    const referringUrl = request.headers.referer
-    await request.ga.event({
+    const context = _getContext(request)
+
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.SERVICE_COMPLETE,
       action: Analytics.Action.DROPOUT,
-      label: _getContext(referringUrl).pageTitle
+      label: context.pageTitle
     })
 
     return h.view(Views.CANNOT_TRADE, {
-      ..._getContext(referringUrl)
+      ...context
     })
   },
 
   post: async (request, h) => {
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.SERVICE_COMPLETE,
       action: `${Analytics.Action.SELECTED} Finish and redirect button`,
       label: 'Cannot Trade'
@@ -27,7 +30,9 @@ const handlers = {
   }
 }
 
-const _getContext = referringUrl => {
+const _getContext = request => {
+  const referringUrl = request.headers.referer
+
   const pageTitle = 'You are not allowed to sell or hire out your item'
 
   if (referringUrl.includes(Paths.TAKEN_FROM_ELEPHANT)) {

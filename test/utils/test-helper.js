@@ -5,6 +5,7 @@ const { JSDOM } = jsdom
 
 const CookieService = require('../../server/services/cookie.service')
 const RedisService = require('../../server/services/redis.service')
+const AnalyticsService = require('../../server/services/analytics.service')
 
 const elementIds = {
   backLink: 'back-link'
@@ -14,11 +15,18 @@ const DEFAULT_VALIDATION_SUMMARY_HEADING = 'There is a problem'
 
 module.exports = class TestHelper {
   static createMocks () {
+    jest.mock('../../server/services/address.service')
+
+    jest.mock('../../server/services/cookie.service')
     CookieService.checkSessionCookie = jest
       .fn()
       .mockReturnValue('THE_SESSION_COOKIE')
 
+    jest.mock('../../server/services/redis.service')
     RedisService.set = jest.fn()
+
+    jest.mock('../../server/services/analytics.service')
+    AnalyticsService.sendEvent = jest.fn()
   }
 
   /**

@@ -1,5 +1,8 @@
 'use strict'
 
+const AnalyticsService = require('../../services/analytics.service')
+const RedisService = require('../../services/redis.service')
+
 const {
   AddressType,
   Options,
@@ -8,7 +11,6 @@ const {
   Views,
   Analytics
 } = require('../../utils/constants')
-const RedisService = require('../../services/redis.service')
 
 const getAddressType = request =>
   request.route.path === Paths.OWNER_ADDRESS_CONFIRM
@@ -33,7 +35,7 @@ const handlers = {
       RedisKeys.OWNED_BY_APPLICANT
     )
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.CONFIRM,
       label: context.pageTitle

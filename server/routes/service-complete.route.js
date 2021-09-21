@@ -1,5 +1,10 @@
 'use strict'
 
+const AnalyticsService = require('../services/analytics.service')
+const NotificationService = require('../services/notification.service')
+const PaymentService = require('../services/payment.service')
+const RedisService = require('../services/redis.service')
+
 const {
   Paths,
   RedisKeys,
@@ -8,9 +13,6 @@ const {
   ItemType,
   Analytics
 } = require('../utils/constants')
-const NotificationService = require('../services/notification.service')
-const PaymentService = require('../services/payment.service')
-const RedisService = require('../services/redis.service')
 
 const handlers = {
   get: async (request, h) => {
@@ -41,7 +43,7 @@ const handlers = {
 
     _sendConfirmationEmail(request, isSection2, context, itemType)
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.SERVICE_COMPLETE,
       action: context.pageTitle,
       label: context.pageTitle

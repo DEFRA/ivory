@@ -1,40 +1,52 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views, Options, Analytics } = require('../../utils/constants')
+const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
+
+const {
+  ItemType,
+  Paths,
+  RedisKeys,
+  Views,
+  Options,
+  Analytics
+} = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
+    const context = _getContext(request)
+
     return h.view(Views.IS_IT_A_PORTRAIT_MINIATURE, {
-      ..._getContext()
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = _getContext(request)
     const payload = request.payload
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: _getContext().pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.IS_IT_A_PORTRAIT_MINIATURE, {
-          ..._getContext(),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.isItAPortraitMiniature}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     switch (payload.isItAPortraitMiniature) {
@@ -46,11 +58,7 @@ const handlers = {
         )
         return h.redirect(Paths.IS_ITEM_PRE_1918)
       case Options.NO:
-        await RedisService.set(
-          request,
-          RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
-          ''
-        )
+        await RedisService.set(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT, '')
         return h.redirect(Paths.IS_ITEM_PRE_1918)
       case Options.I_DONT_KNOW:
         return h.redirect(Paths.CANNOT_CONTINUE)
@@ -61,7 +69,8 @@ const handlers = {
 const _getContext = () => {
   return {
     pageTitle: 'Is your item a portrait miniature?',
-    helpText: 'Portrait miniatures are small portraits, popular in the 18th or 19th century, that were often painted on very thin pieces of ivory.',
+    helpText:
+      'Portrait miniatures are small portraits, popular in the 18th or 19th century, that were often painted on very thin pieces of ivory.',
     items: getStandardOptions()
   }
 }

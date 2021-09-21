@@ -1,14 +1,13 @@
 'use strict'
 
+jest.mock('@defra/hapi-gapi')
+
 const fs = require('fs')
 
 const createServer = require('../../server')
 
 const TestHelper = require('../utils/test-helper')
 
-jest.mock('../../server/services/cookie.service')
-
-jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
 describe('/remove-document route', () => {

@@ -1,41 +1,57 @@
 'use strict'
 
-const { ItemType, Paths, RedisKeys, Views, Options, Analytics } = require('../../utils/constants')
+const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
+
+const {
+  Analytics,
+  ItemType,
+  Options,
+  Paths,
+  RedisKeys,
+  Views
+} = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
+    const context = _getContext()
+
     return h.view(Views.IS_ITEM_PRE_1918, {
-      ..._getContext()
+      ...context
     })
   },
 
   post: async (request, h) => {
+    const context = _getContext()
     const payload = request.payload
     const errors = _validateForm(payload)
-    const whatIsItem = await RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
+
+    const whatIsItem = await RedisService.get(
+      request,
+      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
+    )
 
     if (errors.length) {
-      await request.ga.event({
+      AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: _getContext().pageTitle
+        label: context.pageTitle
       })
 
       return h
         .view(Views.IS_ITEM_PRE_1918, {
-          ..._getContext(),
+          ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    await request.ga.event({
+    AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.isItemPre1918}`,
-      label: _getContext().pageTitle
+      label: context.pageTitle
     })
 
     switch (payload.isItemPre1918) {
