@@ -2,6 +2,7 @@
 
 const TestHelper = require('../../utils/test-helper')
 const AddressService = require('../../../server/services/address.service')
+jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
 const { singleAddress } = require('../../mock-data/addresses')

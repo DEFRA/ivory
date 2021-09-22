@@ -2,6 +2,7 @@
 
 const TestHelper = require('../utils/test-helper')
 
+jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
 describe('/intention-for-item route', () => {

@@ -3,6 +3,7 @@
 const TestHelper = require('../utils/test-helper')
 const { ItemType, Paths, RedisKeys } = require('../../server/utils/constants')
 
+jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
 const MAX_FILES = 6

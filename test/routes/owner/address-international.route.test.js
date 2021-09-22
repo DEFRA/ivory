@@ -1,5 +1,6 @@
 'use strict'
 
+jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 const TestHelper = require('../../utils/test-helper')
 const CharacterLimits = require('../../mock-data/character-limits')

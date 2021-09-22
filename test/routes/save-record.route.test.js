@@ -8,6 +8,7 @@ const {
   RedisKeys
 } = require('../../server/utils/constants')
 
+jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
 jest.mock('../../server/services/odata.service')
