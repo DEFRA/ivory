@@ -19,6 +19,9 @@ module.exports = class TestHelper {
   static createMocks () {
     jest.mock('../../server/services/address.service')
 
+    jest.mock('../../server/services/analytics.service')
+    AnalyticsService.sendEvent = jest.fn()
+
     jest.mock('../../server/services/cookie.service')
     CookieService.checkSessionCookie = jest
       .fn()
@@ -26,9 +29,6 @@ module.exports = class TestHelper {
 
     jest.mock('../../server/services/redis.service')
     RedisService.set = jest.fn()
-
-    jest.mock('../../server/services/analytics.service')
-    AnalyticsService.sendEvent = jest.fn()
   }
 
   static createServer () {
