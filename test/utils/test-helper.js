@@ -17,9 +17,6 @@ const DEFAULT_VALIDATION_SUMMARY_HEADING = 'There is a problem'
 
 module.exports = class TestHelper {
   static createMocks () {
-    jest.mock('../../server/services/redis.service')
-    RedisService.set = jest.fn()
-
     jest.mock('../../server/services/address.service')
 
     jest.mock('../../server/services/analytics.service')
@@ -30,8 +27,7 @@ module.exports = class TestHelper {
       .fn()
       .mockReturnValue('THE_SESSION_COOKIE')
 
-    // jest.mock('../../server/services/redis.service')
-    // RedisService.set = jest.fn()
+    RedisService.set = jest.fn()
   }
 
   static createServer () {

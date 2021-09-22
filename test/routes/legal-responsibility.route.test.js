@@ -1,11 +1,11 @@
 'use strict'
 
+const RedisService = require('../../server/services/redis.service')
+
 const TestHelper = require('../utils/test-helper')
 const { ItemType } = require('../../server/utils/constants')
 
-const RedisService = require('../../server/services/redis.service')
-
-describe.skip('/legal-responsibility route', () => {
+describe('/legal-responsibility route', () => {
   let server
   const url = '/legal-responsibility'
   const nextUrlNoPhotos = '/upload-photo'

@@ -1,10 +1,9 @@
 'use strict'
 
+const RedisService = require('../../server/services/redis.service')
 const TestHelper = require('../utils/test-helper')
 
-const RedisService = require('../../server/services/redis.service')
-
-describe.skip('/ivory-integral route', () => {
+describe('/ivory-integral route', () => {
   let server
   const url = '/ivory-integral'
   const nextUrl = '/ivory-age'

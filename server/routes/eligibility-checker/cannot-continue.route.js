@@ -1,6 +1,6 @@
 'use strict'
 
-// const AnalyticsService = require('../../services/analytics.service')
+const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
 
 const {
@@ -8,19 +8,19 @@ const {
   Paths,
   RedisKeys,
   Views,
-  Urls
-  // Analytics
+  Urls,
+  Analytics
 } = require('../../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
     const context = await _getContext(request)
 
-    // AnalyticsService.sendEvent(request, {
-    //   category: Analytics.Category.SERVICE_COMPLETE,
-    //   action: Analytics.Action.DROPOUT,
-    //   label: context.pageTitle
-    // })
+    AnalyticsService.sendEvent(request, {
+      category: Analytics.Category.SERVICE_COMPLETE,
+      action: Analytics.Action.DROPOUT,
+      label: context.pageTitle
+    })
 
     return h.view(Views.CANNOT_CONTINUE, {
       ...context
@@ -28,13 +28,13 @@ const handlers = {
   },
 
   post: async (request, h) => {
-    // const context = await _getContext(request)
+    const context = await _getContext(request)
 
-    // AnalyticsService.sendEvent(request, {
-    //   category: Analytics.Category.SERVICE_COMPLETE,
-    //   action: `${Analytics.Action.SELECTED} Finish and redirect button`,
-    //   label: context.pageTitle
-    // })
+    AnalyticsService.sendEvent(request, {
+      category: Analytics.Category.SERVICE_COMPLETE,
+      action: `${Analytics.Action.SELECTED} Finish and redirect button`,
+      label: context.pageTitle
+    })
 
     return h.redirect(Urls.GOV_UK_HOME)
   }

@@ -1,11 +1,11 @@
 'use strict'
 
-const TestHelper = require('../../utils/test-helper')
 const RedisService = require('../../../server/services/redis.service')
+const TestHelper = require('../../utils/test-helper')
 
 const CharacterLimits = require('../../mock-data/character-limits')
 
-describe.skip('/user-details/applicant/address-international route', () => {
+describe('/user-details/applicant/address-international route', () => {
   let server
   const url = '/user-details/applicant/address-international'
   const nextUrl = '/intention-for-item'
