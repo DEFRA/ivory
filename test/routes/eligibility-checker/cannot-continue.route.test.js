@@ -1,10 +1,8 @@
 'use strict'
 
+jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 const TestHelper = require('../../utils/test-helper')
-
-// jest.mock('../../../server/services/redis.service')
-// RedisService.set = jest.fn()
 
 const { Options } = require('../../../server/utils/constants')
 
