@@ -3,6 +3,9 @@
 const RedisService = require('../../../server/services/redis.service')
 const TestHelper = require('../../utils/test-helper')
 
+// jest.mock('../../../server/services/redis.service')
+// RedisService.set = jest.fn()
+
 const { Options } = require('../../../server/utils/constants')
 
 describe('/eligibility-checker/cannot-continue route', () => {
@@ -104,7 +107,7 @@ describe('/eligibility-checker/cannot-continue route', () => {
       })
     })
 
-    describe.skip('GET: Contains Ivory - Yes', () => {
+    describe('GET: Contains Ivory - Yes', () => {
       beforeEach(async () => {
         RedisService.get = jest.fn().mockResolvedValue(Options.YES)
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -122,7 +125,7 @@ describe('/eligibility-checker/cannot-continue route', () => {
       })
     })
 
-    describe.skip('GET: Contains Ivory - No', () => {
+    describe('GET: Contains Ivory - No', () => {
       beforeEach(async () => {
         RedisService.get = jest.fn().mockResolvedValue(Options.No)
         document = await TestHelper.submitGetRequest(server, getOptions)

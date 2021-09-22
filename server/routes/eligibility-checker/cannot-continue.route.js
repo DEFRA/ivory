@@ -1,12 +1,12 @@
 'use strict'
 
 // const AnalyticsService = require('../../services/analytics.service')
-// const RedisService = require('../../services/redis.service')
+const RedisService = require('../../services/redis.service')
 
 const {
-  // Options,
+  Options,
   Paths,
-  // RedisKeys,
+  RedisKeys,
   Views,
   Urls
   // Analytics
@@ -41,11 +41,10 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  // const containsElephantIvoryIdk =
-  //   (await RedisService.get(request, RedisKeys.CONTAIN_ELEPHANT_IVORY)) ===
-  //   Options.I_DONT_KNOW
+  const containsElephantIvoryIdk =
+    (await RedisService.get(request, RedisKeys.CONTAIN_ELEPHANT_IVORY)) ===
+    Options.I_DONT_KNOW
 
-  const containsElephantIvoryIdk = true
   return {
     pageTitle: 'You cannot continue',
     helpText1a: `To use this service, you must know for sure whether your item ${
