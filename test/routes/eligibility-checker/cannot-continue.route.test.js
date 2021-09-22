@@ -5,7 +5,7 @@ const TestHelper = require('../../utils/test-helper')
 
 const { Options } = require('../../../server/utils/constants')
 
-describe('/eligibility-checker/cannot-continue route', () => {
+describe.skip('/eligibility-checker/cannot-continue route', () => {
   let server
   const url = '/eligibility-checker/cannot-continue'
   const nextUrl = 'https://www.gov.uk/'
