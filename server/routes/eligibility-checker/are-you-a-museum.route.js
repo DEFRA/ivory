@@ -16,7 +16,7 @@ const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
-    const context = _getContext(request)
+    const context = _getContext()
 
     return h.view(Views.ARE_YOU_A_MUSEUM, {
       ...context
@@ -24,7 +24,7 @@ const handlers = {
   },
 
   post: async (request, h) => {
-    const context = _getContext(request)
+    const context = _getContext()
     const payload = request.payload
     const errors = _validateForm(payload)
 
