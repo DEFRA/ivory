@@ -398,15 +398,4 @@ describe('/user-details/owner/address-choose route', () => {
 
 const _createMocks = () => {
   TestHelper.createMocks()
-
-  // const mockData = {
-  //   [RedisKeys.OWNED_BY_APPLICANT]: '',
-  //   [RedisKeys.ADDRESS_FIND_RESULTS]: '',
-  //   [RedisKeys.ADDRESS_FIND_NAME_OR_NUMBER]: '',
-  //   [RedisKeys.ADDRESS_FIND_POSTCODE]: ''
-  // }
-
-  // RedisService.get = jest.fn((request, redisKey) => {
-  //   return mockData[redisKey]
-  // })
 }
