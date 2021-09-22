@@ -4,7 +4,7 @@ const TestHelper = require('../utils/test-helper')
 
 const RedisService = require('../../server/services/redis.service')
 
-describe('/ivory-integral route', () => {
+describe.skip('/ivory-integral route', () => {
   let server
   const url = '/ivory-integral'
   const nextUrl = '/ivory-age'

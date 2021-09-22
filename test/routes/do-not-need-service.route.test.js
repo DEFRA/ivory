@@ -3,7 +3,7 @@
 const RedisService = require('../../server/services/redis.service')
 const TestHelper = require('../utils/test-helper')
 
-describe('Eligibility checker - do not need service route', () => {
+describe.skip('Eligibility checker - do not need service route', () => {
   let server
   const url = '/eligibility-checker/do-not-need-service'
 

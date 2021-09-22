@@ -5,7 +5,7 @@ const { ItemType } = require('../../server/utils/constants')
 
 const RedisService = require('../../server/services/redis.service')
 
-describe('/legal-responsibility route', () => {
+describe.skip('/legal-responsibility route', () => {
   let server
   const url = '/legal-responsibility'
   const nextUrlNoPhotos = '/upload-photo'

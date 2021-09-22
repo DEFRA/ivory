@@ -4,7 +4,7 @@ const TestHelper = require('../utils/test-helper')
 
 const RedisService = require('../../server/services/redis.service')
 
-describe('/what-type-of-item-is-it route', () => {
+describe.skip('/what-type-of-item-is-it route', () => {
   let server
   const url = '/what-type-of-item-is-it'
   const nextUrl = '/can-continue'

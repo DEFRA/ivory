@@ -5,7 +5,7 @@ const RedisService = require('../../../server/services/redis.service')
 
 const CharacterLimits = require('../../mock-data/character-limits')
 
-describe('/user-details/applicant/address-international route', () => {
+describe.skip('/user-details/applicant/address-international route', () => {
   let server
   const url = '/user-details/applicant/address-international'
   const nextUrl = '/intention-for-item'
