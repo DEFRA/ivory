@@ -104,7 +104,7 @@ describe('/eligibility-checker/cannot-continue route', () => {
       })
     })
 
-    describe('GET: Contains Ivory - Yes', () => {
+    describe.skip('GET: Contains Ivory - Yes', () => {
       beforeEach(async () => {
         RedisService.get = jest.fn().mockResolvedValue(Options.YES)
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -122,7 +122,7 @@ describe('/eligibility-checker/cannot-continue route', () => {
       })
     })
 
-    describe('GET: Contains Ivory - No', () => {
+    describe.skip('GET: Contains Ivory - No', () => {
       beforeEach(async () => {
         RedisService.get = jest.fn().mockResolvedValue(Options.No)
         document = await TestHelper.submitGetRequest(server, getOptions)
