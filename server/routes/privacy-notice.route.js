@@ -1,8 +1,5 @@
 'use strict'
 
-// TODO GA
-// const AnalyticsService = require('../services/analytics.service')
-
 const config = require('../utils/config')
 const { Paths, Views } = require('../utils/constants')
 
