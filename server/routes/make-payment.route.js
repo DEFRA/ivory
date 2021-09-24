@@ -28,7 +28,7 @@ const handlers = {
 
     const description = isSection2
       ? 'Ivory Act application for a certificate'
-      : 'Ivory Act self assessment'
+      : 'Ivory Act self-assessment'
 
     const applicantContactDetails = JSON.parse(
       await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)

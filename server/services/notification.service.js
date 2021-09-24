@@ -3,12 +3,15 @@
 const { v4: uuidv4 } = require('uuid')
 
 const config = require('../utils/config')
+const { EmailTypes } = require('../utils/constants')
 
 const NotifyClient = require('notifications-node-client').NotifyClient
 
 class NotificationService {
-  static async sendConfirmationEmail (isSection2, recipientEmail, data) {
+  static async sendEmail (emailType, isSection2, recipientEmail, data) {
     const notifyClient = new NotifyClient(config.govNotifyKey)
+
+    const templateId = _getTemplateId(emailType, isSection2)
 
     const personalisation = {
       fullName: data.fullName,
@@ -19,20 +22,16 @@ class NotificationService {
     const emailReplyToId = null
     try {
       console.log(
-        `Sending Section 10 confirmation email to: [${recipientEmail}]`
+        `Sending Section ${
+          isSection2 ? '2' : '10'
+        } ${emailType} email to: [${recipientEmail}]`
       )
 
-      await notifyClient.sendEmail(
-        isSection2
-          ? config.govNotifyTemplateIdConfirmSection2
-          : config.govNotifyTemplateIdConfirmSection10,
-        recipientEmail,
-        {
-          personalisation,
-          reference,
-          emailReplyToId
-        }
-      )
+      await notifyClient.sendEmail(templateId, recipientEmail, {
+        personalisation,
+        reference,
+        emailReplyToId
+      })
 
       return true
     } catch (error) {
@@ -41,6 +40,19 @@ class NotificationService {
 
     return false
   }
+}
+
+const _getTemplateId = (emailType, isSection2) => {
+  let templateId
+  if (emailType === EmailTypes.CONFIRMATION_EMAIL) {
+    templateId = isSection2
+      ? config.govNotifyTemplateIdConfirmSection2
+      : config.govNotifyTemplateIdConfirmSection10
+  } else {
+    templateId = config.govNotifyTemplateIdEmailToOwnerSection10
+  }
+
+  return templateId
 }
 
 module.exports = NotificationService
