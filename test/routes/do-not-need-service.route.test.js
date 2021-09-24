@@ -114,7 +114,7 @@ describe('Eligibility checker - do not need service route', () => {
 
     describe('GET: Dynamic content, not elephant ivory', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('false')
+        RedisService.get = jest.fn().mockResolvedValue('No')
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
