@@ -4,12 +4,12 @@ const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
 
 const {
+  Analytics,
+  Options,
   Paths,
   RedisKeys,
-  Views,
   Urls,
-  Analytics,
-  Options
+  Views
 } = require('../../utils/constants')
 
 const handlers = {
