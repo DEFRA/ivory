@@ -8,7 +8,8 @@ const {
   RedisKeys,
   Views,
   Urls,
-  Analytics
+  Analytics,
+  Options
 } = require('../../utils/constants')
 
 const handlers = {
@@ -45,7 +46,7 @@ const _getContext = async request => {
 
   const notContainingIvory =
     (await RedisService.get(request, RedisKeys.CONTAIN_ELEPHANT_IVORY)) ===
-    'false'
+    Options.NO
 
   return {
     pageTitle: 'You don’t need to tell us about this item',
