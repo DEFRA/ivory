@@ -4,14 +4,16 @@ const AnalyticsService = require('../services/analytics.service')
 const NotificationService = require('../services/notification.service')
 const PaymentService = require('../services/payment.service')
 const RedisService = require('../services/redis.service')
+const { EmailTypes } = require('../utils/constants')
 
 const {
-  Paths,
-  RedisKeys,
-  Views,
-  PaymentResult,
+  Analytics,
   ItemType,
-  Analytics
+  Options,
+  Paths,
+  PaymentResult,
+  RedisKeys,
+  Views
 } = require('../utils/constants')
 
 const handlers = {
@@ -22,6 +24,10 @@ const handlers = {
     )
 
     const isSection2 = itemType === ItemType.HIGH_VALUE
+
+    const ownedByApplicant =
+      (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
+      Options.YES
 
     const paymentId = await RedisService.get(request, RedisKeys.PAYMENT_ID)
 
@@ -41,7 +47,17 @@ const handlers = {
 
     const context = await _getContext(request, isSection2)
 
-    _sendConfirmationEmail(request, isSection2, context, itemType)
+    _sendEmail(
+      request,
+      EmailTypes.CONFIRMATION_EMAIL,
+      context,
+      itemType,
+      isSection2
+    )
+
+    if (!ownedByApplicant && !isSection2) {
+      _sendEmail(request, EmailTypes.EMAIL_TO_OWNER, context, itemType)
+    }
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.SERVICE_COMPLETE,
@@ -70,6 +86,7 @@ const _getContext = async (request, isSection2) => {
   )
 
   return {
+    ownerContactDetails,
     applicantContactDetails,
     submissionReference,
     ownerEmail: ownerContactDetails.emailAddress,
@@ -104,35 +121,47 @@ const _paymentFailed = state =>
 const _paymentError = state =>
   state && state.status && state.status === PaymentResult.ERROR
 
-const _sendConfirmationEmail = async (
+const _sendEmail = async (
   request,
-  isSection2,
+  emailType,
   context,
-  itemType
+  itemType,
+  isSection2
 ) => {
+  let redisSentEmailKey
+  let fullName
+  let email
+
+  if (emailType === EmailTypes.CONFIRMATION_EMAIL) {
+    redisSentEmailKey = RedisKeys.EMAIL_CONFIRMATION_SENT
+    fullName = context.applicantContactDetails.name
+    email = context.applicantEmail
+  } else if (emailType === EmailTypes.EMAIL_TO_OWNER) {
+    redisSentEmailKey = RedisKeys.EMAIL_TO_OWNER_SENT
+    fullName = context.ownerContactDetails.name
+    email = context.ownerEmail
+  }
+
   let messageSent = await RedisService.get(
     request,
-    RedisKeys.CONFIRMATION_EMAIL_SENT
+    RedisKeys[redisSentEmailKey]
   )
 
   if (!messageSent) {
     const data = {
-      fullName: context.applicantContactDetails.name,
+      fullName,
       exemptionType: itemType,
       submissionReference: context.submissionReference
     }
 
-    messageSent = await NotificationService.sendConfirmationEmail(
+    messageSent = await NotificationService.sendEmail(
+      emailType,
       isSection2,
-      context.applicantEmail,
+      email,
       data
     )
 
-    await RedisService.set(
-      request,
-      RedisKeys.CONFIRMATION_EMAIL_SENT,
-      messageSent
-    )
+    await RedisService.set(request, RedisKeys[redisSentEmailKey], messageSent)
   }
 }
 

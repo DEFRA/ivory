@@ -30,6 +30,11 @@ const CharacterLimits = {
   Textarea: 100000
 }
 
+const EmailTypes = {
+  CONFIRMATION_EMAIL: 'confirmation-email',
+  EMAIL_TO_OWNER: 'email-to-owner'
+}
+
 const Options = {
   YES: 'Yes',
   NO: 'No',
@@ -261,11 +266,12 @@ const RedisKeys = {
   ARE_YOU_A_MUSEUM: 'eligibility-checker.are-you-a-museum',
   CONTAIN_ELEPHANT_IVORY: 'eligibility-checker.contain-elephant-ivory',
   DESCRIBE_THE_ITEM: 'describe-the-item',
+  EMAIL_CONFIRMATION_SENT: 'email-confirmation-sent',
+  EMAIL_TO_OWNER_SENT: 'email-to-owner-sent',
   INTENTION_FOR_ITEM: 'intention-for-item',
   IVORY_AGE: 'ivory-age',
   IVORY_INTEGRAL: 'ivory-integral',
   IVORY_VOLUME: 'ivory-volume',
-  CONFIRMATION_EMAIL_SENT: 'confirmation-email-sent',
   OWNED_BY_APPLICANT: 'owned-by-applicant',
   OWNER_ADDRESS: 'owner.address',
   OWNER_CONTACT_DETAILS: 'owner-contact-details',
@@ -303,6 +309,7 @@ module.exports = Object.freeze({
   Analytics,
   CharacterLimits,
   DataVerseFieldName,
+  EmailTypes,
   HOME_URL,
   Intention,
   ItemType,
