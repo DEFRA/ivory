@@ -26,7 +26,7 @@ const checkForFileSizeError = async (request, redisKey) => {
   if ((await RedisService.get(request, redisKey)) === 'true') {
     errors.push({
       name: 'files',
-      text: `The file must be smaller than ${config.maximumFileSize}mb`
+      text: `The file must be smaller than ${config.maximumFileSize}MB`
     })
   }
 

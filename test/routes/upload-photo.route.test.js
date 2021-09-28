@@ -124,7 +124,7 @@ describe('/upload-photo route', () => {
           `#${elementIds.helpText6} > li:nth-child(2)`
         )
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('smaller than 30mb')
+        expect(TestHelper.getTextContent(element)).toEqual('smaller than 10MB')
       })
 
       it('should have the file chooser', () => {

@@ -23,7 +23,7 @@ const schema = joi.object().keys({
     .default('Declare elephant ivory you intend to sell or hire out'),
   logLevel: joi.string().default('warn'),
   requestTimeout: joi.number(),
-  maximumFileSize: joi.number().default(30),
+  maximumFileSize: joi.number().default(10),
   redisHost: joi.string(),
   redisPort: joi.number(),
   redisPassword: joi.string(),
