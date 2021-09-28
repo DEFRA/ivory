@@ -45,11 +45,13 @@ const elementIds = {
   legalDeclarationHeading: 'legalDeclarationHeading',
   legalDeclarationPara1: 'legalDeclarationPara1',
   legalDeclarationPara2: 'legalDeclarationPara2',
+  legalDeclarationPara3: 'legalDeclarationPara3',
   legalAssertion1: 'legalAssertion1',
   legalAssertion2: 'legalAssertion2',
   legalAssertion3: 'legalAssertion3',
   legalAssertion4: 'legalAssertion4',
   legalAssertion5: 'legalAssertion5',
+  legalAssertionsAdditional1: 'legalAssertionsAdditional1',
   agree: 'agree',
   agreeAndSubmit: 'agreeAndSubmit'
 }
@@ -70,10 +72,6 @@ describe('/check-your-answers route', () => {
   })
 
   beforeEach(() => {
-    _createMocks()
-  })
-
-  afterEach(() => {
     jest.clearAllMocks()
   })
 
@@ -529,7 +527,7 @@ describe('/check-your-answers route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Before you continue, you must agree to the following:'
+            'Before you continue, you must agree with the following:'
           )
 
           element = document.querySelector(
@@ -563,7 +561,7 @@ describe('/check-your-answers route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'You must also agree that the owner confirms the following:'
+            'Both you and the owner must also agree with the following:'
           )
         })
       })
@@ -604,7 +602,7 @@ describe('/check-your-answers route', () => {
           )
         })
 
-        it('should have the correct legal declarations for ItemType = MUSICAL', async () => {
+        it('should have the correct legal declarations for ItemType = TEN_PERCENT', async () => {
           _createMocks(ItemType.TEN_PERCENT)
 
           document = await TestHelper.submitGetRequest(server, getOptions)
@@ -666,7 +664,7 @@ describe('/check-your-answers route', () => {
           let element = document.querySelector(`#${elementIds.legalAssertion1}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'you are selling or hiring out the ivory item to a qualifying museum'
+            'the item is to be sold or hired out to a qualifying museum'
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion2}`)
@@ -690,19 +688,29 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'the item is of outstandingly high artistic, cultural or historical value'
+            'any replacement ivory was taken from an elephant before 1 January 1975'
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'any replacement ivory was taken from an elephant before 1 January 1975'
+            'the information you’ve provided is complete and correct'
           )
 
-          element = document.querySelector(`#${elementIds.legalAssertion4}`)
+          element = document.querySelector(
+            `#${elementIds.legalDeclarationPara3}`
+          )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'the information you’ve provided is complete and correct'
+            'By making this application, I confirm that I believe:'
+          )
+
+          element = document.querySelector(
+            `#${elementIds.legalAssertionsAdditional1}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'the item is of outstandingly high artistic, cultural or historical value'
           )
         })
       })

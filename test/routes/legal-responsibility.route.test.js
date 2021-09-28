@@ -16,6 +16,7 @@ describe('/legal-responsibility route', () => {
     pageTitle: 'pageTitle',
     helpTextPara1: 'helpTextPara-1',
     helpTextPara2: 'helpTextPara-2',
+    helpTextPara3: 'helpTextPara-3',
     callOutText: 'callOutText',
     cancelLink: 'cancelLink',
     continue: 'continue'
@@ -45,7 +46,7 @@ describe('/legal-responsibility route', () => {
       url
     }
 
-    describe('GET: Has the correct details when it is NOT a S2 (high value) item', () => {
+    describe('GET: Has the correct details when it is a section 10 item', () => {
       beforeEach(async () => {
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -62,23 +63,27 @@ describe('/legal-responsibility route', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'The item’s owner is legally responsible for the information you’re about to give'
+          'Both the owner and applicant are jointly responsible for providing accurate information within the self-assessment'
         )
       })
 
       it('should have the correct help text', () => {
-        const element = document.querySelector(`#${elementIds.helpTextPara1}`)
+        let element = document.querySelector(`#${elementIds.helpTextPara1}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'This is a self-assessment, both the owner and applicant are jointly responsible for ensuring the item is exempt.'
+        )
+
+        element = document.querySelector(`#${elementIds.helpTextPara2}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'The Ivory Act 2018 permits you to do a self-assessment for someone else, but you must have permission to act on their behalf.'
+        )
+
+        element = document.querySelector(`#${elementIds.helpTextPara3}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'Stop at any point if you’re unsure about the right answer.'
-        )
-      })
-
-      it('should have the correct help text', () => {
-        const element = document.querySelector(`#${elementIds.helpTextPara2}`)
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'This is a self-assessment, so the owner is responsible for ensuring the item is exempt.'
         )
       })
 
@@ -86,7 +91,7 @@ describe('/legal-responsibility route', () => {
         const element = document.querySelector(`#${elementIds.callOutText}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'If we later find out that the item is not exempt, the item’s owner could be fined or prosecuted.'
+          'If we later find out that the item is not exempt, the applicant or owner could be fined or prosecuted.'
         )
       })
 
@@ -97,7 +102,7 @@ describe('/legal-responsibility route', () => {
       })
     })
 
-    describe('GET: Has the correct details when it IS a S2 (high value) item', () => {
+    describe('GET: Has the correct details when it is a section 2 (high value) item', () => {
       beforeEach(async () => {
         RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
 
@@ -108,20 +113,18 @@ describe('/legal-responsibility route', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'The person doing this application is legally responsible for the information in it'
+          'Both the owner and applicant are jointly responsible for providing accurate information when making an application'
         )
       })
 
       it('should have the correct help text', () => {
-        const element = document.querySelector(`#${elementIds.helpTextPara1}`)
+        let element = document.querySelector(`#${elementIds.helpTextPara1}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'If you’re acting on behalf of someone else, you must be certain that the information is accurate.'
+          'The Ivory Act 2018 permits you to do an application for someone else, but you must have permission to act on their behalf.'
         )
-      })
 
-      it('should have the correct help text', () => {
-        const element = document.querySelector(`#${elementIds.helpTextPara2}`)
+        element = document.querySelector(`#${elementIds.helpTextPara2}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'Stop at any point if you’re unsure about the right answer.'
@@ -132,7 +135,7 @@ describe('/legal-responsibility route', () => {
         const element = document.querySelector(`#${elementIds.callOutText}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'If we later find out that the information you’ve given is not accurate, you could be fined or prosecuted.'
+          'If we later find out that the information you’ve given is not accurate, the applicant or owner could be fined or prosecuted.'
         )
       })
     })

@@ -89,11 +89,26 @@
 
       <h2 id="legalDeclarationHeading" class="govuk-heading-m">Legal declaration</h2>
 
-      {% if ownedByApplicant %}
-        <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree to the following:</p>
+
+
+      {% if isSection2 %}
+      
+        {% if ownedByApplicant %}
+          <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree with the following:</p>
+        {% else %}
+          <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree that you have permission to act on the owner’s behalf.</p>
+          <p id="legalDeclarationPara2" class="govuk-body">Both you and the owner must also agree with the following:</p>
+        {% endif %}
+
       {% else %}
-        <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree that you have permission to act on the owner’s behalf.</p>
-        <p id="legalDeclarationPara2" class="govuk-body">You must also agree that the owner confirms the following:</p>
+
+        {% if ownedByApplicant %}
+          <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree with the following:</p>
+        {% else %}
+          <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree that you have permission to act on the owner’s behalf.</p>
+          <p id="legalDeclarationPara2" class="govuk-body">Both you and the owner must also agree with the following:</p>
+        {% endif %}
+
       {% endif %}
 
       <ul class="govuk-list govuk-list--bullet">
@@ -101,6 +116,16 @@
           <li id="legalAssertion{{ loop.index }}">{{ legalAssertion }}</li>
         {% endfor %}
       </ul>
+
+      {% if isSection2 %}
+        <p id="legalDeclarationPara3" class="govuk-body">By making this application, I confirm that I believe:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          {% for legalAssertion in legalAssertionsAdditionalSection2 %}
+            <li id="legalAssertionsAdditional{{ loop.index }}">{{ legalAssertion }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
 
       {{ govukCheckboxes({
         idPrefix: "agree",

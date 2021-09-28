@@ -6,10 +6,10 @@ const RedisService = require('../services/redis.service')
 const {
   Analytics,
   ItemType,
+  Options,
   Paths,
-  Views,
   RedisKeys,
-  Options
+  Views
 } = require('../utils/constants')
 const { getIvoryVolumePercentage } = require('../utils/general')
 const { buildErrorSummary, Validators } = require('../utils/validation')
@@ -83,17 +83,19 @@ const _getContext = async request => {
   ])
 
   return {
-    exemptionTypeSummary: _getExemptionTypeSummary(exemptionType),
     photoSummary,
     itemDescriptionSummary,
     exemptionReasonSummary,
     documentSummary,
     saleIntentionSummary,
     ownerSummary,
+    isSection2,
     ownedByApplicant,
     isMesuem,
     pageTitle: 'Check your answers',
-    legalAssertions: LEGAL_ASSERTIONS[exemptionType]
+    legalAssertions: LEGAL_ASSERTIONS[exemptionType],
+    legalAssertionsAdditionalSection2: LEGAL_ASSERTIONS.additionalSection2,
+    exemptionTypeSummary: _getExemptionTypeSummary(exemptionType)
   }
 }
 
@@ -518,14 +520,16 @@ const LEGAL_ASSERTIONS = {
     COMPLETE_AND_CORRECT
   ],
   [ItemType.MUSEUM]: [
-    'you are selling or hiring out the ivory item to a qualifying museum',
+    'the item is to be sold or hired out to a qualifying museum',
     COMPLETE_AND_CORRECT
   ],
   [ItemType.HIGH_VALUE]: [
     'the item was made before 1918',
-    'the item is of outstandingly high artistic, cultural or historical value',
     BEFORE_1975,
     COMPLETE_AND_CORRECT
+  ],
+  additionalSection2: [
+    'the item is of outstandingly high artistic, cultural or historical value'
   ]
 }
 

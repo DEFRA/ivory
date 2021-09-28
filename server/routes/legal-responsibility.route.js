@@ -40,29 +40,36 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  if ((await _getItemType(request)) === ItemType.HIGH_VALUE) {
-    return {
-      pageTitle:
-        'The person doing this application is legally responsible for the information in it',
-      helpTextParas: [
-        'If you’re acting on behalf of someone else, you must be certain that the information is accurate.',
-        'Stop at any point if you’re unsure about the right answer.'
-      ],
-      callOutText:
-        'If we later find out that the information you’ve given is not accurate, you could be fined or prosecuted.'
-    }
+  const isSection2 = (await _getItemType(request)) === ItemType.HIGH_VALUE
+
+  const context = {}
+
+  if (isSection2) {
+    context.pageTitle =
+      'Both the owner and applicant are jointly responsible for providing accurate information when making an application'
+
+    context.helpTextParas = [
+      'The Ivory Act 2018 permits you to do an application for someone else, but you must have permission to act on their behalf.'
+    ]
+    context.callOutText =
+      'If we later find out that the information you’ve given is not accurate, the applicant or owner could be fined or prosecuted.'
   } else {
-    return {
-      pageTitle:
-        'The item’s owner is legally responsible for the information you’re about to give',
-      helpTextParas: [
-        'Stop at any point if you’re unsure about the right answer.',
-        'This is a self-assessment, so the owner is responsible for ensuring the item is exempt.'
-      ],
-      callOutText:
-        'If we later find out that the item is not exempt, the item’s owner could be fined or prosecuted.'
-    }
+    context.pageTitle =
+      'Both the owner and applicant are jointly responsible for providing accurate information within the self-assessment'
+
+    context.helpTextParas = [
+      'This is a self-assessment, both the owner and applicant are jointly responsible for ensuring the item is exempt.',
+      'The Ivory Act 2018 permits you to do a self-assessment for someone else, but you must have permission to act on their behalf.'
+    ]
+    context.callOutText =
+      'If we later find out that the item is not exempt, the applicant or owner could be fined or prosecuted.'
   }
+
+  context.helpTextParas.push(
+    'Stop at any point if you’re unsure about the right answer.'
+  )
+
+  return context
 }
 
 const _getItemType = async request =>
