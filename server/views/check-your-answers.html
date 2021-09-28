@@ -89,26 +89,11 @@
 
       <h2 id="legalDeclarationHeading" class="govuk-heading-m">Legal declaration</h2>
 
-
-
-      {% if isSection2 %}
-      
-        {% if ownedByApplicant %}
-          <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree with the following:</p>
-        {% else %}
-          <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree that you have permission to act on the owner’s behalf.</p>
-          <p id="legalDeclarationPara2" class="govuk-body">Both you and the owner must also agree with the following:</p>
-        {% endif %}
-
+      {% if ownedByApplicant %}
+        <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree with the following:</p>
       {% else %}
-
-        {% if ownedByApplicant %}
-          <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree with the following:</p>
-        {% else %}
-          <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree that you have permission to act on the owner’s behalf.</p>
-          <p id="legalDeclarationPara2" class="govuk-body">Both you and the owner must also agree with the following:</p>
-        {% endif %}
-
+        <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree that you have permission to act on the owner’s behalf.</p>
+        <p id="legalDeclarationPara2" class="govuk-body">Both you and the owner must also agree with the following:</p>
       {% endif %}
 
       <ul class="govuk-list govuk-list--bullet">
