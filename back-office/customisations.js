@@ -128,7 +128,7 @@ this.initialiseRecord = (formContext, isSection2) => {
 
     formContext.getAttribute(DataVerseFieldName.STATUS).setValue(LOGGED_STATUS);
 
-    this.updateStatusAppliedDate(formContext);
+    this.submissionStatusOnChange(formContext);
 
     formContext.getControl(DataVerseFieldName.PAYMENT_REFERENCE).setDisabled(false);
 
