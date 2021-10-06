@@ -196,6 +196,13 @@ this.exemptionTypeOnChange = executionContext => {
       break;
 
     default:
+      formContext.getControl(DataVerseFieldName.WHY_IVORY_INTEGRAL).setVisible(false);
+      formContext.getControl(DataVerseFieldName.WHY_AGE_EXEMPT).setVisible(false);
+      formContext.getControl(DataVerseFieldName.WHY_IVORY_EXEMPT).setVisible(false);
+
+      formContext.getAttribute(DataVerseFieldName.WHY_IVORY_INTEGRAL).setValue(null);
+      formContext.getAttribute(DataVerseFieldName.WHY_AGE_EXEMPT).setValue(null);
+      formContext.getAttribute(DataVerseFieldName.WHY_IVORY_EXEMPT).setValue(null);
   }
 
   this.setAgeExemptionReasons(formContext, false);
