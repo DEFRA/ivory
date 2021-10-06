@@ -17,7 +17,7 @@ const handlers = {
       await RedisService.get(request, RedisKeys.PAYMENT_AMOUNT)
     )
 
-    const submissionReference = _generateReference()
+    const submissionReference = _generateSubmissionReference()
 
     const itemType = await RedisService.get(
       request,
@@ -77,7 +77,7 @@ const handlers = {
  * Generates a random 8 character uppercase alphanumeric reference
  * @returns Reference
  */
-const _generateReference = () => {
+const _generateSubmissionReference = () => {
   return RandomString.generate({
     length: 8,
     readable: true,

@@ -74,6 +74,9 @@
       "jest",
       "beforeAll",
       "afterAll"
+    ],
+    "ignore": [
+      "/back-office/**/*.js"
     ]
   }
 }

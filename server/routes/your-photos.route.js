@@ -72,7 +72,7 @@ const _getContext = async request => {
           {
             href: `/remove-photo/${index + 1}`,
             text: 'Remove',
-            visuallyHiddenText: 'name'
+            visuallyHiddenText: `photo ${index + 1}`
           }
         ]
       }

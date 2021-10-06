@@ -56,7 +56,7 @@ const _getContext = async request => {
           {
             href: `/remove-document/${index + 1}`,
             text: 'Remove',
-            visuallyHiddenText: 'name'
+            visuallyHiddenText: `document ${index + 1}`
           }
         ]
       }
