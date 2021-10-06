@@ -77,7 +77,7 @@ this.formOnLoad = (executionContext, section) => {
   const submissionReference = formContext.getAttribute(fieldName).getValue();
 
   if (!submissionReference) {
-    this.initialiseRecord(formContext, isSection2);
+    this.initialiseRecord(executionContext, isSection2);
   }
 
   if (!isSection2) {
@@ -110,8 +110,10 @@ this.formOnSave = executionContext => {
 }
 
 // Used when manually creating new records to add calculated values.
-this.initialiseRecord = (formContext, isSection2) => {
+this.initialiseRecord = (executionContext, isSection2) => {
   'use strict';
+
+  const formContext = executionContext.getFormContext();
 
   const currentDate = new Date();
 
@@ -128,7 +130,7 @@ this.initialiseRecord = (formContext, isSection2) => {
 
     formContext.getAttribute(DataVerseFieldName.STATUS).setValue(LOGGED_STATUS);
 
-    this.submissionStatusOnChange(formContext);
+    this.submissionStatusOnChange(executionContext);
 
     formContext.getControl(DataVerseFieldName.PAYMENT_REFERENCE).setDisabled(false);
 
