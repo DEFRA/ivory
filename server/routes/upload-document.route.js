@@ -5,6 +5,7 @@ const path = require('path')
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+const AntimalwareService = require('../services/antimalware.service')
 
 const config = require('../utils/config')
 const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
@@ -67,20 +68,33 @@ const handlers = {
     }
 
     try {
-      const file = await fs.promises.readFile(payload.files.path)
+      const isInfected = await AntimalwareService.scan(request, payload.files.path, filename)
 
-      uploadData.files.push(filename)
-      uploadData.fileSizes.push(payload.files.bytes)
+      if (!isInfected) {
+        const file = await fs.promises.readFile(payload.files.path)
 
-      const buffer = Buffer.from(file)
-      const base64 = buffer.toString('base64')
-      uploadData.fileData.push(base64)
+        uploadData.files.push(filename)
+        uploadData.fileSizes.push(payload.files.bytes)
 
-      RedisService.set(
-        request,
-        RedisKeys.UPLOAD_DOCUMENT,
-        JSON.stringify(uploadData)
-      )
+        const buffer = Buffer.from(file)
+        const base64 = buffer.toString('base64')
+        uploadData.fileData.push(base64)
+
+        RedisService.set(
+          request,
+          RedisKeys.UPLOAD_DOCUMENT,
+          JSON.stringify(uploadData)
+        )
+      } else {
+        errors.push({
+          name: 'files',
+          text: 'The file could not be uploaded - try a different one'
+        })
+        return h.view(Views.UPLOAD_DOCUMENT, {
+          ...context,
+          ...buildErrorSummary(errors)
+        })
+      }
     } catch (error) {
       errors = []
       errors.push({

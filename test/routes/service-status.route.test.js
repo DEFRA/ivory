@@ -78,7 +78,7 @@ describe('Enter Permit Number route', () => {
       expect(TestHelper.getTextContent(element).length > 0).toBeTruthy()
     })
 
-    it('should display the ClamAV version number', () => {
+    it('should display the status of ClamAV', () => {
       let element = document.querySelector(`#${elementIds.clamVersionLabel}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('ClamAV version:')

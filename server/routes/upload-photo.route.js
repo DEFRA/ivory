@@ -71,7 +71,7 @@ const handlers = {
     }
 
     try {
-      const isInfected = await AntimalwareService.scan(payload.files.path)
+      const isInfected = await AntimalwareService.scan(request, payload.files.path, filename)
 
       if (!isInfected) {
         const extension = path.extname(filename)
