@@ -1,6 +1,6 @@
 {
   "name": "ivory",
-  "version": "0.17.4",
+  "version": "0.18.0",
   "description": "Digital service to support the Ivory Act",
   "main": "index.js",
   "scripts": {
@@ -52,6 +52,7 @@
     "node-sass": "^6.0.1",
     "notifications-node-client": "^5.1.0",
     "nunjucks": "3.2.3",
+    "pdf-lib": "^1.16.0",
     "postcode-validator": "^3.5.3",
     "randomstring": "^1.2.1",
     "sharp": "^0.29.0",

@@ -70,7 +70,7 @@ module.exports = class ODataService {
     return responseDetail
   }
 
-  static async getRecord (id, isSection2) {
+  static async getRecord (id, isSection2 = true, key) {
     const token = await ActiveDirectoryAuthService.getToken()
 
     const headers = {
@@ -87,6 +87,31 @@ module.exports = class ODataService {
       isSection2 ? SECTION_2_ENDPOINT : SECTION_10_ENDPOINT
     }(${id})`
 
+    const response = await fetch(url, {
+      method: 'GET',
+      headers
+    })
+
+    const entity = await response.json()
+
+    return entity[DataVerseFieldName.CERTIFICATE_KEY] === key ? entity : null
+  }
+
+  static async getImage (id, imageName) {
+    const token = await ActiveDirectoryAuthService.getToken()
+
+    const headers = {
+      'OData-Version': oDataVersion,
+      'OData-MaxVersion': oDataVersion,
+      'Content-Type': ContentTypes.APPLICATION_OCTET_STREAM,
+      Authorization: `Bearer ${token}`,
+      Prefer: PREFER_REPRESENTATION
+    }
+
+    const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
+
+    const url = `${apiEndpoint}/${SECTION_2_ENDPOINT}(${id})/${imageName}/$value?size=full`
+
     console.log(`Fetching URL: [${url}]`)
 
     const response = await fetch(url, {
@@ -94,17 +119,7 @@ module.exports = class ODataService {
       headers
     })
 
-    if (response.status !== StatusCodes.OK) {
-      console.log(await response.json())
-
-      throw new Error(
-        `Error getting record: ${response.status}, section ${
-          isSection2 ? '2' : '10'
-        } case ID: ${id}`
-      )
-    }
-
-    return response.json()
+    return response
   }
 
   static async updateRecord (id, body, isSection2) {
