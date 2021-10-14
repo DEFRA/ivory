@@ -55,6 +55,7 @@ const schema = joi.object().keys({
   paymentAmountBandB: joi.number().default(25000),
   googleAnalyticsId: joi.string().default('UA-YYYYYY-YY'),
   clamscanBinaries: joi.string().default('/usr/bin/'),
+  clamscanPreference: joi.string().default('clamdscan'),
   useBasicAuth: joi.bool().valid(true, false)
 })
 
@@ -96,6 +97,7 @@ const config = {
   paymentAmountBandB: process.env.PAYMENT_AMOUNT_BAND_B,
   googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
   clamscanBinaries: process.env.CLAMSCAN_BINARIES,
+  clamscanPreference: process.env.CLAMSCAN_PREFERENCE,
   useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH || false)
 }
 

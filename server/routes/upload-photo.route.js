@@ -71,8 +71,7 @@ const handlers = {
     }
 
     try {
-      const isInfected = (await AntimalwareService.scan(payload.files.path))
-      console.log(isInfected)
+      const isInfected = await AntimalwareService.scan(payload.files.path)
 
       if (!isInfected) {
         const extension = path.extname(filename)
@@ -106,6 +105,15 @@ const handlers = {
           RedisKeys.UPLOAD_PHOTO,
           JSON.stringify(uploadData)
         )
+      } else {
+        errors.push({
+          name: 'files',
+          text: 'The file could not be uploaded - try a different one'
+        })
+        return h.view(Views.UPLOAD_PHOTO, {
+          ...context,
+          ...buildErrorSummary(errors)
+        })
       }
     } catch (error) {
       if (error.message === 'Input buffer contains unsupported image format') {
