@@ -1,25 +1,24 @@
 {% extends 'form-layout.html' %}
 
-{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
 
 {% block formContent %}
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
 
-          {% call govukFieldset({
-              attributes: {
-                id: "pageTitle"
-              },
-              legend: {
-                text: pageTitle,
-                classes: "govuk-fieldset__legend--l",
-                isPageHeading: true
-              }
-          }) %}
+        {% call govukFieldset({
+            attributes: {
+              id: "pageTitle"
+            },
+            legend: {
+              text: pageTitle,
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+        }) %}
 
           <p id="helpText">{{ helpText }}</p>
 
@@ -50,16 +49,16 @@
               autocomplete: "postal-code"
           }) }}
 
-          {% endcall %}
+        {% endcall %}
 
-          {{ govukButton({
-              attributes: {
-                id: "findAddress"
-              },
-              text: "Find address"
-          }) }}
+        {{ govukButton({
+            attributes: {
+              id: "findAddress"
+            },
+            text: "Find address"
+        }) }}
 
-        <p class="govuk-body"><a id="outsideUkLink" href="address-international">The address is outside the UK</a></p>
+      <p class="govuk-body"><a id="outsideUkLink" href="address-international">The address is outside the UK</a></p>
     </div>
   </div>
 {% endblock %}

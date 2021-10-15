@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
@@ -34,19 +35,30 @@
 
       {% set items = (items.push(otherItem), items) %}
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      <p id="helpText" class="govuk-body">{{ helpText }}</p>
+        <p id="helpText" class="govuk-body">{{ helpText }}</p>
 
-      {{ govukCheckboxes({
-        idPrefix: "ivoryAge",
-        name: "ivoryAge",
-        hint: {
-          text: "Select all that apply"
-        },
-        errorMessage: fieldErrors['ivoryAge'],
-        items: items
-      }) }}
+        {{ govukCheckboxes({
+          idPrefix: "ivoryAge",
+          name: "ivoryAge",
+          hint: {
+            text: "Select all that apply"
+          },
+          errorMessage: fieldErrors['ivoryAge'],
+          items: items
+        }) }}
+
+      {% endcall %}
 
       {{ govukButton({
           attributes: {

@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
@@ -11,25 +12,36 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      {{ govukInsetText({
-        id: "callOutText",
-        text: callOutText
-      }) }}
+        {{ govukInsetText({
+          id: "callOutText",
+          text: callOutText
+        }) }}
 
-      <p id="helpText">{{ helpText }}</p>
+        <p id="helpText">{{ helpText }}</p>
 
-      <p id="helpText2">{{ helpText2 }}</p>
+        <p id="helpText2">{{ helpText2 }}</p>
 
-      <p id="helpText3">{{ helpText3 }}</p>
+        <p id="helpText3">{{ helpText3 }}</p>
 
-      {{ govukDetails({
-        id: "whatKindsOfItem",
-        summaryText: "What kinds of item have less than 10% ivory?",
-        html: '<p>Items likely to have less than 10% ivory include furniture with ivory inlay.</p>
-              <p>You will not be able to sell items like chess sets with ivory pieces or cutlery with ivory handles, because these usually have more than 10% ivory.</p>'
-      }) }}
+        {{ govukDetails({
+          id: "whatKindsOfItem",
+          summaryText: "What kinds of item have less than 10% ivory?",
+          html: '<p>Items likely to have less than 10% ivory include furniture with ivory inlay.</p>
+                <p>You will not be able to sell items like chess sets with ivory pieces or cutlery with ivory handles, because these usually have more than 10% ivory.</p>'
+        }) }}
+
+      {% endcall %}
 
       {{ govukRadios({
         idPrefix: "lessThan10Ivory",

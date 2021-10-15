@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
@@ -10,29 +11,40 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
+      
+        <p id="helpText">{{ helpText }}</p>
 
-      <p id="helpText">{{ helpText }}</p>
+        {{ govukDetails({
+          id: "howDoIKnow",
+          summaryText: "How do I know if my ivory is elephant ivory?",
+          html: '<p>It can be extremely difficult to tell the difference between:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>elephant ivory</li>
+                  <li>other types of ivory, such as walrus</li>
+                  <li>fake ivory, such as ivorine</li>
+                  <li>certain types of animal bone</li>
+                </ul>
+                <p>If you are not sure about the item you want to sell or buy, you should consult an expert first, such as a registered antiques dealer or auctioneer who specialises in ivory.</p>'
+        }) }}
 
-      {{ govukDetails({
-        id: "howDoIKnow",
-        summaryText: "How do I know if my ivory is elephant ivory?",
-        html: '<p>It can be extremely difficult to tell the difference between:</p>
-              <ul class="govuk-list govuk-list--bullet">
-                <li>elephant ivory</li>
-                <li>other types of ivory, such as walrus</li>
-                <li>fake ivory, such as ivorine</li>
-                <li>certain types of animal bone</li>
-              </ul>
-              <p>If you are not sure about the item you want to sell or buy, you should consult an expert first, such as a registered antiques dealer or auctioneer who specialises in ivory.</p>'
-      }) }}
+        {{ govukRadios({
+          idPrefix: "containElephantIvory",
+          name: "containElephantIvory",
+          errorMessage: fieldErrors['containElephantIvory'],
+          items: items
+        }) }}
 
-      {{ govukRadios({
-        idPrefix: "containElephantIvory",
-        name: "containElephantIvory",
-        errorMessage: fieldErrors['containElephantIvory'],
-        items: items
-      }) }}
+      {% endcall %}
 
       {{ govukButton({
           attributes: {

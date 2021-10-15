@@ -83,7 +83,9 @@ describe('/user-details/owner/address-choose route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'Choose your address'
@@ -195,7 +197,9 @@ describe('/user-details/owner/address-choose route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           "Choose the owner's address"

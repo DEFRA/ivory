@@ -59,7 +59,9 @@ describe('/eligibility-checker/less-than-10-ivory route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector(`#${elementIds.pageTitle}`)
+      const element = document.querySelector(
+        `#${elementIds.pageTitle} > legend > h1`
+      )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'Is your item less than 10% ivory?'

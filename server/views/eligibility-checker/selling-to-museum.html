@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -9,16 +10,27 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      <p id="helpText">{{ helpText }}</p>
+        <p id="helpText">{{ helpText }}</p>
 
-      <ul id="helpTextList" class="govuk-list govuk-list--bullet">
-        <li>Arts Council England</li>
-        <li>Museums Galleries Scotland</li>
-        <li>Northern Ireland Museums Council</li>
-        <li>the Museums, Archives and Libraries Division of the Welsh Government</li>
-      </ul>
+        <ul id="helpTextList" class="govuk-list govuk-list--bullet">
+          <li>Arts Council England</li>
+          <li>Museums Galleries Scotland</li>
+          <li>Northern Ireland Museums Council</li>
+          <li>the Museums, Archives and Libraries Division of the Welsh Government</li>
+        </ul>
+
+      {% endcall %}
 
       {{ govukRadios({
         idPrefix: "sellingToMuseum",

@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -9,24 +10,35 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      <p id="helpText">{{ helpText }}</p>
+        <p id="helpText">{{ helpText }}</p>
 
-      <p id="helpText2">{{ helpText2 }}</p>
+        <p id="helpText2">{{ helpText2 }}</p>
 
-      <ul id="helpTextList" class="govuk-list govuk-list--bullet">
-        <li>items shaped like musical instruments that are not designed to be played</li>
-        <li>items used to create music or rhythm that were not made originally for that purpose</li>
-        <li>parts of musical instruments, like individual piano keys</li>
-      </ul>
+        <ul id="helpTextList" class="govuk-list govuk-list--bullet">
+          <li>items shaped like musical instruments that are not designed to be played</li>
+          <li>items used to create music or rhythm that were not made originally for that purpose</li>
+          <li>parts of musical instruments, like individual piano keys</li>
+        </ul>
 
-      {{ govukRadios({
-        idPrefix: "isItAMusicalInstrument",
-        name: "isItAMusicalInstrument",
-        errorMessage: fieldErrors['isItAMusicalInstrument'],
-        items: items
-      }) }}
+        {{ govukRadios({
+          idPrefix: "isItAMusicalInstrument",
+          name: "isItAMusicalInstrument",
+          errorMessage: fieldErrors['isItAMusicalInstrument'],
+          items: items
+        }) }}
+
+      {% endcall %}
 
       {{ govukButton({
           attributes: {

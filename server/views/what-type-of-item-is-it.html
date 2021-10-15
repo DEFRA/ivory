@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
@@ -9,22 +10,33 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 class="govuk-heading-l" id="pageTitle">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      <p class="govuk-body" id="introPara">Unless your item is to be sold or hired out to a qualifying museum, any replacement ivory must have been taken from an elephant before 1975 and used only to restore the item.</p>
+        <p class="govuk-body" id="introPara">Unless your item is to be sold or hired out to a qualifying museum, any replacement ivory must have been taken from an elephant before 1975 and used only to restore the item.</p>
 
-      {{ govukRadios({
-        idPrefix: "whatTypeOfItemIsIt",
-        name: "whatTypeOfItemIsIt",
-        errorMessage: fieldErrors['whatTypeOfItemIsIt'],
-        items: items
-      }) }}
+        {{ govukRadios({
+          idPrefix: "whatTypeOfItemIsIt",
+          name: "whatTypeOfItemIsIt",
+          errorMessage: fieldErrors['whatTypeOfItemIsIt'],
+          items: items
+        }) }}
 
-      {{ govukDetails({
-        id: "needMoreHelp",
-        summaryText: "I need more help to work this out",
-        html: 'Use our eligibility checker to <a id="eligibilityChecker" href="' + linkUrl + '" class="govuk-link">check if you can sell or hire out your item</a>.'
-      }) }}
+        {{ govukDetails({
+          id: "needMoreHelp",
+          summaryText: "I need more help to work this out",
+          html: 'Use our eligibility checker to <a id="eligibilityChecker" href="' + linkUrl + '" class="govuk-link">check if you can sell or hire out your item</a>.'
+        }) }}
+
+      {% endcall %}
 
       {{ govukButton({
           attributes: {
