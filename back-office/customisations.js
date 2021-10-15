@@ -35,8 +35,10 @@ const DataVerseFieldName = {
   PHOTO_1: 'cre2c_photo1',
   SUPPORTING_EVIDENCE_1: 'cre2c_supportingevidence1',
   SUPPORTING_EVIDENCE_1_NAME: 'cre2c_supportingevidence1_name',
+  CERTIFICATE_ISSUE_DATE: 'cre2c_certificateissuedate',
   CERTIFICATE_KEY: 'cre2c_certificatekey',
-  CERTIFICATE_LINK: 'cre2c_certificatelink'
+  CERTIFICATE_LINK: 'cre2c_certificatelink',
+  CERTIFICATE_NUMBER: 'cre2c_certificatenumber'
 };
 
 const ExemptionTypeLookup = {
@@ -99,6 +101,8 @@ this.formOnLoad = async (executionContext, section) => {
     this._setCertificateKey(formContext)
     await this._setCertificateLink(formContext);
   }
+
+  this.certificateDetailsOnChange(executionContext);
 }
 
 this.formOnSave = executionContext => {
@@ -262,6 +266,15 @@ this.ivoryAgeOnChange = executionContext => {
     formContext.getControl(DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON).setVisible(false);
     formContext.getAttribute(DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON).setValue(null);
   }
+}
+
+this.certificateDetailsOnChange = executionContext => {
+  'use strict';
+
+  const formContext = executionContext.getFormContext();
+  const certificateNumber = formContext.getAttribute(DataVerseFieldName.CERTIFICATE_NUMBER).getValue();
+  const certificateIssueDate = formContext.getAttribute(DataVerseFieldName.CERTIFICATE_ISSUE_DATE).getValue();
+  formContext.getControl(DataVerseFieldName.CERTIFICATE_LINK).setVisible(certificateNumber !== null && certificateIssueDate !== null);
 }
 
 this.setAgeExemptionReasons = (formContext, isSection2) => {

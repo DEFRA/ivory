@@ -99,8 +99,10 @@ const _getPdf = async entity => {
   // Prevents the form fields from being editable
   form.flatten()
 
-  const certificateNumber = entity[DataVerseFieldName.CERTIFICATE_NUMBER]
-  _addWatermark(pdfDoc, certificateNumber)
+  const certificateNumber = entity[DataVerseFieldName.CERTIFICATE_NUMBER] || 'CERTIFCATE NUMBER NOT ENTERED'
+  if (certificateNumber) {
+    _addWatermark(pdfDoc, certificateNumber)
+  }
 
   const pdfBytes = await pdfDoc.save()
 
