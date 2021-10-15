@@ -9,6 +9,7 @@ module.exports = {
   ],
   coverageDirectory: 'test-output',
   coveragePathIgnorePatterns: [
+    '<rootDir>/back-office/',
     '<rootDir>/bin/',
     '<rootDir>/node_modules/',
     '<rootDir>/test-output/',

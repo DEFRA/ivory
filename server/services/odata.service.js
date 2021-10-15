@@ -50,20 +50,24 @@ module.exports = class ODataService {
       headers
     })
 
+    const responseDetail = await response.json()
+
     if (response.status !== StatusCodes.CREATED) {
-      console.log(await response.json())
+      console.log(responseDetail)
 
       const fieldName = isSection2
         ? DataVerseFieldName.NAME
         : DataVerseFieldName.SUBMISSION_REFERENCE
       throw new Error(
-        `Error creating record: ${response.status}, section ${
+        `Error creating Dataverse record: ${response.status}, section ${
           isSection2 ? '2' : '10'
-        } submission reference: ${body[fieldName]}`
+        } submission reference: [${body[fieldName]}], payment reference: [${
+          body[DataVerseFieldName.PAYMENT_REFERENCE]
+        }]`
       )
     }
 
-    return response.json()
+    return responseDetail
   }
 
   static async getRecord (id, isSection2) {
