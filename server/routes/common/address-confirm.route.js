@@ -103,17 +103,14 @@ const _getContext = async (request, addressType) => {
 
 const _getContextForOwnerAddressType = ownedByApplicant => {
   return {
-    pageTitle:
-      ownedByApplicant === Options.YES
-        ? 'Confirm your address'
-        : "Confirm the owner's address",
+    pageTitle: 'Confirm address',
     editAddressUrl: '/user-details/owner/address-enter'
   }
 }
 
 const _getContextForApplicantAddressType = () => {
   return {
-    pageTitle: 'Confirm your address',
+    pageTitle: 'Confirm address',
     editAddressUrl: '/user-details/applicant/address-enter'
   }
 }

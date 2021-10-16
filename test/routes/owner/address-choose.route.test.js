@@ -85,9 +85,7 @@ describe('/user-details/owner/address-choose route', () => {
       it('should have the correct page heading', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'Choose your address'
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Choose address')
       })
 
       it('should have the help text if name/number and postcode were entered', () => {
@@ -197,9 +195,7 @@ describe('/user-details/owner/address-choose route', () => {
       it('should have the correct page heading', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          "Choose the owner's address"
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Choose address')
       })
 
       it('should have the help text if name/number and postcode were entered', () => {

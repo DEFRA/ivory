@@ -1,0 +1,45 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block formContent %}
+
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+        {% call govukFieldset({
+            attributes: {
+              id: "pageTitle"
+            },
+            legend: {
+              text: pageTitle,
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+        }) %}
+
+          <p class="govuk-body">This could be an auction house or antiques dealer, for example.</p>
+
+          {{ govukRadios({
+            idPrefix: "workForABusiness",
+            name: "workForABusiness",
+            errorMessage: fieldErrors['workForABusiness'],
+            items: items
+          }) }}
+
+        {% endcall %}
+
+        {{ govukButton({
+            attributes: {
+              id: "continue"
+            },
+            text: "Continue"
+          })
+        }}
+
+    </div>
+  </div>
+{% endblock %}

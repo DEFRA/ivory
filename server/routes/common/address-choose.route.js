@@ -87,7 +87,9 @@ const handlers = {
 }
 
 const _getContext = async (request, addressType) => {
-  let context
+  const context = {
+    pageTitle: 'Choose address'
+  }
 
   const ownedByApplicant = await RedisService.get(
     request,
@@ -105,33 +107,12 @@ const _getContext = async (request, addressType) => {
     }
   })
 
-  if (addressType === AddressType.OWNER) {
-    context = _getContextForOwnerAddressType(ownedByApplicant)
-  } else {
-    context = _getContextForApplicantAddressType()
-  }
-
   context.addresses = items
   context.ownedByApplicant = ownedByApplicant
 
   await _addBuildingNameOrNumberAndPostcodeToContext(request, context)
 
   return context
-}
-
-const _getContextForOwnerAddressType = ownedByApplicant => {
-  return {
-    pageTitle:
-      ownedByApplicant === Options.YES
-        ? 'Choose your address'
-        : "Choose the owner's address"
-  }
-}
-
-const _getContextForApplicantAddressType = () => {
-  return {
-    pageTitle: 'Choose your address'
-  }
 }
 
 const _addBuildingNameOrNumberAndPostcodeToContext = async (

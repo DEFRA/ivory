@@ -309,7 +309,7 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
     _getSummaryListRow(
       'Who owns the item?',
       ownedByApplicant ? 'I own it' : 'Someone else owns it',
-      _getChangeItems(Paths.WHO_OWNS_ITEM, CHANGE_LINK_HINT.WhoOwnsItem)
+      _getChangeItems(Paths.WHO_OWNS_ITEM, CHANGE_LINK_HINT.WhoOwnsTheItem)
     )
   ]
 
@@ -483,7 +483,7 @@ const CHANGE_LINK_HINT = {
     'Change your proof that item has less than [##PERCENTAGE##]% ivory',
   WhyIvoryIntegral: 'Change reason why all ivory is integral to item',
   YourDocuments: 'Change your documents',
-  WhoOwnsItem: 'Change who owns the item',
+  WhoOwnsTheItem: 'Change who owns the item',
   YourName: 'Change your name',
   BusinessName: 'Change business name',
   YourEmail: 'Change your email',

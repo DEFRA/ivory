@@ -5,14 +5,15 @@ const TestHelper = require('../utils/test-helper')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-describe('/who-owns-the-item route', () => {
+describe('/work-for-a-business route', () => {
   let server
-  const url = '/who-owns-the-item'
+  const url = '/work-for-a-business'
   const nextUrl = '/user-details/owner/contact-details'
 
   const elementIds = {
-    doYouOwnTheItem: 'doYouOwnTheItem',
-    doYouOwnTheItem2: 'doYouOwnTheItem-2',
+    pageTitle: 'pageTitle',
+    workForABusiness: 'workForABusiness',
+    workForABusiness2: 'workForABusiness-2',
     continue: 'continue'
   }
 
@@ -53,24 +54,28 @@ describe('/who-owns-the-item route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector('.govuk-fieldset__legend')
+      const element = document.querySelector(
+        `#${elementIds.pageTitle} > legend > h1`
+      )
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Who owns the item?')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'Do you work for a business who is selling or hiring out the item?'
+      )
     })
 
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
-        elementIds.doYouOwnTheItem,
-        'I own it',
-        'I own it'
+        elementIds.workForABusiness,
+        'Yes',
+        'Yes'
       )
 
       TestHelper.checkRadioOption(
         document,
-        elementIds.doYouOwnTheItem2,
-        'Someone else owns it',
-        'Someone else owns it'
+        elementIds.workForABusiness2,
+        'No',
+        'No'
       )
     })
 
@@ -94,19 +99,14 @@ describe('/who-owns-the-item route', () => {
 
     describe('Success', () => {
       it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'I own it',
-          nextUrl
-        )
+        await _checkSelectedRadioAction(postOptions, server, 'Yes', nextUrl)
       })
 
       it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'Someone else owns it',
+          'You cannot remove the ivory easily or without damaging the item',
           nextUrl
         )
       })
@@ -122,9 +122,9 @@ describe('/who-owns-the-item route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'doYouOwnTheItem',
-          'doYouOwnTheItem-error',
-          'Tell us if you own the item'
+          'workForABusiness',
+          'workForABusiness-error',
+          'Tell us whether you work for a business who is selling or hiring out the item'
         )
       })
     })

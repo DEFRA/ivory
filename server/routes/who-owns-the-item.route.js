@@ -44,37 +44,39 @@ const handlers = {
     await RedisService.set(
       request,
       RedisKeys.OWNED_BY_APPLICANT,
-      payload.whoOwnsItem === 'I own it' ? Options.YES : Options.NO
+      payload.doYouOwnTheItem
     )
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
-      action: `${Analytics.Action.SELECTED} ${payload.whoOwnsItem}`,
+      action: `${Analytics.Action.SELECTED} ${payload.doYouOwnTheItem}`,
       label: context.pageTitle
     })
 
-    return h.redirect(Paths.OWNER_CONTACT_DETAILS)
+    return payload.doYouOwnTheItem === Options.YES
+      ? h.redirect(Paths.OWNER_CONTACT_DETAILS)
+      : h.redirect(Paths.WORK_FOR_A_BUSINESS)
   }
 }
 
 const _getContext = async request => {
-  const whoOwnsItem = await RedisService.get(
+  const doYouOwnTheItem = await RedisService.get(
     request,
     RedisKeys.OWNED_BY_APPLICANT
   )
 
   return {
-    pageTitle: 'Who owns the item?',
+    pageTitle: 'Do you own the item?',
     items: [
       {
-        value: 'I own it',
-        text: 'I own it',
-        checked: whoOwnsItem === Options.YES
+        value: Options.YES,
+        text: Options.YES,
+        checked: doYouOwnTheItem === Options.YES
       },
       {
-        value: 'Someone else owns it',
-        text: 'Someone else owns it',
-        checked: whoOwnsItem === Options.NO
+        value: Options.NO,
+        text: Options.NO,
+        checked: doYouOwnTheItem === Options.NO
       }
     ]
   }
@@ -82,10 +84,10 @@ const _getContext = async request => {
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.whoOwnsItem)) {
+  if (Validators.empty(payload.doYouOwnTheItem)) {
     errors.push({
-      name: 'whoOwnsItem',
-      text: 'Tell us who owns the item'
+      name: 'doYouOwnTheItem',
+      text: 'Tell us if you own the item'
     })
   }
   return errors

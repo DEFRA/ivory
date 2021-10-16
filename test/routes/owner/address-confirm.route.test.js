@@ -69,9 +69,7 @@ describe('/user-details/owner/address-confirm route', () => {
       it('should have the correct page heading', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'Confirm your address'
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Confirm address')
       })
 
       it('should show the selected address', () => {
@@ -141,9 +139,7 @@ describe('/user-details/owner/address-confirm route', () => {
       it('should have the correct page heading', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          "Confirm the owner's address"
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Confirm address')
       })
 
       it('should show the selected address', () => {

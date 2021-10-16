@@ -29,7 +29,7 @@ describe('/ivory-age route', () => {
   let server
   const url = '/ivory-age'
   const nextUrlUploadDocument = '/want-to-add-documents'
-  const nextUrlWhoOwnsItem = '/who-owns-the-item'
+  const nextUrlWhoOwnsTheItem = '/who-owns-the-item'
 
   let document
 
@@ -313,7 +313,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'It has a stamp, serial number or signature to prove its age',
-          nextUrlWhoOwnsItem
+          nextUrlWhoOwnsTheItem
         )
       })
 
@@ -322,7 +322,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'I have a dated receipt showing when it was bought or repaired',
-          nextUrlWhoOwnsItem
+          nextUrlWhoOwnsTheItem
         )
       })
 
@@ -331,7 +331,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'I have a dated publication that shows or describes the item',
-          nextUrlWhoOwnsItem
+          nextUrlWhoOwnsTheItem
         )
       })
 
@@ -340,7 +340,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'It’s been in the family since before 1975',
-          nextUrlWhoOwnsItem
+          nextUrlWhoOwnsTheItem
         )
       })
 
@@ -349,7 +349,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           'I have written verification from a relevant expert',
-          nextUrlWhoOwnsItem
+          nextUrlWhoOwnsTheItem
         )
       })
 
@@ -360,7 +360,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           other,
-          nextUrlWhoOwnsItem,
+          nextUrlWhoOwnsTheItem,
           otherReason
         )
       })
@@ -381,7 +381,7 @@ describe('/ivory-age route', () => {
           postOptions,
           server,
           selectedOption,
-          nextUrlWhoOwnsItem
+          nextUrlWhoOwnsTheItem
         )
       })
     })

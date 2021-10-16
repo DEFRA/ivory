@@ -92,6 +92,13 @@ const DataVerseFieldName = {
   SUPPORTING_EVIDENCE_1_NAME: 'cre2c_supportingevidence1_name'
 }
 
+const DeclarationCapacities = {
+  AGENT: 'Agent',
+  EXECUTOR_ADMINISTRATOR: 'Executor or administrator',
+  TRUSTEE: 'Trustee',
+  OTHER: 'Other'
+}
+
 const Intention = {
   SELL: 'Sell it',
   HIRE: 'Hire it out',
@@ -186,6 +193,7 @@ const Paths = {
   REMOVE_PHOTO: '/remove-photo',
   RMI_AND_PRE_1918: '/eligibility-checker/rmi-and-pre-1918',
   SAVE_RECORD: '/save-record',
+  SELLING_ON_BEHALF_OF: '/selling-on-behalf-of',
   SELLING_TO_MUSEUM: '/eligibility-checker/selling-to-museum',
   SERVICE_COMPLETE: '/service-complete',
   SERVICE_STATUS: '/service-status',
@@ -195,10 +203,12 @@ const Paths = {
   UPLOAD_DOCUMENT: '/upload-document',
   UPLOAD_PHOTO: '/upload-photo',
   UPLOAD_TIMEOUT: '/errors/upload-timeout',
+  WHAT_CAPACITY: '/what-capacity',
   WANT_TO_ADD_DOCUMENTS: '/want-to-add-documents',
   WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',
   WHO_OWNS_ITEM: '/who-owns-the-item',
   WHY_IS_ITEM_RMI: '/why-is-item-rmi',
+  WORK_FOR_A_BUSINESS: '/work-for-a-business',
   YOUR_DOCUMENTS: '/your-documents',
   YOUR_PHOTOS: '/your-photos'
 }
@@ -240,6 +250,7 @@ const Views = {
   PRIVACY_NOTICE: 'privacy-notice',
   PROBLEM_WITH_SERVICE: 'errors/problem-with-service',
   RMI_AND_PRE_1918: 'eligibility-checker/rmi-and-pre-1918',
+  SELLING_ON_BEHALF_OF: 'selling-on-behalf-of',
   SELLING_TO_MUSEUM: 'eligibility-checker/selling-to-museum',
   SERVICE_COMPLETE: 'service-complete',
   SERVICE_STATUS: 'service-status',
@@ -249,9 +260,11 @@ const Views = {
   UPLOAD_DOCUMENT: 'upload-document',
   UPLOAD_PHOTO: 'upload-photo',
   UPLOAD_TIMEOUT: 'errors/upload-timeout',
+  WHAT_CAPACITY: 'what-capacity',
   WANT_TO_ADD_DOCUMENTS: 'want-to-add-documents',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHO_OWNS_ITEM: 'who-owns-the-item',
+  WORK_FOR_A_BUSINESS: 'work-for-a-business',
   WHY_IS_ITEM_RMI: 'why-is-item-rmi',
   YOUR_DOCUMENTS: 'your-documents',
   YOUR_PHOTOS: 'your-photos'
@@ -277,6 +290,7 @@ const RedisKeys = {
   OWNER_CONTACT_DETAILS: 'owner-contact-details',
   PAYMENT_AMOUNT: 'payment-amount',
   PAYMENT_ID: 'payment-id',
+  SELLING_ON_BEHALF_OF: 'selling-on-behalf-of',
   SUBMISSION_DATE: 'submission-date',
   SUBMISSION_REFERENCE: 'submission-reference',
   TARGET_COMPLETION_DATE: 'target-completion-date',
@@ -285,8 +299,10 @@ const RedisKeys = {
   UPLOAD_PHOTO: 'upload-photo',
   UPLOAD_PHOTO_ERROR: 'upload-photo.error',
   USED_CHECKER: 'used-checker',
+  WHAT_CAPACITY: 'what-capacity',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHY_IS_ITEM_RMI: 'why-is-item-rmi',
+  WORK_FOR_A_BUSINESS: 'work-for-a-business',
   YOUR_DOCUMENTS: 'your-documents',
   YOUR_PHOTOS: 'your-photos'
 }
@@ -309,6 +325,7 @@ module.exports = Object.freeze({
   Analytics,
   CharacterLimits,
   DataVerseFieldName,
+  DeclarationCapacities,
   EmailTypes,
   HOME_URL,
   Intention,

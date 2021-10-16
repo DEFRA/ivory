@@ -67,9 +67,7 @@ describe('/user-details/applicant/address-confirm route', () => {
       it('should have the correct page heading', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'Confirm your address'
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Confirm address')
       })
 
       it('should show the selected address', () => {

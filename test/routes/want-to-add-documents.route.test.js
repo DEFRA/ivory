@@ -6,7 +6,7 @@ describe('/want-to-add-documents route', () => {
   let server
   const url = '/want-to-add-documents'
   const nextUrlUploadDocument = '/upload-document'
-  const nextUrWhoOwnsItem = '/who-owns-the-item'
+  const nextUrWhoOwnsTheItem = '/who-owns-the-item'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -110,7 +110,7 @@ describe('/want-to-add-documents route', () => {
           postOptions,
           server,
           'No',
-          nextUrWhoOwnsItem,
+          nextUrWhoOwnsTheItem,
           'Item to be sold or hired out to a qualifying museum'
         )
       })
