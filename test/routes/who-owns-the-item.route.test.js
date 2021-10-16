@@ -8,7 +8,8 @@ const RedisService = require('../../server/services/redis.service')
 describe('/who-owns-the-item route', () => {
   let server
   const url = '/who-owns-the-item'
-  const nextUrl = '/user-details/owner/contact-details'
+  const nextUrlYourDetails = '/user-details/owner/contact-details'
+  const nextUrlWorkForABusiness = '/work-for-a-business'
 
   const elementIds = {
     doYouOwnTheItem: 'doYouOwnTheItem',
@@ -55,22 +56,22 @@ describe('/who-owns-the-item route', () => {
     it('should have the correct page heading', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Who owns the item?')
+      expect(TestHelper.getTextContent(element)).toEqual('Do you own the item?')
     })
 
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
         elementIds.doYouOwnTheItem,
-        'I own it',
-        'I own it'
+        'Yes',
+        'Yes'
       )
 
       TestHelper.checkRadioOption(
         document,
         elementIds.doYouOwnTheItem2,
-        'Someone else owns it',
-        'Someone else owns it'
+        'No',
+        'No'
       )
     })
 
@@ -97,8 +98,8 @@ describe('/who-owns-the-item route', () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'I own it',
-          nextUrl
+          'Yes',
+          nextUrlYourDetails
         )
       })
 
@@ -106,8 +107,8 @@ describe('/who-owns-the-item route', () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'Someone else owns it',
-          nextUrl
+          'No',
+          nextUrlWorkForABusiness
         )
       })
     })
@@ -154,7 +155,7 @@ const _checkSelectedRadioAction = async (
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
     redisKey,
-    selectedOption === 'I own it' ? 'Yes' : 'No'
+    selectedOption === 'Yes' ? 'Yes' : 'No'
   )
 
   expect(response.headers.location).toEqual(nextUrl)
