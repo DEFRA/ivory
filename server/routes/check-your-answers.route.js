@@ -482,7 +482,7 @@ const CHANGE_LINK_HINT = {
   IvoryVolme: 'your proof that item has less than [##PERCENTAGE##]% ivory',
   WhyIvoryIntegral: 'reason why all ivory is integral to item',
   YourDocuments: 'your documents',
-  WhoOwnsItem: 'who owns the item',
+  WhoOwnsTheItem: 'who owns the item',
   YourName: 'your name',
   BusinessName: 'business name',
   YourEmail: 'your email',

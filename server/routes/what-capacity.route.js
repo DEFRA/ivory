@@ -66,12 +66,7 @@ const handlers = {
       JSON.stringify(payload)
     )
 
-    // TODO go to (CD4 - Your details)
-    return h.redirect(
-      Paths.IVORY_AGE
-
-      // itemType === ItemType.TEN_PERCENT ? Paths.IVORY_INTEGRAL : Paths.IVORY_AGE
-    )
+    return h.redirect(Paths.OWNER_CONTACT_DETAILS)
   }
 }
 
