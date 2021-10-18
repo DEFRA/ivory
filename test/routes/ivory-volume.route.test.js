@@ -68,7 +68,9 @@ describe('/ivory-volume route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'How do you know the item has less than 10% ivory by volume?'
@@ -131,7 +133,9 @@ describe('/ivory-volume route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'How do you know the item has less than 20% ivory by volume?'

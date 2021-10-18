@@ -470,28 +470,27 @@ const _getChangeItems = (href, visuallyHiddenText) => [
 ]
 
 const CHANGE_LINK_HINT = {
-  ExemptionType: 'Change type of exemption',
-  YourPhotos: 'Change your photos',
-  WhatIsItem: 'Change your description of the item',
-  WhereIsIvory: 'Change where the ivory is',
-  UniqueFeatures: 'Change any unique features',
-  WhereMade: 'Change where it was made',
-  WhenMade: 'Change when it was made',
-  ItemAge: 'Change your proof of age',
-  WhyRmi: 'Change reason why item is of outstandingly high value',
-  IvoryVolme:
-    'Change your proof that item has less than [##PERCENTAGE##]% ivory',
-  WhyIvoryIntegral: 'Change reason why all ivory is integral to item',
-  YourDocuments: 'Change your documents',
-  WhoOwnsItem: 'Change who owns the item',
-  YourName: 'Change your name',
-  BusinessName: 'Change business name',
-  YourEmail: 'Change your email',
-  YourAddress: 'Change your address',
-  OwnerName: 'Change owner’s name',
-  OwnerEmail: 'Change owner’s email',
-  OwnerAddress: 'Change owner’s address',
-  SaleIntention: 'Change what owner intends to do'
+  ExemptionType: 'type of exemption',
+  YourPhotos: 'your photos',
+  WhatIsItem: 'your description of the item',
+  WhereIsIvory: 'where the ivory is',
+  UniqueFeatures: 'any unique features',
+  WhereMade: 'where it was made',
+  WhenMade: 'when it was made',
+  ItemAge: 'your proof of age',
+  WhyRmi: 'reason why item is of outstandingly high value',
+  IvoryVolme: 'your proof that item has less than [##PERCENTAGE##]% ivory',
+  WhyIvoryIntegral: 'reason why all ivory is integral to item',
+  YourDocuments: 'your documents',
+  WhoOwnsItem: 'who owns the item',
+  YourName: 'your name',
+  BusinessName: 'business name',
+  YourEmail: 'your email',
+  YourAddress: 'your address',
+  OwnerName: 'owner’s name',
+  OwnerEmail: 'owner’s email',
+  OwnerAddress: 'owner’s address',
+  SaleIntention: 'what owner intends to do'
 }
 
 const BEFORE_1975 =

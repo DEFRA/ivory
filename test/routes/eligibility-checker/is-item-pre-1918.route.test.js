@@ -61,7 +61,9 @@ describe('/eligibility-checker/is-item-pre-1918 route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector(`#${elementIds.pageTitle}`)
+      const element = document.querySelector(
+        `#${elementIds.pageTitle} > legend > h1`
+      )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'Was your item made before 1 January 1918?'

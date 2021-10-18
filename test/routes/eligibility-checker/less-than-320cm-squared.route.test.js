@@ -55,7 +55,9 @@ describe('/eligibility-checker/less-than-320cm-squared route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector(`#${elementIds.pageTitle}`)
+      const element = document.querySelector(
+        `#${elementIds.pageTitle} > legend > h1`
+      )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'Does the portrait miniature have an ivory surface area of less than 320 square centimetres?'

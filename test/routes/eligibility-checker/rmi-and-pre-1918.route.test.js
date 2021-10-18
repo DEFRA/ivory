@@ -58,7 +58,9 @@ describe('/eligibility-checker/rmi-and-pre-1918 route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector(`#${elementIds.pageTitle}`)
+      const element = document.querySelector(
+        `#${elementIds.pageTitle} > legend > h1`
+      )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'Is it a pre-1918 item of outstandingly high artistic, cultural or historical value?'

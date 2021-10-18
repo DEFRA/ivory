@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -8,16 +9,27 @@
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      <p id="helpText" class="govuk-body">{{ helpText }}</p>
+        <p id="helpText" class="govuk-body">{{ helpText }}</p>
 
-      {{ govukTextarea({
-        name: "internationalAddress",
-        id: "internationalAddress",
-        value: internationalAddress,
-        errorMessage: fieldErrors['internationalAddress']
-      }) }}
+        {{ govukTextarea({
+          name: "internationalAddress",
+          id: "internationalAddress",
+          value: internationalAddress,
+          errorMessage: fieldErrors['internationalAddress']
+        }) }}
+
+      {% endcall %}
 
       {{ govukButton({
           attributes: {

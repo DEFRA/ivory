@@ -90,28 +90,6 @@ $govuk-global-styles: true;
   }
 }
 
-.govuk-phase-banner-alt {
-  background-color: govuk-colour('pink');
-  &:hover {
-    background-color: darken(govuk-colour('pink'), 10%);
-  }
-
-  a {
-    color: govuk-colour('white');
-    &:visited,
-    &:hover,
-    &:active {
-      color: govuk-colour('white');
-    }
-    text-decoration: none;
-  }
-}
-
-.govuk-phase-banner-alt__text {
-  display: table-cell;
-  vertical-align: middle;
-}
-
 .ivory-summary-list {
   .govuk-summary-list__key {
     vertical-align: top;

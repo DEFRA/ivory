@@ -65,7 +65,9 @@ describe('/upload-document route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'Add a document to support your case'
@@ -162,7 +164,9 @@ describe('/upload-document route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'Add another document'

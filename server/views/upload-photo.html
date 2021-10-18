@@ -1,5 +1,6 @@
 {% extends 'multipart-form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -9,42 +10,53 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      {% if (not hideHelpText) %}
-        <span id="hint" class="govuk-body">
+        {% if (not hideHelpText) %}
+          <span id="hint" class="govuk-body">
 
-          <p id="helpText1" class="govuk-body">You must add photos one at a time, up to a total of 6.</p>
+            <p id="helpText1" class="govuk-body">You must add photos one at a time, up to a total of 6.</p>
 
-          <p id="helpText2" class="govuk-body">These must be clear, well-lit and high-resolution images.</p>
+            <p id="helpText2" class="govuk-body">These must be clear, well-lit and high-resolution images.</p>
 
-          <p id="helpText3" class="govuk-body">You must include a photo of:</p>
+            <p id="helpText3" class="govuk-body">You must include a photo of:</p>
 
-          <ul id="helpText4" class="govuk-list govuk-list--bullet">
-            <li>the whole item</li>
-            <li>any distinguishing features, including where the ivory is</li>
+            <ul id="helpText4" class="govuk-list govuk-list--bullet">
+              <li>the whole item</li>
+              <li>any distinguishing features, including where the ivory is</li>
+            </ul>
+
+          </span>
+        {% endif %}
+
+          <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload photo</h2>
+
+          <p id="helpText5" class="govuk-body">The photo must be:</p>
+
+          <ul id="helpText6" class="govuk-list govuk-list--bullet">
+            <li>in JPG or PNG format</li>
+            <li>smaller than {{ maximumFileSize }}MB</li>
           </ul>
 
-        </span>
-      {% endif %}
+        {{ govukFileUpload({
+          attributes: {
+            accept: accept
+          },
+          id: "files",
+          name: "files",
+          errorMessage: fieldErrors['files']
+        }) }}
 
-        <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload photo</h2>
-
-        <p id="helpText5" class="govuk-body">The photo must be:</p>
-
-        <ul id="helpText6" class="govuk-list govuk-list--bullet">
-          <li>in JPG or PNG format</li>
-          <li>smaller than {{ maximumFileSize }}MB</li>
-        </ul>
-
-      {{ govukFileUpload({
-        attributes: {
-          accept: accept
-        },
-        id: "files",
-        name: "files",
-        errorMessage: fieldErrors['files']
-      }) }}
+      {% endcall %}
 
       {{ govukButton({
           attributes: {
