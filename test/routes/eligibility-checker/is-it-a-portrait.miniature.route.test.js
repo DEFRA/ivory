@@ -56,7 +56,9 @@ describe('/eligibility-checker/is-it-a-portrait-miniature route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector(`#${elementIds.pageTitle}`)
+      const element = document.querySelector(
+        `#${elementIds.pageTitle} > legend > h1`
+      )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'Is your item a portrait miniature?'

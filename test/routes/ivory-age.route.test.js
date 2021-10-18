@@ -82,7 +82,9 @@ describe('/ivory-age route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'How do you know the item was made before 1975?'
@@ -111,7 +113,9 @@ describe('/ivory-age route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'How do you know the item was made before 3 March 1947?'
@@ -134,7 +138,9 @@ describe('/ivory-age route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'How do you know the item was made before 1918?'
@@ -157,7 +163,9 @@ describe('/ivory-age route', () => {
       })
 
       it('should have the correct page heading', () => {
-        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'How do you know the item was made before 1918?'

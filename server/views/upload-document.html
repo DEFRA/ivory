@@ -1,5 +1,6 @@
 {% extends 'multipart-form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
@@ -10,38 +11,49 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      {% if (not hideHelpText) %}
-        <span id="hint" class="govuk-body">
+        {% if (not hideHelpText) %}
+          <span id="hint" class="govuk-body">
 
-          <p id="helpText1" class="govuk-body">You must add files one at a time, up to a total of 6.</p>
+            <p id="helpText1" class="govuk-body">You must add files one at a time, up to a total of 6.</p>
 
-          {{ govukInsetText({
-            id: "insetHelpText",
-            text: "Be careful not to upload too much material, as this could affect how long it takes an assessor to review it."
-          }) }}
+            {{ govukInsetText({
+              id: "insetHelpText",
+              text: "Be careful not to upload too much material, as this could affect how long it takes an assessor to review it."
+            }) }}
 
-        </span>
-      {% endif %}
-        
-        <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload file</h2>
+          </span>
+        {% endif %}
+          
+          <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload file</h2>
 
-        <p id="helpText2" class="govuk-body">The document must be:</p>
+          <p id="helpText2" class="govuk-body">The document must be:</p>
 
-        <ul id="helpText3" class="govuk-list govuk-list--bullet">
-          <li>a PDF or Microsoft Word document</li>
-          <li>smaller than {{ maximumFileSize }}MB</li>
-        </ul>
+          <ul id="helpText3" class="govuk-list govuk-list--bullet">
+            <li>a PDF or Microsoft Word document</li>
+            <li>smaller than {{ maximumFileSize }}MB</li>
+          </ul>
 
-      {{ govukFileUpload({
-        attributes: {
-          accept: accept
-        },
-        id: "files",
-        name: "files",
-        errorMessage: fieldErrors['files']
-      }) }}
+        {{ govukFileUpload({
+          attributes: {
+            accept: accept
+          },
+          id: "files",
+          name: "files",
+          errorMessage: fieldErrors['files']
+        }) }}
+
+      {% endcall %}
 
       {{ govukButton({
           attributes: {

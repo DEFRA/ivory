@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
@@ -22,38 +23,49 @@
         }) }}
       {% endset -%}
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
-
-      {{ govukRadios({
-        idPrefix: "ivoryVolume",
-        name: "ivoryVolume",
-        errorMessage: fieldErrors['ivoryVolume'],
-        items: [
-          {
-            value: options[0].label,
-            text: options[0].label,
-            checked: options[0].checked
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
           },
-          {
-            value: options[1].label,
-            text: options[1].label,
-            checked: options[1].checked
-          },
-          {
-            value: options[2].label,
-            text: options[2].label,
-            checked: options[2].checked
-          },
-          {
-            value: options[3].label,
-            text: options[3].label,
-            checked: options[3].checked,
-            conditional: {
-              html: otherHtml
-            }
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
           }
-        ]
-      }) }}
+      }) %}
+
+        {{ govukRadios({
+          idPrefix: "ivoryVolume",
+          name: "ivoryVolume",
+          errorMessage: fieldErrors['ivoryVolume'],
+          items: [
+            {
+              value: options[0].label,
+              text: options[0].label,
+              checked: options[0].checked
+            },
+            {
+              value: options[1].label,
+              text: options[1].label,
+              checked: options[1].checked
+            },
+            {
+              value: options[2].label,
+              text: options[2].label,
+              checked: options[2].checked
+            },
+            {
+              value: options[3].label,
+              text: options[3].label,
+              checked: options[3].checked,
+              conditional: {
+                html: otherHtml
+              }
+            }
+          ]
+        }) }}
+
+      {% endcall %}
 
       {{ govukButton({
           attributes: {

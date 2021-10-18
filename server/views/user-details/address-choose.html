@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -8,21 +9,32 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      {% if showHelpText %}
-        <p id="helpText1" class="govuk-body">No results for "{{ nameOrNumber }}".</p>
-        <p id="helpText2" class="govuk-body">Here are all the results for {{ postcode }}.</p>
-      {% endif %}
+        {% if showHelpText %}
+          <p id="helpText1" class="govuk-body">No results for "{{ nameOrNumber }}".</p>
+          <p id="helpText2" class="govuk-body">Here are all the results for {{ postcode }}.</p>
+        {% endif %}
 
-      {{ govukRadios({
-        idPrefix: "address",
-        name: "address",
-        errorMessage: fieldErrors['address'],
-        items: addresses
-      }) }}
+        {{ govukRadios({
+          idPrefix: "address",
+          name: "address",
+          errorMessage: fieldErrors['address'],
+          items: addresses
+        }) }}
 
-      <p class="govuk-body"><a id="addressNotOnList" href="address-enter">The address is not on the list</a></p>
+        <p class="govuk-body"><a id="addressNotOnList" href="address-enter">The address is not on the list</a></p>
+
+      {% endcall %}
 
       {{ govukButton({
           attributes: {

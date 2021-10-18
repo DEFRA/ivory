@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -8,24 +9,34 @@
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
+        {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+        }) %}
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+        <p id="helpText">{{ helpText }}</p>
 
-      <p id="helpText">{{ helpText }}</p>
+        <ul id="helpTextList" class="govuk-list govuk-list--bullet">
+          <li>Arts Council England</li>
+          <li>Museums Galleries Scotland</li>
+          <li>Northern Ireland Museums Council</li>
+          <li>the Museums, Archives and Libraries Division of the Welsh Government</li>
+        </ul>
 
-      <ul id="helpTextList" class="govuk-list govuk-list--bullet">
-        <li>Arts Council England</li>
-        <li>Museums Galleries Scotland</li>
-        <li>Northern Ireland Museums Council</li>
-        <li>the Museums, Archives and Libraries Division of the Welsh Government</li>
-      </ul>
+        {{ govukRadios({
+          idPrefix: "areYouAMuseum",
+          name: "areYouAMuseum",
+          errorMessage: fieldErrors['areYouAMuseum'],
+          items: items
+        }) }}
 
-      {{ govukRadios({
-        idPrefix: "areYouAMuseum",
-        name: "areYouAMuseum",
-        errorMessage: fieldErrors['areYouAMuseum'],
-        items: items
-      }) }}
+      {% endcall %}
 
       {{ govukButton({
           attributes: {

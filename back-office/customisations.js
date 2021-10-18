@@ -34,7 +34,11 @@ const DataVerseFieldName = {
   APPLICANT_ADDRESS: 'cre2c_applicantaddress',
   PHOTO_1: 'cre2c_photo1',
   SUPPORTING_EVIDENCE_1: 'cre2c_supportingevidence1',
-  SUPPORTING_EVIDENCE_1_NAME: 'cre2c_supportingevidence1_name'
+  SUPPORTING_EVIDENCE_1_NAME: 'cre2c_supportingevidence1_name',
+  CERTIFICATE_ISSUE_DATE: 'cre2c_certificateissuedate',
+  CERTIFICATE_KEY: 'cre2c_certificatekey',
+  CERTIFICATE_LINK: 'cre2c_certificatelink',
+  CERTIFICATE_NUMBER: 'cre2c_certificatenumber'
 };
 
 const ExemptionTypeLookup = {
@@ -65,7 +69,7 @@ const AgeExemptionReasonLookup = {
   OTHER_REASON: 881990009
 }
 
-this.formOnLoad = (executionContext, section) => {
+this.formOnLoad = async (executionContext, section) => {
   'use strict';
 
   const formContext = executionContext.getFormContext();
@@ -92,6 +96,13 @@ this.formOnLoad = (executionContext, section) => {
   this.setAgeExemptionReasons(formContext, isSection2);
 
   this.ivoryAgeOnChange(executionContext);
+
+  if (isSection2) {
+    this._setCertificateKey(formContext)
+    await this._setCertificateLink(formContext);
+  }
+
+  this.certificateDetailsOnChange(executionContext);
 }
 
 this.formOnSave = executionContext => {
@@ -145,6 +156,27 @@ this.initialiseRecord = (executionContext, isSection2) => {
         .setValue(targetCompletionDate);
     }
   }
+}
+
+this._setCertificateKey = formContext => {
+  'use strict';
+
+  const certificateKey = formContext.getAttribute(DataVerseFieldName.CERTIFICATE_KEY).getValue();
+  if (!certificateKey) {
+    formContext.getAttribute(DataVerseFieldName.CERTIFICATE_KEY).setValue(this.generateCertificateKey());
+  }
+}
+
+this._setCertificateLink = async formContext => {
+  'use strict';
+
+  const frontEndUrl = await this.getEnvironmentVariableValue('cre2c_FRONT_END_URL');
+  const id = formContext.data.entity.getId().toLowerCase().replace('{', '').replace('}', '');
+
+  const key = formContext.getAttribute(DataVerseFieldName.CERTIFICATE_KEY).getValue();
+  const link = `${frontEndUrl}/download/${id}?key=${key}`;
+
+  formContext.getAttribute(DataVerseFieldName.CERTIFICATE_LINK).setValue(link);
 }
 
 this.submissionStatusOnChange = executionContext => {
@@ -240,6 +272,15 @@ this.ivoryAgeOnChange = executionContext => {
   }
 }
 
+this.certificateDetailsOnChange = executionContext => {
+  'use strict';
+
+  const formContext = executionContext.getFormContext();
+  const certificateNumber = formContext.getAttribute(DataVerseFieldName.CERTIFICATE_NUMBER).getValue();
+  const certificateIssueDate = formContext.getAttribute(DataVerseFieldName.CERTIFICATE_ISSUE_DATE).getValue();
+  formContext.getControl(DataVerseFieldName.CERTIFICATE_LINK).setVisible(certificateNumber !== null && certificateIssueDate !== null);
+}
+
 this.setAgeExemptionReasons = (formContext, isSection2) => {
   'use strict';
 
@@ -291,11 +332,53 @@ this.generateSubmissionReference = () => {
     .toUpperCase();
 }
 
-// Used when necessary for debugging purposes
-this.showAlert = () => {
+// Generates a random 129 character long certificate key
+this.generateCertificateKey = () => {
   'use strict';
 
-  const currentUserName = Xrm.Utility.getGlobalContext().userSettings.userName
-  const message = 'Hello ' + currentUserName;
-  Xrm.Navigation.openAlertDialog({ text: message});
+  let key = '';
+  for (let i = 0; i < 12; i++) {
+    key += Math.random()
+    .toString(36)
+    .substr(2, 15);
+  }
+
+  return key;
+}
+
+// Used when necessary for debugging purposes
+this.showAlert = message => {
+  'use strict';
+
+//  const currentUserName = Xrm.Utility.getGlobalContext().userSettings.userName
+//  const message = 'Hello ' + currentUserName;
+//  Xrm.Navigation.openAlertDialog({ text: message});
+
+  Xrm.Navigation.openAlertDialog({ text: message });
+}
+
+this.getEnvironmentVariableValue = async schemaName => {
+  'use strict';
+
+  const response = await Xrm.WebApi.retrieveMultipleRecords(
+      'environmentvariabledefinition',
+      [
+          "?$select=defaultvalue",
+          "&$filter=schemaname eq '", schemaName, "'",
+          "&$expand=environmentvariabledefinition_environmentvariablevalue($select=value)"
+      ].join('')
+  );
+
+  let value = null;
+
+  if (response.entities.length === 1) {
+      if (response.entities[0].environmentvariabledefinition_environmentvariablevalue.length === 1) {
+          value = response.entities[0].environmentvariabledefinition_environmentvariablevalue[0].value;
+      }
+      else {
+          value = response.entities[0].defaultvalue;
+      }
+  }
+
+  return value;
 }

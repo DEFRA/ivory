@@ -56,7 +56,9 @@ describe('/eligibility-checker/are-you-a-museum route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector(`#${elementIds.pageTitle}`)
+      const element = document.querySelector(
+        `#${elementIds.pageTitle} > legend > h1`
+      )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'Are you selling or hiring the item out on behalf of a museum?'

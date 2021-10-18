@@ -88,8 +88,16 @@ const DataVerseFieldName = {
   APPLICANT_EMAIL: 'cre2c_applicantemail',
   APPLICANT_ADDRESS: 'cre2c_applicantaddress',
   PHOTO_1: 'cre2c_photo1',
+  PHOTO_2: 'cre2c_photo2',
+  PHOTO_3: 'cre2c_photo3',
+  PHOTO_4: 'cre2c_photo4',
+  PHOTO_5: 'cre2c_photo5',
+  PHOTO_6: 'cre2c_photo6',
   SUPPORTING_EVIDENCE_1: 'cre2c_supportingevidence1',
-  SUPPORTING_EVIDENCE_1_NAME: 'cre2c_supportingevidence1_name'
+  SUPPORTING_EVIDENCE_1_NAME: 'cre2c_supportingevidence1_name',
+  CERTIFICATE_NUMBER: 'cre2c_certificatenumber',
+  CERTIFICATE_ISSUE_DATE: 'cre2c_certificateissuedate',
+  CERTIFICATE_KEY: 'cre2c_certificatekey'
 }
 
 const DeclarationCapacities = {
@@ -163,6 +171,7 @@ const Paths = {
   COOKIE_POLICY: '/cookie-policy',
   DESCRIBE_THE_ITEM: '/describe-the-item',
   DO_NOT_NEED_SERVICE: '/eligibility-checker/do-not-need-service',
+  DOWNLOAD: '/download',
   HOW_CERTAIN: '/eligibility-checker/how-certain',
   INTENTION_FOR_ITEM: '/intention-for-item',
   IS_IT_A_MUSICAL_INSTRUMENT: '/eligibility-checker/is-it-a-musical-instrument',
@@ -189,6 +198,7 @@ const Paths = {
   PAGE_NOT_FOUND: '/errors/page-not-found',
   PRIVACY_NOTICE: '/privacy-notice',
   PROBLEM_WITH_SERVICE: '/errors/problem-with-service',
+  RECORD_NOT_FOUND: '/errors/record-not-found',
   REMOVE_DOCUMENT: '/remove-document',
   REMOVE_PHOTO: '/remove-photo',
   RMI_AND_PRE_1918: '/eligibility-checker/rmi-and-pre-1918',
@@ -249,6 +259,7 @@ const Views = {
   PAGE_NOT_FOUND: 'errors/page-not-found',
   PRIVACY_NOTICE: 'privacy-notice',
   PROBLEM_WITH_SERVICE: 'errors/problem-with-service',
+  RECORD_NOT_FOUND: 'errors/record-not-found',
   RMI_AND_PRE_1918: 'eligibility-checker/rmi-and-pre-1918',
   SELLING_ON_BEHALF_OF: 'selling-on-behalf-of',
   SELLING_TO_MUSEUM: 'eligibility-checker/selling-to-museum',

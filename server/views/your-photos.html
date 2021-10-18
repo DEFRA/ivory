@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -9,17 +10,28 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      <p class="govuk-body" id="helpText">You can add up to {{ maxPhotos }} photos.</p>
+        <p class="govuk-body" id="helpText">You can add up to {{ maxPhotos }} photos.</p>
 
-      {{ govukSummaryList({
-        rows: rows
-      }) }}
+        {{ govukSummaryList({
+          rows: rows
+        }) }}
 
-      {% if allowMorePhotos %}
-        <p class="govuk-body govuk-!-margin-bottom-7"><a id="addAnotherPhoto" class="govuk-link" href="{{ addPhotoUrl }}">Add another photo</a></p>
-      {% endif %}
+        {% if allowMorePhotos %}
+          <p class="govuk-body govuk-!-margin-bottom-7"><a id="addAnotherPhoto" class="govuk-link" href="{{ addPhotoUrl }}">Add another photo</a></p>
+        {% endif %}
+
+      {% endcall %}
 
       {{ govukButton({
           attributes: {

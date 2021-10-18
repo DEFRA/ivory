@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
@@ -10,30 +11,41 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      <p id="helpText">{{ helpText }}</p>
+        <p id="helpText">{{ helpText }}</p>
 
-      <p id="helpText2">{{ helpText2 }}</p>
+        <p id="helpText2">{{ helpText2 }}</p>
 
-      <p id="helpText3">{{ helpText3 }}</p>
+        <p id="helpText3">{{ helpText3 }}</p>
 
-      {{ govukDetails({
-        id: "whatKindsOfItem",
-        summaryText: "What kinds of item have less than 20% ivory?",
-        html: '<p>Items likely to have less than 20% ivory include:</p>
-              <ul class="govuk-list govuk-list--bullet">
-                <li>a piano with ivory keys</li>
-                <li>a violin bow with ivory at the end of the bow</li>
-              </ul>'
-      }) }}
+        {{ govukDetails({
+          id: "whatKindsOfItem",
+          summaryText: "What kinds of item have less than 20% ivory?",
+          html: '<p>Items likely to have less than 20% ivory include:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>a piano with ivory keys</li>
+                  <li>a violin bow with ivory at the end of the bow</li>
+                </ul>'
+        }) }}
 
-      {{ govukRadios({
-        idPrefix: "lessThan20Ivory",
-        name: "lessThan20Ivory",
-        errorMessage: fieldErrors['lessThan20Ivory'],
-        items: items
-      }) }}
+        {{ govukRadios({
+          idPrefix: "lessThan20Ivory",
+          name: "lessThan20Ivory",
+          errorMessage: fieldErrors['lessThan20Ivory'],
+          items: items
+        }) }}
+
+      {% endcall %}
 
       {{ govukButton({
           attributes: {

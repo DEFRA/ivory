@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -9,24 +10,35 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
 
-      <p id="helpText">{{ helpText }}</p>
+        <p id="helpText">{{ helpText }}</p>
 
-      <ul id="helpTextList" class="govuk-list govuk-list--bullet">
-        <li>a stamp, serial number or signature on the item to prove its age</li>
-        <li>a dated receipt showing when the item was bought or repaired</li>
-        <li>a dated publication that shows or describes the item</li>
-        <li>personal knowledge or evidence that the item has been in the family since before 1 January 1918</li>
-        <li>written verification from a relevant expert</li>
-      </ul>
+        <ul id="helpTextList" class="govuk-list govuk-list--bullet">
+          <li>a stamp, serial number or signature on the item to prove its age</li>
+          <li>a dated receipt showing when the item was bought or repaired</li>
+          <li>a dated publication that shows or describes the item</li>
+          <li>personal knowledge or evidence that the item has been in the family since before 1 January 1918</li>
+          <li>written verification from a relevant expert</li>
+        </ul>
 
-      {{ govukRadios({
-        idPrefix: "isItemPre1918",
-        name: "isItemPre1918",
-        errorMessage: fieldErrors['isItemPre1918'],
-        items: items
-      }) }}
+        {{ govukRadios({
+          idPrefix: "isItemPre1918",
+          name: "isItemPre1918",
+          errorMessage: fieldErrors['isItemPre1918'],
+          items: items
+        }) }}
+
+      {% endcall %}
 
       {{ govukButton({
           attributes: {

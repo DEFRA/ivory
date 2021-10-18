@@ -138,7 +138,7 @@ describe('/check-your-answers route', () => {
         _checkSummaryChangeLinks(
           document,
           elementIds.summaries.exemptionType,
-          'Change Change type of exemption',
+          'Change type of exemption',
           Paths.WHAT_TYPE_OF_ITEM_IS_IT
         )
       })
@@ -164,7 +164,7 @@ describe('/check-your-answers route', () => {
         _checkSummaryChangeLinks(
           document,
           elementIds.summaries.photos,
-          'Change Change your photos',
+          'Change your photos',
           Paths.YOUR_PHOTOS
         )
       })
@@ -196,11 +196,11 @@ describe('/check-your-answers route', () => {
           document,
           elementIds.summaries.itemDescription,
           [
-            'Change Change your description of the item',
-            'Change Change where the ivory is',
-            'Change Change any unique features',
-            'Change Change where it was made',
-            'Change Change when it was made'
+            'Change your description of the item',
+            'Change where the ivory is',
+            'Change any unique features',
+            'Change where it was made',
+            'Change when it was made'
           ],
           [
             Paths.DESCRIBE_THE_ITEM,
@@ -254,8 +254,8 @@ describe('/check-your-answers route', () => {
           document,
           elementIds.summaries.exemptionReason,
           [
-            'Change Change your proof of age',
-            'Change Change reason why item is of outstandingly high value'
+            'Change your proof of age',
+            'Change reason why item is of outstandingly high value'
           ],
           [Paths.IVORY_AGE, Paths.WHY_IS_ITEM_RMI]
         )
@@ -286,7 +286,7 @@ describe('/check-your-answers route', () => {
         _checkSummaryChangeLinks(
           document,
           elementIds.summaries.documents,
-          'Change Change your documents',
+          'Change your documents',
           Paths.YOUR_DOCUMENTS
         )
       })
@@ -324,13 +324,13 @@ describe('/check-your-answers route', () => {
           document,
           elementIds.summaries.owner,
           [
-            'Change Change who owns the item',
-            'Change Change owner’s name',
-            'Change Change owner’s email',
-            'Change Change owner’s address',
-            'Change Change your name',
-            'Change Change your email',
-            'Change Change your address'
+            'Change who owns the item',
+            'Change owner’s name',
+            'Change owner’s email',
+            'Change owner’s address',
+            'Change your name',
+            'Change your email',
+            'Change your address'
           ],
           [
             Paths.WHO_OWNS_ITEM,
@@ -368,7 +368,7 @@ describe('/check-your-answers route', () => {
         _checkSummaryChangeLinks(
           document,
           elementIds.summaries.saleIntention,
-          'Change Change what owner intends to do',
+          'Change what owner intends to do',
           Paths.INTENTION_FOR_ITEM
         )
       })
@@ -409,11 +409,11 @@ describe('/check-your-answers route', () => {
           document,
           elementIds.summaries.owner,
           [
-            'Change Change who owns the item',
-            'Change Change your name',
-            'Change Change business name',
-            'Change Change your email',
-            'Change Change your address'
+            'Change who owns the item',
+            'Change your name',
+            'Change business name',
+            'Change your email',
+            'Change your address'
           ],
           [
             Paths.WHO_OWNS_ITEM,
@@ -499,9 +499,9 @@ describe('/check-your-answers route', () => {
           document,
           elementIds.summaries.exemptionReason,
           [
-            'Change Change your proof of age',
-            'Change Change your proof that item has less than 10% ivory',
-            'Change Change reason why all ivory is integral to item'
+            'Change your proof of age',
+            'Change your proof that item has less than 10% ivory',
+            'Change reason why all ivory is integral to item'
           ],
           [Paths.IVORY_AGE, Paths.IVORY_VOLUME, Paths.IVORY_INTEGRAL]
         )
