@@ -7,6 +7,7 @@ const sharp = require('sharp')
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+const AntimalwareService = require('../services/antimalware.service')
 
 const config = require('../utils/config')
 const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
@@ -70,37 +71,50 @@ const handlers = {
     }
 
     try {
-      const extension = path.extname(filename)
+      const isInfected = await AntimalwareService.scan(request, payload.files.path, filename)
 
-      const file = await fs.promises.readFile(payload.files.path)
+      if (!isInfected) {
+        const extension = path.extname(filename)
 
-      const filenameNoExtension = filename.substring(
-        0,
-        filename.length - extension.length
-      )
-      const thumbnailFilename = `${filenameNoExtension}-thumbnail${extension}`
+        const file = await fs.promises.readFile(payload.files.path)
 
-      uploadData.files.push(filename)
-      uploadData.fileSizes.push(payload.files.bytes)
-      uploadData.thumbnails.push(thumbnailFilename)
+        const filenameNoExtension = filename.substring(
+          0,
+          filename.length - extension.length
+        )
+        const thumbnailFilename = `${filenameNoExtension}-thumbnail${extension}`
 
-      const buffer = Buffer.from(file)
-      const base64 = buffer.toString('base64')
-      uploadData.fileData.push(base64)
+        uploadData.files.push(filename)
+        uploadData.fileSizes.push(payload.files.bytes)
+        uploadData.thumbnails.push(thumbnailFilename)
 
-      const thumbnailBuffer = await sharp(buffer)
-        .resize(THUMBNAIL_WIDTH, null, {
-          withoutEnlargement: true
+        const buffer = Buffer.from(file)
+        const base64 = buffer.toString('base64')
+        uploadData.fileData.push(base64)
+
+        const thumbnailBuffer = await sharp(buffer)
+          .resize(THUMBNAIL_WIDTH, null, {
+            withoutEnlargement: true
+          })
+          .toBuffer()
+
+        uploadData.thumbnailData.push(thumbnailBuffer.toString('base64'))
+
+        RedisService.set(
+          request,
+          RedisKeys.UPLOAD_PHOTO,
+          JSON.stringify(uploadData)
+        )
+      } else {
+        errors.push({
+          name: 'files',
+          text: 'The file could not be uploaded - try a different one'
         })
-        .toBuffer()
-
-      uploadData.thumbnailData.push(thumbnailBuffer.toString('base64'))
-
-      RedisService.set(
-        request,
-        RedisKeys.UPLOAD_PHOTO,
-        JSON.stringify(uploadData)
-      )
+        return h.view(Views.UPLOAD_PHOTO, {
+          ...context,
+          ...buildErrorSummary(errors)
+        })
+      }
     } catch (error) {
       if (error.message === 'Input buffer contains unsupported image format') {
         error.message = 'Unrecognised image file format'
