@@ -35,7 +35,8 @@ describe('/service-complete route', () => {
     helpText3: 'helpText3',
     helpText4: 'helpText4',
     helpText5: 'helpText5',
-    finish: 'finish'
+    finish: 'finish',
+    feedbackLink: 'feedbackLink'
   }
 
   let document
@@ -164,6 +165,15 @@ describe('/service-complete route', () => {
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual('Finish')
         })
+
+        it('should have the correct feedback link', () => {
+          const element = document.querySelector(`#${elementIds.feedbackLink}`)
+          TestHelper.checkLink(
+            element,
+            'What did you think of this service?',
+            'https://defragroup.eu.qualtrics.com/jfe/form/SV_0vtTE03cG8IQiBU'
+          )
+        })
       })
     })
 
@@ -259,6 +269,15 @@ describe('/service-complete route', () => {
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'If you have not heard from us within 30 days, you can contact us at ivory@apha.gov.uk. Make sure you have your submission reference number, so we can find your details.'
+          )
+        })
+
+        it('should have the correct feedback link', () => {
+          const element = document.querySelector(`#${elementIds.feedbackLink}`)
+          TestHelper.checkLink(
+            element,
+            'What did you think of this service?',
+            'https://defragroup.eu.qualtrics.com/jfe/form/SV_0vtTE03cG8IQiBU'
           )
         })
       })
