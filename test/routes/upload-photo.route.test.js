@@ -5,6 +5,9 @@ const TestHelper = require('../utils/test-helper')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
+jest.mock('../../server/services/antimalware.service')
+const AntimalwareService = require('../../server/services/antimalware.service')
+
 describe('/upload-photo route', () => {
   let server
   const url = '/upload-photo'
@@ -353,6 +356,27 @@ describe('/upload-photo route', () => {
           'The file must be a JPG or PNG'
         )
       })
+
+      it('should display a validation error message if the user tries to upload a virus', async () => {
+        AntimalwareService.scan = jest.fn().mockResolvedValue('OMG a virus!')
+        const payloadFile = {
+          path: tempFolder,
+          bytes: 100,
+          filename: 'image1.jpeg',
+          headers: {
+            'content-disposition':
+              'form-data; name="files"; filename="image1.jpeg"',
+            'content-type': 'image/jpeg'
+          }
+        }
+        await _checkValidation(
+          server,
+          postOptions,
+          payloadFile,
+          'The file could not be uploaded - try a different one',
+          200
+        )
+      })
     })
   })
 
@@ -433,10 +457,11 @@ const _checkValidation = async (
   server,
   postOptions,
   payloadFile,
-  expectedError
+  expectedError,
+  errorCode = 400
 ) => {
   postOptions.payload.files = payloadFile
-  const response = await TestHelper.submitPostRequest(server, postOptions, 400)
+  const response = await TestHelper.submitPostRequest(server, postOptions, errorCode)
   await TestHelper.checkValidationError(
     response,
     'files',

@@ -5,6 +5,9 @@ const TestHelper = require('../utils/test-helper')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
+jest.mock('../../server/services/antimalware.service')
+const AntimalwareService = require('../../server/services/antimalware.service')
+
 describe('/upload-document route', () => {
   let server
   const url = '/upload-document'
@@ -220,15 +223,15 @@ describe('/upload-document route', () => {
 
     describe('Success', () => {
       // This test is failing as it has not yet been possible to successfully mock fs.promises.readFile without breaking the server
-      it.skip('should store the images in Redis and progress to the next route', async () => {
+      it.skip('should store the documents in Redis and progress to the next route', async () => {
         postOptions.payload.files = {
           path: tempFolder,
           bytes: 37474,
-          filename: 'image1.png',
+          filename: 'document1.pdf',
           headers: {
             'content-disposition':
-              'form-data; name="files"; filename="image1.png"',
-            'content-type': 'image/png'
+              'form-data; name="files"; filename="document1.pdf"',
+            'content-type': 'application/pdf'
           }
         }
 
@@ -265,21 +268,21 @@ describe('/upload-document route', () => {
           {
             path: tempFolder,
             bytes: 197310,
-            filename: 'image1.jpeg',
+            filename: 'document1.pdf',
             headers: {
               'content-disposition':
-                'form-data; name="files"; filename="image1.jpeg"',
-              'content-type': 'image/jpeg'
+                'form-data; name="files"; filename="document1.pdf"',
+              'content-type': 'application/pdf'
             }
           },
           {
             path: tempFolder,
             bytes: 153090,
-            filename: 'image2.png',
+            filename: 'document1.pdf',
             headers: {
               'content-disposition':
-                'form-data; name="files"; filename="image2.png"',
-              'content-type': 'image/jpeg'
+                'form-data; name="files"; filename="document1.pdf"',
+              'content-type': 'application/pdf'
             }
           }
         ]
@@ -295,11 +298,11 @@ describe('/upload-document route', () => {
         const payloadFile = {
           path: tempFolder,
           bytes: 0,
-          filename: 'image1.jpeg',
+          filename: 'document1.pdf',
           headers: {
             'content-disposition':
-              'form-data; name="files"; filename="image1.jpeg"',
-            'content-type': 'image/jpeg'
+              'form-data; name="files"; filename="document1.pdf"',
+            'content-type': 'application/pdf'
           }
         }
         await _checkValidation(
@@ -315,11 +318,11 @@ describe('/upload-document route', () => {
         const payloadFile = {
           path: tempFolder,
           bytes: 32 * 1024 * 1024,
-          filename: 'image1.jpeg',
+          filename: 'document1.pdf',
           headers: {
             'content-disposition':
-              'form-data; name="files"; filename="image1.jpeg"',
-            'content-type': 'image/jpeg'
+              'form-data; name="files"; filename="document1.pdf"',
+            'content-type': 'application/pdf'
           }
         }
         postOptions.payload.files = payloadFile
@@ -342,6 +345,27 @@ describe('/upload-document route', () => {
           postOptions,
           payloadFile,
           'The file must be a PDF or Microsoft Word document (.DOC or .DOCX)'
+        )
+      })
+
+      it('should display a validation error message if the user tries to upload a virus', async () => {
+        AntimalwareService.scan = jest.fn().mockResolvedValue('OMG a virus!')
+        const payloadFile = {
+          path: tempFolder,
+          bytes: 100,
+          filename: 'document1.pdf',
+          headers: {
+            'content-disposition':
+              'form-data; name="files"; filename="document1.pdf"',
+            'content-type': 'application/pdf'
+          }
+        }
+        await _checkValidation(
+          server,
+          postOptions,
+          payloadFile,
+          'The file could not be uploaded - try a different one',
+          200
         )
       })
     })
@@ -423,10 +447,11 @@ const _checkValidation = async (
   server,
   postOptions,
   payloadFile,
-  expectedError
+  expectedError,
+  errorCode = 400
 ) => {
   postOptions.payload.files = payloadFile
-  const response = await TestHelper.submitPostRequest(server, postOptions, 400)
+  const response = await TestHelper.submitPostRequest(server, postOptions, errorCode)
   await TestHelper.checkValidationError(
     response,
     'files',

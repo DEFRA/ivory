@@ -159,7 +159,7 @@ The predefined tasks are:
 
 ## Testing
 
-[lab](https://github.com/hapijs/lab) and [code](https://github.com/hapijs/code) are used for unit testing.
+[Jest](https://jestjs.io/) is used for unit testing.
 
 See the `/test` folder for more information.
 

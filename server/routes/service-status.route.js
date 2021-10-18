@@ -2,6 +2,7 @@
 
 const moment = require('moment')
 const nodePackage = require('../../package.json')
+const AntimalwareService = require('../services/antimalware.service')
 
 const { Paths, Views } = require('../utils/constants')
 
@@ -14,6 +15,7 @@ const handlers = {
       data: {
         name: nodePackage.name,
         version: nodePackage.version,
+        clamVersion: await AntimalwareService.version(),
         rendered: moment(new Date()).format(DATE_FORMAT_DMY_WITH_HMS),
         uptime: moment(Date.now() - process.uptime() * 1000).format(
           DATE_FORMAT_DMY_WITH_HMS

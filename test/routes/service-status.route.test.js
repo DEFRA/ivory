@@ -12,6 +12,8 @@ describe('Enter Permit Number route', () => {
     serviceName: 'service-name',
     versionLabel: 'version-label',
     version: 'version',
+    clamVersionLabel: 'clam-version-label',
+    clamVersion: 'clam-version',
     serverStartedLabel: 'server-started-label',
     serverStarted: 'server-started',
     pageRenderedLabel: 'page-rendered-label',
@@ -72,6 +74,16 @@ describe('Enter Permit Number route', () => {
       expect(TestHelper.getTextContent(element)).toEqual('Version:')
 
       element = document.querySelector(`#${elementIds.version}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element).length > 0).toBeTruthy()
+    })
+
+    it('should display the status of ClamAV', () => {
+      let element = document.querySelector(`#${elementIds.clamVersionLabel}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual('ClamAV version:')
+
+      element = document.querySelector(`#${elementIds.clamVersion}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element).length > 0).toBeTruthy()
     })
