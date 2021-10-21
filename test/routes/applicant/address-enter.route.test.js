@@ -127,7 +127,7 @@ describe('/user-details/applicant/address-enter route', () => {
           `#${elementIds.pageTitle} > legend > h1`
         )
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('Edit your address')
+        expect(TestHelper.getTextContent(element)).toEqual('Edit the address')
       })
 
       it('should have the correct help text for 1 address returned', () => {
@@ -163,7 +163,7 @@ describe('/user-details/applicant/address-enter route', () => {
           `#${elementIds.pageTitle} > legend > h1`
         )
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('Enter your address')
+        expect(TestHelper.getTextContent(element)).toEqual('Enter the address')
       })
 
       it('should have the correct help text for multiple addresses returned', () => {

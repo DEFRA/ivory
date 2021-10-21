@@ -13,7 +13,6 @@ describe('/user-details/applicant/address-international route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    helpText: 'helpText',
     internationalAddress: 'internationalAddress',
     continue: 'continue'
   }
@@ -60,14 +59,6 @@ describe('/user-details/applicant/address-international route', () => {
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual('Enter your address')
-    })
-
-    it('should have the correct help text', () => {
-      const element = document.querySelector(`#${elementIds.helpText}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'If your business is helping someone else sell their item, give your business address.'
-      )
     })
 
     it('should have the "Enter your address" form field', () => {

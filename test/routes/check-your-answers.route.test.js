@@ -301,7 +301,7 @@ describe('/check-your-answers route', () => {
         _checkSummary(document, elementIds.summaries.owner)
 
         _checkSummaryKeys(document, elementIds.summaries.owner, [
-          'Who owns the item?',
+          'Do you own the item?',
           'Owner’s name',
           'Owner’s email',
           'Owner’s address',
@@ -311,7 +311,7 @@ describe('/check-your-answers route', () => {
         ])
 
         _checkSummaryValues(document, elementIds.summaries.owner, [
-          'Someone else owns it',
+          'No',
           mockOwnerContactDetails.name,
           mockOwnerContactDetails.emailAddress,
           ownerAddress,
@@ -390,7 +390,7 @@ describe('/check-your-answers route', () => {
         _checkSummary(document, elementIds.summaries.owner)
 
         _checkSummaryKeys(document, elementIds.summaries.owner, [
-          'Who owns the item?',
+          'Do you own the item?',
           'Your name',
           'Business name (optional)',
           'Your email',
@@ -398,7 +398,7 @@ describe('/check-your-answers route', () => {
         ])
 
         _checkSummaryValues(document, elementIds.summaries.owner, [
-          'I own it',
+          'Yes',
           mockOwnerContactDetails.name,
           businessName,
           mockOwnerContactDetails.emailAddress,

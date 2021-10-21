@@ -307,8 +307,8 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
 
   const ownerSummary = [
     _getSummaryListRow(
-      'Who owns the item?',
-      ownedByApplicant ? 'I own it' : 'Someone else owns it',
+      'Do you own the item?',
+      ownedByApplicant ? 'Yes' : 'No',
       _getChangeItems(Paths.WHO_OWNS_ITEM, CHANGE_LINK_HINT.WhoOwnsTheItem)
     )
   ]

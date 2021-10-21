@@ -13,7 +13,7 @@ const other = 'Other'
 describe('/what-capacity route', () => {
   let server
   const url = '/what-capacity'
-  const nextUrl = '/ivory-age'
+  const nextUrl = '/user-details/owner/contact-details'
 
   const elementIds = {
     pageTitle: 'pageTitle',

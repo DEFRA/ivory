@@ -119,17 +119,18 @@ const _getContext = async (request, addressType) => {
   return context
 }
 
+// TODO
+// 'Enter the address of the business'
+
 const _getContextForOwnerAddressType = ownedByApplicant => {
   let context
   if (ownedByApplicant === Options.YES) {
     context = {
-      pageTitle: 'Enter your address',
-      helpText: 'If your business owns the item, give your business address.'
+      pageTitle: 'Enter your address'
     }
   } else {
     context = {
-      pageTitle: "Enter the owner's address",
-      helpText: 'If the owner is a business, give the business address.'
+      pageTitle: "Enter the owner's address"
     }
   }
   return context
@@ -137,9 +138,7 @@ const _getContextForOwnerAddressType = ownedByApplicant => {
 
 const _getContextForApplicantAddressType = () => {
   return {
-    pageTitle: 'Enter your address',
-    helpText:
-      'If your business is helping someone else sell their item, give your business address.'
+    pageTitle: 'Enter your address'
   }
 }
 

@@ -170,9 +170,7 @@ describe('/user-details/owner/address-enter route', () => {
             `#${elementIds.pageTitle} > legend > h1`
           )
           expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'Edit your address'
-          )
+          expect(TestHelper.getTextContent(element)).toEqual('Edit the address')
         })
 
         it('should have the correct help text for 1 address returned', () => {
@@ -208,9 +206,7 @@ describe('/user-details/owner/address-enter route', () => {
             `#${elementIds.pageTitle} > legend > h1`
           )
           expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            "Edit the owner's address"
-          )
+          expect(TestHelper.getTextContent(element)).toEqual('Edit the address')
         })
 
         it('should have the correct help text for 1 address returned', () => {
@@ -249,7 +245,7 @@ describe('/user-details/owner/address-enter route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Enter your address'
+            'Enter the address'
           )
         })
 
@@ -287,7 +283,7 @@ describe('/user-details/owner/address-enter route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            "Enter the owner's address"
+            'Enter the address'
           )
         })
 
