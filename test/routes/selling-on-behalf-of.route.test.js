@@ -5,12 +5,12 @@ const TestHelper = require('../utils/test-helper')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-const other = 'Other'
-
 describe('/selling-on-behalf-of route', () => {
   let server
   const url = '/selling-on-behalf-of'
-  const nextUrl = '/ivory-age'
+  const nextUrlYourDetails = '/user-details/applicant/contact-details'
+  const nextUrlOwnerDetails = '/user-details/owner/contact-details'
+  const nextUrlWhatCapacity = '/what-capacity'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -175,46 +175,79 @@ describe('/selling-on-behalf-of route', () => {
     })
 
     describe('Success', () => {
-      beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('Yes')
+      describe('POST: Work for a business', () => {
+        beforeEach(async () => {
+          RedisService.get = jest.fn().mockResolvedValueOnce('Yes')
+        })
+
+        it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
+          await _checkSelectedRadioAction(
+            postOptions,
+            server,
+            'The business I work for',
+            nextUrlYourDetails
+          )
+        })
+
+        it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
+          await _checkSelectedRadioAction(
+            postOptions,
+            server,
+            'An individual',
+            nextUrlOwnerDetails
+          )
+        })
+
+        it('should store the value in Redis and progress to the next route when the third option has been selected', async () => {
+          await _checkSelectedRadioAction(
+            postOptions,
+            server,
+            'Another business',
+            nextUrlOwnerDetails
+          )
+        })
+
+        it('should store the value in Redis and progress to the next route when the third option has been selected', async () => {
+          await _checkSelectedRadioAction(
+            postOptions,
+            server,
+            'Other',
+            nextUrlWhatCapacity
+          )
+        })
       })
 
-      it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'It’s clear from looking at it',
-          nextUrl
-        )
-      })
+      describe('POST: Does not work for a business', () => {
+        beforeEach(async () => {
+          RedisService.get = jest.fn().mockResolvedValue('No')
+        })
 
-      it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'I measured it',
-          nextUrl
-        )
-      })
+        it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
+          await _checkSelectedRadioAction(
+            postOptions,
+            server,
+            'A friend or relative',
+            nextUrlOwnerDetails
+          )
+        })
 
-      it('should store the value in Redis and progress to the next route when the third option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'I have written verification from a relevant expert',
-          nextUrl
-        )
-      })
+        it('should store the value in Redis and progress to the next route when the third option has been selected', async () => {
+          await _checkSelectedRadioAction(
+            postOptions,
+            server,
+            'A business',
+            nextUrlOwnerDetails
+          )
+        })
 
-      it('should store the value in Redis and progress to the next route when the fourth option has been selected & Other text added', async () => {
-        postOptions.payload.otherCapacity = 'some text'
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          other,
-          nextUrl,
-          'some text'
-        )
+        it('should store the value in Redis and progress to the next route when the third option has been selected', async () => {
+          await _checkSelectedRadioAction(
+            postOptions,
+            server,
+            'Other',
+            nextUrlWhatCapacity
+          )
+        })
       })
     })
 
@@ -249,8 +282,7 @@ const _checkSelectedRadioAction = async (
   postOptions,
   server,
   selectedOption,
-  nextUrl,
-  otherCapacity = ''
+  nextUrl
 ) => {
   const redisKey = 'selling-on-behalf-of'
   postOptions.payload.sellingOnBehalfOf = selectedOption
@@ -259,17 +291,11 @@ const _checkSelectedRadioAction = async (
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
-  const expectedRedisValue = {}
-  if (otherCapacity) {
-    expectedRedisValue.otherCapacity = otherCapacity
-  }
-  expectedRedisValue.sellingOnBehalfOf = selectedOption
-
   expect(RedisService.set).toBeCalledTimes(1)
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
     redisKey,
-    JSON.stringify(expectedRedisValue)
+    selectedOption
   )
 
   expect(response.headers.location).toEqual(nextUrl)
