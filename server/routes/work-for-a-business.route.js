@@ -1,14 +1,14 @@
 'use strict'
 
-// const AnalyticsService = require('../services/analytics.service')
+const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
 
 const {
   Options,
   Paths,
   Views,
-  RedisKeys
-  // Analytics
+  RedisKeys,
+  Analytics
 } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
@@ -27,11 +27,11 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      // AnalyticsService.sendEvent(request, {
-      //   category: Analytics.Category.ERROR,
-      //   action: JSON.stringify(errors),
-      //   label: context.pageTitle
-      // })
+      AnalyticsService.sendEvent(request, {
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: context.pageTitle
+      })
 
       return h
         .view(Views.WORK_FOR_A_BUSINESS, {
@@ -47,11 +47,11 @@ const handlers = {
       payload.workForABusiness
     )
 
-    // AnalyticsService.sendEvent(request, {
-    //   category: Analytics.Category.MAIN_QUESTIONS,
-    //   action: `${Analytics.Action.SELECTED} ${payload.workForABusiness}`,
-    //   label: context.pageTitle
-    // })
+    AnalyticsService.sendEvent(request, {
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${Analytics.Action.SELECTED} ${payload.workForABusiness}`,
+      label: context.pageTitle
+    })
 
     return h.redirect(Paths.SELLING_ON_BEHALF_OF)
   }

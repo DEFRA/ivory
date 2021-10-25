@@ -8,10 +8,11 @@ const RedisService = require('../../server/services/redis.service')
 describe('/work-for-a-business route', () => {
   let server
   const url = '/work-for-a-business'
-  const nextUrl = '/user-details/owner/contact-details'
+  const nextUrl = '/selling-on-behalf-of'
 
   const elementIds = {
     pageTitle: 'pageTitle',
+    helpText: 'helpText',
     workForABusiness: 'workForABusiness',
     workForABusiness2: 'workForABusiness-2',
     continue: 'continue'
@@ -63,6 +64,14 @@ describe('/work-for-a-business route', () => {
       )
     })
 
+    it('should have the correct help text', () => {
+      const element = document.querySelector(`#${elementIds.helpText}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'This could be an auction house or antiques dealer, for example.'
+      )
+    })
+
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
@@ -97,18 +106,13 @@ describe('/work-for-a-business route', () => {
       }
     })
 
-    describe('Success', () => {
+    describe.only('Success', () => {
       it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
         await _checkSelectedRadioAction(postOptions, server, 'Yes', nextUrl)
       })
 
       it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'You cannot remove the ivory easily or without damaging the item',
-          nextUrl
-        )
+        await _checkSelectedRadioAction(postOptions, server, 'No', nextUrl)
       })
     })
 
@@ -143,8 +147,8 @@ const _checkSelectedRadioAction = async (
   selectedOption,
   nextUrl
 ) => {
-  const redisKey = 'owned-by-applicant'
-  postOptions.payload.doYouOwnTheItem = selectedOption
+  const redisKey = 'work-for-a-business'
+  postOptions.payload.workForABusiness = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(0)
 
@@ -154,7 +158,7 @@ const _checkSelectedRadioAction = async (
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
     redisKey,
-    selectedOption === 'I own it' ? 'Yes' : 'No'
+    selectedOption
   )
 
   expect(response.headers.location).toEqual(nextUrl)
