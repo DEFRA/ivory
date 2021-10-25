@@ -106,7 +106,7 @@ describe('/work-for-a-business route', () => {
       }
     })
 
-    describe.only('Success', () => {
+    describe('Success', () => {
       it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
         await _checkSelectedRadioAction(postOptions, server, 'Yes', nextUrl)
       })
