@@ -1,0 +1,109 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+      CD5 
+      
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
+
+      <p class="govuk-body" id="helpText">You must have the owner’s permission to act on their behalf.</p>
+
+      {% if isBusiness %}
+        {{ govukInput({
+          label: {
+            classes: "govuk-label govuk-label--s",
+            text: "Business name"
+          },
+          id: "businessName",
+          name: "businessName",
+          value: businessName,
+          autocomplete: "name",
+          spellcheck: false,
+          errorMessage: fieldErrors['businessName']
+        }) }}
+      {% else %}
+        {{ govukInput({
+          label: {
+            classes: "govuk-label govuk-label--s",
+            text: "Full name"
+          },
+          id: "fullName",
+          name: "fullName",
+          value: fullName,
+          autocomplete: "name",
+          spellcheck: false,
+          errorMessage: fieldErrors['fullName']
+        }) }}
+      {% endif %}
+
+      {% set otherHtml %}
+        {{ govukInput({
+            label: {
+              text: "Email address"
+            },
+            classes: "govuk-!-width-two-third",
+            id: "emailAddress",
+            name: "emailAddress",
+            value: emailAddress,
+            errorMessage: fieldErrors['emailAddress']
+          }) }}
+      {% endset -%}
+
+      {% set yesItem = {
+        text: yesOption.text,
+        value: yesOption.value,
+        checked: yesOption.checked,
+        conditional: {
+          html: otherHtml
+        }
+      }
+      %}
+
+      {% set items = (items.unshift(yesItem), items) %}
+
+    {% endcall %}
+
+    {{ govukRadios({
+      idPrefix: "hasEmailAddress",
+      name: "hasEmailAddress",
+      fieldset: {
+        legend: {
+          text: "Does the owner have an email address?",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "We’ll use this to send them a copy of this declaration"
+      },
+      items: items,
+      errorMessage: fieldErrors['hasEmailAddress']
+    }) }}
+
+
+    {{ govukButton({
+        attributes: {
+          id: "continue"
+        },
+        text: "Continue"
+      })
+    }}
+    </div>
+  </div>
+{% endblock %}

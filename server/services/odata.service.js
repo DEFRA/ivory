@@ -53,7 +53,7 @@ module.exports = class ODataService {
     const responseDetail = await response.json()
 
     if (response.status !== StatusCodes.CREATED) {
-      console.log(responseDetail)
+      console.error(responseDetail)
 
       const fieldName = isSection2
         ? DataVerseFieldName.NAME

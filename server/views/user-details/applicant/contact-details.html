@@ -11,6 +11,8 @@
 
       {% if ownerApplicant %}
 
+        applicant: ownerApplicant
+
         {{ govukInput({
           label: {
             classes: "govuk-label govuk-label--s",
@@ -24,22 +26,23 @@
           errorMessage: fieldErrors['name']
         }) }}
 
-        {{ govukInput({
-          label: {
-            classes: "govuk-label govuk-label--s",
-            text: "Business name (optional)"
-          },
-          hint: {
-            text: "We only need this if your business owns the item"
-          },
-          id: "businessName",
-          name: "businessName",
-          value: businessName,
-          spellcheck: false,
-          errorMessage: fieldErrors['businessName']
-        }) }}
+        {% if ownerApplicant %}
+          {{ govukInput({
+            label: {
+              classes: "govuk-label govuk-label--s",
+              text: "Business name"
+            },
+            id: "businessName",
+            name: "businessName",
+            value: businessName,
+            spellcheck: false,
+            errorMessage: fieldErrors['businessName']
+          }) }}
+        {% endif %}
 
       {% elif applicant %}
+
+        applicant: applicant
 
         {{ govukInput({
           label: {
@@ -55,6 +58,8 @@
         }) }}
 
       {% else %}
+
+        applicant: else
 
         <p id="why-required">We need these because the owner is legally responsible for all the information you provide.</p>
 

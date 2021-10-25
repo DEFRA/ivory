@@ -2,7 +2,10 @@
 
 const AnalyticsService = require('../../../services/analytics.service')
 const RedisService = require('../../../services/redis.service')
-
+const {
+  BehalfOfBusinessOptions,
+  BehalfOfNotBusinessOptions
+} = require('../../../utils/constants')
 const {
   CharacterLimits,
   Options,
@@ -17,45 +20,48 @@ const { addPayloadToContext } = require('../../../utils/general')
 
 const handlers = {
   get: async (request, h) => {
-    const ownedByApplicant = await RedisService.get(
-      request,
-      RedisKeys.OWNED_BY_APPLICANT
-    )
+    const context = await _getContext(request)
 
-    const context = await _getContext(request, ownedByApplicant)
-
-    return h.view(Views.CONTACT_DETAILS, {
+    return h.view(Views.CONTACT_DETAILS_OWNER, {
       ...context,
-      pageTitle: _getPageHeading(ownedByApplicant),
-      ownerApplicant: ownedByApplicant === Options.YES
+      pageTitle: context.pageTitle
     })
   },
 
   post: async (request, h) => {
-    const ownedByApplicant = await RedisService.get(
-      request,
-      RedisKeys.OWNED_BY_APPLICANT
-    )
-
-    const context = await _getContext(request, ownedByApplicant)
+    const context = await _getContext(request)
     const payload = request.payload
-    const errors = _validateForm(payload, ownedByApplicant)
+    const errors = _validateForm(payload, context.isBusiness)
 
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
         action: JSON.stringify(errors),
-        label: _getPageHeading(ownedByApplicant)
+        label: context.pageTitle
       })
 
       return h
-        .view(Views.CONTACT_DETAILS, {
-          pageTitle: _getPageHeading(ownedByApplicant),
-          ownerApplicant: ownedByApplicant === Options.YES,
+        .view(Views.CONTACT_DETAILS_OWNER, {
           ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
+    }
+
+    AnalyticsService.sendEvent(request, {
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${Analytics.Action.SELECTED} ${
+        context.isBusiness ? context.businessName : context.fullName
+      } ${payload.hasEmailAddress}${
+        payload.hasEmailAddress === Options.YES
+          ? ' - ' + payload.emailAddress
+          : ''
+      }`,
+      label: context.pageTitle
+    })
+
+    if (payload.hasEmailAddress !== Options.YES) {
+      delete payload.emailAddress
     }
 
     await RedisService.set(
@@ -64,25 +70,22 @@ const handlers = {
       JSON.stringify(payload)
     )
 
-    if (ownedByApplicant === Options.YES) {
-      await RedisService.set(
-        request,
-        RedisKeys.APPLICANT_CONTACT_DETAILS,
-        JSON.stringify(payload)
-      )
-    }
-
-    AnalyticsService.sendEvent(request, {
-      category: Analytics.Category.MAIN_QUESTIONS,
-      action: Analytics.Action.ENTERED,
-      label: _getPageHeading(ownedByApplicant)
-    })
-
     return h.redirect(Paths.OWNER_ADDRESS_FIND)
   }
 }
 
-const _getContext = async (request, ownedByApplicant) => {
+const _getContext = async request => {
+  let payload
+  if (request.payload) {
+    payload = request.payload
+  } else {
+    payload = JSON.parse(
+      await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)
+    )
+  }
+
+  const hasEmailAddress = payload ? payload.hasEmailAddress : null
+
   let contactDetails = await RedisService.get(
     request,
     RedisKeys.OWNER_CONTACT_DETAILS
@@ -92,140 +95,108 @@ const _getContext = async (request, ownedByApplicant) => {
     contactDetails = JSON.parse(contactDetails)
   }
 
+  const sellingOnBehalfOf = await RedisService.get(
+    request,
+    RedisKeys.SELLING_ON_BEHALF_OF
+  )
+
+  const isBusiness = [
+    BehalfOfBusinessOptions.ANOTHER_BUSINESS,
+    BehalfOfNotBusinessOptions.A_BUSINESS
+  ].includes(sellingOnBehalfOf)
+
+  const options = _getOptions(hasEmailAddress)
+  const yesOption = options.shift()
+
   const context = {
-    pageTitle: _getPageHeading(ownedByApplicant),
-    applicant: true,
-    ownedByApplicant: ownedByApplicant === Options.YES,
+    pageTitle: 'Owner’s contact details',
+    items: options,
+    yesOption,
+    isBusiness,
     ...contactDetails
   }
 
   return addPayloadToContext(request, context)
 }
 
-const _getPageHeading = ownedByApplicant => {
-  return ownedByApplicant === Options.YES
-    ? 'Your contact details'
-    : "Owner's contact details"
+const _getOptions = selectedOption => {
+  const options = Object.values(Options)
+    .slice(0, 2)
+    .map(option => {
+      return {
+        value: option,
+        text: option,
+        checked: selectedOption === option
+      }
+    })
+
+  return options
 }
 
-const _validateForm = (payload, ownedByApplicant) => {
-  return ownedByApplicant === Options.YES
-    ? _validateOwnerApplicant(payload)
-    : _validateApplicant(payload)
-}
-
-const _validateOwnerApplicant = payload => {
+const _validateForm = (payload, isBusiness) => {
   const errors = []
 
-  if (Validators.empty(payload.name)) {
+  if (isBusiness) {
+    if (Validators.empty(payload.businessName)) {
+      errors.push({
+        name: 'businessName',
+        text: 'Enter the owner’s business name'
+      })
+    } else if (
+      Validators.maxLength(payload.businessName, CharacterLimits.Input)
+    ) {
+      errors.push({
+        name: 'businessName',
+        text: `Business name must have fewer than ${formatNumberWithCommas(
+          CharacterLimits.Input
+        )} characters`
+      })
+    }
+  } else {
+    if (Validators.empty(payload.fullName)) {
+      errors.push({
+        name: 'fullName',
+        text: 'Enter the owner’s full name'
+      })
+    } else if (Validators.maxLength(payload.fullName, CharacterLimits.Input)) {
+      errors.push({
+        name: 'fullName',
+        text: `Full name must have fewer than ${formatNumberWithCommas(
+          CharacterLimits.Input
+        )} characters`
+      })
+    }
+  }
+
+  if (Validators.empty(payload.hasEmailAddress)) {
     errors.push({
-      name: 'name',
-      text: 'Enter your full name'
-    })
-  } else if (Validators.maxLength(payload.name, CharacterLimits.Input)) {
-    errors.push({
-      name: 'name',
-      text: `Name must have fewer than ${formatNumberWithCommas(
-        CharacterLimits.Input
-      )} characters`
+      name: 'hasEmailAddress',
+      text: 'Enter the owner’s email address or select ‘no’'
     })
   }
 
-  if (Validators.maxLength(payload.businessName, CharacterLimits.Input)) {
-    errors.push({
-      name: 'businessName',
-      text: `Business name must have fewer than ${formatNumberWithCommas(
-        CharacterLimits.Input
-      )} characters`
-    })
-  }
-
-  if (Validators.empty(payload.emailAddress)) {
-    errors.push({
-      name: 'emailAddress',
-      text: 'Enter your email address'
-    })
-  } else if (!Validators.email(payload.emailAddress)) {
-    errors.push({
-      name: 'emailAddress',
-      text:
-        'Enter an email address in the correct format, like name@example.com'
-    })
-  } else if (
-    Validators.maxLength(payload.emailAddress, CharacterLimits.Input)
-  ) {
-    errors.push({
-      name: 'emailAddress',
-      text: `Email address must have fewer than ${formatNumberWithCommas(
-        CharacterLimits.Input
-      )} characters`
-    })
-  }
-
-  if (Validators.empty(payload.confirmEmailAddress)) {
-    errors.push({
-      name: 'confirmEmailAddress',
-      text: 'You must confirm your email address'
-    })
-  } else if (payload.confirmEmailAddress !== payload.emailAddress) {
-    errors.push({
-      name: 'confirmEmailAddress',
-      text: 'This confirmation does not match your email address'
-    })
-  }
-
-  return errors
-}
-
-const _validateApplicant = payload => {
-  const errors = []
-
-  if (Validators.empty(payload.name)) {
-    errors.push({
-      name: 'name',
-      text: "Enter the owner's full name or business name"
-    })
-  } else if (Validators.maxLength(payload.name, CharacterLimits.Input)) {
-    errors.push({
-      name: 'name',
-      text: `Name must have fewer than ${formatNumberWithCommas(
-        CharacterLimits.Input
-      )} characters`
-    })
-  }
-
-  if (Validators.empty(payload.emailAddress)) {
-    errors.push({
-      name: 'emailAddress',
-      text: "Enter the owner's email address"
-    })
-  } else if (!Validators.email(payload.emailAddress)) {
-    errors.push({
-      name: 'emailAddress',
-      text:
-        'Enter an email address in the correct format, like name@example.com'
-    })
-  } else if (
-    Validators.maxLength(payload.emailAddress, CharacterLimits.Input)
-  ) {
-    errors.push({
-      name: 'emailAddress',
-      text: `Email address must have fewer than ${formatNumberWithCommas(
-        CharacterLimits.Input
-      )} characters`
-    })
-  }
-
-  if (Validators.empty(payload.confirmEmailAddress)) {
-    errors.push({
-      name: 'confirmEmailAddress',
-      text: "You must confirm the owner's email address"
-    })
-  } else if (payload.confirmEmailAddress !== payload.emailAddress) {
-    errors.push({
-      name: 'confirmEmailAddress',
-      text: "This confirmation does not match the owner's email address"
-    })
+  if (payload.hasEmailAddress === Options.YES) {
+    if (Validators.empty(payload.emailAddress)) {
+      errors.push({
+        name: 'emailAddress',
+        text: 'Enter the owner’s email address'
+      })
+    } else if (!Validators.email(payload.emailAddress)) {
+      errors.push({
+        name: 'emailAddress',
+        text:
+          'Enter an email address in the correct format, like name@example.com'
+      })
+    } else if (
+      Validators.maxLength(payload.emailAddress, CharacterLimits.Input)
+    ) {
+      errors.push({
+        name: 'emailAddress',
+        text: `Email address must have fewer than ${formatNumberWithCommas(
+          CharacterLimits.Input
+        )} characters`
+      })
+    }
   }
 
   return errors

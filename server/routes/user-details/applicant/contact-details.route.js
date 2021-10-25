@@ -18,9 +18,14 @@ const pageTitle = 'Your contact details'
 
 const handlers = {
   get: async (request, h) => {
-    const context = await _getContext(request)
+    const ownedByApplicant = await RedisService.get(
+      request,
+      RedisKeys.OWNED_BY_APPLICANT
+    )
 
-    return h.view(Views.CONTACT_DETAILS, {
+    const context = await _getContext(request, ownedByApplicant)
+
+    return h.view(Views.CONTACT_DETAILS_APPLICANT, {
       ...context
     })
   },
@@ -38,7 +43,7 @@ const handlers = {
       })
 
       return h
-        .view(Views.CONTACT_DETAILS, {
+        .view(Views.CONTACT_DETAILS_APPLICANT, {
           ...context,
           ...buildErrorSummary(errors)
         })

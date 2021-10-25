@@ -57,6 +57,19 @@ const AgeExemptionReasons = {
   OTHER_REASON: 'Other reason'
 }
 
+const BehalfOfBusinessOptions = {
+  BUSINESS_I_WORK_FOR: 'The business I work for',
+  AN_INDIVIDUAL: 'An individual',
+  ANOTHER_BUSINESS: 'Another business',
+  OTHER: 'Other'
+}
+
+const BehalfOfNotBusinessOptions = {
+  FRIEND_OR_RELATIVE: 'A friend or relative',
+  A_BUSINESS: 'A business',
+  OTHER: 'Other'
+}
+
 const DataVerseFieldName = {
   SECTION_2_CASE_ID: 'cre2c_ivorysection2caseid',
   SECTION_10_CASE_ID: 'cre2c_ivorysection10caseid',
@@ -235,7 +248,8 @@ const Views = {
   CANNOT_CONTINUE: 'eligibility-checker/cannot-continue',
   CANNOT_TRADE: 'eligibility-checker/cannot-trade',
   CHECK_YOUR_ANSWERS: 'check-your-answers',
-  CONTACT_DETAILS: 'user-details/contact-details',
+  CONTACT_DETAILS_APPLICANT: 'user-details/applicant/contact-details',
+  CONTACT_DETAILS_OWNER: 'user-details/owner/contact-details',
   CONTAIN_ELEPHANT_IVORY: 'eligibility-checker/contain-elephant-ivory',
   COOKIE_POLICY: 'cookie-policy',
   DESCRIBE_THE_ITEM: 'describe-the-item',
@@ -334,6 +348,8 @@ module.exports = Object.freeze({
   AddressType,
   AgeExemptionReasons,
   Analytics,
+  BehalfOfBusinessOptions,
+  BehalfOfNotBusinessOptions,
   CharacterLimits,
   DataVerseFieldName,
   DeclarationCapacities,

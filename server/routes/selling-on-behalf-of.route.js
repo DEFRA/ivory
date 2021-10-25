@@ -2,6 +2,10 @@
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+const {
+  BehalfOfBusinessOptions,
+  BehalfOfNotBusinessOptions
+} = require('../utils/constants')
 
 const {
   Options,
@@ -11,19 +15,6 @@ const {
   Analytics
 } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
-
-const BehalfOfBusinessOptions = {
-  BUSINESS_I_WORK_FOR: 'The business I work for',
-  AN_INDIVIDUAL: 'An individual',
-  ANOTHER_BUSINESS: 'Another business',
-  OTHER: 'Other'
-}
-
-const BehalfOfNotBusinessOptions = {
-  FRIEND_OR_RELATIVE: 'A friend or relative',
-  A_BUSINESS: 'A business',
-  OTHER: 'Other'
-}
 
 const handlers = {
   get: async (request, h) => {

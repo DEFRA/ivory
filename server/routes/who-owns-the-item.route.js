@@ -54,7 +54,7 @@ const handlers = {
     })
 
     return payload.doYouOwnTheItem === Options.YES
-      ? h.redirect(Paths.OWNER_CONTACT_DETAILS)
+      ? h.redirect(Paths.APPLICANT_CONTACT_DETAILS)
       : h.redirect(Paths.WORK_FOR_A_BUSINESS)
   }
 }
