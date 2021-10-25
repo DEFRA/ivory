@@ -100,9 +100,8 @@ this.formOnLoad = async (executionContext, section) => {
   if (isSection2) {
     this._setCertificateKey(formContext)
     await this._setCertificateLink(formContext);
+    this.certificateDetailsOnChange(executionContext);
   }
-
-  this.certificateDetailsOnChange(executionContext);
 }
 
 this.formOnSave = executionContext => {
