@@ -1,6 +1,6 @@
 'use strict'
 
-// const AnalyticsService = require('../services/analytics.service')
+const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
 
 const {
@@ -8,8 +8,8 @@ const {
   DeclarationCapacities,
   Paths,
   RedisKeys,
-  Views
-  // Analytics
+  Views,
+  Analytics
 } = require('../utils/constants')
 const { formatNumberWithCommas } = require('../utils/general')
 const { buildErrorSummary, Validators } = require('../utils/validation')
@@ -31,11 +31,11 @@ const handlers = {
     const errors = _validateForm(payload)
 
     if (errors.length) {
-      // AnalyticsService.sendEvent(request, {
-      //   category: Analytics.Category.ERROR,
-      //   action: JSON.stringify(errors),
-      //   label: context.pageTitle
-      // })
+      AnalyticsService.sendEvent(request, {
+        category: Analytics.Category.ERROR,
+        action: JSON.stringify(errors),
+        label: context.pageTitle
+      })
 
       return h
         .view(Views.WHAT_CAPACITY, {
@@ -45,20 +45,19 @@ const handlers = {
         .code(400)
     }
 
-    // if (payload.whatCapacity !== 'Other reason') {
-    //   delete payload.otherCapacity
-    //   AnalyticsService.sendEvent(request, {
-    //     category: Analytics.Category.MAIN_QUESTIONS,
-    //     action: `${Analytics.Action.SELECTED} ${payload.whatCapacity}`,
-    //     label: context.pageTitle
-    //   })
-    // } else {
-    //   AnalyticsService.sendEvent(request, {
-    //     category: Analytics.Category.MAIN_QUESTIONS,
-    //     action: `${Analytics.Action.SELECTED} ${payload.whatCapacity} - ${payload.otherCapacity}`,
-    //     label: context.pageTitle
-    //   })
-    // }
+    if (payload.whatCapacity !== otherCapacity) {
+      delete payload.otherCapacity
+    }
+
+    AnalyticsService.sendEvent(request, {
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${Analytics.Action.SELECTED} ${payload.whatCapacity}${
+        payload.whatCapacity === otherCapacity
+          ? ' - ' + payload.otherCapacity
+          : ''
+      }`,
+      label: context.pageTitle
+    })
 
     await RedisService.set(
       request,

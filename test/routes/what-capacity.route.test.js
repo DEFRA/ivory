@@ -135,13 +135,6 @@ describe('/what-capacity route', () => {
     })
 
     describe('Success', () => {
-      beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockResolvedValueOnce(JSON.stringify({}))
-          .mockResolvedValueOnce(ItemType.MINIATURE)
-      })
-
       it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
         await _checkSelectedRadioAction(
           postOptions,
@@ -182,10 +175,6 @@ describe('/what-capacity route', () => {
     })
 
     describe('Failure', () => {
-      beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify({}))
-      })
-
       it('should display a validation error message if the user does not select an item', async () => {
         postOptions.payload.whatCapacity = ''
         const response = await TestHelper.submitPostRequest(
