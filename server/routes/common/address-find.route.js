@@ -6,6 +6,8 @@ const RedisService = require('../../services/redis.service')
 
 const {
   AddressType,
+  BehalfOfBusinessOptions,
+  BehalfOfNotBusinessOptions,
   CharacterLimits,
   Paths,
   RedisKeys,
@@ -23,7 +25,8 @@ const getAddressType = request =>
 
 const handlers = {
   get: async (request, h) => {
-    const context = await _getContext(request)
+    const addressType = getAddressType(request)
+    const context = await _getContext(request, addressType)
 
     return h.view(Views.ADDRESS_FIND, {
       ...context
@@ -32,7 +35,7 @@ const handlers = {
 
   post: async (request, h) => {
     const addressType = getAddressType(request)
-    const context = await _getContext(request)
+    const context = await _getContext(request, addressType)
     const payload = request.payload
     const errors = _validateForm(payload)
 
@@ -110,15 +113,35 @@ const handlers = {
   }
 }
 
-const _getContext = async request => {
-  const workForABusiness =
-    (await RedisService.get(request, RedisKeys.WORK_FOR_A_BUSINESS)) ===
-    Options.YES
+const _getContext = async (request, addressType) => {
+  let pageTitle
 
-  return {
-    pageTitle: workForABusiness
+  if (addressType === AddressType.APPLICANT) {
+    const workForABusiness =
+      (await RedisService.get(request, RedisKeys.WORK_FOR_A_BUSINESS)) ===
+      Options.YES
+
+    pageTitle = workForABusiness
       ? "What's the address of the business you work for?"
       : 'What is your address?'
+  } else {
+    const sellingOnBehalfOf = await RedisService.get(
+      request,
+      RedisKeys.SELLING_ON_BEHALF_OF
+    )
+
+    const isBusiness = [
+      BehalfOfBusinessOptions.ANOTHER_BUSINESS,
+      BehalfOfNotBusinessOptions.A_BUSINESS
+    ].includes(sellingOnBehalfOf)
+
+    pageTitle = isBusiness
+      ? 'What’s the address of the business that owns the item?'
+      : 'What is the owner’s address?'
+  }
+
+  return {
+    pageTitle
   }
 }
 

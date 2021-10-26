@@ -5,6 +5,8 @@ const RedisService = require('../../services/redis.service')
 
 const {
   AddressType,
+  BehalfOfBusinessOptions,
+  BehalfOfNotBusinessOptions,
   CharacterLimits,
   Options,
   Paths,
@@ -15,10 +17,7 @@ const {
 const { formatNumberWithCommas } = require('../../utils/general')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
-const {
-  addPayloadToContext,
-  convertToCommaSeparatedTitleCase
-} = require('../../utils/general')
+const { convertToCommaSeparatedTitleCase } = require('../../utils/general')
 
 const getAddressType = request =>
   request.route.path === Paths.OWNER_ADDRESS_INTERNATIONAL
@@ -55,6 +54,7 @@ const handlers = {
         })
         .code(400)
     }
+
     const ownedByApplicant = await RedisService.get(
       request,
       RedisKeys.OWNED_BY_APPLICANT
@@ -87,13 +87,10 @@ const handlers = {
     }
 
     let route
-    if (addressType === AddressType.OWNER) {
-      route =
-        ownedByApplicant === Options.YES
-          ? Paths.INTENTION_FOR_ITEM
-          : Paths.APPLICANT_CONTACT_DETAILS
-    } else {
+    if (addressType === AddressType.APPLICANT) {
       route = Paths.INTENTION_FOR_ITEM
+    } else {
+      route = Paths.APPLICANT_CONTACT_DETAILS
     }
 
     return h.redirect(route)
@@ -101,44 +98,34 @@ const handlers = {
 }
 
 const _getContext = async (request, addressType) => {
-  let context
+  let pageTitle
 
-  const ownedByApplicant = await RedisService.get(
-    request,
-    RedisKeys.OWNED_BY_APPLICANT
-  )
+  if (addressType === AddressType.APPLICANT) {
+    const workForABusiness =
+      (await RedisService.get(request, RedisKeys.WORK_FOR_A_BUSINESS)) ===
+      Options.YES
 
-  if (addressType === AddressType.OWNER) {
-    context = _getContextForOwnerAddressType(ownedByApplicant)
+    pageTitle = workForABusiness
+      ? 'Enter the address of the business'
+      : 'Enter your address'
   } else {
-    context = _getContextForApplicantAddressType()
+    const sellingOnBehalfOf = await RedisService.get(
+      request,
+      RedisKeys.SELLING_ON_BEHALF_OF
+    )
+
+    const isBusiness = [
+      BehalfOfBusinessOptions.ANOTHER_BUSINESS,
+      BehalfOfNotBusinessOptions.A_BUSINESS
+    ].includes(sellingOnBehalfOf)
+
+    pageTitle = isBusiness
+      ? 'Enter the address of the business'
+      : 'Enter the owner’s address'
   }
 
-  addPayloadToContext(request, context)
-
-  return context
-}
-
-// TODO
-// 'Enter the address of the business'
-
-const _getContextForOwnerAddressType = ownedByApplicant => {
-  let context
-  if (ownedByApplicant === Options.YES) {
-    context = {
-      pageTitle: 'Enter your address'
-    }
-  } else {
-    context = {
-      pageTitle: "Enter the owner's address"
-    }
-  }
-  return context
-}
-
-const _getContextForApplicantAddressType = () => {
   return {
-    pageTitle: 'Enter your address'
+    pageTitle
   }
 }
 

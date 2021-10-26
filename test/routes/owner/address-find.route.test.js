@@ -55,9 +55,9 @@ describe('/user-details/owner/address-find route', () => {
       url
     }
 
-    describe('Not working for a business', () => {
+    describe('Owner is not a business', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('No')
+        RedisService.get = jest.fn().mockResolvedValue('An individual')
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -76,7 +76,7 @@ describe('/user-details/owner/address-find route', () => {
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'What is your address?'
+          'What is the owner’s address?'
         )
       })
 
@@ -109,9 +109,9 @@ describe('/user-details/owner/address-find route', () => {
       })
     })
 
-    describe('Working for a business', () => {
+    describe('Owner is a business', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('Yes')
+        RedisService.get = jest.fn().mockResolvedValue('A business')
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -122,7 +122,7 @@ describe('/user-details/owner/address-find route', () => {
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          "What's the address of the business you work for?"
+          'What’s the address of the business that owns the item?'
         )
       })
     })
