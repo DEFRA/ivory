@@ -14,7 +14,6 @@ const {
   Analytics
 } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
-const { addPayloadToContext } = require('../../utils/general')
 const { formatNumberWithCommas } = require('../../utils/general')
 
 const getAddressType = request =>
@@ -24,16 +23,7 @@ const getAddressType = request =>
 
 const handlers = {
   get: async (request, h) => {
-    const ownedByApplicant = await RedisService.get(
-      request,
-      RedisKeys.OWNED_BY_APPLICANT
-    )
-
-    const context = await _getContext(
-      request,
-      getAddressType(request),
-      ownedByApplicant
-    )
+    const context = await _getContext(request)
 
     return h.view(Views.ADDRESS_FIND, {
       ...context
@@ -41,15 +31,10 @@ const handlers = {
   },
 
   post: async (request, h) => {
-    const ownedByApplicant = await RedisService.get(
-      request,
-      RedisKeys.OWNED_BY_APPLICANT
-    )
-
     const addressType = getAddressType(request)
-    const context = await _getContext(request, addressType, ownedByApplicant)
+    const context = await _getContext(request)
     const payload = request.payload
-    const errors = _validateForm(payload, addressType, ownedByApplicant)
+    const errors = _validateForm(payload)
 
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
@@ -125,45 +110,19 @@ const handlers = {
   }
 }
 
-const _getContext = async (request, addressType, ownedByApplicant) => {
-  let context
+const _getContext = async request => {
+  const workForABusiness =
+    (await RedisService.get(request, RedisKeys.WORK_FOR_A_BUSINESS)) ===
+    Options.YES
 
-  if (addressType === AddressType.OWNER) {
-    context = _getContextForOwnerAddressType(ownedByApplicant)
-  } else {
-    context = _getContextForApplicantAddressType()
-  }
-
-  addPayloadToContext(request, context)
-
-  return context
-}
-
-const _getContextForOwnerAddressType = ownedByApplicant => {
-  let context
-  if (ownedByApplicant === Options.YES) {
-    context = {
-      pageTitle: 'What is your address?',
-      helpText:
-        'If your business is the legal owner of the item, give your business address.'
-    }
-  } else {
-    context = {
-      pageTitle: 'What is the owner’s address?'
-    }
-  }
-  return context
-}
-
-const _getContextForApplicantAddressType = () => {
   return {
-    pageTitle: 'What is your address?',
-    helpText:
-      'If your business is helping someone else sell their item, give your business address.'
+    pageTitle: workForABusiness
+      ? "What's the address of the business you work for?"
+      : 'What is your address?'
   }
 }
 
-const _validateForm = (payload, addressType, ownedByApplicant) => {
+const _validateForm = payload => {
   const errors = []
 
   if (Validators.maxLength(payload.nameOrNumber, CharacterLimits.Input)) {
@@ -176,18 +135,9 @@ const _validateForm = (payload, addressType, ownedByApplicant) => {
   }
 
   if (Validators.empty(payload.postcode)) {
-    let errorMessage
-    if (addressType === AddressType.OWNER) {
-      errorMessage =
-        ownedByApplicant === Options.YES
-          ? 'Enter your postcode'
-          : "Enter the owner's postcode"
-    } else {
-      errorMessage = 'Enter your postcode'
-    }
     errors.push({
       name: 'postcode',
-      text: errorMessage
+      text: 'Enter your postcode'
     })
   }
 
