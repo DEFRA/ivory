@@ -56,6 +56,8 @@ const schema = joi.object().keys({
   googleAnalyticsId: joi.string().default('UA-YYYYYY-YY'),
   clamscanBinaries: joi.string().default('/usr/bin/'),
   clamscanPreference: joi.string().default('clamdscan'),
+  clamscanDebug: joi.bool(),
+  disableAntimalware: joi.bool(),
   useBasicAuth: joi.bool().valid(true, false)
 })
 
@@ -98,6 +100,8 @@ const config = {
   googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
   clamscanBinaries: process.env.CLAMSCAN_BINARIES,
   clamscanPreference: process.env.CLAMSCAN_PREFERENCE,
+  clamscanDebug: process.env.CLAMSCAN_DEBUG,
+  disableAntimalware: process.env.DISABLE_ANTIMALWARE,
   useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH || false)
 }
 
