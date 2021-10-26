@@ -149,9 +149,7 @@ const _getContextForOwnerAddressType = ownedByApplicant => {
     }
   } else {
     context = {
-      pageTitle: 'What is the owner’s address?',
-      helpText:
-        'If the legal owner of the item is a business, give the business address.'
+      pageTitle: 'What is the owner’s address?'
     }
   }
   return context

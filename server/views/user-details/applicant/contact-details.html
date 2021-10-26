@@ -7,26 +7,23 @@
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
+      CD4
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
-
-      {% if ownerApplicant %}
-
-        applicant: ownerApplicant
 
         {{ govukInput({
           label: {
             classes: "govuk-label govuk-label--s",
             text: "Full name"
           },
-          id: "name",
-          name: "name",
-          value: name,
+          id: "fullName",
+          name: "fullName",
+          value: fullName,
           autocomplete: "name",
           spellcheck: false,
-          errorMessage: fieldErrors['name']
+          errorMessage: fieldErrors['fullName']
         }) }}
 
-        {% if ownerApplicant %}
+        {% if workForABusiness %}
           {{ govukInput({
             label: {
               classes: "govuk-label govuk-label--s",
@@ -40,80 +37,41 @@
           }) }}
         {% endif %}
 
-      {% elif applicant %}
-
-        applicant: applicant
+        {{ govukInput({
+          label: {
+            classes: "govuk-label govuk-label--s",
+            text: "Email address"
+          },
+          id: "emailAddress",
+          name: "emailAddress",
+          type: "email",
+          value: emailAddress,
+          autocomplete: "email",
+          spellcheck: false,
+          errorMessage: fieldErrors['emailAddress']
+        }) }}
 
         {{ govukInput({
           label: {
             classes: "govuk-label govuk-label--s",
-            text: "Full name"
+            text: "Confirm email address"
           },
-          id: "name",
-          name: "name",
-          value: name,
-          autocomplete: "name",
+          id: "confirmEmailAddress",
+          name: "confirmEmailAddress",
+          type: "email",
+          value: confirmEmailAddress,
+          autocomplete: "email",
           spellcheck: false,
-          errorMessage: fieldErrors['name']
+          errorMessage: fieldErrors['confirmEmailAddress']
         }) }}
 
-      {% else %}
-
-        applicant: else
-
-        <p id="why-required">We need these because the owner is legally responsible for all the information you provide.</p>
-
-        <p id="business-text">If the owner is a business, give the business details.</p>
-
-        {{ govukInput({
-          label: {
-            classes: "govuk-label govuk-label--s",
-            text: "Full name or business name"
-          },
-          id: "name",
-          name: "name",
-          value: name,
-          spellcheck: false,
-          errorMessage: fieldErrors['name']
-        }) }}
-
-      {% endif %}
-
-      {{ govukInput({
-        label: {
-          classes: "govuk-label govuk-label--s",
-          text: "Email address"
-        },
-        id: "emailAddress",
-        name: "emailAddress",
-        type: "email",
-        value: emailAddress,
-        autocomplete: "email",
-        spellcheck: false,
-        errorMessage: fieldErrors['emailAddress']
-      }) }}
-
-      {{ govukInput({
-        label: {
-          classes: "govuk-label govuk-label--s",
-          text: "Confirm email address"
-        },
-        id: "confirmEmailAddress",
-        name: "confirmEmailAddress",
-        type: "email",
-        value: confirmEmailAddress,
-        autocomplete: "email",
-        spellcheck: false,
-        errorMessage: fieldErrors['confirmEmailAddress']
-      }) }}
-
-      {{ govukButton({
-          attributes: {
-            id: "continue"
-          },
-          text: "Continue"
-        })
-      }}
+        {{ govukButton({
+            attributes: {
+              id: "continue"
+            },
+            text: "Continue"
+          })
+        }}
     </div>
   </div>
 {% endblock %}

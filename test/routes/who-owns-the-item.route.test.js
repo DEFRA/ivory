@@ -4,11 +4,12 @@ const TestHelper = require('../utils/test-helper')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
+const { RedisKeys } = require('../../server/utils/constants')
 
 describe('/who-owns-the-item route', () => {
   let server
   const url = '/who-owns-the-item'
-  const nextUrlYourDetails = '/user-details/owner/contact-details'
+  const nextUrlYourDetails = '/user-details/applicant/contact-details'
   const nextUrlWorkForABusiness = '/work-for-a-business'
 
   const elementIds = {
@@ -151,12 +152,27 @@ const _checkSelectedRadioAction = async (
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
-  expect(RedisService.set).toBeCalledTimes(1)
-  expect(RedisService.set).toBeCalledWith(
-    expect.any(Object),
-    redisKey,
-    selectedOption === 'Yes' ? 'Yes' : 'No'
-  )
+  if (selectedOption === 'Yes') {
+    expect(RedisService.set).toBeCalledTimes(2)
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      redisKey,
+      selectedOption === 'Yes' ? 'Yes' : 'No'
+    )
+
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      RedisKeys.WORK_FOR_A_BUSINESS,
+      null
+    )
+  } else {
+    expect(RedisService.set).toBeCalledTimes(1)
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      redisKey,
+      selectedOption === 'Yes' ? 'Yes' : 'No'
+    )
+  }
 
   expect(response.headers.location).toEqual(nextUrl)
 }

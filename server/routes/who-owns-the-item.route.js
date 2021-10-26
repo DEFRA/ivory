@@ -47,6 +47,10 @@ const handlers = {
       payload.doYouOwnTheItem
     )
 
+    if (payload.doYouOwnTheItem === Options.YES) {
+      await RedisService.set(request, RedisKeys.WORK_FOR_A_BUSINESS, null)
+    }
+
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: `${Analytics.Action.SELECTED} ${payload.doYouOwnTheItem}`,

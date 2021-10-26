@@ -19,7 +19,6 @@ describe('/user-details/owner/address-find route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    helpText: 'helpText',
     nameOrNumber: 'nameOrNumber',
     postcode: 'postcode',
     findAddress: 'findAddress',
@@ -77,14 +76,6 @@ describe('/user-details/owner/address-find route', () => {
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'What is your address?'
-      )
-    })
-
-    it('should have the correct help text', () => {
-      const element = document.querySelector(`#${elementIds.helpText}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'If your business is the legal owner of the item, give your business address.'
       )
     })
 
