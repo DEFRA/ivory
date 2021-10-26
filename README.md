@@ -28,6 +28,10 @@ The default values will be used if the environment variables are missing or comm
 | ADDRESS_LOOKUP_PASSPHRASE  | Address lookup passphrase  |    no    |                 |                                    |       |
 | ADDRESS_LOOKUP_PFX_CERT    | Address lookup certificate |    no    |                 | PFX file location or Base64 string |       |
 | GOOGLE_ANALYTICS_ID        | GA Tracking ID             |    no    | UA-YYYYYY-YY    |   A Google Analytics Tracking ID   |       |
+| CLAMSCAN_BINARIES          | Location of the binary     |    no    | /usr/bin/       |                                    |       |
+| CLAMSCAN_PREFERENCE        | Prefered scanning method   |    no    | clamdscan       |         clamdscan, clamscan        |       |
+| CLAMSCAN_DEBUG             | log msgs to the console    |    no    | false           |             true,false             |       |
+| DISABLE_ANTIMALWARE        | Disables the anti-malware  |    no    | false           |             true,false             |       |
 
 # Prerequisites
 
