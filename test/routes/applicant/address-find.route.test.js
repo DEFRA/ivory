@@ -19,7 +19,6 @@ describe('/user-details/applicant/address-find route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    helpText: 'helpText',
     nameOrNumber: 'nameOrNumber',
     postcode: 'postcode',
     findAddress: 'findAddress',
@@ -56,70 +55,81 @@ describe('/user-details/applicant/address-find route', () => {
       url
     }
 
-    beforeEach(async () => {
-      RedisService.get = jest.fn().mockResolvedValue('Yes')
+    describe('Not working for a business', () => {
+      beforeEach(async () => {
+        RedisService.get = jest.fn().mockResolvedValue('No')
 
-      document = await TestHelper.submitGetRequest(server, getOptions)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the Beta banner', () => {
+        TestHelper.checkBetaBanner(document)
+      })
+
+      it('should have the Back link', () => {
+        TestHelper.checkBackLink(document)
+      })
+
+      it('should have the correct page heading', () => {
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'What is your address?'
+        )
+      })
+
+      it('should have the "Name or Number" form field', () => {
+        TestHelper.checkFormField(
+          document,
+          elementIds.nameOrNumber,
+          'Property name or number',
+          'For example, The Mill, Flat A or 37b'
+        )
+      })
+
+      it('should have the "Postcode" form field', () => {
+        TestHelper.checkFormField(document, elementIds.postcode, 'Postcode')
+      })
+
+      it('should have the correct Call to Action button', () => {
+        const element = document.querySelector(`#${elementIds.findAddress}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Find address')
+      })
+
+      it('should have the correct "Outside UK" link', () => {
+        const element = document.querySelector(`#${elementIds.outsideUkLink}`)
+        TestHelper.checkLink(
+          element,
+          'The address is outside the UK',
+          'address-international'
+        )
+      })
     })
 
-    it('should have the Beta banner', () => {
-      TestHelper.checkBetaBanner(document)
-    })
+    describe('Working for a business', () => {
+      beforeEach(async () => {
+        RedisService.get = jest.fn().mockResolvedValue('Yes')
 
-    it('should have the Back link', () => {
-      TestHelper.checkBackLink(document)
-    })
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
 
-    it('should have the correct page heading', () => {
-      const element = document.querySelector(
-        `#${elementIds.pageTitle} > legend > h1`
-      )
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'What is your address?'
-      )
-    })
-
-    it('should have the correct help text', () => {
-      const element = document.querySelector(`#${elementIds.helpText}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'If your business is helping someone else sell their item, give your business address.'
-      )
-    })
-
-    it('should have the "Name or Number" form field', () => {
-      TestHelper.checkFormField(
-        document,
-        elementIds.nameOrNumber,
-        'Property name or number',
-        'For example, The Mill, Flat A or 37b'
-      )
-    })
-
-    it('should have the "Postcode" form field', () => {
-      TestHelper.checkFormField(document, elementIds.postcode, 'Postcode')
-    })
-
-    it('should have the correct Call to Action button', () => {
-      const element = document.querySelector(`#${elementIds.findAddress}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Find address')
-    })
-
-    it('should have the correct "Outside UK" link', () => {
-      const element = document.querySelector(`#${elementIds.outsideUkLink}`)
-      TestHelper.checkLink(
-        element,
-        'The address is outside the UK',
-        'address-international'
-      )
+      it('should have the correct page heading', () => {
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          "What's the address of the business you work for?"
+        )
+      })
     })
   })
 
   describe('POST', () => {
     let postOptions
-    const nameOrNumber = '123'
 
     beforeEach(() => {
       postOptions = {
@@ -137,32 +147,19 @@ describe('/user-details/applicant/address-find route', () => {
       it('should store the query terms and address array in Redis and progress to the next route when a single address is returned by the search', async () => {
         AddressService.addressSearch = jest.fn().mockReturnValue(singleAddress)
 
-        const postcode = 'SW1A 1AA'
         postOptions.payload = {
-          nameOrNumber,
-          postcode
+          postcode: 'SW1A 1AA'
         }
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
           302
         )
-
         expect(RedisService.set).toBeCalledTimes(3)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeys.Results,
           JSON.stringify(singleAddress)
-        )
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKeys.NameOrNumber,
-          nameOrNumber
-        )
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKeys.Postcode,
-          postcode
         )
 
         expect(response.headers.location).toEqual(nextUrlSingleAddress)
@@ -173,32 +170,19 @@ describe('/user-details/applicant/address-find route', () => {
           .fn()
           .mockReturnValue(multipleAddresses)
 
-        const postcode = 'CF10 4GA'
         postOptions.payload = {
-          nameOrNumber,
-          postcode
+          postcode: 'CF10 4GA'
         }
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
           302
         )
-
         expect(RedisService.set).toBeCalledTimes(3)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeys.Results,
           JSON.stringify(multipleAddresses)
-        )
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKeys.NameOrNumber,
-          nameOrNumber
-        )
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKeys.Postcode,
-          postcode
         )
 
         expect(response.headers.location).toEqual(nextUrlMultipleAddresses)
@@ -207,32 +191,19 @@ describe('/user-details/applicant/address-find route', () => {
       it('should store an empty query terms and address array in Redis and progress to the next route when no addresses are returned by the search', async () => {
         AddressService.addressSearch = jest.fn().mockReturnValue([])
 
-        const postcode = 'CF10 4GA'
         postOptions.payload = {
-          nameOrNumber,
-          postcode
+          postcode: 'CF10 4GA'
         }
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
           302
         )
-
         expect(RedisService.set).toBeCalledTimes(3)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeys.Results,
           JSON.stringify([])
-        )
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKeys.NameOrNumber,
-          nameOrNumber
-        )
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKeys.Postcode,
-          postcode
         )
 
         expect(response.headers.location).toEqual(nextUrlEnterAddress)
@@ -247,32 +218,19 @@ describe('/user-details/applicant/address-find route', () => {
 
         AddressService.addressSearch = jest.fn().mockReturnValue(addresses)
 
-        const postcode = 'CF10 4GA'
         postOptions.payload = {
-          nameOrNumber,
-          postcode
+          postcode: 'CF10 4GA'
         }
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
           302
         )
-
         expect(RedisService.set).toBeCalledTimes(3)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeys.Results,
           JSON.stringify(addresses)
-        )
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKeys.NameOrNumber,
-          nameOrNumber
-        )
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKeys.Postcode,
-          postcode
         )
 
         expect(response.headers.location).toEqual(nextUrlEnterAddress)
@@ -280,6 +238,10 @@ describe('/user-details/applicant/address-find route', () => {
     })
 
     describe('Failure', () => {
+      beforeEach(() => {
+        RedisService.get = jest.fn().mockResolvedValue('Yes')
+      })
+
       it('should display a validation error message if the user does not enter the postcode', async () => {
         postOptions.payload = {
           postcode: ''
