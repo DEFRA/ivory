@@ -57,11 +57,6 @@ const handlers = {
         .code(400)
     }
 
-    const ownedByApplicant = await RedisService.get(
-      request,
-      RedisKeys.OWNED_BY_APPLICANT
-    )
-
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.ENTERED,
@@ -79,14 +74,17 @@ const handlers = {
       address
     )
 
-    if (ownedByApplicant === Options.YES) {
-      await RedisService.set(request, RedisKeys.APPLICANT_ADDRESS, address)
+    if (
+      addressType === AddressType.APPLICANT_ADDRESS &&
+      context.ownedByApplicant
+    ) {
+      await RedisService.set(request, RedisKeys.OWNER_ADDRESS, address)
     }
 
     let route
     if (addressType === AddressType.OWNER) {
       route =
-        ownedByApplicant === Options.YES
+        context.ownedByApplicant === Options.YES
           ? Paths.INTENTION_FOR_ITEM
           : Paths.APPLICANT_CONTACT_DETAILS
     } else {
@@ -100,16 +98,17 @@ const handlers = {
 const _getContext = async (request, addressType, isGet = true) => {
   const context = {}
 
-  const ownedByApplicant = await RedisService.get(
-    request,
-    RedisKeys.OWNED_BY_APPLICANT
-  )
+  const ownedByApplicant =
+    (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
+    Options.YES
 
   const addresses = JSON.parse(
     await RedisService.get(request, RedisKeys.ADDRESS_FIND_RESULTS)
   )
 
   const resultSize = addresses.length
+
+  context.ownedByApplicant = ownedByApplicant
 
   if (resultSize === 0) {
     context.pageTitle = 'No results, you will need to enter the address'
@@ -126,7 +125,7 @@ const _getContext = async (request, addressType, isGet = true) => {
   }
 
   if (!ownedByApplicant) {
-    if (addressType !== AddressType.OWNER) {
+    if (addressType === AddressType.OWNER) {
       context.helpText =
         'If the owner is a business, give the business address.'
     } else {

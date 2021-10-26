@@ -24,9 +24,7 @@ const elementIds = {
 describe('/user-details/owner/address-enter route', () => {
   let server
   const url = '/user-details/owner/address-enter'
-  const nextUrlApplicantContactDetails =
-    '/user-details/applicant/contact-details'
-  const nextUrlIntentionForItem = '/intention-for-item'
+  const nextUrl = '/user-details/applicant/contact-details'
 
   let document
 
@@ -46,7 +44,7 @@ describe('/user-details/owner/address-enter route', () => {
     jest.clearAllMocks()
   })
 
-  describe('GET: Enter or Edit address', () => {
+  describe('GET', () => {
     const getOptions = {
       method: 'GET',
       url
@@ -69,6 +67,15 @@ describe('/user-details/owner/address-enter route', () => {
         TestHelper.checkBackLink(document)
       })
 
+      it('should have the correct form fields', () => {
+        _checkFormFields(document, {
+          addressLine1: 'Buckingham Palace',
+          addressLine2: 'Westminster',
+          townOrCity: 'London',
+          postcode: 'SW1A 1AA'
+        })
+      })
+
       it('should have the correct Call to Action button', () => {
         const element = document.querySelector(`#${elementIds.continue}`)
         expect(element).toBeTruthy()
@@ -76,170 +83,40 @@ describe('/user-details/owner/address-enter route', () => {
       })
     })
 
-    describe('GET: No address mode', () => {
-      describe('Owned by applicant', () => {
-        beforeEach(async () => {
-          RedisService.get = jest
-            .fn()
-            .mockResolvedValueOnce('Yes')
-            .mockResolvedValueOnce(JSON.stringify([]))
-
-          document = await TestHelper.submitGetRequest(server, getOptions)
-        })
-
-        it('should have the correct page heading for no addresses returned', () => {
-          const element = document.querySelector(
-            `#${elementIds.pageTitle} > legend > h1`
-          )
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'No results, you will need to enter the address'
-          )
-        })
-
-        it('should have the correct help text for no addresses returned', () => {
-          const element = document.querySelector(`#${elementIds.helpText}`)
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'If your business owns the item, give your business address.'
-          )
-        })
-
-        it('should have the correct form fields that are NOT be pre-populated with test data', () => {
-          _checkFormFields(document, {
-            addressLine1: '',
-            addressLine2: '',
-            townOrCity: '',
-            postcode: ''
-          })
-        })
-      })
-
-      describe('Not owned by applicant', () => {
+    describe('GET: Page modes', () => {
+      describe('Page mode: "edit address"', () => {
         beforeEach(async () => {
           RedisService.get = jest
             .fn()
             .mockResolvedValueOnce('No')
-            .mockResolvedValueOnce(JSON.stringify([]))
+            .mockResolvedValue(JSON.stringify(singleAddress))
 
           document = await TestHelper.submitGetRequest(server, getOptions)
         })
 
-        it('should have the correct page heading for no addresses returned', () => {
-          const element = document.querySelector(
-            `#${elementIds.pageTitle} > legend > h1`
-          )
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'No results, you will need to enter the address'
-          )
-        })
-
-        it('should have the correct help text for no addresses returned', () => {
-          const element = document.querySelector(`#${elementIds.helpText}`)
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'If the owner is a business, give the business address.'
-          )
-        })
-
-        it('should have the correct form fields that are NOT be pre-populated with test data', () => {
-          _checkFormFields(document, {
-            addressLine1: '',
-            addressLine2: '',
-            townOrCity: '',
-            postcode: ''
-          })
-        })
-      })
-    })
-
-    describe('GET: Single address mode', () => {
-      describe('Owned by applicant', () => {
-        beforeEach(async () => {
-          RedisService.get = jest
-            .fn()
-            .mockResolvedValueOnce('Yes')
-            .mockResolvedValueOnce(JSON.stringify(singleAddress))
-
+        it('should have the correct page heading', async () => {
           document = await TestHelper.submitGetRequest(server, getOptions)
-        })
 
-        it('should have the correct page heading for 1 address returned', () => {
           const element = document.querySelector(
             `#${elementIds.pageTitle} > legend > h1`
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual('Edit the address')
         })
-
-        it('should have the correct help text for 1 address returned', () => {
-          const element = document.querySelector(`#${elementIds.helpText}`)
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'If your business owns the item, give your business address.'
-          )
-        })
-
-        it('should have the correct form fields that are NOT be pre-populated with test data', () => {
-          _checkFormFields(document, {
-            addressLine1: 'Buckingham Palace',
-            addressLine2: 'Westminster',
-            townOrCity: 'London',
-            postcode: 'SW1A 1AA'
-          })
-        })
       })
 
-      describe('Not owned by applicant', () => {
+      describe('Page mode: "address not on the list', () => {
         beforeEach(async () => {
           RedisService.get = jest
             .fn()
             .mockResolvedValueOnce('No')
-            .mockResolvedValueOnce(JSON.stringify(singleAddress))
-
-          document = await TestHelper.submitGetRequest(server, getOptions)
-        })
-
-        it('should have the correct page heading for 1 address returned', () => {
-          const element = document.querySelector(
-            `#${elementIds.pageTitle} > legend > h1`
-          )
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual('Edit the address')
-        })
-
-        it('should have the correct help text for 1 address returned', () => {
-          const element = document.querySelector(`#${elementIds.helpText}`)
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'If the owner is a business, give the business address.'
-          )
-        })
-
-        it('should have the correct form fields that are NOT be pre-populated with test data', () => {
-          _checkFormFields(document, {
-            addressLine1: 'Buckingham Palace',
-            addressLine2: 'Westminster',
-            townOrCity: 'London',
-            postcode: 'SW1A 1AA'
-          })
-        })
-      })
-    })
-
-    describe('GET: Multiple address mode', () => {
-      describe('Owned by applicant', () => {
-        beforeEach(async () => {
-          RedisService.get = jest
-            .fn()
-            .mockResolvedValueOnce('Yes')
             .mockResolvedValueOnce(JSON.stringify(multipleAddresses))
 
+          console.log(multipleAddresses.length)
           document = await TestHelper.submitGetRequest(server, getOptions)
         })
 
-        it('should have the correct page heading for multiple addresses returned', () => {
+        it('should have the correct page heading', async () => {
           const element = document.querySelector(
             `#${elementIds.pageTitle} > legend > h1`
           )
@@ -248,113 +125,17 @@ describe('/user-details/owner/address-enter route', () => {
             'Enter the address'
           )
         })
-
-        it('should have the correct help text for multiple addresses returned', () => {
-          const element = document.querySelector(`#${elementIds.helpText}`)
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'If your business owns the item, give your business address.'
-          )
-        })
-
-        it('should have the correct form fields that are NOT be pre-populated with test data', () => {
-          _checkFormFields(document, {
-            addressLine1: '',
-            addressLine2: '',
-            townOrCity: '',
-            postcode: ''
-          })
-        })
       })
 
-      describe('Not owned by applicant', () => {
+      describe('Page mode: "too many results', () => {
+        const maxAddressCount = 51
+        const addresses = []
+
         beforeEach(async () => {
-          RedisService.get = jest
-            .fn()
-            .mockResolvedValueOnce('No')
-            .mockResolvedValueOnce(JSON.stringify(multipleAddresses))
+          for (let i = 0; i < maxAddressCount; i++) {
+            addresses.push(singleAddress)
+          }
 
-          document = await TestHelper.submitGetRequest(server, getOptions)
-        })
-
-        it('should have the correct page heading for multiple addresses returned', () => {
-          const element = document.querySelector(
-            `#${elementIds.pageTitle} > legend > h1`
-          )
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'Enter the address'
-          )
-        })
-
-        it('should have the correct help text for multiple addresses returned', () => {
-          const element = document.querySelector(`#${elementIds.helpText}`)
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'If the owner is a business, give the business address.'
-          )
-        })
-
-        it('should have the correct form fields that are NOT be pre-populated with test data', () => {
-          _checkFormFields(document, {
-            addressLine1: '',
-            addressLine2: '',
-            townOrCity: '',
-            postcode: ''
-          })
-        })
-      })
-    })
-
-    describe('GET: Too many addresses mode', () => {
-      const maxAddressCount = 51
-      const addresses = []
-      beforeEach(async () => {
-        for (let i = 0; i < maxAddressCount; i++) {
-          addresses.push(singleAddress)
-        }
-      })
-
-      describe('Owned by applicant', () => {
-        beforeEach(async () => {
-          RedisService.get = jest
-            .fn()
-            .mockResolvedValueOnce('Yes')
-            .mockResolvedValueOnce(JSON.stringify(addresses))
-
-          document = await TestHelper.submitGetRequest(server, getOptions)
-        })
-
-        it('should have the correct page heading for too many addresses returned', () => {
-          const element = document.querySelector(
-            `#${elementIds.pageTitle} > legend > h1`
-          )
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'Too many results, you will need to enter the address'
-          )
-        })
-
-        it('should have the correct help text for too many addresses returned', () => {
-          const element = document.querySelector(`#${elementIds.helpText}`)
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'If your business owns the item, give your business address.'
-          )
-        })
-
-        it('should have the correct form fields that are NOT be pre-populated with test data', () => {
-          _checkFormFields(document, {
-            addressLine1: '',
-            addressLine2: '',
-            townOrCity: '',
-            postcode: ''
-          })
-        })
-      })
-
-      describe('Not owned by applicant', () => {
-        beforeEach(async () => {
           RedisService.get = jest
             .fn()
             .mockResolvedValueOnce('No')
@@ -363,7 +144,7 @@ describe('/user-details/owner/address-enter route', () => {
           document = await TestHelper.submitGetRequest(server, getOptions)
         })
 
-        it('should have the correct page heading for too many addresses returned', () => {
+        it('should have the correct page heading', async () => {
           const element = document.querySelector(
             `#${elementIds.pageTitle} > legend > h1`
           )
@@ -372,22 +153,26 @@ describe('/user-details/owner/address-enter route', () => {
             'Too many results, you will need to enter the address'
           )
         })
+      })
 
-        it('should have the correct help text for too many addresses returned', () => {
-          const element = document.querySelector(`#${elementIds.helpText}`)
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual(
-            'If the owner is a business, give the business address.'
-          )
+      describe('Page mode: "no results', () => {
+        beforeEach(async () => {
+          RedisService.get = jest
+            .fn()
+            .mockResolvedValueOnce('No')
+            .mockResolvedValueOnce(JSON.stringify([]))
+
+          document = await TestHelper.submitGetRequest(server, getOptions)
         })
 
-        it('should have the correct form fields that are NOT be pre-populated with test data', () => {
-          _checkFormFields(document, {
-            addressLine1: '',
-            addressLine2: '',
-            townOrCity: '',
-            postcode: ''
-          })
+        it('should have the correct page heading', async () => {
+          const element = document.querySelector(
+            `#${elementIds.pageTitle} > legend > h1`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'No results, you will need to enter the address'
+          )
         })
       })
     })
@@ -396,7 +181,7 @@ describe('/user-details/owner/address-enter route', () => {
   describe('POST', () => {
     let postOptions
     const redisKeyOwnerAddress = 'owner.address'
-    const redisKeyApplicantAddress = 'applicant.address'
+    // const redisKeyApplicantAddress = 'applicant.address'
 
     beforeEach(async () => {
       postOptions = {
@@ -406,90 +191,82 @@ describe('/user-details/owner/address-enter route', () => {
       }
     })
 
-    describe('Success: Owned by applicant', () => {
-      beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockResolvedValueOnce('Yes')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
-          .mockResolvedValueOnce('Yes')
+    describe('Success', () => {
+      describe('Owned by applicant', () => {
+        beforeEach(async () => {
+          RedisService.get = jest
+            .fn()
+            .mockResolvedValueOnce('Yes')
+            .mockResolvedValueOnce(JSON.stringify(singleAddress))
+        })
+
+        it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
+          postOptions.payload = {
+            addressLine1: 'A Big House',
+            townOrCity: 'London',
+            postcode: 'SW1A 1AA'
+          }
+
+          expect(RedisService.set).toBeCalledTimes(0)
+
+          const response = await TestHelper.submitPostRequest(
+            server,
+            postOptions,
+            302
+          )
+
+          expect(RedisService.set).toBeCalledTimes(1)
+          expect(RedisService.set).toBeCalledWith(
+            expect.any(Object),
+            redisKeyOwnerAddress,
+            'A Big House, London, SW1A 1AA'
+          )
+
+          expect(response.headers.location).toEqual(nextUrl)
+        })
       })
 
-      it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
-        postOptions.payload = {
-          addressLine1: 'A Big House',
-          townOrCity: 'London',
-          postcode: 'SW1A 1AA'
-        }
+      describe('Not owned by applicant', () => {
+        beforeEach(async () => {
+          RedisService.get = jest
+            .fn()
+            .mockResolvedValueOnce('No')
+            .mockResolvedValueOnce(JSON.stringify(singleAddress))
+        })
 
-        expect(RedisService.set).toBeCalledTimes(0)
+        it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
+          postOptions.payload = {
+            addressLine1: 'A Big House',
+            townOrCity: 'London',
+            postcode: 'SW1A 1AA'
+          }
 
-        const response = await TestHelper.submitPostRequest(
-          server,
-          postOptions,
-          302
-        )
+          expect(RedisService.set).toBeCalledTimes(0)
 
-        expect(RedisService.set).toBeCalledTimes(2)
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKeyOwnerAddress,
-          'A Big House, London, SW1A 1AA'
-        )
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKeyApplicantAddress,
-          'A Big House, London, SW1A 1AA'
-        )
+          const response = await TestHelper.submitPostRequest(
+            server,
+            postOptions,
+            302
+          )
 
-        expect(response.headers.location).toEqual(nextUrlIntentionForItem)
-      })
-    })
+          expect(RedisService.set).toBeCalledTimes(1)
+          expect(RedisService.set).toBeCalledWith(
+            expect.any(Object),
+            redisKeyOwnerAddress,
+            'A Big House, London, SW1A 1AA'
+          )
 
-    describe('Success: Not owned by applicant', () => {
-      beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockResolvedValueOnce('No')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
-          .mockResolvedValueOnce('No')
-      })
-
-      it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
-        postOptions.payload = {
-          addressLine1: 'A Big House',
-          townOrCity: 'London',
-          postcode: 'SW1A 1AA'
-        }
-
-        expect(RedisService.set).toBeCalledTimes(0)
-
-        const response = await TestHelper.submitPostRequest(
-          server,
-          postOptions,
-          302
-        )
-
-        expect(RedisService.set).toBeCalledTimes(1)
-        expect(RedisService.set).toBeCalledWith(
-          expect.any(Object),
-          redisKeyOwnerAddress,
-          'A Big House, London, SW1A 1AA'
-        )
-
-        expect(response.headers.location).toEqual(
-          nextUrlApplicantContactDetails
-        )
+          expect(response.headers.location).toEqual(nextUrl)
+        })
       })
     })
 
-    describe('Failure: address-enter', () => {
+    describe('Failure', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('Yes')
           .mockResolvedValueOnce(JSON.stringify(singleAddress))
-          .mockResolvedValueOnce('Yes')
       })
 
       it('should display a validation error message if the user does not enter address line 1', async () => {

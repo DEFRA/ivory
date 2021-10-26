@@ -317,7 +317,7 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
     ownerSummary.push(
       _getSummaryListRow(
         'Your name',
-        ownerContactDetails.name,
+        ownerContactDetails.fullName,
         _getChangeItems(Paths.OWNER_CONTACT_DETAILS, CHANGE_LINK_HINT.YourName)
       )
     )
@@ -352,7 +352,7 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
     ownerSummary.push(
       _getSummaryListRow(
         'Owner’s name',
-        ownerContactDetails.name,
+        ownerContactDetails.fullName,
         _getChangeItems(Paths.OWNER_CONTACT_DETAILS, CHANGE_LINK_HINT.OwnerName)
       )
     )
@@ -379,7 +379,7 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
     ownerSummary.push(
       _getSummaryListRow(
         'Your name',
-        applicantContactDetails.name,
+        applicantContactDetails.fullName,
         _getChangeItems(
           Paths.APPLICANT_CONTACT_DETAILS,
           CHANGE_LINK_HINT.YourName
