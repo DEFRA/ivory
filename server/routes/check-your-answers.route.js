@@ -295,122 +295,288 @@ const _getItemDescriptionSummary = async (request, isSection2) => {
 }
 
 const _getOwnerSummary = async (request, ownedByApplicant) => {
+  const sellingOnBehalfOf = await RedisService.get(
+    request,
+    RedisKeys.SELLING_ON_BEHALF_OF
+  )
+
+  const workForABusiness = await RedisService.get(
+    request,
+    RedisKeys.WORK_FOR_A_BUSINESS
+  )
+
   const ownerContactDetails =
     JSON.parse(
       await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)
     ) || {}
+
+  const ownerAddress = await RedisService.get(request, RedisKeys.OWNER_ADDRESS)
 
   const applicantContactDetails =
     JSON.parse(
       await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)
     ) || {}
 
+  const applicantAddress = await RedisService.get(
+    request,
+    RedisKeys.APPLICANT_ADDRESS
+  )
+
   const ownerSummary = [
     _getSummaryListRow(
       'Do you own the item?',
-      ownedByApplicant ? 'Yes' : 'No',
+      ownedByApplicant ? Options.YES : Options.NO,
       _getChangeItems(Paths.WHO_OWNS_ITEM, CHANGE_LINK_HINT.WhoOwnsTheItem)
     )
   ]
+  console.log('ownerContactDetails:', ownerContactDetails)
+  console.log('ownerAddress:', ownerAddress)
+  console.log('applicantContactDetails:', applicantContactDetails)
+  console.log('applicantAddress:', applicantAddress)
+  console.log('sellingOnBehalfOf:', sellingOnBehalfOf)
+  console.log('workForABusiness:', workForABusiness)
 
   if (ownedByApplicant) {
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Your name',
-        ownerContactDetails.fullName,
-        _getChangeItems(Paths.OWNER_CONTACT_DETAILS, CHANGE_LINK_HINT.YourName)
+    await _getOwnerSummaryOwnedByApplicant(
+      ownerSummary,
+      ownerContactDetails,
+      ownerAddress
+    )
+  } else {
+    if (sellingOnBehalfOf === 'The business I work for') {
+      await _getOwnerSummaryApplicantBusiness(
+        ownerSummary,
+        workForABusiness,
+        sellingOnBehalfOf,
+        applicantContactDetails,
+        applicantAddress
+      )
+    } else if (sellingOnBehalfOf === 'Other') {
+      await _getOwnerSummaryApplicantOther(
+        ownerSummary,
+        sellingOnBehalfOf,
+        applicantContactDetails,
+        applicantAddress
+      )
+    } else {
+      await _getOwnerSummaryApplicantDefault(ownerSummary, ownerContactDetails)
+    }
+  }
+
+  return ownerSummary
+}
+
+const _getOwnerSummaryOwnedByApplicant = async (
+  ownerSummary,
+  ownerContactDetails,
+  ownerAddress
+) => {
+  console.log('_getOwnerSummaryOwnedByApplicant')
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your name',
+      ownerContactDetails.fullName,
+      _getChangeItems(
+        Paths.APPLICANT_CONTACT_DETAILS,
+        CHANGE_LINK_HINT.YourName
       )
     )
+  )
 
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your email',
+      ownerContactDetails.emailAddress,
+      _getChangeItems(
+        Paths.APPLICANT_CONTACT_DETAILS,
+        CHANGE_LINK_HINT.YourEmail
+      )
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your address',
+      ownerAddress,
+      _getChangeItems(
+        Paths.APPLICANT_ADDRESS_FIND,
+        CHANGE_LINK_HINT.YourAddress
+      )
+    )
+  )
+}
+
+const _getOwnerSummaryApplicantBusiness = async (
+  ownerSummary,
+  workForABusiness,
+  sellingOnBehalfOf,
+  applicantContactDetails,
+  applicantAddress
+) => {
+  console.log('_getOwnerSummaryApplicantBusiness')
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Work for a business',
+      workForABusiness,
+      _getChangeItems(
+        Paths.WORK_FOR_A_BUSINESS,
+        CHANGE_LINK_HINT.WorkForABusiness
+      )
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Selling on behalf of',
+      sellingOnBehalfOf,
+      _getChangeItems(
+        Paths.SELLING_ON_BEHALF_OF,
+        CHANGE_LINK_HINT.WhoOwnsTheItem
+      )
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your name',
+      applicantContactDetails.fullName,
+      _getChangeItems(
+        Paths.APPLICANT_CONTACT_DETAILS,
+        CHANGE_LINK_HINT.YourName
+      )
+    )
+  )
+
+  if (workForABusiness === Options.YES) {
     ownerSummary.push(
       _getSummaryListRow(
-        'Business name (optional)',
-        ownerContactDetails.businessName || NOTHING_ENTERED,
+        'Business name',
+        applicantContactDetails.businessName || NOTHING_ENTERED,
         _getChangeItems(
           Paths.OWNER_CONTACT_DETAILS,
           CHANGE_LINK_HINT.BusinessName
         )
       )
     )
-
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Your email',
-        ownerContactDetails.emailAddress,
-        _getChangeItems(Paths.OWNER_CONTACT_DETAILS, CHANGE_LINK_HINT.YourEmail)
-      )
-    )
-
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Your address',
-        await RedisService.get(request, RedisKeys.OWNER_ADDRESS),
-        _getChangeItems(Paths.OWNER_ADDRESS_FIND, CHANGE_LINK_HINT.YourAddress)
-      )
-    )
-  } else {
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Owner’s name',
-        ownerContactDetails.fullName,
-        _getChangeItems(Paths.OWNER_CONTACT_DETAILS, CHANGE_LINK_HINT.OwnerName)
-      )
-    )
-
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Owner’s email',
-        ownerContactDetails.emailAddress,
-        _getChangeItems(
-          Paths.OWNER_CONTACT_DETAILS,
-          CHANGE_LINK_HINT.OwnerEmail
-        )
-      )
-    )
-
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Owner’s address',
-        await RedisService.get(request, RedisKeys.OWNER_ADDRESS),
-        _getChangeItems(Paths.OWNER_ADDRESS_FIND, CHANGE_LINK_HINT.OwnerAddress)
-      )
-    )
-
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Your name',
-        applicantContactDetails.fullName,
-        _getChangeItems(
-          Paths.APPLICANT_CONTACT_DETAILS,
-          CHANGE_LINK_HINT.YourName
-        )
-      )
-    )
-
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Your email',
-        applicantContactDetails.emailAddress,
-        _getChangeItems(
-          Paths.APPLICANT_CONTACT_DETAILS,
-          CHANGE_LINK_HINT.YourEmail
-        )
-      )
-    )
-
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Your address',
-        await RedisService.get(request, RedisKeys.APPLICANT_ADDRESS),
-        _getChangeItems(
-          Paths.APPLICANT_ADDRESS_FIND,
-          CHANGE_LINK_HINT.YourAddress
-        )
-      )
-    )
   }
 
-  return ownerSummary
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your email',
+      applicantContactDetails.emailAddress,
+      _getChangeItems(
+        Paths.APPLICANT_CONTACT_DETAILS,
+        CHANGE_LINK_HINT.YourEmail
+      )
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your address',
+      applicantAddress,
+      _getChangeItems(
+        Paths.APPLICANT_ADDRESS_FIND,
+        CHANGE_LINK_HINT.YourAddress
+      )
+    )
+  )
+}
+
+const _getOwnerSummaryApplicantOther = async (
+  ownerSummary,
+  sellingOnBehalfOf,
+  applicantContactDetails,
+  applicantAddress
+) => {
+  console.log('_getOwnerSummaryApplicantOther')
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Selling on behalf of',
+      sellingOnBehalfOf,
+      _getChangeItems(
+        Paths.SELLING_ON_BEHALF_OF,
+        CHANGE_LINK_HINT.WhoOwnsTheItem
+      )
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your name',
+      applicantContactDetails.fullName,
+      _getChangeItems(
+        Paths.APPLICANT_CONTACT_DETAILS,
+        CHANGE_LINK_HINT.YourName
+      )
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your email',
+      applicantContactDetails.emailAddress,
+      _getChangeItems(
+        Paths.APPLICANT_CONTACT_DETAILS,
+        CHANGE_LINK_HINT.YourEmail
+      )
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your address',
+      applicantAddress,
+      _getChangeItems(
+        Paths.APPLICANT_ADDRESS_FIND,
+        CHANGE_LINK_HINT.YourAddress
+      )
+    )
+  )
+}
+
+const _getOwnerSummaryApplicantDefault = async (
+  request,
+  ownerContactDetails,
+  ownerSummary
+) => {
+  console.log('_getOwnerSummaryApplicantDefault')
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your name',
+      ownerContactDetails.fullName,
+      _getChangeItems(
+        Paths.APPLICANT_CONTACT_DETAILS,
+        CHANGE_LINK_HINT.YourName
+      )
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your email',
+      ownerContactDetails.emailAddress,
+      _getChangeItems(
+        Paths.APPLICANT_CONTACT_DETAILS,
+        CHANGE_LINK_HINT.YourEmail
+      )
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Your address',
+      await RedisService.get(request, RedisKeys.OWNER_ADDRESS),
+      _getChangeItems(
+        Paths.APPLICANT_ADDRESS_FIND,
+        CHANGE_LINK_HINT.YourAddress
+      )
+    )
+  )
 }
 
 const _getPhotoSummary = async request => {
@@ -470,27 +636,29 @@ const _getChangeItems = (href, visuallyHiddenText) => [
 ]
 
 const CHANGE_LINK_HINT = {
-  ExemptionType: 'type of exemption',
-  YourPhotos: 'your photos',
-  WhatIsItem: 'your description of the item',
-  WhereIsIvory: 'where the ivory is',
-  UniqueFeatures: 'any unique features',
-  WhereMade: 'where it was made',
-  WhenMade: 'when it was made',
-  ItemAge: 'your proof of age',
-  WhyRmi: 'reason why item is of outstandingly high value',
-  IvoryVolme: 'your proof that item has less than [##PERCENTAGE##]% ivory',
-  WhyIvoryIntegral: 'reason why all ivory is integral to item',
-  YourDocuments: 'your documents',
-  WhoOwnsTheItem: 'who owns the item',
-  YourName: 'your name',
   BusinessName: 'business name',
-  YourEmail: 'your email',
-  YourAddress: 'your address',
-  OwnerName: 'owner’s name',
-  OwnerEmail: 'owner’s email',
+  ExemptionType: 'type of exemption',
+  ItemAge: 'your proof of age',
+  IvoryVolme: 'your proof that item has less than [##PERCENTAGE##]% ivory',
   OwnerAddress: 'owner’s address',
-  SaleIntention: 'what owner intends to do'
+  OwnerEmail: 'owner’s email',
+  OwnerName: 'owner’s name',
+  SellingOnBehalfOf: 'who owns the item',
+  SaleIntention: 'what owner intends to do',
+  UniqueFeatures: 'any unique features',
+  WhatIsItem: 'your description of the item',
+  WhenMade: 'when it was made',
+  WhereIsIvory: 'where the ivory is',
+  WhereMade: 'where it was made',
+  WhoOwnsTheItem: 'who owns the item',
+  WhyIvoryIntegral: 'reason why all ivory is integral to item',
+  WhyRmi: 'reason why item is of outstandingly high value',
+  WorkForABusiness: 'if you work for a business',
+  YourAddress: 'your address',
+  YourDocuments: 'your documents',
+  YourEmail: 'your email',
+  YourName: 'your name',
+  YourPhotos: 'your photos'
 }
 
 const BEFORE_1975 =
