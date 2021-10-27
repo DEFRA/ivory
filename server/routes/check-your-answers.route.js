@@ -359,7 +359,15 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
         applicantAddress
       )
     } else {
-      await _getOwnerSummaryApplicantDefault(ownerSummary, ownerContactDetails)
+      await _getOwnerSummaryApplicantDefault(
+        ownerSummary,
+        workForABusiness,
+        sellingOnBehalfOf,
+        ownerContactDetails,
+        ownerAddress,
+        applicantContactDetails,
+        applicantAddress
+      )
     }
   }
 
@@ -539,16 +547,66 @@ const _getOwnerSummaryApplicantOther = async (
 }
 
 const _getOwnerSummaryApplicantDefault = async (
-  request,
+  ownerSummary,
+  workForABusiness,
+  sellingOnBehalfOf,
   ownerContactDetails,
-  ownerSummary
+  ownerAddress,
+  applicantContactDetails,
+  applicantAddress
 ) => {
   console.log('_getOwnerSummaryApplicantDefault')
 
   ownerSummary.push(
     _getSummaryListRow(
+      'Work for a business',
+      workForABusiness,
+      _getChangeItems(
+        Paths.WORK_FOR_A_BUSINESS,
+        CHANGE_LINK_HINT.WorkForABusiness
+      )
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Selling on behalf of',
+      sellingOnBehalfOf,
+      _getChangeItems(
+        Paths.SELLING_ON_BEHALF_OF,
+        CHANGE_LINK_HINT.WhoOwnsTheItem
+      )
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Owner’s name',
+      ownerContactDetails.fullName || ownerContactDetails.businessName,
+      _getChangeItems(Paths.OWNER_CONTACT_DETAILS, CHANGE_LINK_HINT.OwnerName)
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Owner’s email',
+      ownerContactDetails.emailAddress || 'None given',
+      _getChangeItems(Paths.OWNER_CONTACT_DETAILS, CHANGE_LINK_HINT.OwnerEmail)
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Owner’s address',
+      ownerAddress,
+      _getChangeItems(Paths.OWNER_ADDRESS_FIND, CHANGE_LINK_HINT.OwnerAddress)
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
       'Your name',
-      ownerContactDetails.fullName,
+      applicantContactDetails.fullName,
       _getChangeItems(
         Paths.APPLICANT_CONTACT_DETAILS,
         CHANGE_LINK_HINT.YourName
@@ -556,10 +614,23 @@ const _getOwnerSummaryApplicantDefault = async (
     )
   )
 
+  if (workForABusiness === Options.YES) {
+    ownerSummary.push(
+      _getSummaryListRow(
+        'Business name',
+        applicantContactDetails.businessName || NOTHING_ENTERED,
+        _getChangeItems(
+          Paths.APPLICANT_CONTACT_DETAILS,
+          CHANGE_LINK_HINT.BusinessName
+        )
+      )
+    )
+  }
+
   ownerSummary.push(
     _getSummaryListRow(
       'Your email',
-      ownerContactDetails.emailAddress,
+      applicantContactDetails.emailAddress,
       _getChangeItems(
         Paths.APPLICANT_CONTACT_DETAILS,
         CHANGE_LINK_HINT.YourEmail
@@ -570,7 +641,7 @@ const _getOwnerSummaryApplicantDefault = async (
   ownerSummary.push(
     _getSummaryListRow(
       'Your address',
-      await RedisService.get(request, RedisKeys.OWNER_ADDRESS),
+      applicantAddress,
       _getChangeItems(
         Paths.APPLICANT_ADDRESS_FIND,
         CHANGE_LINK_HINT.YourAddress
