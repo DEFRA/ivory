@@ -305,6 +305,10 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
     RedisKeys.WORK_FOR_A_BUSINESS
   )
 
+  const capacity = _formatCapacity(
+    JSON.parse(await RedisService.get(request, RedisKeys.WHAT_CAPACITY)) || {}
+  )
+
   const ownerContactDetails =
     JSON.parse(
       await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)
@@ -329,12 +333,6 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
       _getChangeItems(Paths.WHO_OWNS_ITEM, CHANGE_LINK_HINT.WhoOwnsTheItem)
     )
   ]
-  console.log('ownerContactDetails:', ownerContactDetails)
-  console.log('ownerAddress:', ownerAddress)
-  console.log('applicantContactDetails:', applicantContactDetails)
-  console.log('applicantAddress:', applicantAddress)
-  console.log('sellingOnBehalfOf:', sellingOnBehalfOf)
-  console.log('workForABusiness:', workForABusiness)
 
   if (ownedByApplicant) {
     await _getOwnerSummaryOwnedByApplicant(
@@ -354,7 +352,9 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
     } else if (sellingOnBehalfOf === 'Other') {
       await _getOwnerSummaryApplicantOther(
         ownerSummary,
+        workForABusiness,
         sellingOnBehalfOf,
+        capacity,
         applicantContactDetails,
         applicantAddress
       )
@@ -374,13 +374,24 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
   return ownerSummary
 }
 
+const _formatCapacity = whatCapacity => {
+  let capacity
+  if (whatCapacity && whatCapacity.whatCapacity) {
+    capacity = whatCapacity.whatCapacity
+
+    if (capacity === 'Other') {
+      capacity += ` - ${whatCapacity.otherCapacity}`
+    }
+  }
+
+  return capacity
+}
+
 const _getOwnerSummaryOwnedByApplicant = async (
   ownerSummary,
   ownerContactDetails,
   ownerAddress
 ) => {
-  console.log('_getOwnerSummaryOwnedByApplicant')
-
   ownerSummary.push(
     _getSummaryListRow(
       'Your name',
@@ -422,8 +433,6 @@ const _getOwnerSummaryApplicantBusiness = async (
   applicantContactDetails,
   applicantAddress
 ) => {
-  console.log('_getOwnerSummaryApplicantBusiness')
-
   ownerSummary.push(
     _getSummaryListRow(
       'Work for a business',
@@ -495,11 +504,22 @@ const _getOwnerSummaryApplicantBusiness = async (
 
 const _getOwnerSummaryApplicantOther = async (
   ownerSummary,
+  workForABusiness,
   sellingOnBehalfOf,
+  capacity,
   applicantContactDetails,
   applicantAddress
 ) => {
-  console.log('_getOwnerSummaryApplicantOther')
+  ownerSummary.push(
+    _getSummaryListRow(
+      'Work for a business',
+      workForABusiness,
+      _getChangeItems(
+        Paths.WORK_FOR_A_BUSINESS,
+        CHANGE_LINK_HINT.WorkForABusiness
+      )
+    )
+  )
 
   ownerSummary.push(
     _getSummaryListRow(
@@ -514,6 +534,14 @@ const _getOwnerSummaryApplicantOther = async (
 
   ownerSummary.push(
     _getSummaryListRow(
+      'Capacity you’re acting',
+      capacity,
+      _getChangeItems(Paths.WHAT_CAPACITY, CHANGE_LINK_HINT.WhoOwnsTheItem)
+    )
+  )
+
+  ownerSummary.push(
+    _getSummaryListRow(
       'Your name',
       applicantContactDetails.fullName,
       _getChangeItems(
@@ -522,6 +550,19 @@ const _getOwnerSummaryApplicantOther = async (
       )
     )
   )
+
+  if (workForABusiness === Options.YES) {
+    ownerSummary.push(
+      _getSummaryListRow(
+        'Business name',
+        applicantContactDetails.businessName || NOTHING_ENTERED,
+        _getChangeItems(
+          Paths.APPLICANT_CONTACT_DETAILS,
+          CHANGE_LINK_HINT.BusinessName
+        )
+      )
+    )
+  }
 
   ownerSummary.push(
     _getSummaryListRow(
@@ -555,8 +596,6 @@ const _getOwnerSummaryApplicantDefault = async (
   applicantContactDetails,
   applicantAddress
 ) => {
-  console.log('_getOwnerSummaryApplicantDefault')
-
   ownerSummary.push(
     _getSummaryListRow(
       'Work for a business',

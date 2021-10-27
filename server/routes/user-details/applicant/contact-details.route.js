@@ -4,12 +4,12 @@ const AnalyticsService = require('../../../services/analytics.service')
 const RedisService = require('../../../services/redis.service')
 
 const {
+  Analytics,
   CharacterLimits,
+  Options,
   Paths,
   RedisKeys,
-  Views,
-  Analytics,
-  Options
+  Views
 } = require('../../../utils/constants')
 const { formatNumberWithCommas } = require('../../../utils/general')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
@@ -31,6 +31,10 @@ const handlers = {
     const payload = request.payload
     const errors = _validateForm(payload, context.workForABusiness)
 
+    const ownedByApplicant =
+      (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
+      Options.YES
+
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,
@@ -51,6 +55,14 @@ const handlers = {
       RedisKeys.APPLICANT_CONTACT_DETAILS,
       JSON.stringify(payload)
     )
+
+    if (ownedByApplicant) {
+      await RedisService.set(
+        request,
+        RedisKeys.OWNER_CONTACT_DETAILS,
+        JSON.stringify(payload)
+      )
+    }
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,

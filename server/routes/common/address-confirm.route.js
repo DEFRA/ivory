@@ -51,10 +51,13 @@ const handlers = {
       context.address.AddressLine
     )
 
-    if (ownedByApplicant === Options.YES) {
+    if (
+      ownedByApplicant === Options.YES &&
+      addressType === AddressType.APPLICANT
+    ) {
       await RedisService.set(
         request,
-        RedisKeys.APPLICANT_ADDRESS,
+        RedisKeys.OWNER_ADDRESS,
         context.address.AddressLine
       )
     }

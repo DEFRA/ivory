@@ -112,7 +112,6 @@ describe('/user-details/applicant/address-enter route', () => {
             .mockResolvedValueOnce('No')
             .mockResolvedValueOnce(JSON.stringify(multipleAddresses))
 
-          console.log(multipleAddresses.length)
           document = await TestHelper.submitGetRequest(server, getOptions)
         })
 
