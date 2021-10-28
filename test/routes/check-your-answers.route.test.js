@@ -1,7 +1,13 @@
 'use strict'
 
 const TestHelper = require('../utils/test-helper')
-const { ItemType, Paths, RedisKeys } = require('../../server/utils/constants')
+const {
+  BehalfOfBusinessOptions,
+  ItemType,
+  Options,
+  Paths,
+  RedisKeys
+} = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
@@ -83,7 +89,7 @@ describe('/check-your-answers route', () => {
 
     describe('GET: Common content', () => {
       beforeEach(async () => {
-        _createMocks(ItemType.HIGH_VALUE, true)
+        _createMocks(ItemType.HIGH_VALUE)
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
@@ -291,58 +297,58 @@ describe('/check-your-answers route', () => {
         )
       })
 
-      it('should have the correct "Owner" summary section - NOT owned by applicant', () => {
-        _checkSubheading(
-          document,
-          elementIds.subHeadings.owner,
-          'Owner and applicant details'
-        )
+      // it('should have the correct "Owner" summary section - NOT owned by applicant', () => {
+      //   _checkSubheading(
+      //     document,
+      //     elementIds.subHeadings.owner,
+      //     'Owner’s details'
+      //   )
 
-        _checkSummary(document, elementIds.summaries.owner)
+      //   _checkSummary(document, elementIds.summaries.owner)
 
-        _checkSummaryKeys(document, elementIds.summaries.owner, [
-          'Do you own the item?',
-          'Owner’s name',
-          'Owner’s email',
-          'Owner’s address',
-          'Your name',
-          'Your email',
-          'Your address'
-        ])
+      //   _checkSummaryKeys(document, elementIds.summaries.owner, [
+      //     'Do you own the item?',
+      //     'Owner’s name',
+      //     'Owner’s email',
+      //     'Owner’s address',
+      //     'Your name',
+      //     'Your email',
+      //     'Your address'
+      //   ])
 
-        _checkSummaryValues(document, elementIds.summaries.owner, [
-          'No',
-          mockOwnerContactDetails.name,
-          mockOwnerContactDetails.emailAddress,
-          ownerAddress,
-          mockApplicantContactDetails.name,
-          mockApplicantContactDetails.emailAddress,
-          applicantAddress
-        ])
+      //   _checkSummaryValues(document, elementIds.summaries.owner, [
+      //     Options.NO,
+      //     mockOwnerContactDetails.fullName,
+      //     mockOwnerContactDetails.emailAddress,
+      //     ownerAddress,
+      //     mockApplicantContactDetails.fullName,
+      //     mockApplicantContactDetails.emailAddress,
+      //     applicantAddress
+      //   ])
 
-        _checkSummaryChangeLinks(
-          document,
-          elementIds.summaries.owner,
-          [
-            'Change who owns the item',
-            'Change owner’s name',
-            'Change owner’s email',
-            'Change owner’s address',
-            'Change your name',
-            'Change your email',
-            'Change your address'
-          ],
-          [
-            Paths.WHO_OWNS_ITEM,
-            Paths.OWNER_CONTACT_DETAILS,
-            Paths.OWNER_CONTACT_DETAILS,
-            Paths.OWNER_ADDRESS_FIND,
-            Paths.APPLICANT_CONTACT_DETAILS,
-            Paths.APPLICANT_CONTACT_DETAILS,
-            Paths.APPLICANT_ADDRESS_FIND
-          ]
-        )
-      })
+      //   _checkSummaryChangeLinks(
+      //     document,
+      //     elementIds.summaries.owner,
+      //     [
+      //       'Change who owns the item',
+      //       'Change owner’s name',
+      //       'Change owner’s email',
+      //       'Change owner’s address',
+      //       'Change your name',
+      //       'Change your email',
+      //       'Change your address'
+      //     ],
+      //     [
+      //       Paths.WHO_OWNS_ITEM,
+      //       Paths.OWNER_CONTACT_DETAILS,
+      //       Paths.OWNER_CONTACT_DETAILS,
+      //       Paths.OWNER_ADDRESS_FIND,
+      //       Paths.APPLICANT_CONTACT_DETAILS,
+      //       Paths.APPLICANT_CONTACT_DETAILS,
+      //       Paths.APPLICANT_ADDRESS_FIND
+      //     ]
+      //   )
+      // })
 
       it('should have the correct "Sale Intention" summary section', () => {
         _checkSubheading(
@@ -374,57 +380,57 @@ describe('/check-your-answers route', () => {
       })
     })
 
-    describe('GET: Page sections - owned by applicant', () => {
-      beforeEach(async () => {
-        _createMocks(ItemType.HIGH_VALUE, true)
-        document = await TestHelper.submitGetRequest(server, getOptions)
-      })
+    // describe('GET: Page sections - owned by applicant', () => {
+    //   beforeEach(async () => {
+    //     _createMocks(ItemType.HIGH_VALUE, true)
+    //     document = await TestHelper.submitGetRequest(server, getOptions)
+    //   })
 
-      it('should have the correct "Owner" summary section - owned by applicant', () => {
-        _checkSubheading(
-          document,
-          elementIds.subHeadings.owner,
-          'Owner’s details'
-        )
+    //   it('should have the correct "Owner" summary section - owned by applicant', () => {
+    //     _checkSubheading(
+    //       document,
+    //       elementIds.subHeadings.owner,
+    //       'Owner’s details'
+    //     )
 
-        _checkSummary(document, elementIds.summaries.owner)
+    //     _checkSummary(document, elementIds.summaries.owner)
 
-        _checkSummaryKeys(document, elementIds.summaries.owner, [
-          'Do you own the item?',
-          'Your name',
-          'Business name (optional)',
-          'Your email',
-          'Your address'
-        ])
+    //     _checkSummaryKeys(document, elementIds.summaries.owner, [
+    //       'Do you own the item?',
+    //       'Your name',
+    //       'Business name (optional)',
+    //       'Your email',
+    //       'Your address'
+    //     ])
 
-        _checkSummaryValues(document, elementIds.summaries.owner, [
-          'Yes',
-          mockOwnerContactDetails.name,
-          businessName,
-          mockOwnerContactDetails.emailAddress,
-          ownerAddress
-        ])
+    //     _checkSummaryValues(document, elementIds.summaries.owner, [
+    //       'Yes',
+    //       mockOwnerContactDetails.fullName,
+    //       businessName,
+    //       mockOwnerContactDetails.emailAddress,
+    //       ownerAddress
+    //     ])
 
-        _checkSummaryChangeLinks(
-          document,
-          elementIds.summaries.owner,
-          [
-            'Change who owns the item',
-            'Change your name',
-            'Change business name',
-            'Change your email',
-            'Change your address'
-          ],
-          [
-            Paths.WHO_OWNS_ITEM,
-            Paths.OWNER_CONTACT_DETAILS,
-            Paths.OWNER_CONTACT_DETAILS,
-            Paths.OWNER_CONTACT_DETAILS,
-            Paths.OWNER_ADDRESS_FIND
-          ]
-        )
-      })
-    })
+    //     _checkSummaryChangeLinks(
+    //       document,
+    //       elementIds.summaries.owner,
+    //       [
+    //         'Change who owns the item',
+    //         'Change your name',
+    //         'Change business name',
+    //         'Change your email',
+    //         'Change your address'
+    //       ],
+    //       [
+    //         Paths.WHO_OWNS_ITEM,
+    //         Paths.OWNER_CONTACT_DETAILS,
+    //         Paths.OWNER_CONTACT_DETAILS,
+    //         Paths.OWNER_CONTACT_DETAILS,
+    //         Paths.OWNER_ADDRESS_FIND
+    //       ]
+    //     )
+    //   })
+    // })
 
     describe('GET: Page sections - non-RMI item type', () => {
       beforeEach(async () => {
@@ -508,10 +514,248 @@ describe('/check-your-answers route', () => {
       })
     })
 
+    describe('GET: Page sections for "Owner’s details"', () => {
+      it('should have the correct "Owner’s details" summary section - owned by applicant', async () => {
+        _createMocks(ItemType.TEN_PERCENT)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+
+        _checkSubheading(
+          document,
+          elementIds.subHeadings.owner,
+          'Owner’s details'
+        )
+
+        _checkSummary(document, elementIds.summaries.owner)
+
+        _checkSummaryKeys(document, elementIds.summaries.owner, [
+          'Do you own the item?',
+          'Your name',
+          'Your email',
+          'Your address'
+        ])
+
+        _checkSummaryValues(document, elementIds.summaries.owner, [
+          'Yes',
+          mockOwnerContactDetails.fullName,
+          mockOwnerContactDetails.emailAddress,
+          ownerAddress
+        ])
+
+        _checkSummaryChangeLinks(
+          document,
+          elementIds.summaries.owner,
+          [
+            'Change who owns the item',
+            'Change your name',
+            'Change your email',
+            'Change your address'
+          ],
+          [
+            Paths.WHO_OWNS_ITEM,
+            Paths.APPLICANT_CONTACT_DETAILS,
+            Paths.APPLICANT_CONTACT_DETAILS,
+            Paths.APPLICANT_ADDRESS_FIND
+          ]
+        )
+      })
+
+      it('should have the correct "Owner’s details" summary section - answered selling on behalf of "the business I work for"', async () => {
+        _createMocks(
+          ItemType.TEN_PERCENT,
+          false,
+          BehalfOfBusinessOptions.BUSINESS_I_WORK_FOR
+        )
+        document = await TestHelper.submitGetRequest(server, getOptions)
+
+        _checkSubheading(
+          document,
+          elementIds.subHeadings.owner,
+          'Owner’s details'
+        )
+
+        _checkSummary(document, elementIds.summaries.owner)
+
+        _checkSummaryKeys(document, elementIds.summaries.owner, [
+          'Do you own the item?',
+          'Work for a business',
+          'Selling on behalf of',
+          'Your name',
+          'Business name',
+          'Your email',
+          'Your address'
+        ])
+
+        _checkSummaryValues(document, elementIds.summaries.owner, [
+          Options.NO,
+          Options.YES,
+          BehalfOfBusinessOptions.BUSINESS_I_WORK_FOR,
+          mockApplicantContactDetails.fullName,
+          mockApplicantContactDetails.businessName,
+          mockApplicantContactDetails.emailAddress,
+          applicantAddress
+        ])
+
+        _checkSummaryChangeLinks(
+          document,
+          elementIds.summaries.owner,
+          [
+            'Change who owns the item',
+            'Change if you work for a business',
+            'Change who owns the item',
+            'Change your name',
+            'Change business name',
+            'Change your email',
+            'Change your address'
+          ],
+          [
+            Paths.WHO_OWNS_ITEM,
+            Paths.WORK_FOR_A_BUSINESS,
+            Paths.SELLING_ON_BEHALF_OF,
+            Paths.APPLICANT_CONTACT_DETAILS,
+            Paths.APPLICANT_CONTACT_DETAILS,
+            Paths.APPLICANT_CONTACT_DETAILS,
+            Paths.APPLICANT_ADDRESS_FIND
+          ]
+        )
+      })
+
+      it('should have the correct "Owner’s details" summary section - answered selling on behalf of "other"', async () => {
+        _createMocks(ItemType.TEN_PERCENT, false, BehalfOfBusinessOptions.OTHER)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+
+        _checkSubheading(
+          document,
+          elementIds.subHeadings.owner,
+          'Owner’s details'
+        )
+
+        _checkSummary(document, elementIds.summaries.owner)
+
+        _checkSummaryKeys(document, elementIds.summaries.owner, [
+          'Do you own the item?',
+          'Work for a business',
+          'Selling on behalf of',
+          'Capacity you’re acting',
+          'Your name',
+          'Business name',
+          'Your email',
+          'Your address'
+        ])
+
+        _checkSummaryValues(document, elementIds.summaries.owner, [
+          Options.NO,
+          Options.YES,
+          BehalfOfBusinessOptions.OTHER,
+          'Other - Some other capacity',
+          mockApplicantContactDetails.fullName,
+          mockApplicantContactDetails.businessName,
+          mockApplicantContactDetails.emailAddress,
+          applicantAddress
+        ])
+
+        _checkSummaryChangeLinks(
+          document,
+          elementIds.summaries.owner,
+          [
+            'Change who owns the item',
+            'Change if you work for a business',
+            'Change who owns the item',
+            'Change if you work for a business',
+            'Change your name',
+            'Change business name',
+            'Change your email',
+            'Change your address'
+          ],
+          [
+            Paths.WHO_OWNS_ITEM,
+            Paths.WORK_FOR_A_BUSINESS,
+            Paths.SELLING_ON_BEHALF_OF,
+            Paths.WHAT_CAPACITY,
+            Paths.APPLICANT_CONTACT_DETAILS,
+            Paths.APPLICANT_CONTACT_DETAILS,
+            Paths.APPLICANT_CONTACT_DETAILS,
+            Paths.APPLICANT_ADDRESS_FIND
+          ]
+        )
+      })
+
+      it('should have the correct "Owner’s details" summary section - all other scenarios', async () => {
+        _createMocks(
+          ItemType.TEN_PERCENT,
+          false,
+          BehalfOfBusinessOptions.AN_INDIVIDUAL
+        )
+        document = await TestHelper.submitGetRequest(server, getOptions)
+
+        _checkSubheading(
+          document,
+          elementIds.subHeadings.owner,
+          'Owner’s details'
+        )
+
+        _checkSummary(document, elementIds.summaries.owner)
+
+        _checkSummaryKeys(document, elementIds.summaries.owner, [
+          'Do you own the item?',
+          'Work for a business',
+          'Selling on behalf of',
+          'Owner’s name',
+          'Owner’s email',
+          'Owner’s address',
+          'Your name',
+          'Business name',
+          'Your email',
+          'Your address'
+        ])
+
+        _checkSummaryValues(document, elementIds.summaries.owner, [
+          Options.NO,
+          Options.YES,
+          BehalfOfBusinessOptions.AN_INDIVIDUAL,
+          mockOwnerContactDetails.fullName,
+          mockOwnerContactDetails.emailAddress,
+          ownerAddress,
+          mockApplicantContactDetails.fullName,
+          mockApplicantContactDetails.businessName,
+          mockApplicantContactDetails.emailAddress,
+          applicantAddress
+        ])
+
+        _checkSummaryChangeLinks(
+          document,
+          elementIds.summaries.owner,
+          [
+            'Change who owns the item',
+            'Change if you work for a business',
+            'Change who owns the item',
+            'Change owner’s name',
+            'Change owner’s email',
+            'Change owner’s address',
+            'Change your name',
+            'Change business name',
+            'Change your email',
+            'Change your address'
+          ],
+          [
+            Paths.WHO_OWNS_ITEM,
+            Paths.WORK_FOR_A_BUSINESS,
+            Paths.SELLING_ON_BEHALF_OF,
+            Paths.OWNER_CONTACT_DETAILS,
+            Paths.OWNER_CONTACT_DETAILS,
+            Paths.OWNER_ADDRESS_FIND,
+            Paths.APPLICANT_CONTACT_DETAILS,
+            Paths.APPLICANT_CONTACT_DETAILS,
+            Paths.APPLICANT_CONTACT_DETAILS,
+            Paths.APPLICANT_ADDRESS_FIND
+          ]
+        )
+      })
+    })
+
     describe('GET: Legal declarations', () => {
       describe('Summary paragraphs', () => {
         it('should have the correct heading and summary paragraphs when item is owned by applicant', async () => {
-          _createMocks(ItemType.HIGH_VALUE, true)
+          _createMocks(ItemType.HIGH_VALUE)
           document = await TestHelper.submitGetRequest(server, getOptions)
 
           let element = document.querySelector(
@@ -840,13 +1084,14 @@ const mockDocuments = {
 }
 
 const mockOwnerContactDetails = {
-  name: 'OWNER_NAME',
+  fullName: 'OWNER_NAME',
   emailAddress: 'OWNER@EMAIL.COM',
   confirmEmailAddress: 'OWNER@EMAIL.COM'
 }
 
 const mockApplicantContactDetails = {
-  name: 'APPLICANT_NAME',
+  fullName: 'APPLICANT_NAME',
+  businessName: 'APPLICANT_BUSINESS_NAME',
   emailAddress: 'APPLICANT@EMAIL.COM',
   confirmEmailAddress: 'APPLICANT@EMAIL.COM'
 }
@@ -854,11 +1099,13 @@ const mockApplicantContactDetails = {
 const ownerAddress = 'OWNER_ADDRESS'
 const applicantAddress = 'APPLICANT_ADDRESS'
 
-const businessName = 'Nothing entered'
-
 const saleIntention = 'Sell it'
 
-const _createMocks = (itemType, ownedByApplicant = true) => {
+const _createMocks = (
+  itemType,
+  ownedByApplicant = true,
+  sellingOnBehalfOf = null
+) => {
   TestHelper.createMocks()
 
   RedisService.get = jest.fn((request, redisKey) => {
@@ -871,16 +1118,24 @@ const _createMocks = (itemType, ownedByApplicant = true) => {
       [RedisKeys.IVORY_INTEGRAL]: ivoryIntegral,
       [RedisKeys.IVORY_AGE]: JSON.stringify(mockIvoryAge),
       [RedisKeys.UPLOAD_DOCUMENT]: JSON.stringify(mockDocuments),
-      [RedisKeys.OWNED_BY_APPLICANT]: ownedByApplicant ? 'Yes' : 'No',
+      [RedisKeys.OWNED_BY_APPLICANT]: ownedByApplicant
+        ? Options.YES
+        : Options.NO,
       [RedisKeys.OWNER_CONTACT_DETAILS]: JSON.stringify(
         mockOwnerContactDetails
       ),
       [RedisKeys.APPLICANT_CONTACT_DETAILS]: JSON.stringify(
-        mockApplicantContactDetails
+        ownedByApplicant ? mockOwnerContactDetails : mockApplicantContactDetails
       ),
       [RedisKeys.OWNER_ADDRESS]: ownerAddress,
       [RedisKeys.APPLICANT_ADDRESS]: applicantAddress,
-      [RedisKeys.INTENTION_FOR_ITEM]: saleIntention
+      [RedisKeys.INTENTION_FOR_ITEM]: saleIntention,
+      [RedisKeys.WHAT_CAPACITY]: JSON.stringify({
+        whatCapacity: 'Other',
+        otherCapacity: 'Some other capacity'
+      }),
+      [RedisKeys.WORK_FOR_A_BUSINESS]: Options.YES,
+      [RedisKeys.SELLING_ON_BEHALF_OF]: sellingOnBehalfOf
     }
 
     return mockDataMap[redisKey]

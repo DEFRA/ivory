@@ -472,7 +472,7 @@ const _getOwnerSummaryApplicantBusiness = async (
         'Business name',
         applicantContactDetails.businessName || NOTHING_ENTERED,
         _getChangeItems(
-          Paths.OWNER_CONTACT_DETAILS,
+          Paths.APPLICANT_CONTACT_DETAILS,
           CHANGE_LINK_HINT.BusinessName
         )
       )
@@ -536,7 +536,7 @@ const _getOwnerSummaryApplicantOther = async (
     _getSummaryListRow(
       'Capacity you’re acting',
       capacity,
-      _getChangeItems(Paths.WHAT_CAPACITY, CHANGE_LINK_HINT.WhoOwnsTheItem)
+      _getChangeItems(Paths.WHAT_CAPACITY, CHANGE_LINK_HINT.WorkForABusiness)
     )
   )
 
