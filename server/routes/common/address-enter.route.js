@@ -83,10 +83,7 @@ const handlers = {
 
     let route
     if (addressType === AddressType.OWNER) {
-      route =
-        context.ownedByApplicant === Options.YES
-          ? Paths.INTENTION_FOR_ITEM
-          : Paths.APPLICANT_CONTACT_DETAILS
+      route = Paths.APPLICANT_CONTACT_DETAILS
     } else {
       route = Paths.INTENTION_FOR_ITEM
     }
