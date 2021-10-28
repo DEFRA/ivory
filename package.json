@@ -17,7 +17,7 @@
     "postinstall": "npm run build"
   },
   "author": "Department for Environment, Food & Rural Affairs",
-  "license": "ISC",
+  "license": "SEE LICENSE IN LICENSE",
   "bugs": {
     "url": "https://github.com/DEFRA/ivory/issues"
   },

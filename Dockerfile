@@ -15,11 +15,8 @@ RUN apk update && apk upgrade && apk add --no-cache clamav rsyslog wget clamav-l
 #RUN touch /tmp/clamd.sock
 
 COPY bin/clamavDockerFiles/conf /etc/clamav
-#COPY bin/clamavDockerFiles/start.py /start.py
 
 VOLUME ["/data"]
-
-#CMD /start.py
 
 RUN freshclam
 RUN freshclam -d
