@@ -35,7 +35,7 @@ The default values will be used if the environment variables are missing or comm
 
 # Prerequisites
 
-Node v14.x
+Node v16.x
 
 Redis
 
