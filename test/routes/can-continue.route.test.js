@@ -169,7 +169,11 @@ describe('/ivory-volume route', () => {
 
         it('should have the correct "Cancel" link', () => {
           const element = document.querySelector(`#${elementIds.cancelLink}`)
-          TestHelper.checkLink(element, 'Cancel', 'https://www.gov.uk/')
+          TestHelper.checkLink(
+            element,
+            'Cancel and return to GOV.UK',
+            'https://www.gov.uk/'
+          )
         })
       })
 
@@ -391,7 +395,11 @@ describe('/ivory-volume route', () => {
 
         it('should have the correct "Cancel" link', () => {
           const element = document.querySelector(`#${elementIds.cancelLink}`)
-          TestHelper.checkLink(element, 'Cancel', 'https://www.gov.uk/')
+          TestHelper.checkLink(
+            element,
+            'Cancel and return to GOV.UK',
+            'https://www.gov.uk/'
+          )
         })
       })
 
