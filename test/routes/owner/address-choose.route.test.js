@@ -308,7 +308,7 @@ describe('/user-details/owner/address-choose route', () => {
         })
       })
 
-      it.only('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
+      it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
         AddressService.addressSearch = jest.fn().mockReturnValue(singleAddress)
 
         postOptions.payload = {
@@ -361,11 +361,16 @@ describe('/user-details/owner/address-choose route', () => {
           302
         )
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledTimes(2)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeyOwnerAddress,
           singleAddress[0].Address.AddressLine
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeyOwnerAddressInternational,
+          false
         )
 
         expect(response.headers.location).toEqual(
