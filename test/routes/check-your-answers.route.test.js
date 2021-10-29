@@ -297,59 +297,6 @@ describe('/check-your-answers route', () => {
         )
       })
 
-      // it('should have the correct "Owner" summary section - NOT owned by applicant', () => {
-      //   _checkSubheading(
-      //     document,
-      //     elementIds.subHeadings.owner,
-      //     'Owner’s details'
-      //   )
-
-      //   _checkSummary(document, elementIds.summaries.owner)
-
-      //   _checkSummaryKeys(document, elementIds.summaries.owner, [
-      //     'Do you own the item?',
-      //     'Owner’s name',
-      //     'Owner’s email',
-      //     'Owner’s address',
-      //     'Your name',
-      //     'Your email',
-      //     'Your address'
-      //   ])
-
-      //   _checkSummaryValues(document, elementIds.summaries.owner, [
-      //     Options.NO,
-      //     mockOwnerContactDetails.fullName,
-      //     mockOwnerContactDetails.emailAddress,
-      //     ownerAddress,
-      //     mockApplicantContactDetails.fullName,
-      //     mockApplicantContactDetails.emailAddress,
-      //     applicantAddress
-      //   ])
-
-      //   _checkSummaryChangeLinks(
-      //     document,
-      //     elementIds.summaries.owner,
-      //     [
-      //       'Change who owns the item',
-      //       'Change owner’s name',
-      //       'Change owner’s email',
-      //       'Change owner’s address',
-      //       'Change your name',
-      //       'Change your email',
-      //       'Change your address'
-      //     ],
-      //     [
-      //       Paths.WHO_OWNS_ITEM,
-      //       Paths.OWNER_CONTACT_DETAILS,
-      //       Paths.OWNER_CONTACT_DETAILS,
-      //       Paths.OWNER_ADDRESS_FIND,
-      //       Paths.APPLICANT_CONTACT_DETAILS,
-      //       Paths.APPLICANT_CONTACT_DETAILS,
-      //       Paths.APPLICANT_ADDRESS_FIND
-      //     ]
-      //   )
-      // })
-
       it('should have the correct "Sale Intention" summary section', () => {
         _checkSubheading(
           document,
@@ -379,58 +326,6 @@ describe('/check-your-answers route', () => {
         )
       })
     })
-
-    // describe('GET: Page sections - owned by applicant', () => {
-    //   beforeEach(async () => {
-    //     _createMocks(ItemType.HIGH_VALUE, true)
-    //     document = await TestHelper.submitGetRequest(server, getOptions)
-    //   })
-
-    //   it('should have the correct "Owner" summary section - owned by applicant', () => {
-    //     _checkSubheading(
-    //       document,
-    //       elementIds.subHeadings.owner,
-    //       'Owner’s details'
-    //     )
-
-    //     _checkSummary(document, elementIds.summaries.owner)
-
-    //     _checkSummaryKeys(document, elementIds.summaries.owner, [
-    //       'Do you own the item?',
-    //       'Your name',
-    //       'Business name (optional)',
-    //       'Your email',
-    //       'Your address'
-    //     ])
-
-    //     _checkSummaryValues(document, elementIds.summaries.owner, [
-    //       'Yes',
-    //       mockOwnerContactDetails.fullName,
-    //       businessName,
-    //       mockOwnerContactDetails.emailAddress,
-    //       ownerAddress
-    //     ])
-
-    //     _checkSummaryChangeLinks(
-    //       document,
-    //       elementIds.summaries.owner,
-    //       [
-    //         'Change who owns the item',
-    //         'Change your name',
-    //         'Change business name',
-    //         'Change your email',
-    //         'Change your address'
-    //       ],
-    //       [
-    //         Paths.WHO_OWNS_ITEM,
-    //         Paths.OWNER_CONTACT_DETAILS,
-    //         Paths.OWNER_CONTACT_DETAILS,
-    //         Paths.OWNER_CONTACT_DETAILS,
-    //         Paths.OWNER_ADDRESS_FIND
-    //       ]
-    //     )
-    //   })
-    // })
 
     describe('GET: Page sections - non-RMI item type', () => {
       beforeEach(async () => {
