@@ -194,8 +194,6 @@ const _addOwnerAndApplicantDetails = async request => {
     RedisKeys.OWNER_CONTACT_DETAILS
   )
 
-  console.log(ownerContactDetails)
-
   if (ownerContactDetails) {
     ownerContactDetails = JSON.parse(ownerContactDetails)
   }
