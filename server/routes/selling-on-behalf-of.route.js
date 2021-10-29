@@ -51,6 +51,18 @@ const handlers = {
       payload.sellingOnBehalfOf
     )
 
+    if (
+      payload.sellingOnBehalfOf !== BehalfOfBusinessOptions.AN_INDIVIDUAL &&
+      payload.sellingOnBehalfOf !== BehalfOfBusinessOptions.ANOTHER_BUSINESS &&
+      payload.sellingOnBehalfOf !==
+        BehalfOfNotBusinessOptions.FRIEND_OR_RELATIVE &&
+      payload.sellingOnBehalfOf !== BehalfOfNotBusinessOptions.A_BUSINESS
+    ) {
+      // Clear out any owner details that may have been previously entered
+      await RedisService.set(request, RedisKeys.OWNER_CONTACT_DETAILS, null)
+      await RedisService.set(request, RedisKeys.OWNER_ADDRESS, null)
+    }
+
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: `${Analytics.Action.SELECTED} ${payload.sellingOnBehalfOf}`,

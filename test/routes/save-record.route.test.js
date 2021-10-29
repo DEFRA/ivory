@@ -232,7 +232,13 @@ const section10RedisMockDataMap = {
   [RedisKeys.OWNER_CONTACT_DETAILS]: JSON.stringify(mockOwnerData),
   [RedisKeys.OWNER_ADDRESS]: 'OWNER_ADDRESS',
   [RedisKeys.APPLICANT_CONTACT_DETAILS]: JSON.stringify(mockApplicantData),
-  [RedisKeys.APPLICANT_ADDRESS]: 'APPLICANT_ADDRESS'
+  [RedisKeys.APPLICANT_ADDRESS]: 'APPLICANT_ADDRESS',
+  [RedisKeys.WHAT_CAPACITY]: JSON.stringify({
+    whatCapacity: 'Other',
+    otherCapacity: 'Some other capacity'
+  }),
+  [RedisKeys.WORK_FOR_A_BUSINESS]: true,
+  [RedisKeys.SELLING_ON_BEHALF_OF]: 'Other'
 }
 
 const section2RedisMockDataMap = {
@@ -259,5 +265,11 @@ const section2RedisMockDataMap = {
   [RedisKeys.APPLICANT_ADDRESS]: 'APPLICANT_ADDRESS',
   [RedisKeys.TARGET_COMPLETION_DATE]: 'TARGET_COMPLETION_DATE',
   [RedisKeys.UPLOAD_DOCUMENT]: JSON.stringify(mockFileAttachmentData),
-  [RedisKeys.WHY_IS_ITEM_RMI]: 'RMI_REASON'
+  [RedisKeys.WHY_IS_ITEM_RMI]: 'RMI_REASON',
+  [RedisKeys.WHAT_CAPACITY]: JSON.stringify({
+    whatCapacity: 'Other',
+    otherCapacity: 'Some other capacity'
+  }),
+  [RedisKeys.WORK_FOR_A_BUSINESS]: true,
+  [RedisKeys.SELLING_ON_BEHALF_OF]: 'Other'
 }

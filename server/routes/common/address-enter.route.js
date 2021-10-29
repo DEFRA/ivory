@@ -74,11 +74,21 @@ const handlers = {
       address
     )
 
-    if (
-      addressType === AddressType.APPLICANT_ADDRESS &&
-      context.ownedByApplicant
-    ) {
+    await RedisService.set(
+      request,
+      addressType === AddressType.OWNER
+        ? RedisKeys.OWNER_ADDRESS_INTERNATIONAL
+        : RedisKeys.APPLICANT_ADDRESS_INTERNATIONAL,
+      false
+    )
+
+    if (addressType === AddressType.APPLICANT && context.ownedByApplicant) {
       await RedisService.set(request, RedisKeys.OWNER_ADDRESS, address)
+      await RedisService.set(
+        request,
+        RedisKeys.OWNER_ADDRESS_INTERNATIONAL,
+        false
+      )
     }
 
     let route

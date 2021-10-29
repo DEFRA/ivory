@@ -199,7 +199,7 @@ describe('user-details/owner/contact-details route', () => {
           expect(RedisService.set).toBeCalledTimes(1)
           expect(RedisService.set).toBeCalledWith(
             expect.any(Object),
-            'owner-contact-details',
+            'owner.contact-details',
             JSON.stringify(postOptions.payload)
           )
 
@@ -233,7 +233,7 @@ describe('user-details/owner/contact-details route', () => {
           expect(RedisService.set).toBeCalledTimes(1)
           expect(RedisService.set).toBeCalledWith(
             expect.any(Object),
-            'owner-contact-details',
+            'owner.contact-details',
             JSON.stringify(postOptions.payload)
           )
 

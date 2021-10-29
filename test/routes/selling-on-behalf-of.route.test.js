@@ -185,7 +185,8 @@ describe('/selling-on-behalf-of route', () => {
             postOptions,
             server,
             'The business I work for',
-            nextUrlYourDetails
+            nextUrlYourDetails,
+            true
           )
         })
 
@@ -194,7 +195,8 @@ describe('/selling-on-behalf-of route', () => {
             postOptions,
             server,
             'An individual',
-            nextUrlOwnerDetails
+            nextUrlOwnerDetails,
+            false
           )
         })
 
@@ -203,7 +205,8 @@ describe('/selling-on-behalf-of route', () => {
             postOptions,
             server,
             'Another business',
-            nextUrlOwnerDetails
+            nextUrlOwnerDetails,
+            false
           )
         })
 
@@ -212,7 +215,8 @@ describe('/selling-on-behalf-of route', () => {
             postOptions,
             server,
             'Other',
-            nextUrlWhatCapacity
+            nextUrlWhatCapacity,
+            true
           )
         })
       })
@@ -227,7 +231,8 @@ describe('/selling-on-behalf-of route', () => {
             postOptions,
             server,
             'A friend or relative',
-            nextUrlOwnerDetails
+            nextUrlOwnerDetails,
+            false
           )
         })
 
@@ -236,7 +241,8 @@ describe('/selling-on-behalf-of route', () => {
             postOptions,
             server,
             'A business',
-            nextUrlOwnerDetails
+            nextUrlOwnerDetails,
+            false
           )
         })
 
@@ -245,7 +251,8 @@ describe('/selling-on-behalf-of route', () => {
             postOptions,
             server,
             'Other',
-            nextUrlWhatCapacity
+            nextUrlWhatCapacity,
+            true
           )
         })
       })
@@ -282,21 +289,43 @@ const _checkSelectedRadioAction = async (
   postOptions,
   server,
   selectedOption,
-  nextUrl
+  nextUrl,
+  shouldClearOwnerDetails
 ) => {
   const redisKey = 'selling-on-behalf-of'
+  const redisKeyOwnerContactDetails = 'owner.contact-details'
+  const redisKeyOwnerAddress = 'owner.address'
   postOptions.payload.sellingOnBehalfOf = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(0)
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
-  expect(RedisService.set).toBeCalledTimes(1)
-  expect(RedisService.set).toBeCalledWith(
-    expect.any(Object),
-    redisKey,
-    selectedOption
-  )
+  if (shouldClearOwnerDetails) {
+    expect(RedisService.set).toBeCalledTimes(3)
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      redisKey,
+      selectedOption
+    )
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      redisKeyOwnerAddress,
+      null
+    )
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      redisKeyOwnerContactDetails,
+      null
+    )
+  } else {
+    expect(RedisService.set).toBeCalledTimes(1)
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      redisKey,
+      selectedOption
+    )
+  }
 
   expect(response.headers.location).toEqual(nextUrl)
 }

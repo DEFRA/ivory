@@ -192,6 +192,7 @@ describe('/user-details/owner/address-confirm route', () => {
   describe('POST', () => {
     let postOptions
     const redisKeyOwnerAddress = 'owner.address'
+    const redisKeyOwnerAddressInternational = 'owner.address.international'
 
     beforeEach(() => {
       postOptions = {
@@ -224,12 +225,18 @@ describe('/user-details/owner/address-confirm route', () => {
           302
         )
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledTimes(2)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeyOwnerAddress,
           singleAddress[0].Address.AddressLine
         )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeyOwnerAddressInternational,
+          false
+        )
+
         expect(response.headers.location).toEqual(nextUrlIntentionForItem)
       })
     })
@@ -257,12 +264,18 @@ describe('/user-details/owner/address-confirm route', () => {
           302
         )
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledTimes(2)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeyOwnerAddress,
           singleAddress[0].Address.AddressLine
         )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeyOwnerAddressInternational,
+          false
+        )
+
         expect(response.headers.location).toEqual(
           nextUrlApplicantContactDetails
         )

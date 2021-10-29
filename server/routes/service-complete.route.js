@@ -45,7 +45,7 @@ const handlers = {
       return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
 
-    const context = await _getContext(request, isSection2)
+    const context = await _getContext(request, isSection2, ownedByApplicant)
 
     _sendEmail(
       request,
@@ -71,26 +71,33 @@ const handlers = {
   }
 }
 
-const _getContext = async (request, isSection2) => {
+const _getContext = async (request, isSection2, ownedByApplicant) => {
   const submissionReference = await RedisService.get(
     request,
     RedisKeys.SUBMISSION_REFERENCE
   )
 
   const ownerContactDetails = JSON.parse(
-    await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)
+    (await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)) || '{}'
   )
 
   const applicantContactDetails = JSON.parse(
-    await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)
+    (await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)) ||
+      '{}'
   )
 
   return {
     ownerContactDetails,
     applicantContactDetails,
     submissionReference,
-    ownerEmail: ownerContactDetails.emailAddress,
-    applicantEmail: applicantContactDetails.emailAddress,
+    applicantEmail: applicantContactDetails
+      ? applicantContactDetails.emailAddress
+      : null,
+    ownerEmail:
+      !ownedByApplicant && ownerContactDetails
+        ? ownerContactDetails.emailAddress
+        : null,
+
     pageTitle: isSection2 ? 'Application received' : 'Self-assessment complete',
     helpText1: isSection2
       ? 'We’ve sent confirmation of this application to:'
@@ -134,11 +141,11 @@ const _sendEmail = async (
 
   if (emailType === EmailTypes.CONFIRMATION_EMAIL) {
     redisSentEmailKey = RedisKeys.EMAIL_CONFIRMATION_SENT
-    fullName = context.applicantContactDetails.name
+    fullName = context.applicantContactDetails.fullName
     email = context.applicantEmail
   } else if (emailType === EmailTypes.EMAIL_TO_OWNER) {
     redisSentEmailKey = RedisKeys.EMAIL_TO_OWNER_SENT
-    fullName = context.ownerContactDetails.name
+    fullName = context.ownerContactDetails.fullName
     email = context.ownerEmail
   }
 

@@ -179,8 +179,11 @@ describe('/user-details/applicant/address-enter route', () => {
 
   describe('POST', () => {
     let postOptions
-    // const redisKeyOwnerAddress = 'owner.address'
+    const redisKeyOwnerAddress = 'owner.address'
     const redisKeyApplicantAddress = 'applicant.address'
+    const redisKeyOwnerAddressInternational = 'owner.address.international'
+    const redisKeyApplicantAddressInternational =
+      'applicant.address.international'
 
     beforeEach(async () => {
       postOptions = {
@@ -214,11 +217,26 @@ describe('/user-details/applicant/address-enter route', () => {
             302
           )
 
-          expect(RedisService.set).toBeCalledTimes(1)
+          expect(RedisService.set).toBeCalledTimes(4)
           expect(RedisService.set).toBeCalledWith(
             expect.any(Object),
             redisKeyApplicantAddress,
             'A Big House, London, SW1A 1AA'
+          )
+          expect(RedisService.set).toBeCalledWith(
+            expect.any(Object),
+            redisKeyOwnerAddress,
+            'A Big House, London, SW1A 1AA'
+          )
+          expect(RedisService.set).toBeCalledWith(
+            expect.any(Object),
+            redisKeyOwnerAddressInternational,
+            false
+          )
+          expect(RedisService.set).toBeCalledWith(
+            expect.any(Object),
+            redisKeyApplicantAddressInternational,
+            false
           )
 
           expect(response.headers.location).toEqual(nextUrl)
@@ -248,11 +266,16 @@ describe('/user-details/applicant/address-enter route', () => {
             302
           )
 
-          expect(RedisService.set).toBeCalledTimes(1)
+          expect(RedisService.set).toBeCalledTimes(2)
           expect(RedisService.set).toBeCalledWith(
             expect.any(Object),
             redisKeyApplicantAddress,
             'A Big House, London, SW1A 1AA'
+          )
+          expect(RedisService.set).toBeCalledWith(
+            expect.any(Object),
+            redisKeyApplicantAddressInternational,
+            false
           )
 
           expect(response.headers.location).toEqual(nextUrl)

@@ -103,6 +103,7 @@ describe('/user-details/owner/address-international route', () => {
   describe('POST', () => {
     let postOptions
     const redisKeyOwnerAddress = 'owner.address'
+    const redisKeyApplicantAddressInternational = 'owner.address.international'
     const internationalAddress = 'THE OWNER ADDRESS'
 
     beforeEach(() => {
@@ -130,11 +131,16 @@ describe('/user-details/owner/address-international route', () => {
           postOptions,
           302
         )
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledTimes(2)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeyOwnerAddress,
           'The Owner Address'
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeyApplicantAddressInternational,
+          true
         )
 
         expect(response.headers.location).toEqual(nextUrlApplicantDetails)

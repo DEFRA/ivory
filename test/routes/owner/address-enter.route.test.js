@@ -180,7 +180,7 @@ describe('/user-details/owner/address-enter route', () => {
   describe('POST', () => {
     let postOptions
     const redisKeyOwnerAddress = 'owner.address'
-    // const redisKeyApplicantAddress = 'applicant.address'
+    const redisKeyOwnerAddressInternational = 'owner.address.international'
 
     beforeEach(async () => {
       postOptions = {
@@ -214,11 +214,16 @@ describe('/user-details/owner/address-enter route', () => {
             302
           )
 
-          expect(RedisService.set).toBeCalledTimes(1)
+          expect(RedisService.set).toBeCalledTimes(2)
           expect(RedisService.set).toBeCalledWith(
             expect.any(Object),
             redisKeyOwnerAddress,
             'A Big House, London, SW1A 1AA'
+          )
+          expect(RedisService.set).toBeCalledWith(
+            expect.any(Object),
+            redisKeyOwnerAddressInternational,
+            false
           )
 
           expect(response.headers.location).toEqual(nextUrl)
@@ -248,11 +253,16 @@ describe('/user-details/owner/address-enter route', () => {
             302
           )
 
-          expect(RedisService.set).toBeCalledTimes(1)
+          expect(RedisService.set).toBeCalledTimes(2)
           expect(RedisService.set).toBeCalledWith(
             expect.any(Object),
             redisKeyOwnerAddress,
             'A Big House, London, SW1A 1AA'
+          )
+          expect(RedisService.set).toBeCalledWith(
+            expect.any(Object),
+            redisKeyOwnerAddressInternational,
+            false
           )
 
           expect(response.headers.location).toEqual(nextUrl)

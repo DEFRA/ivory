@@ -4,8 +4,8 @@ const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
 
 const {
+  Capacities,
   CharacterLimits,
-  DeclarationCapacities,
   Paths,
   RedisKeys,
   Views,
@@ -65,7 +65,7 @@ const handlers = {
       JSON.stringify(payload)
     )
 
-    return h.redirect(Paths.OWNER_CONTACT_DETAILS)
+    return h.redirect(Paths.APPLICANT_CONTACT_DETAILS)
   }
 }
 
@@ -88,14 +88,14 @@ const _getContext = async request => {
     items: options,
     otherOption,
     otherCapacity:
-      payload && payload.whatCapacity === DeclarationCapacities.OTHER
+      payload && payload.whatCapacity === Capacities.OTHER
         ? payload.otherCapacity
         : null
   }
 }
 
 const _getOptions = whatCapacity => {
-  const options = Object.values(DeclarationCapacities).map(capacity => {
+  const options = Object.values(Capacities).map(capacity => {
     return {
       label: capacity,
       checked: whatCapacity && whatCapacity === capacity

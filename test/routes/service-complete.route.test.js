@@ -308,7 +308,7 @@ describe('/service-complete route', () => {
             mockOwnerContactDetails.emailAddress,
             {
               exemptionType: ItemType.MUSICAL,
-              fullName: mockOwnerContactDetails.name,
+              fullName: mockOwnerContactDetails.fullName,
               submissionReference
             }
           )
@@ -331,7 +331,7 @@ describe('/service-complete route', () => {
             mockApplicantContactDetails.emailAddress,
             {
               exemptionType: ItemType.MUSICAL,
-              fullName: mockApplicantContactDetails.name,
+              fullName: mockApplicantContactDetails.fullName,
               submissionReference
             }
           )
@@ -342,7 +342,7 @@ describe('/service-complete route', () => {
             mockOwnerContactDetails.emailAddress,
             {
               exemptionType: ItemType.MUSICAL,
-              fullName: mockOwnerContactDetails.name,
+              fullName: mockOwnerContactDetails.fullName,
               submissionReference
             }
           )
@@ -365,7 +365,7 @@ describe('/service-complete route', () => {
             mockOwnerContactDetails.emailAddress,
             {
               exemptionType: ItemType.HIGH_VALUE,
-              fullName: mockOwnerContactDetails.name,
+              fullName: mockOwnerContactDetails.fullName,
               submissionReference
             }
           )
@@ -387,7 +387,7 @@ describe('/service-complete route', () => {
             mockApplicantContactDetails.emailAddress,
             {
               exemptionType: ItemType.HIGH_VALUE,
-              fullName: mockApplicantContactDetails.name,
+              fullName: mockApplicantContactDetails.fullName,
               submissionReference
             }
           )
@@ -458,13 +458,13 @@ const paymentReference = 'PAYMENT_REFERENCE'
 const submissionReference = '1234ABCD'
 
 const mockOwnerContactDetails = {
-  name: 'OWNER_NAME',
+  fullName: 'OWNER_NAME',
   emailAddress: 'OWNER@EMAIL.COM',
   confirmEmailAddress: 'OWNER@EMAIL.COM'
 }
 
 const mockApplicantContactDetails = {
-  name: 'APPLICANT_NAME',
+  fullName: 'APPLICANT_NAME',
   emailAddress: 'APPLICANT@EMAIL.COM',
   confirmEmailAddress: 'APPLICANT@EMAIL.COM'
 }

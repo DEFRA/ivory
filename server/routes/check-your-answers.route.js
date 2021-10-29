@@ -309,17 +309,16 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
     JSON.parse(await RedisService.get(request, RedisKeys.WHAT_CAPACITY)) || {}
   )
 
-  const ownerContactDetails =
-    JSON.parse(
-      await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)
-    ) || {}
+  const ownerContactDetails = JSON.parse(
+    (await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)) || '{}'
+  )
 
   const ownerAddress = await RedisService.get(request, RedisKeys.OWNER_ADDRESS)
 
-  const applicantContactDetails =
-    JSON.parse(
-      await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)
-    ) || {}
+  const applicantContactDetails = JSON.parse(
+    (await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)) ||
+      '{}'
+  )
 
   const applicantAddress = await RedisService.get(
     request,
