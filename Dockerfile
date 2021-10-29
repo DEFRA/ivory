@@ -1,26 +1,21 @@
-FROM node:14-alpine3.14
+FROM node:16
 
 LABEL author="Department for Environment, Food & Rural Affairs"
 
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Install python
-#RUN apk update && apk upgrade && apk add --no-cache \
-#  python3 py3-pip bash \
-#  && pip3 install --upgrade pip
+RUN apt-get update && \
+  apt-get upgrade -y
   
-RUN apk update && apk upgrade && apk add --no-cache clamav rsyslog wget clamav-libunrar bash
+RUN apt-get install -y bash clamav clamav-base clamav-daemon clamav-freshclam libclamav9
 
-#RUN touch /tmp/clamd.sock
-
-COPY bin/clamavDockerFiles/conf /etc/clamav
+RUN mkdir /var/run/clamav && \
+  chown clamav:clamav /var/run/clamav
 
 VOLUME ["/data"]
 
 RUN freshclam
-RUN freshclam -d
-#RUN clamd
 
 WORKDIR /app
 
@@ -31,4 +26,4 @@ RUN npm run build
 
 EXPOSE $PORT
 
-ENTRYPOINT [ "npm", "start" ]
+ENTRYPOINT /bin/sh ./bin/startContainer

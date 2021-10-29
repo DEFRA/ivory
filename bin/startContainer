@@ -1,0 +1,9 @@
+#!/bin/bash
+
+freshclam -d
+
+echo "Starting Daemon"
+clamd
+
+echo "Starting Ivory application"
+npm start
