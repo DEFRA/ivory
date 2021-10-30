@@ -1,8 +1,9 @@
 #!/bin/bash
 
+echo "Starting freshclam daemon"
 freshclam -d
 
-echo "Starting Daemon"
+echo "Starting clamd daemon"
 clamd
 
 echo "Starting Ivory application"
