@@ -3,7 +3,6 @@
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 const TestHelper = require('../../utils/test-helper')
-
 const CharacterLimits = require('../../mock-data/character-limits')
 
 describe('/user-details/applicant/address-international route', () => {
@@ -13,7 +12,6 @@ describe('/user-details/applicant/address-international route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    helpText: 'helpText',
     internationalAddress: 'internationalAddress',
     continue: 'continue'
   }
@@ -42,53 +40,67 @@ describe('/user-details/applicant/address-international route', () => {
       url
     }
 
-    beforeEach(async () => {
-      document = await TestHelper.submitGetRequest(server, getOptions)
+    describe('Not working for a business', () => {
+      beforeEach(async () => {
+        RedisService.get = jest.fn().mockResolvedValue('An individual')
+
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the Beta banner', () => {
+        TestHelper.checkBetaBanner(document)
+      })
+
+      it('should have the Back link', () => {
+        TestHelper.checkBackLink(document)
+      })
+
+      it('should have the correct page heading', () => {
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Enter your address')
+      })
+
+      it('should have the "Enter your address" form field', () => {
+        TestHelper.checkFormField(
+          document,
+          elementIds.internationalAddress,
+          '',
+          ''
+        )
+      })
+
+      it('should have the correct Call to Action button', () => {
+        const element = document.querySelector(`#${elementIds.continue}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      })
     })
 
-    it('should have the Beta banner', () => {
-      TestHelper.checkBetaBanner(document)
-    })
+    describe('Working for a business', () => {
+      beforeEach(async () => {
+        RedisService.get = jest.fn().mockResolvedValue('An individual')
 
-    it('should have the Back link', () => {
-      TestHelper.checkBackLink(document)
-    })
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
 
-    it('should have the correct page heading', () => {
-      const element = document.querySelector(
-        `#${elementIds.pageTitle} > legend > h1`
-      )
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Enter your address')
-    })
-
-    it('should have the correct help text', () => {
-      const element = document.querySelector(`#${elementIds.helpText}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'If your business is helping someone else sell their item, give your business address.'
-      )
-    })
-
-    it('should have the "Enter your address" form field', () => {
-      TestHelper.checkFormField(
-        document,
-        elementIds.internationalAddress,
-        '',
-        ''
-      )
-    })
-
-    it('should have the correct Call to Action button', () => {
-      const element = document.querySelector(`#${elementIds.continue}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      it('should have the correct page heading', () => {
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Enter your address')
+      })
     })
   })
 
   describe('POST', () => {
     let postOptions
     const redisKeyApplicantAddress = 'applicant.address'
+    const redisKeyApplicantAddressInternational =
+      'applicant.address.international'
     const internationalAddress = 'THE OWNER ADDRESS'
 
     beforeEach(() => {
@@ -116,11 +128,16 @@ describe('/user-details/applicant/address-international route', () => {
           postOptions,
           302
         )
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledTimes(2)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeyApplicantAddress,
           'The Owner Address'
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeyApplicantAddressInternational,
+          true
         )
 
         expect(response.headers.location).toEqual(nextUrl)

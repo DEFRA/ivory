@@ -87,9 +87,7 @@ describe('/user-details/owner/address-choose route', () => {
           `#${elementIds.pageTitle} > legend > h1`
         )
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'Choose your address'
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Choose address')
       })
 
       it('should have the help text if name/number and postcode were entered', () => {
@@ -201,9 +199,7 @@ describe('/user-details/owner/address-choose route', () => {
           `#${elementIds.pageTitle} > legend > h1`
         )
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          "Choose the owner's address"
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Choose address')
       })
 
       it('should have the help text if name/number and postcode were entered', () => {
@@ -289,7 +285,7 @@ describe('/user-details/owner/address-choose route', () => {
 
   describe('POST', () => {
     const redisKeyOwnerAddress = 'owner.address'
-    const redisKeyApplicantAddress = 'applicant.address'
+    const redisKeyOwnerAddressInternational = 'owner.address.international'
     let postOptions
 
     beforeEach(() => {
@@ -335,8 +331,8 @@ describe('/user-details/owner/address-choose route', () => {
         )
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
-          redisKeyApplicantAddress,
-          singleAddress[0].Address.AddressLine
+          redisKeyOwnerAddressInternational,
+          false
         )
 
         expect(response.headers.location).toEqual(nextUrlIntentionForItem)
@@ -365,11 +361,16 @@ describe('/user-details/owner/address-choose route', () => {
           302
         )
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledTimes(2)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeyOwnerAddress,
           singleAddress[0].Address.AddressLine
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeyOwnerAddressInternational,
+          false
         )
 
         expect(response.headers.location).toEqual(

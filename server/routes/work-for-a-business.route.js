@@ -16,7 +16,7 @@ const handlers = {
   get: async (request, h) => {
     const context = await _getContext(request)
 
-    return h.view(Views.WHO_OWNS_ITEM, {
+    return h.view(Views.WORK_FOR_A_BUSINESS, {
       ...context
     })
   },
@@ -34,7 +34,7 @@ const handlers = {
       })
 
       return h
-        .view(Views.WHO_OWNS_ITEM, {
+        .view(Views.WORK_FOR_A_BUSINESS, {
           ...context,
           ...buildErrorSummary(errors)
         })
@@ -43,44 +43,39 @@ const handlers = {
 
     await RedisService.set(
       request,
-      RedisKeys.OWNED_BY_APPLICANT,
-      payload.doYouOwnTheItem
+      RedisKeys.WORK_FOR_A_BUSINESS,
+      payload.workForABusiness
     )
-
-    if (payload.doYouOwnTheItem === Options.YES) {
-      await RedisService.set(request, RedisKeys.WORK_FOR_A_BUSINESS, null)
-    }
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
-      action: `${Analytics.Action.SELECTED} ${payload.doYouOwnTheItem}`,
+      action: `${Analytics.Action.SELECTED} ${payload.workForABusiness}`,
       label: context.pageTitle
     })
 
-    return payload.doYouOwnTheItem === Options.YES
-      ? h.redirect(Paths.APPLICANT_CONTACT_DETAILS)
-      : h.redirect(Paths.WORK_FOR_A_BUSINESS)
+    return h.redirect(Paths.SELLING_ON_BEHALF_OF)
   }
 }
 
 const _getContext = async request => {
-  const doYouOwnTheItem = await RedisService.get(
+  const workForABusiness = await RedisService.get(
     request,
-    RedisKeys.OWNED_BY_APPLICANT
+    RedisKeys.WORK_FOR_A_BUSINESS
   )
 
   return {
-    pageTitle: 'Do you own the item?',
+    pageTitle:
+      'Do you work for a business who is selling or hiring out the item?',
     items: [
       {
-        value: Options.YES,
-        text: Options.YES,
-        checked: doYouOwnTheItem === Options.YES
+        value: 'Yes',
+        text: 'Yes',
+        checked: workForABusiness === Options.YES
       },
       {
-        value: Options.NO,
-        text: Options.NO,
-        checked: doYouOwnTheItem === Options.NO
+        value: 'No',
+        text: 'No',
+        checked: workForABusiness === Options.NO
       }
     ]
   }
@@ -88,10 +83,11 @@ const _getContext = async request => {
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.doYouOwnTheItem)) {
+  if (Validators.empty(payload.workForABusiness)) {
     errors.push({
-      name: 'doYouOwnTheItem',
-      text: 'Tell us if you own the item'
+      name: 'workForABusiness',
+      text:
+        'Tell us whether you work for a business who is selling or hiring out the item'
     })
   }
   return errors
@@ -100,12 +96,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.WHO_OWNS_ITEM}`,
+    path: `${Paths.WORK_FOR_A_BUSINESS}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.WHO_OWNS_ITEM}`,
+    path: `${Paths.WORK_FOR_A_BUSINESS}`,
     handler: handlers.post
   }
 ]

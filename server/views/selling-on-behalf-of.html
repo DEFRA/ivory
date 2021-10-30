@@ -1,5 +1,6 @@
 {% extends 'form-layout.html' %}
 
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -9,19 +10,25 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-        {{ govukRadios({
-          idPrefix: "doYouOwnTheItem",
-          name: "doYouOwnTheItem",
-          fieldset: {
+        {% call govukFieldset({
+            attributes: {
+              id: "pageTitle"
+            },
             legend: {
               text: pageTitle,
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
             }
-          },
-          errorMessage: fieldErrors['doYouOwnTheItem'],
-          items: items
-        }) }}
+        }) %}
+
+          {{ govukRadios({
+            idPrefix: "sellingOnBehalfOf",
+            name: "sellingOnBehalfOf",
+            errorMessage: fieldErrors['sellingOnBehalfOf'],
+            items: items
+          }) }}
+
+        {% endcall %}
 
         {{ govukButton({
             attributes: {

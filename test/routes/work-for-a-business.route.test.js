@@ -2,18 +2,19 @@
 
 const TestHelper = require('../utils/test-helper')
 
-describe('/want-to-add-documents route', () => {
+jest.mock('../../server/services/redis.service')
+const RedisService = require('../../server/services/redis.service')
+
+describe('/work-for-a-business route', () => {
   let server
-  const url = '/want-to-add-documents'
-  const nextUrlUploadDocument = '/upload-document'
-  const nextUrWhoOwnsTheItem = '/who-owns-the-item'
+  const url = '/work-for-a-business'
+  const nextUrl = '/selling-on-behalf-of'
 
   const elementIds = {
     pageTitle: 'pageTitle',
     helpText: 'helpText',
-    helpTextList: 'helpTextList',
-    wantToAddDocuments: 'wantToAddDocuments',
-    wantToAddDocuments2: 'wantToAddDocuments-2',
+    workForABusiness: 'workForABusiness',
+    workForABusiness2: 'workForABusiness-2',
     continue: 'continue'
   }
 
@@ -59,21 +60,29 @@ describe('/want-to-add-documents route', () => {
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Do you want to add any documents to support your application?'
+        'Do you work for a business who is selling or hiring out the item?'
+      )
+    })
+
+    it('should have the correct help text', () => {
+      const element = document.querySelector(`#${elementIds.helpText}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'This could be an auction house or antiques dealer, for example.'
       )
     })
 
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
-        elementIds.wantToAddDocuments,
+        elementIds.workForABusiness,
         'Yes',
         'Yes'
       )
 
       TestHelper.checkRadioOption(
         document,
-        elementIds.wantToAddDocuments2,
+        elementIds.workForABusiness2,
         'No',
         'No'
       )
@@ -98,40 +107,29 @@ describe('/want-to-add-documents route', () => {
     })
 
     describe('Success', () => {
-      it('should progress to the next route when the first option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'Yes',
-          nextUrlUploadDocument
-        )
+      it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
+        await _checkSelectedRadioAction(postOptions, server, 'Yes', nextUrl)
       })
 
-      it('should progress to the next route when the second option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'No',
-          nextUrWhoOwnsTheItem,
-          'Item to be sold or hired out to a qualifying museum'
-        )
+      it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
+        await _checkSelectedRadioAction(postOptions, server, 'No', nextUrl)
       })
+    })
 
-      describe('Failure', () => {
-        it('should display a validation error message if the user does not select an item', async () => {
-          postOptions.payload.wantToAddDocuments = ''
-          const response = await TestHelper.submitPostRequest(
-            server,
-            postOptions,
-            400
-          )
-          await TestHelper.checkValidationError(
-            response,
-            'wantToAddDocuments',
-            'wantToAddDocuments-error',
-            'You must tell us if you want to add any documents to support your application'
-          )
-        })
+    describe('Failure', () => {
+      it('should display a validation error message if the user does not select an item', async () => {
+        postOptions.payload.doYouOwnTheItem = ''
+        const response = await TestHelper.submitPostRequest(
+          server,
+          postOptions,
+          400
+        )
+        await TestHelper.checkValidationError(
+          response,
+          'workForABusiness',
+          'workForABusiness-error',
+          'Tell us whether you work for a business who is selling or hiring out the item'
+        )
       })
     })
   })
@@ -139,6 +137,8 @@ describe('/want-to-add-documents route', () => {
 
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  RedisService.get = jest.fn()
 }
 
 const _checkSelectedRadioAction = async (
@@ -147,9 +147,19 @@ const _checkSelectedRadioAction = async (
   selectedOption,
   nextUrl
 ) => {
-  postOptions.payload.wantToAddDocuments = selectedOption
+  const redisKey = 'work-for-a-business'
+  postOptions.payload.workForABusiness = selectedOption
+
+  expect(RedisService.set).toBeCalledTimes(0)
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
+
+  expect(RedisService.set).toBeCalledTimes(1)
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    redisKey,
+    selectedOption
+  )
 
   expect(response.headers.location).toEqual(nextUrl)
 }

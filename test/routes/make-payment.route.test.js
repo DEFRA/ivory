@@ -83,7 +83,7 @@ describe('/make-payment route', () => {
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'applicant-contact-details'
+        'applicant.contact-details'
       )
 
       expect(RedisService.get).toBeCalledWith(
@@ -145,7 +145,7 @@ describe('/make-payment route', () => {
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'applicant-contact-details'
+        'applicant.contact-details'
       )
 
       expect(RedisService.get).toBeCalledWith(

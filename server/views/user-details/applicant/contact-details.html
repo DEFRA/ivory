@@ -1,0 +1,89 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
+
+        {{ govukInput({
+          label: {
+            classes: "govuk-label govuk-label--s",
+            text: "Full name"
+          },
+          id: "fullName",
+          name: "fullName",
+          value: fullName,
+          autocomplete: "name",
+          spellcheck: false,
+          errorMessage: fieldErrors['fullName']
+        }) }}
+
+        {% if workForABusiness %}
+          {{ govukInput({
+            label: {
+              classes: "govuk-label govuk-label--s",
+              text: "Business name"
+            },
+            id: "businessName",
+            name: "businessName",
+            value: businessName,
+            spellcheck: false,
+            errorMessage: fieldErrors['businessName']
+          }) }}
+        {% endif %}
+
+        {{ govukInput({
+          label: {
+            classes: "govuk-label govuk-label--s",
+            text: "Email address"
+          },
+          id: "emailAddress",
+          name: "emailAddress",
+          type: "email",
+          value: emailAddress,
+          autocomplete: "email",
+          spellcheck: false,
+          errorMessage: fieldErrors['emailAddress']
+        }) }}
+
+        {{ govukInput({
+          label: {
+            classes: "govuk-label govuk-label--s",
+            text: "Confirm email address"
+          },
+          id: "confirmEmailAddress",
+          name: "confirmEmailAddress",
+          type: "email",
+          value: confirmEmailAddress,
+          autocomplete: "email",
+          spellcheck: false,
+          errorMessage: fieldErrors['confirmEmailAddress']
+        }) }}
+
+      {% endcall %}
+
+        {{ govukButton({
+            attributes: {
+              id: "continue"
+            },
+            text: "Continue"
+          })
+        }}
+    </div>
+  </div>
+{% endblock %}

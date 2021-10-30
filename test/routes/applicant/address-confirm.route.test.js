@@ -67,9 +67,7 @@ describe('/user-details/applicant/address-confirm route', () => {
       it('should have the correct page heading', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'Confirm your address'
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Confirm address')
       })
 
       it('should show the selected address', () => {
@@ -122,6 +120,8 @@ describe('/user-details/applicant/address-confirm route', () => {
   describe('POST', () => {
     let postOptions
     const redisKeyApplicantAddress = 'applicant.address'
+    const redisKeyApplicantAddressInternational =
+      'applicant.address.international'
 
     beforeEach(() => {
       postOptions = {
@@ -154,12 +154,18 @@ describe('/user-details/applicant/address-confirm route', () => {
           302
         )
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledTimes(2)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeyApplicantAddress,
           singleAddress[0].Address.AddressLine
         )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeyApplicantAddressInternational,
+          false
+        )
+
         expect(response.headers.location).toEqual(nextUrl)
       })
     })

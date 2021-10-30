@@ -4,15 +4,17 @@ const TestHelper = require('../utils/test-helper')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
+const { RedisKeys } = require('../../server/utils/constants')
 
 describe('/who-owns-the-item route', () => {
   let server
   const url = '/who-owns-the-item'
-  const nextUrl = '/user-details/owner/contact-details'
+  const nextUrlYourDetails = '/user-details/applicant/contact-details'
+  const nextUrlWorkForABusiness = '/work-for-a-business'
 
   const elementIds = {
-    ivoryIsIntegral: 'whoOwnsItem',
-    ivoryIsIntegral2: 'whoOwnsItem-2',
+    doYouOwnTheItem: 'doYouOwnTheItem',
+    doYouOwnTheItem2: 'doYouOwnTheItem-2',
     continue: 'continue'
   }
 
@@ -55,22 +57,22 @@ describe('/who-owns-the-item route', () => {
     it('should have the correct page heading', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Who owns the item?')
+      expect(TestHelper.getTextContent(element)).toEqual('Do you own the item?')
     })
 
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
-        elementIds.ivoryIsIntegral,
-        'I own it',
-        'I own it'
+        elementIds.doYouOwnTheItem,
+        'Yes',
+        'Yes'
       )
 
       TestHelper.checkRadioOption(
         document,
-        elementIds.ivoryIsIntegral2,
-        'Someone else owns it',
-        'Someone else owns it'
+        elementIds.doYouOwnTheItem2,
+        'No',
+        'No'
       )
     })
 
@@ -97,8 +99,8 @@ describe('/who-owns-the-item route', () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'I own it',
-          nextUrl
+          'Yes',
+          nextUrlYourDetails
         )
       })
 
@@ -106,15 +108,15 @@ describe('/who-owns-the-item route', () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'You cannot remove the ivory easily or without damaging the item',
-          nextUrl
+          'No',
+          nextUrlWorkForABusiness
         )
       })
     })
 
     describe('Failure', () => {
       it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.whoOwnsItem = ''
+        postOptions.payload.doYouOwnTheItem = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -122,9 +124,9 @@ describe('/who-owns-the-item route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'whoOwnsItem',
-          'whoOwnsItem-error',
-          'Tell us who owns the item'
+          'doYouOwnTheItem',
+          'doYouOwnTheItem-error',
+          'Tell us if you own the item'
         )
       })
     })
@@ -144,18 +146,33 @@ const _checkSelectedRadioAction = async (
   nextUrl
 ) => {
   const redisKey = 'owned-by-applicant'
-  postOptions.payload.whoOwnsItem = selectedOption
+  postOptions.payload.doYouOwnTheItem = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(0)
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
-  expect(RedisService.set).toBeCalledTimes(1)
-  expect(RedisService.set).toBeCalledWith(
-    expect.any(Object),
-    redisKey,
-    selectedOption === 'I own it' ? 'Yes' : 'No'
-  )
+  if (selectedOption === 'Yes') {
+    expect(RedisService.set).toBeCalledTimes(2)
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      redisKey,
+      selectedOption === 'Yes' ? 'Yes' : 'No'
+    )
+
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      RedisKeys.WORK_FOR_A_BUSINESS,
+      null
+    )
+  } else {
+    expect(RedisService.set).toBeCalledTimes(1)
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      redisKey,
+      selectedOption === 'Yes' ? 'Yes' : 'No'
+    )
+  }
 
   expect(response.headers.location).toEqual(nextUrl)
 }

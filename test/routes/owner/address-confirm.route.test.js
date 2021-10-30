@@ -69,9 +69,7 @@ describe('/user-details/owner/address-confirm route', () => {
       it('should have the correct page heading', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'Confirm your address'
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Confirm address')
       })
 
       it('should show the selected address', () => {
@@ -141,9 +139,7 @@ describe('/user-details/owner/address-confirm route', () => {
       it('should have the correct page heading', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          "Confirm the owner's address"
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Confirm address')
       })
 
       it('should show the selected address', () => {
@@ -196,7 +192,7 @@ describe('/user-details/owner/address-confirm route', () => {
   describe('POST', () => {
     let postOptions
     const redisKeyOwnerAddress = 'owner.address'
-    const redisKeyApplicantAddress = 'applicant.address'
+    const redisKeyOwnerAddressInternational = 'owner.address.international'
 
     beforeEach(() => {
       postOptions = {
@@ -237,9 +233,10 @@ describe('/user-details/owner/address-confirm route', () => {
         )
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
-          redisKeyApplicantAddress,
-          singleAddress[0].Address.AddressLine
+          redisKeyOwnerAddressInternational,
+          false
         )
+
         expect(response.headers.location).toEqual(nextUrlIntentionForItem)
       })
     })
@@ -267,12 +264,18 @@ describe('/user-details/owner/address-confirm route', () => {
           302
         )
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledTimes(2)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKeyOwnerAddress,
           singleAddress[0].Address.AddressLine
         )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeyOwnerAddressInternational,
+          false
+        )
+
         expect(response.headers.location).toEqual(
           nextUrlApplicantContactDetails
         )

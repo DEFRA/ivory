@@ -13,10 +13,8 @@ describe('user-details/applicant/contact-details route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    name: 'name',
-    ownerApplicant: {
-      businessName: 'businessName'
-    },
+    fullName: 'fullName',
+    businessName: 'businessName',
     emailAddress: 'emailAddress',
     confirmEmailAddress: 'confirmEmailAddress',
     continue: 'continue'
@@ -46,50 +44,83 @@ describe('user-details/applicant/contact-details route', () => {
       url
     }
 
-    beforeEach(async () => {
-      RedisService.get = jest.fn().mockResolvedValue(JSON.stringify({}))
+    describe('GET: Does not work for a business', () => {
+      beforeEach(async () => {
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce('No')
+          .mockResolvedValueOnce(JSON.stringify({}))
 
-      document = await TestHelper.submitGetRequest(server, getOptions)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the Beta banner', () => {
+        TestHelper.checkBetaBanner(document)
+      })
+
+      it('should have the Back link', () => {
+        TestHelper.checkBackLink(document)
+      })
+
+      it('should have the correct page heading', () => {
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Your contact details'
+        )
+      })
+
+      it('should have the "Full name" form field', () => {
+        TestHelper.checkFormField(document, elementIds.fullName, 'Full name')
+      })
+
+      it('should have NOT the "Business name" form field', () => {
+        const element = document.querySelector(`#${elementIds.businessName}`)
+        expect(element).toBeFalsy()
+      })
+
+      it('should have the "Email address" form field', () => {
+        TestHelper.checkFormField(
+          document,
+          elementIds.emailAddress,
+          'Email address'
+        )
+      })
+
+      it('should have the "Confirm email address" form field', () => {
+        TestHelper.checkFormField(
+          document,
+          elementIds.confirmEmailAddress,
+          'Confirm email address'
+        )
+      })
+
+      it('should have the correct Call to Action button', () => {
+        const element = document.querySelector(`#${elementIds.continue}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      })
     })
 
-    it('should have the Beta banner', () => {
-      TestHelper.checkBetaBanner(document)
-    })
+    describe('GET: Works for a business', () => {
+      beforeEach(async () => {
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce('Yes')
+          .mockResolvedValueOnce(JSON.stringify({}))
 
-    it('should have the Back link', () => {
-      TestHelper.checkBackLink(document)
-    })
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
 
-    it('should have the correct page heading', () => {
-      const element = document.querySelector(`#${elementIds.pageTitle}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Your contact details')
-    })
-
-    it('should have the "Full name" form field', () => {
-      TestHelper.checkFormField(document, elementIds.name, 'Full name')
-    })
-
-    it('should have the "Email address" form field', () => {
-      TestHelper.checkFormField(
-        document,
-        elementIds.emailAddress,
-        'Email address'
-      )
-    })
-
-    it('should have the "Confirm email address" form field', () => {
-      TestHelper.checkFormField(
-        document,
-        elementIds.confirmEmailAddress,
-        'Confirm email address'
-      )
-    })
-
-    it('should have the correct Call to Action button', () => {
-      const element = document.querySelector(`#${elementIds.continue}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Continue')
+      it('should have the "Business name" form field', () => {
+        TestHelper.checkFormField(
+          document,
+          elementIds.businessName,
+          'Business name'
+        )
+      })
     })
   })
 
@@ -106,12 +137,16 @@ describe('user-details/applicant/contact-details route', () => {
 
     describe('Success', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify({}))
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce('Yes')
+          .mockResolvedValueOnce(JSON.stringify({}))
       })
 
       it('should store the value in Redis and progress to the next route when all fields have been entered correctly', async () => {
         postOptions.payload = {
-          name: 'some-value',
+          fullName: 'Joe Bloggs',
+          businessName: 'ABC Limited',
           emailAddress: 'some-email@somewhere.com',
           confirmEmailAddress: 'some-email@somewhere.com'
         }
@@ -127,7 +162,7 @@ describe('user-details/applicant/contact-details route', () => {
         expect(RedisService.set).toBeCalledTimes(1)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
-          'applicant-contact-details',
+          'applicant.contact-details',
           JSON.stringify(postOptions.payload)
         )
 
@@ -137,40 +172,46 @@ describe('user-details/applicant/contact-details route', () => {
 
     describe('Failure', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify({}))
+        RedisService.get = jest
+          .fn()
+          .mockResolvedValueOnce('Yes')
+          .mockResolvedValueOnce(JSON.stringify({}))
       })
 
       it('should display a validation error message if the user does not enter the full name', async () => {
         postOptions.payload = {
-          name: '',
+          fullName: '',
+          businessName: 'ABC Limited',
           emailAddress: 'some-email@somewhere.com',
           confirmEmailAddress: 'some-email@somewhere.com'
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
           server,
-          elementIds.name,
+          elementIds.fullName,
           'Enter your full name'
         )
       })
 
       it('should display a validation error message if the full name is too long', async () => {
         postOptions.payload = {
-          name: `${CharacterLimits.fourThousandCharacters}X`,
+          fullName: `${CharacterLimits.fourThousandCharacters}X`,
+          businessName: 'ABC Limited',
           emailAddress: 'some-email@somewhere.com',
           confirmEmailAddress: 'some-email@somewhere.com'
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
           server,
-          elementIds.name,
+          elementIds.fullName,
           'Name must have fewer than 4,000 characters'
         )
       })
 
       it('should display a validation error message if the user does not enter the email address', async () => {
         postOptions.payload = {
-          name: 'some-value',
+          fullName: 'Joe Bloggs',
+          businessName: 'ABC Limited',
           emailAddress: '',
           confirmEmailAddress: 'some-email@somewhere.com'
         }
@@ -184,7 +225,8 @@ describe('user-details/applicant/contact-details route', () => {
 
       it('should display a validation error message if the user does not enter an email address in a valid format', async () => {
         postOptions.payload = {
-          name: 'some-value',
+          fullName: 'Joe Bloggs',
+          businessName: 'ABC Limited',
           emailAddress: 'invalid-email@',
           confirmEmailAddress: 'some-email@somewhere.com'
         }
@@ -198,7 +240,8 @@ describe('user-details/applicant/contact-details route', () => {
 
       it('should display a validation error message if the email address is too long', async () => {
         postOptions.payload = {
-          name: 'some-value',
+          fullName: 'Joe Bloggs',
+          businessName: 'ABC Limited',
           emailAddress: `${CharacterLimits.fourThousandCharacters}@somewhere.com`,
           confirmEmailAddress: `${CharacterLimits.fourThousandCharacters}@somewhere.com`
         }
@@ -212,7 +255,8 @@ describe('user-details/applicant/contact-details route', () => {
 
       it('should display a validation error message if the user does not confirm their email address', async () => {
         postOptions.payload = {
-          name: 'some-value',
+          fullName: 'Joe Bloggs',
+          businessName: 'ABC Limited',
           emailAddress: 'some-email@somewhere.com',
           confirmEmailAddress: ''
         }
@@ -226,7 +270,8 @@ describe('user-details/applicant/contact-details route', () => {
 
       it('should display a validation error message if the email addresses do not match', async () => {
         postOptions.payload = {
-          name: 'some-value',
+          fullName: 'Joe Bloggs',
+          businessName: 'ABC Limited',
           emailAddress: 'some-email@somewhere.com',
           confirmEmailAddress: 'some-other-email@somewhere.com'
         }

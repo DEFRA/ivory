@@ -64,11 +64,23 @@ const handlers = {
       payload.address
     )
 
-    if (context.ownedByApplicant === Options.YES) {
+    await RedisService.set(
+      request,
+      addressType === AddressType.OWNER
+        ? RedisKeys.OWNER_ADDRESS_INTERNATIONAL
+        : RedisKeys.APPLICANT_ADDRESS_INTERNATIONAL,
+      false
+    )
+
+    if (
+      addressType === AddressType.APPLICANT &&
+      context.ownedByApplicant === Options.YES
+    ) {
+      await RedisService.set(request, RedisKeys.OWNER_ADDRESS, payload.address)
       await RedisService.set(
         request,
-        RedisKeys.APPLICANT_ADDRESS,
-        payload.address
+        RedisKeys.OWNER_ADDRESS_INTERNATIONAL,
+        false
       )
     }
 
@@ -87,7 +99,9 @@ const handlers = {
 }
 
 const _getContext = async (request, addressType) => {
-  let context
+  const context = {
+    pageTitle: 'Choose address'
+  }
 
   const ownedByApplicant = await RedisService.get(
     request,
@@ -105,33 +119,12 @@ const _getContext = async (request, addressType) => {
     }
   })
 
-  if (addressType === AddressType.OWNER) {
-    context = _getContextForOwnerAddressType(ownedByApplicant)
-  } else {
-    context = _getContextForApplicantAddressType()
-  }
-
   context.addresses = items
   context.ownedByApplicant = ownedByApplicant
 
   await _addBuildingNameOrNumberAndPostcodeToContext(request, context)
 
   return context
-}
-
-const _getContextForOwnerAddressType = ownedByApplicant => {
-  return {
-    pageTitle:
-      ownedByApplicant === Options.YES
-        ? 'Choose your address'
-        : "Choose the owner's address"
-  }
-}
-
-const _getContextForApplicantAddressType = () => {
-  return {
-    pageTitle: 'Choose your address'
-  }
 }
 
 const _addBuildingNameOrNumberAndPostcodeToContext = async (

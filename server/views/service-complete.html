@@ -17,8 +17,10 @@
       <p class="govuk-body" id="helpText1">{{ helpText1 }}</p>
 
       <ul class="govuk-list govuk-list--bullet">
-        <li id="applicantEmail">{{ applicantEmail }}</li>
-        {% if applicantEmail !== ownerEmail %}
+        {% if applicantEmail %}
+          <li id="applicantEmail">{{ applicantEmail }}</li>
+        {% endif %}
+        {% if ownerEmail %}
           <li id="ownerEmail">{{ ownerEmail }}</li>
         {% endif %}
       </ul>

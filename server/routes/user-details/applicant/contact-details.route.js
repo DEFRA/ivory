@@ -4,11 +4,12 @@ const AnalyticsService = require('../../../services/analytics.service')
 const RedisService = require('../../../services/redis.service')
 
 const {
+  Analytics,
   CharacterLimits,
+  Options,
   Paths,
   RedisKeys,
-  Views,
-  Analytics
+  Views
 } = require('../../../utils/constants')
 const { formatNumberWithCommas } = require('../../../utils/general')
 const { buildErrorSummary, Validators } = require('../../../utils/validation')
@@ -20,7 +21,7 @@ const handlers = {
   get: async (request, h) => {
     const context = await _getContext(request)
 
-    return h.view(Views.CONTACT_DETAILS, {
+    return h.view(Views.CONTACT_DETAILS_APPLICANT, {
       ...context
     })
   },
@@ -28,7 +29,11 @@ const handlers = {
   post: async (request, h) => {
     const context = await _getContext(request)
     const payload = request.payload
-    const errors = _validateForm(payload)
+    const errors = _validateForm(payload, context.workForABusiness)
+
+    const ownedByApplicant =
+      (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
+      Options.YES
 
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
@@ -38,7 +43,7 @@ const handlers = {
       })
 
       return h
-        .view(Views.CONTACT_DETAILS, {
+        .view(Views.CONTACT_DETAILS_APPLICANT, {
           ...context,
           ...buildErrorSummary(errors)
         })
@@ -51,6 +56,14 @@ const handlers = {
       JSON.stringify(payload)
     )
 
+    if (ownedByApplicant) {
+      await RedisService.set(
+        request,
+        RedisKeys.OWNER_CONTACT_DETAILS,
+        JSON.stringify(payload)
+      )
+    }
+
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.ENTERED,
@@ -62,6 +75,10 @@ const handlers = {
 }
 
 const _getContext = async request => {
+  const workForABusiness =
+    (await RedisService.get(request, RedisKeys.WORK_FOR_A_BUSINESS)) ===
+    Options.YES
+
   let contactDetails = await RedisService.get(
     request,
     RedisKeys.APPLICANT_CONTACT_DETAILS
@@ -71,37 +88,46 @@ const _getContext = async request => {
     contactDetails = JSON.parse(contactDetails)
   }
 
-  const context = { pageTitle, applicant: true, ...contactDetails }
+  const context = { pageTitle, workForABusiness, ...contactDetails }
 
   addPayloadToContext(request, context)
 
   return context
 }
 
-const _validateForm = payload => {
+const _validateForm = (payload, workForABusiness) => {
   const errors = []
 
-  if (Validators.empty(payload.name)) {
+  if (Validators.empty(payload.fullName)) {
     errors.push({
-      name: 'name',
+      name: 'fullName',
       text: 'Enter your full name'
     })
-  } else if (Validators.maxLength(payload.name, CharacterLimits.Input)) {
+  } else if (Validators.maxLength(payload.fullName, CharacterLimits.Input)) {
     errors.push({
-      name: 'name',
+      name: 'fullName',
       text: `Name must have fewer than ${formatNumberWithCommas(
         CharacterLimits.Input
       )} characters`
     })
   }
 
-  if (Validators.maxLength(payload.businessName, CharacterLimits.Input)) {
-    errors.push({
-      name: 'businessName',
-      text: `Business name must have fewer than ${formatNumberWithCommas(
-        CharacterLimits.Input
-      )} characters`
-    })
+  if (workForABusiness) {
+    if (Validators.empty(payload.businessName)) {
+      errors.push({
+        name: 'businessName',
+        text: 'Enter the business name'
+      })
+    } else if (
+      Validators.maxLength(payload.businessName, CharacterLimits.Input)
+    ) {
+      errors.push({
+        name: 'businessName',
+        text: `Business name must have fewer than ${formatNumberWithCommas(
+          CharacterLimits.Input
+        )} characters`
+      })
+    }
   }
 
   if (Validators.empty(payload.emailAddress)) {

@@ -1,5 +1,8 @@
 const {
   AgeExemptionReasons,
+  BehalfOfBusinessOptions,
+  BehalfOfNotBusinessOptions,
+  Capacities,
   ItemType,
   Intention,
   IvoryIntegralReasons,
@@ -17,6 +20,13 @@ const AgeExemptionReasonLookup = {
   [AgeExemptionReasons.PROFESSIONAL_OPINION]: 881990007,
   [AgeExemptionReasons.CARBON_DATED]: 881990008,
   [AgeExemptionReasons.OTHER_REASON]: 881990009
+}
+
+const CapacityLookup = {
+  [Capacities.AGENT]: 881990000,
+  [Capacities.EXECUTOR_ADMINISTRATOR]: 881990001,
+  [Capacities.TRUSTEE]: 881990002,
+  [Capacities.OTHER]: 881990003
 }
 
 const ExemptionTypeLookup = {
@@ -46,6 +56,15 @@ const IvoryVolumeLookup = {
   [IvoryVolumeReasons.OTHER_REASON]: 881990003
 }
 
+const SellingOnBehalfOfLookup = {
+  [BehalfOfBusinessOptions.BUSINESS_I_WORK_FOR]: 881990000,
+  [BehalfOfBusinessOptions.AN_INDIVIDUAL]: 881990001,
+  [BehalfOfBusinessOptions.ANOTHER_BUSINESS]: 881990002,
+  [BehalfOfNotBusinessOptions.FRIEND_OR_RELATIVE]: 881990003,
+  [BehalfOfNotBusinessOptions.A_BUSINESS]: 881990004,
+  [BehalfOfBusinessOptions.OTHER]: 881990005
+}
+
 const Status = {
   Logged: 881990000
 }
@@ -59,10 +78,12 @@ const WhyIvoryIntegral = {
 
 module.exports = {
   AgeExemptionReasonLookup,
+  CapacityLookup,
   ExemptionTypeLookup,
   IntentionLookup,
   IvoryIntegralLookup,
   IvoryVolumeLookup,
+  SellingOnBehalfOfLookup,
   Status,
   WhyIvoryIntegral
 }

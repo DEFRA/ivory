@@ -57,11 +57,6 @@ const handlers = {
         .code(400)
     }
 
-    const ownedByApplicant = await RedisService.get(
-      request,
-      RedisKeys.OWNED_BY_APPLICANT
-    )
-
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
       action: Analytics.Action.ENTERED,
@@ -79,16 +74,26 @@ const handlers = {
       address
     )
 
-    if (ownedByApplicant === Options.YES) {
-      await RedisService.set(request, RedisKeys.APPLICANT_ADDRESS, address)
+    await RedisService.set(
+      request,
+      addressType === AddressType.OWNER
+        ? RedisKeys.OWNER_ADDRESS_INTERNATIONAL
+        : RedisKeys.APPLICANT_ADDRESS_INTERNATIONAL,
+      false
+    )
+
+    if (addressType === AddressType.APPLICANT && context.ownedByApplicant) {
+      await RedisService.set(request, RedisKeys.OWNER_ADDRESS, address)
+      await RedisService.set(
+        request,
+        RedisKeys.OWNER_ADDRESS_INTERNATIONAL,
+        false
+      )
     }
 
     let route
     if (addressType === AddressType.OWNER) {
-      route =
-        ownedByApplicant === Options.YES
-          ? Paths.INTENTION_FOR_ITEM
-          : Paths.APPLICANT_CONTACT_DETAILS
+      route = Paths.APPLICANT_CONTACT_DETAILS
     } else {
       route = Paths.INTENTION_FOR_ITEM
     }
@@ -100,10 +105,9 @@ const handlers = {
 const _getContext = async (request, addressType, isGet = true) => {
   const context = {}
 
-  const ownedByApplicant = await RedisService.get(
-    request,
-    RedisKeys.OWNED_BY_APPLICANT
-  )
+  const ownedByApplicant =
+    (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
+    Options.YES
 
   const addresses = JSON.parse(
     await RedisService.get(request, RedisKeys.ADDRESS_FIND_RESULTS)
@@ -111,41 +115,30 @@ const _getContext = async (request, addressType, isGet = true) => {
 
   const resultSize = addresses.length
 
+  context.ownedByApplicant = ownedByApplicant
+
   if (resultSize === 0) {
     context.pageTitle = 'No results, you will need to enter the address'
   } else if (resultSize === 1) {
-    if (addressType === AddressType.OWNER) {
-      context.pageTitle =
-        ownedByApplicant === Options.YES
-          ? 'Edit your address'
-          : "Edit the owner's address"
-    } else {
-      context.pageTitle = 'Edit your address'
-    }
+    context.pageTitle = 'Edit the address'
+
     if (isGet) {
       Object.assign(context, _getAddressFieldsFromAddress(addresses[0].Address))
     }
   } else if (resultSize > 1 && resultSize <= 50) {
-    if (addressType === AddressType.OWNER) {
-      context.pageTitle =
-        ownedByApplicant === Options.YES
-          ? 'Enter your address'
-          : "Enter the owner's address"
-    } else {
-      context.pageTitle = 'Enter your address'
-    }
+    context.pageTitle = 'Enter the address'
   } else if (resultSize > 50) {
     context.pageTitle = 'Too many results, you will need to enter the address'
   }
 
-  if (addressType === AddressType.OWNER) {
-    context.helpText =
-      ownedByApplicant === Options.YES
-        ? 'If your business owns the item, give your business address.'
-        : 'If the owner is a business, give the business address.'
-  } else {
-    context.helpText =
-      'If your business is helping someone else sell their item, give your business address.'
+  if (!ownedByApplicant) {
+    if (addressType === AddressType.OWNER) {
+      context.helpText =
+        'If the owner is a business, give the business address.'
+    } else {
+      context.helpText =
+        'If the business you work for is helping someone else sell their item, give the business address.'
+    }
   }
 
   addPayloadToContext(request, context)

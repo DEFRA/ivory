@@ -20,7 +20,9 @@
           }
       }) %}
 
-        <p id="helpText">{{ helpText }}</p>
+        {% if helpText %}
+          <p id="helpText">{{ helpText }}</p>
+        {% endif %}
 
         {{ govukInput({
           label: {

@@ -57,6 +57,26 @@ const AgeExemptionReasons = {
   OTHER_REASON: 'Other reason'
 }
 
+const BehalfOfBusinessOptions = {
+  BUSINESS_I_WORK_FOR: 'The business I work for',
+  AN_INDIVIDUAL: 'An individual',
+  ANOTHER_BUSINESS: 'Another business',
+  OTHER: 'Other'
+}
+
+const BehalfOfNotBusinessOptions = {
+  FRIEND_OR_RELATIVE: 'A friend or relative',
+  A_BUSINESS: 'A business',
+  OTHER: 'Other'
+}
+
+const Capacities = {
+  AGENT: 'Agent',
+  EXECUTOR_ADMINISTRATOR: 'Executor or administrator',
+  TRUSTEE: 'Trustee',
+  OTHER: 'Other'
+}
+
 const DataVerseFieldName = {
   SECTION_2_CASE_ID: 'cre2c_ivorysection2caseid',
   SECTION_10_CASE_ID: 'cre2c_ivorysection10caseid',
@@ -81,12 +101,15 @@ const DataVerseFieldName = {
   ITEM_SUMMARY: 'cre2c_itemsummary',
   UNIQUE_FEATURES: 'cre2c_uniquefeatures',
   INTENTION: 'cre2c_intention',
+  OWNED_BY_APPLICANT: 'cre2c_ownedbyapplicant',
   OWNER_NAME: 'cre2c_ownername',
   OWNER_EMAIL: 'cre2c_owneremail',
   OWNER_ADDRESS: 'cre2c_owneraddress',
+  OWNER_POSTCODE: 'cre2c_ownerpostcode',
   APPLICANT_NAME: 'cre2c_applicantname',
   APPLICANT_EMAIL: 'cre2c_applicantemail',
   APPLICANT_ADDRESS: 'cre2c_applicantaddress',
+  APPLICANT_POSTCODE: 'cre2c_applicantpostcode',
   PHOTO_1: 'cre2c_photo1',
   PHOTO_2: 'cre2c_photo2',
   PHOTO_3: 'cre2c_photo3',
@@ -97,7 +120,11 @@ const DataVerseFieldName = {
   SUPPORTING_EVIDENCE_1_NAME: 'cre2c_supportingevidence1_name',
   CERTIFICATE_NUMBER: 'cre2c_certificatenumber',
   CERTIFICATE_ISSUE_DATE: 'cre2c_certificateissuedate',
-  CERTIFICATE_KEY: 'cre2c_certificatekey'
+  CERTIFICATE_KEY: 'cre2c_certificatekey',
+  CAPACITY: 'cre2c_capacity',
+  CAPACITY_OTHER: 'cre2c_capacityother',
+  SELLING_ON_BEHALF_OF: 'cre2c_sellingonbehalfof',
+  WORK_FOR_A_BUSINESS: 'cre2c_workforabusiness'
 }
 
 const Intention = {
@@ -196,6 +223,7 @@ const Paths = {
   REMOVE_PHOTO: '/remove-photo',
   RMI_AND_PRE_1918: '/eligibility-checker/rmi-and-pre-1918',
   SAVE_RECORD: '/save-record',
+  SELLING_ON_BEHALF_OF: '/selling-on-behalf-of',
   SELLING_TO_MUSEUM: '/eligibility-checker/selling-to-museum',
   SERVICE_COMPLETE: '/service-complete',
   SERVICE_STATUS: '/service-status',
@@ -205,10 +233,12 @@ const Paths = {
   UPLOAD_DOCUMENT: '/upload-document',
   UPLOAD_PHOTO: '/upload-photo',
   UPLOAD_TIMEOUT: '/errors/upload-timeout',
+  WHAT_CAPACITY: '/what-capacity',
   WANT_TO_ADD_DOCUMENTS: '/want-to-add-documents',
   WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',
   WHO_OWNS_ITEM: '/who-owns-the-item',
   WHY_IS_ITEM_RMI: '/why-is-item-rmi',
+  WORK_FOR_A_BUSINESS: '/work-for-a-business',
   YOUR_DOCUMENTS: '/your-documents',
   YOUR_PHOTOS: '/your-photos'
 }
@@ -225,7 +255,8 @@ const Views = {
   CANNOT_CONTINUE: 'eligibility-checker/cannot-continue',
   CANNOT_TRADE: 'eligibility-checker/cannot-trade',
   CHECK_YOUR_ANSWERS: 'check-your-answers',
-  CONTACT_DETAILS: 'user-details/contact-details',
+  CONTACT_DETAILS_APPLICANT: 'user-details/applicant/contact-details',
+  CONTACT_DETAILS_OWNER: 'user-details/owner/contact-details',
   CONTAIN_ELEPHANT_IVORY: 'eligibility-checker/contain-elephant-ivory',
   COOKIE_POLICY: 'cookie-policy',
   DESCRIBE_THE_ITEM: 'describe-the-item',
@@ -251,6 +282,7 @@ const Views = {
   PROBLEM_WITH_SERVICE: 'errors/problem-with-service',
   RECORD_NOT_FOUND: 'errors/record-not-found',
   RMI_AND_PRE_1918: 'eligibility-checker/rmi-and-pre-1918',
+  SELLING_ON_BEHALF_OF: 'selling-on-behalf-of',
   SELLING_TO_MUSEUM: 'eligibility-checker/selling-to-museum',
   SERVICE_COMPLETE: 'service-complete',
   SERVICE_STATUS: 'service-status',
@@ -260,9 +292,11 @@ const Views = {
   UPLOAD_DOCUMENT: 'upload-document',
   UPLOAD_PHOTO: 'upload-photo',
   UPLOAD_TIMEOUT: 'errors/upload-timeout',
+  WHAT_CAPACITY: 'what-capacity',
   WANT_TO_ADD_DOCUMENTS: 'want-to-add-documents',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHO_OWNS_ITEM: 'who-owns-the-item',
+  WORK_FOR_A_BUSINESS: 'work-for-a-business',
   WHY_IS_ITEM_RMI: 'why-is-item-rmi',
   YOUR_DOCUMENTS: 'your-documents',
   YOUR_PHOTOS: 'your-photos'
@@ -273,7 +307,8 @@ const RedisKeys = {
   ADDRESS_FIND_POSTCODE: 'address-find.postcode',
   ADDRESS_FIND_RESULTS: 'address-find.results',
   APPLICANT_ADDRESS: 'applicant.address',
-  APPLICANT_CONTACT_DETAILS: 'applicant-contact-details',
+  APPLICANT_ADDRESS_INTERNATIONAL: 'applicant.address.international',
+  APPLICANT_CONTACT_DETAILS: 'applicant.contact-details',
   ARE_YOU_A_MUSEUM: 'eligibility-checker.are-you-a-museum',
   CONTAIN_ELEPHANT_IVORY: 'eligibility-checker.contain-elephant-ivory',
   DESCRIBE_THE_ITEM: 'describe-the-item',
@@ -285,9 +320,11 @@ const RedisKeys = {
   IVORY_VOLUME: 'ivory-volume',
   OWNED_BY_APPLICANT: 'owned-by-applicant',
   OWNER_ADDRESS: 'owner.address',
-  OWNER_CONTACT_DETAILS: 'owner-contact-details',
+  OWNER_ADDRESS_INTERNATIONAL: 'owner.address.international',
+  OWNER_CONTACT_DETAILS: 'owner.contact-details',
   PAYMENT_AMOUNT: 'payment-amount',
   PAYMENT_ID: 'payment-id',
+  SELLING_ON_BEHALF_OF: 'selling-on-behalf-of',
   SUBMISSION_DATE: 'submission-date',
   SUBMISSION_REFERENCE: 'submission-reference',
   TARGET_COMPLETION_DATE: 'target-completion-date',
@@ -296,8 +333,10 @@ const RedisKeys = {
   UPLOAD_PHOTO: 'upload-photo',
   UPLOAD_PHOTO_ERROR: 'upload-photo.error',
   USED_CHECKER: 'used-checker',
+  WHAT_CAPACITY: 'what-capacity',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHY_IS_ITEM_RMI: 'why-is-item-rmi',
+  WORK_FOR_A_BUSINESS: 'work-for-a-business',
   YOUR_DOCUMENTS: 'your-documents',
   YOUR_PHOTOS: 'your-photos'
 }
@@ -318,6 +357,9 @@ module.exports = Object.freeze({
   AddressType,
   AgeExemptionReasons,
   Analytics,
+  BehalfOfBusinessOptions,
+  BehalfOfNotBusinessOptions,
+  Capacities,
   CharacterLimits,
   DataVerseFieldName,
   EmailTypes,

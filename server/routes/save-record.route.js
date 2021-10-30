@@ -7,10 +7,11 @@ const RedisService = require('../services/redis.service')
 const PaymentService = require('../services/payment.service')
 
 const {
-  Paths,
-  RedisKeys,
   ItemType,
-  PaymentResult
+  Options,
+  Paths,
+  PaymentResult,
+  RedisKeys
 } = require('../utils/constants')
 const { DataVerseFieldName } = require('../utils/constants')
 const {
@@ -19,7 +20,9 @@ const {
   IntentionLookup,
   IvoryIntegralLookup,
   IvoryVolumeLookup,
-  Status
+  Status,
+  SellingOnBehalfOfLookup,
+  CapacityLookup
 } = require('../services/dataverse-choice-lookups')
 
 const handlers = {
@@ -182,6 +185,10 @@ const _getCommonFields = async (request, itemDescription) => {
 }
 
 const _addOwnerAndApplicantDetails = async request => {
+  const ownedByApplicant =
+    (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
+    Options.YES
+
   let ownerContactDetails = await RedisService.get(
     request,
     RedisKeys.OWNER_CONTACT_DETAILS
@@ -200,20 +207,99 @@ const _addOwnerAndApplicantDetails = async request => {
     applicantContactDetails = JSON.parse(applicantContactDetails)
   }
 
+  const ownerAddress = await RedisService.get(request, RedisKeys.OWNER_ADDRESS)
+  const ownerAddressInternational =
+    (await RedisService.get(request, RedisKeys.OWNER_ADDRESS_INTERNATIONAL)) ===
+    'true'
+  const applicantAddress = await RedisService.get(
+    request,
+    RedisKeys.APPLICANT_ADDRESS
+  )
+  const applicantAddressInternational =
+    (await RedisService.get(
+      request,
+      RedisKeys.APPLICANT_ADDRESS_INTERNATIONAL
+    )) === 'true'
+
+  const sellingOnBehalfOf = await RedisService.get(
+    request,
+    RedisKeys.SELLING_ON_BEHALF_OF
+  )
+
+  const capacityResponse =
+    JSON.parse(await RedisService.get(request, RedisKeys.WHAT_CAPACITY)) || {}
+
+  const capacity = capacityResponse ? capacityResponse.whatCapacity : null
+  const capacityOther = capacityResponse ? capacityResponse.otherCapacity : null
+
   return {
-    [DataVerseFieldName.OWNER_NAME]: ownerContactDetails.name,
-    [DataVerseFieldName.OWNER_EMAIL]: ownerContactDetails.emailAddress,
-    [DataVerseFieldName.OWNER_ADDRESS]: await RedisService.get(
-      request,
-      RedisKeys.OWNER_ADDRESS
+    [DataVerseFieldName.OWNED_BY_APPLICANT]: ownedByApplicant,
+    [DataVerseFieldName.OWNER_NAME]: ownerContactDetails
+      ? ownerContactDetails.fullName || ownerContactDetails.businessName
+      : null,
+    [DataVerseFieldName.OWNER_EMAIL]: ownerContactDetails
+      ? ownerContactDetails.emailAddress
+      : null,
+    [DataVerseFieldName.OWNER_ADDRESS]: _formatAddress(
+      ownerAddress,
+      ownerAddressInternational
     ),
-    [DataVerseFieldName.APPLICANT_NAME]: applicantContactDetails.name,
+    [DataVerseFieldName.OWNER_POSTCODE]: _getPostcode(
+      ownerAddress,
+      ownerAddressInternational
+    ),
+    [DataVerseFieldName.APPLICANT_NAME]: applicantContactDetails.fullName,
     [DataVerseFieldName.APPLICANT_EMAIL]: applicantContactDetails.emailAddress,
-    [DataVerseFieldName.APPLICANT_ADDRESS]: await RedisService.get(
-      request,
-      RedisKeys.APPLICANT_ADDRESS
-    )
+    [DataVerseFieldName.APPLICANT_ADDRESS]: _formatAddress(
+      applicantAddress,
+      applicantAddressInternational
+    ),
+    [DataVerseFieldName.APPLICANT_POSTCODE]: _getPostcode(
+      applicantAddress,
+      applicantAddressInternational
+    ),
+
+    [DataVerseFieldName.WORK_FOR_A_BUSINESS]:
+      (await RedisService.get(request, RedisKeys.WORK_FOR_A_BUSINESS)) ===
+      Options.YES,
+
+    [DataVerseFieldName.SELLING_ON_BEHALF_OF]: _getSellingOnBehalfOfCode(
+      sellingOnBehalfOf
+    ),
+
+    [DataVerseFieldName.CAPACITY]: _getCapacityCode(capacity),
+    [DataVerseFieldName.CAPACITY_OTHER]: capacityOther
   }
+}
+
+// Removes the postcode from an address
+const _formatAddress = (address, isInternationalAddress) => {
+  if (isInternationalAddress) {
+    return address
+  }
+
+  let formattedAddress
+  if (address && !isInternationalAddress) {
+    const postcodeIndex = address.lastIndexOf(', ')
+    if (postcodeIndex) {
+      formattedAddress = address.substring(postcodeIndex, -1)
+    }
+  }
+
+  return formattedAddress
+}
+
+// Returns the postcode from an address
+const _getPostcode = (address, isInternationalAddress) => {
+  let postcode
+  if (address && !isInternationalAddress) {
+    const postcodeIndex = address.lastIndexOf(', ')
+    if (postcodeIndex) {
+      postcode = address.slice(postcodeIndex + 2)
+    }
+  }
+
+  return postcode
 }
 
 const _addInitialPhoto = async request => {
@@ -258,3 +344,8 @@ const _getIvoryVolumeReasonCode = ivoryVolumeReason =>
 
 const _getIvoryIntegralReasonCode = ivoryIntegralReason =>
   IvoryIntegralLookup[ivoryIntegralReason]
+
+const _getCapacityCode = capacity => CapacityLookup[capacity]
+
+const _getSellingOnBehalfOfCode = sellingOnBehalfOf =>
+  SellingOnBehalfOfLookup[sellingOnBehalfOf]

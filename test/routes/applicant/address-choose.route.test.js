@@ -77,7 +77,7 @@ describe('/user-details/applicant/address-choose route', () => {
         `#${elementIds.pageTitle} > legend > h1`
       )
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('Choose your address')
+      expect(TestHelper.getTextContent(element)).toEqual('Choose address')
     })
 
     it('should have the help text if name/number and postcode were entered', () => {
@@ -156,6 +156,7 @@ describe('/user-details/applicant/address-choose route', () => {
 
   describe('POST', () => {
     const redisKey = 'applicant.address'
+    const redisKeyApplicantInternational = 'applicant.address.international'
     let postOptions
 
     beforeEach(() => {
@@ -188,11 +189,16 @@ describe('/user-details/applicant/address-choose route', () => {
           302
         )
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(RedisService.set).toBeCalledTimes(2)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKey,
           singleAddress[0].Address.AddressLine
+        )
+        expect(RedisService.set).toBeCalledWith(
+          expect.any(Object),
+          redisKeyApplicantInternational,
+          false
         )
 
         expect(response.headers.location).toEqual(nextUrl)
