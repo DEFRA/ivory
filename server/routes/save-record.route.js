@@ -226,8 +226,9 @@ const _addOwnerAndApplicantDetails = async request => {
     RedisKeys.SELLING_ON_BEHALF_OF
   )
 
-  const capacityResponse =
-    JSON.parse(await RedisService.get(request, RedisKeys.WHAT_CAPACITY)) || {}
+  const capacityResponse = JSON.parse(
+    (await RedisService.get(request, RedisKeys.WHAT_CAPACITY)) || '{}'
+  )
 
   const capacity = capacityResponse ? capacityResponse.whatCapacity : null
   const capacityOther = capacityResponse ? capacityResponse.otherCapacity : null

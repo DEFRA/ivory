@@ -1,0 +1,78 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      {% set otherHtml %}
+        {{ govukInput({
+            label: {
+              text: "Enter certificate number"
+            },
+            hint: {
+              text: "For example, '10AB010C'"
+            },
+            classes: "govuk-!-width-one-third",
+            id: "certificateNumber",
+            name: "certificateNumber",
+            value: certificateNumber,
+            errorMessage: fieldErrors['certificateNumber']
+          }) }}
+      {% endset -%}
+
+      {% set yesItem = {
+        text: yesOption.text,
+        value: yesOption.value,
+        checked: yesOption.checked,
+        conditional: {
+          html: otherHtml
+        }
+      }
+      %}
+
+      {% set items = (items.unshift(yesItem), items) %}
+
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
+
+      {{ govukRadios({
+        idPrefix: "alreadyCertified",
+        name: "alreadyCertified",
+        errorMessage: fieldErrors['alreadyCertified'],
+        items: items
+      }) }}
+
+      {% endcall %}
+
+      {{ govukDetails({
+        summaryText: "It does but I don't have the certificate or certificate number",
+        html: "<p id=\"para1\">You can find the certificate number towards the top of the digital certificate we emailed the owner when their application was successful.<p id=\"para2\">If you bought the item, the previous owner should have given you the certificate as part of the transaction. You may have received this by email.</p><p id=\"para3\">Without this number, you will have to make a fresh application for your item.</p>"
+      }) }}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text: "Continue"
+        })
+      }}
+
+    </div>
+  </div>
+{% endblock %}
+

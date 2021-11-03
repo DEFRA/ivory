@@ -57,6 +57,11 @@ const AgeExemptionReasons = {
   OTHER_REASON: 'Other reason'
 }
 
+const AlreadyCertifiedOptions = {
+  YES: 'Yes',
+  NO: 'No',
+  USED_TO: 'It used to'
+}
 const BehalfOfBusinessOptions = {
   BUSINESS_I_WORK_FOR: 'The business I work for',
   AN_INDIVIDUAL: 'An individual',
@@ -175,6 +180,7 @@ const Urls = {
 
 const Paths = {
   ACCESSIBILITY_STATEMENT: '/accessibility-statement',
+  ALREADY_CERTIFIED: '/already-certified',
   APPLICANT_ADDRESS_CHOOSE: '/user-details/applicant/address-choose',
   APPLICANT_ADDRESS_CONFIRM: '/user-details/applicant/address-confirm',
   APPLICANT_ADDRESS_ENTER: '/user-details/applicant/address-enter',
@@ -182,6 +188,7 @@ const Paths = {
   APPLICANT_ADDRESS_INTERNATIONAL:
     '/user-details/applicant/address-international',
   APPLICANT_CONTACT_DETAILS: '/user-details/applicant/contact-details',
+  APPLIED_BEFORE: '/applied-before',
   ARE_YOU_A_MUSEUM: '/eligibility-checker/are-you-a-museum',
   CAN_CONTINUE: '/can-continue',
   CANNOT_CONTINUE: '/eligibility-checker/cannot-continue',
@@ -216,11 +223,13 @@ const Paths = {
   OWNER_ADDRESS_INTERNATIONAL: '/user-details/owner/address-international',
   OWNER_CONTACT_DETAILS: '/user-details/owner/contact-details',
   PAGE_NOT_FOUND: '/errors/page-not-found',
+  PREVIOUS_APPLICATION_NUMBER: '/previous-application-number',
   PRIVACY_NOTICE: '/privacy-notice',
   PROBLEM_WITH_SERVICE: '/errors/problem-with-service',
   RECORD_NOT_FOUND: '/errors/record-not-found',
   REMOVE_DOCUMENT: '/remove-document',
   REMOVE_PHOTO: '/remove-photo',
+  REVOKED_CERTIFICATE: '/revoked-certificate',
   RMI_AND_PRE_1918: '/eligibility-checker/rmi-and-pre-1918',
   SAVE_RECORD: '/save-record',
   SELLING_ON_BEHALF_OF: '/selling-on-behalf-of',
@@ -250,6 +259,8 @@ const Views = {
   ADDRESS_ENTER: 'user-details/address-enter',
   ADDRESS_FIND: 'user-details/address-find',
   ADDRESS_INTERNATIONAL: 'user-details/address-international',
+  ALREADY_CERTIFIED: 'already-certified',
+  APPLIED_BEFORE: 'applied-before',
   ARE_YOU_A_MUSEUM: 'eligibility-checker/are-you-a-museum',
   CAN_CONTINUE: 'can-continue',
   CANNOT_CONTINUE: 'eligibility-checker/cannot-continue',
@@ -278,9 +289,11 @@ const Views = {
   MADE_BEFORE_1947: 'eligibility-checker/made-before-1947',
   MADE_BEFORE_1975: 'eligibility-checker/made-before-1975',
   PAGE_NOT_FOUND: 'errors/page-not-found',
+  PREVIOUS_APPLICATION_NUMBER: 'previous-application-number',
   PRIVACY_NOTICE: 'privacy-notice',
   PROBLEM_WITH_SERVICE: 'errors/problem-with-service',
   RECORD_NOT_FOUND: 'errors/record-not-found',
+  REVOKED_CERTIFICATE: 'revoked-certificate',
   RMI_AND_PRE_1918: 'eligibility-checker/rmi-and-pre-1918',
   SELLING_ON_BEHALF_OF: 'selling-on-behalf-of',
   SELLING_TO_MUSEUM: 'eligibility-checker/selling-to-museum',
@@ -309,6 +322,8 @@ const RedisKeys = {
   APPLICANT_ADDRESS: 'applicant.address',
   APPLICANT_ADDRESS_INTERNATIONAL: 'applicant.address.international',
   APPLICANT_CONTACT_DETAILS: 'applicant.contact-details',
+  ALREADY_CERTIFIED: 'already-certified',
+  APPLIED_BEFORE: 'applied-before',
   ARE_YOU_A_MUSEUM: 'eligibility-checker.are-you-a-museum',
   CONTAIN_ELEPHANT_IVORY: 'eligibility-checker.contain-elephant-ivory',
   DESCRIBE_THE_ITEM: 'describe-the-item',
@@ -323,7 +338,9 @@ const RedisKeys = {
   OWNER_ADDRESS_INTERNATIONAL: 'owner.address.international',
   OWNER_CONTACT_DETAILS: 'owner.contact-details',
   PAYMENT_AMOUNT: 'payment-amount',
+  PREVIOUS_APPLICATION_NUMBER: 'previous-application-number',
   PAYMENT_ID: 'payment-id',
+  REVOKED_CERTIFICATE: 'revoked-certficate',
   SELLING_ON_BEHALF_OF: 'selling-on-behalf-of',
   SUBMISSION_DATE: 'submission-date',
   SUBMISSION_REFERENCE: 'submission-reference',
@@ -356,6 +373,7 @@ const StatusCodes = {
 module.exports = Object.freeze({
   AddressType,
   AgeExemptionReasons,
+  AlreadyCertifiedOptions,
   Analytics,
   BehalfOfBusinessOptions,
   BehalfOfNotBusinessOptions,

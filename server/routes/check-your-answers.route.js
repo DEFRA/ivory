@@ -154,8 +154,9 @@ const _getExemptionReasonSummary = async (
   isSection2,
   isMesuem
 ) => {
-  const ivoryAge =
-    JSON.parse(await RedisService.get(request, RedisKeys.IVORY_AGE)) || {}
+  const ivoryAge = JSON.parse(
+    (await RedisService.get(request, RedisKeys.IVORY_AGE)) || '{}'
+  )
 
   if (ivoryAge.otherReason) {
     ivoryAge.ivoryAge.pop()
@@ -306,7 +307,9 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
   )
 
   const capacity = _formatCapacity(
-    JSON.parse(await RedisService.get(request, RedisKeys.WHAT_CAPACITY)) || {}
+    JSON.parse(
+      (await RedisService.get(request, RedisKeys.WHAT_CAPACITY)) || '{}'
+    )
   )
 
   const ownerContactDetails = JSON.parse(

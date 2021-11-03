@@ -54,7 +54,9 @@ const handlers = {
       label: context.pageTitle
     })
 
-    return h.redirect(Paths.CAN_CONTINUE)
+    const isRmi = payload.whatTypeOfItemIsIt === ItemType.HIGH_VALUE
+
+    return h.redirect(isRmi ? Paths.ALREADY_CERTIFIED : Paths.CAN_CONTINUE)
   }
 }
 

@@ -20,7 +20,7 @@ const handlers = {
   get: async (request, h) => {
     const context = await _getContext(request)
 
-    return h.view(Views.WHAT_CAPACITY, {
+    return h.view(Views.REVOKED_CERTIFICATE, {
       ...context
     })
   },
@@ -38,34 +38,34 @@ const handlers = {
       })
 
       return h
-        .view(Views.WHAT_CAPACITY, {
+        .view(Views.REVOKED_CERTIFICATE, {
           ...context,
           ...buildErrorSummary(errors)
         })
         .code(400)
     }
 
-    if (payload.whatCapacity !== otherCapacity) {
-      delete payload.otherCapacity
-    }
+    // if (payload.whatCapacity !== otherCapacity) {
+    //   delete payload.otherCapacity
+    // }
 
-    AnalyticsService.sendEvent(request, {
-      category: Analytics.Category.MAIN_QUESTIONS,
-      action: `${Analytics.Action.SELECTED} ${payload.whatCapacity}${
-        payload.whatCapacity === otherCapacity
-          ? ' - ' + payload.otherCapacity
-          : ''
-      }`,
-      label: context.pageTitle
-    })
+    // AnalyticsService.sendEvent(request, {
+    //   category: Analytics.Category.MAIN_QUESTIONS,
+    //   action: `${Analytics.Action.SELECTED} ${payload.whatCapacity}${
+    //     payload.whatCapacity === otherCapacity
+    //       ? ' - ' + payload.otherCapacity
+    //       : ''
+    //   }`,
+    //   label: context.pageTitle
+    // })
 
     await RedisService.set(
       request,
-      RedisKeys.WHAT_CAPACITY,
+      RedisKeys.REVOKED_CERTIFICATE,
       JSON.stringify(payload)
     )
 
-    return h.redirect(Paths.APPLICANT_CONTACT_DETAILS)
+    return h.redirect(Paths.CAN_CONTINUE)
   }
 }
 
@@ -74,9 +74,10 @@ const _getContext = async request => {
   if (request.payload) {
     payload = request.payload
   } else {
-    payload = JSON.parse(
-      (await RedisService.get(request, RedisKeys.WHAT_CAPACITY)) || '{}'
-    )
+    payload =
+      JSON.parse(
+        await RedisService.get(request, RedisKeys.REVOKED_CERTIFICATE)
+      ) || '{}'
   }
 
   const whatCapacity = payload ? payload.whatCapacity : null
@@ -85,7 +86,8 @@ const _getContext = async request => {
   const otherOption = options.pop()
 
   return {
-    pageTitle: 'In what capacity are you making this declaration?',
+    pageTitle:
+      "Enter the certificate number from the cancelled or 'revoked' certficate",
     items: options,
     otherOption,
     otherCapacity:
@@ -120,13 +122,11 @@ const _getOptions = whatCapacity => {
 
 const _validateForm = payload => {
   const errors = []
-  const errorMessage =
-    'Tell us in what capacity you are making this declaration'
 
   if (Validators.empty(payload.whatCapacity)) {
     errors.push({
       name: 'whatCapacity',
-      text: errorMessage
+      text: 'Tell us if the item already has an exemption certificate'
     })
   }
 
@@ -134,9 +134,11 @@ const _validateForm = payload => {
     if (Validators.empty(payload.otherCapacity)) {
       errors.push({
         name: 'otherCapacity',
-        text: errorMessage
+        text: 'Enter the certificate number'
       })
     }
+
+    // TODO CONFIRM MAX CHARS
 
     if (Validators.maxLength(payload.otherCapacity, CharacterLimits.Input)) {
       errors.push({
@@ -154,12 +156,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.WHAT_CAPACITY}`,
+    path: `${Paths.REVOKED_CERTIFICATE}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.WHAT_CAPACITY}`,
+    path: `${Paths.REVOKED_CERTIFICATE}`,
     handler: handlers.post
   }
 ]

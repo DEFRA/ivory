@@ -9,6 +9,7 @@ describe('/what-type-of-item-is-it route', () => {
   let server
   const url = '/what-type-of-item-is-it'
   const nextUrl = '/can-continue'
+  const nextUrlAlreadyCertified = '/already-certified'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -203,7 +204,7 @@ describe('/what-type-of-item-is-it route', () => {
           postOptions,
           server,
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
-          nextUrl
+          nextUrlAlreadyCertified
         )
       })
     })
