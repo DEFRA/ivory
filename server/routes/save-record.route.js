@@ -52,8 +52,9 @@ const handlers = {
 }
 
 const _createRecord = async (request, itemType, isSection2) => {
-  const itemDescription = JSON.parse(
-    await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
+  const itemDescription = await RedisService.get(
+    request,
+    RedisKeys.DESCRIBE_THE_ITEM
   )
 
   const body = isSection2
@@ -73,8 +74,9 @@ const _updateRecord = async (request, entity, isSection2) => {
 }
 
 const _updateRecordAttachments = async (request, entity) => {
-  const supportingInformation = JSON.parse(
-    await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
+  const supportingInformation = await RedisService.get(
+    request,
+    RedisKeys.UPLOAD_DOCUMENT
   )
 
   if (supportingInformation) {
@@ -117,14 +119,7 @@ const _createSection2Body = async (request, itemType, itemDescription) => {
 }
 
 const _createSection10Body = async (request, itemType, itemDescription) => {
-  const ivoryVolumeStringified = await RedisService.get(
-    request,
-    RedisKeys.IVORY_VOLUME
-  )
-
-  const ivoryVolume = ivoryVolumeStringified
-    ? JSON.parse(ivoryVolumeStringified)
-    : null
+  const ivoryVolume = await RedisService.get(request, RedisKeys.IVORY_VOLUME)
 
   return {
     ...(await _getCommonFields(request, itemDescription)),
@@ -133,12 +128,10 @@ const _createSection10Body = async (request, itemType, itemDescription) => {
       RedisKeys.SUBMISSION_REFERENCE
     ),
     [DataVerseFieldName.EXEMPTION_TYPE]: _getExemptionCategoryCode(itemType),
-    [DataVerseFieldName.WHY_IVORY_EXEMPT]: ivoryVolume
+    [DataVerseFieldName.WHY_IVORY_EXEMPT]: ivoryVolume.ivoryVolume
       ? _getIvoryVolumeReasonCode(ivoryVolume.ivoryVolume)
       : null,
-    [DataVerseFieldName.WHY_IVORY_EXEMPT_OTHER_REASON]: ivoryVolume
-      ? ivoryVolume.otherReason
-      : null,
+    [DataVerseFieldName.WHY_IVORY_EXEMPT_OTHER_REASON]: ivoryVolume.otherReason,
     [DataVerseFieldName.WHY_IVORY_INTEGRAL]:
       itemType === ItemType.TEN_PERCENT
         ? _getIvoryIntegralReasonCode(
@@ -151,9 +144,7 @@ const _createSection10Body = async (request, itemType, itemDescription) => {
 const _getCommonFields = async (request, itemDescription) => {
   const now = new Date().toISOString()
 
-  const ivoryAge = JSON.parse(
-    await RedisService.get(request, RedisKeys.IVORY_AGE)
-  )
+  const ivoryAge = await RedisService.get(request, RedisKeys.IVORY_AGE)
 
   return {
     createdon: now,
@@ -189,23 +180,15 @@ const _addOwnerAndApplicantDetails = async request => {
     (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
     Options.YES
 
-  let ownerContactDetails = await RedisService.get(
+  const ownerContactDetails = await RedisService.get(
     request,
     RedisKeys.OWNER_CONTACT_DETAILS
   )
 
-  if (ownerContactDetails) {
-    ownerContactDetails = JSON.parse(ownerContactDetails)
-  }
-
-  let applicantContactDetails = await RedisService.get(
+  const applicantContactDetails = await RedisService.get(
     request,
     RedisKeys.APPLICANT_CONTACT_DETAILS
   )
-
-  if (applicantContactDetails) {
-    applicantContactDetails = JSON.parse(applicantContactDetails)
-  }
 
   const ownerAddress = await RedisService.get(request, RedisKeys.OWNER_ADDRESS)
   const ownerAddressInternational =
@@ -226,8 +209,9 @@ const _addOwnerAndApplicantDetails = async request => {
     RedisKeys.SELLING_ON_BEHALF_OF
   )
 
-  const capacityResponse = JSON.parse(
-    (await RedisService.get(request, RedisKeys.WHAT_CAPACITY)) || '{}'
+  const capacityResponse = await RedisService.get(
+    request,
+    RedisKeys.WHAT_CAPACITY
   )
 
   const capacity = capacityResponse ? capacityResponse.whatCapacity : null
@@ -304,9 +288,7 @@ const _getPostcode = (address, isInternationalAddress) => {
 }
 
 const _addInitialPhoto = async request => {
-  const photos = JSON.parse(
-    await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
-  )
+  const photos = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
 
   return {
     [DataVerseFieldName.PHOTO_1]:
@@ -315,9 +297,7 @@ const _addInitialPhoto = async request => {
 }
 
 const _addAdditionalPhotos = async request => {
-  const photos = JSON.parse(
-    await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
-  )
+  const photos = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
 
   const additionalPhotos = {}
   if (photos && photos.files && photos.files.length > 1) {

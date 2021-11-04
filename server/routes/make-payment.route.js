@@ -30,8 +30,9 @@ const handlers = {
       ? 'Ivory Act application for a certificate'
       : 'Ivory Act self-assessment'
 
-    const applicantContactDetails = JSON.parse(
-      await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)
+    const applicantContactDetails = await RedisService.get(
+      request,
+      RedisKeys.APPLICANT_CONTACT_DETAILS
     )
 
     const response = await PaymentService.makePayment(

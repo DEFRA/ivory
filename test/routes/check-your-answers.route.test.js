@@ -1006,29 +1006,27 @@ const _createMocks = (
   RedisService.get = jest.fn((request, redisKey) => {
     const mockDataMap = {
       [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: itemType,
-      [RedisKeys.DESCRIBE_THE_ITEM]: JSON.stringify(mockItemDescription),
-      [RedisKeys.UPLOAD_PHOTO]: JSON.stringify(mockPhotos),
+      [RedisKeys.DESCRIBE_THE_ITEM]: mockItemDescription,
+      [RedisKeys.UPLOAD_PHOTO]: mockPhotos,
       [RedisKeys.WHY_IS_ITEM_RMI]: whyRmi,
-      [RedisKeys.IVORY_VOLUME]: JSON.stringify(mockIvoryVolume),
+      [RedisKeys.IVORY_VOLUME]: mockIvoryVolume,
       [RedisKeys.IVORY_INTEGRAL]: ivoryIntegral,
-      [RedisKeys.IVORY_AGE]: JSON.stringify(mockIvoryAge),
-      [RedisKeys.UPLOAD_DOCUMENT]: JSON.stringify(mockDocuments),
+      [RedisKeys.IVORY_AGE]: mockIvoryAge,
+      [RedisKeys.UPLOAD_DOCUMENT]: mockDocuments,
       [RedisKeys.OWNED_BY_APPLICANT]: ownedByApplicant
         ? Options.YES
         : Options.NO,
-      [RedisKeys.OWNER_CONTACT_DETAILS]: JSON.stringify(
-        mockOwnerContactDetails
-      ),
-      [RedisKeys.APPLICANT_CONTACT_DETAILS]: JSON.stringify(
-        ownedByApplicant ? mockOwnerContactDetails : mockApplicantContactDetails
-      ),
+      [RedisKeys.OWNER_CONTACT_DETAILS]: mockOwnerContactDetails,
+      [RedisKeys.APPLICANT_CONTACT_DETAILS]: ownedByApplicant
+        ? mockOwnerContactDetails
+        : mockApplicantContactDetails,
       [RedisKeys.OWNER_ADDRESS]: ownerAddress,
       [RedisKeys.APPLICANT_ADDRESS]: applicantAddress,
       [RedisKeys.INTENTION_FOR_ITEM]: saleIntention,
-      [RedisKeys.WHAT_CAPACITY]: JSON.stringify({
+      [RedisKeys.WHAT_CAPACITY]: {
         whatCapacity: 'Other',
         otherCapacity: 'Some other capacity'
-      }),
+      },
       [RedisKeys.WORK_FOR_A_BUSINESS]: Options.YES,
       [RedisKeys.SELLING_ON_BEHALF_OF]: sellingOnBehalfOf
     }

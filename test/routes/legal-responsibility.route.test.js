@@ -154,16 +154,14 @@ describe('/legal-responsibility route', () => {
 
     describe('Success', () => {
       it('should redirect the correct route when there are no uploaded photos', async () => {
-        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify({}))
+        RedisService.get = jest.fn().mockResolvedValue({})
 
         const response = await TestHelper.submitPostRequest(server, postOptions)
         expect(response.headers.location).toEqual(nextUrlNoPhotos)
       })
 
       it('should redirect the correct route when there are some uploaded photos', async () => {
-        RedisService.get = jest
-          .fn()
-          .mockResolvedValue(JSON.stringify(mockPhotos))
+        RedisService.get = jest.fn().mockResolvedValue(mockPhotos)
 
         const response = await TestHelper.submitPostRequest(server, postOptions)
         expect(response.headers.location).toEqual(nextUrlSomePhotos)

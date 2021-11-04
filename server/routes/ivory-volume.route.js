@@ -89,9 +89,7 @@ const _getContext = async request => {
   if (request.payload) {
     payload = request.payload
   } else {
-    payload = JSON.parse(
-      await RedisService.get(request, RedisKeys.IVORY_VOLUME)
-    )
+    payload = await RedisService.get(request, RedisKeys.IVORY_VOLUME)
   }
 
   const ivoryVolume = payload ? payload.ivoryVolume : null

@@ -79,7 +79,7 @@ const _getContext = async request => {
   if (request.payload) {
     payload = request.payload
   } else {
-    payload = JSON.parse(await RedisService.get(request, RedisKeys.IVORY_AGE))
+    payload = await RedisService.get(request, RedisKeys.IVORY_AGE)
   }
 
   const itemType = await _getItemType(request)

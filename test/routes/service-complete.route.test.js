@@ -472,7 +472,7 @@ const mockApplicantContactDetails = {
 const redisMockDataMap = {
   [RedisKeys.PAYMENT_ID]: paymentReference,
   [RedisKeys.SUBMISSION_REFERENCE]: submissionReference,
-  [RedisKeys.OWNER_CONTACT_DETAILS]: JSON.stringify(mockOwnerContactDetails)
+  [RedisKeys.OWNER_CONTACT_DETAILS]: mockOwnerContactDetails
 }
 
 const _createMocks = () => {
@@ -484,11 +484,10 @@ const _createMocks = () => {
 const _createSection2RedisMock = ownedByApplicant => {
   redisMockDataMap[RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT] = ItemType.HIGH_VALUE
   redisMockDataMap[RedisKeys.OWNED_BY_APPLICANT] = ownedByApplicant
-  redisMockDataMap[RedisKeys.APPLICANT_CONTACT_DETAILS] = JSON.stringify(
+  redisMockDataMap[RedisKeys.APPLICANT_CONTACT_DETAILS] =
     ownedByApplicant === Options.YES
       ? mockOwnerContactDetails
       : mockApplicantContactDetails
-  )
 
   RedisService.get = jest.fn((request, redisKey) => {
     return redisMockDataMap[redisKey]
@@ -498,11 +497,10 @@ const _createSection2RedisMock = ownedByApplicant => {
 const _createSection10RedisMock = ownedByApplicant => {
   redisMockDataMap[RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT] = ItemType.MUSICAL
   redisMockDataMap[RedisKeys.OWNED_BY_APPLICANT] = ownedByApplicant
-  redisMockDataMap[RedisKeys.APPLICANT_CONTACT_DETAILS] = JSON.stringify(
+  redisMockDataMap[RedisKeys.APPLICANT_CONTACT_DETAILS] =
     ownedByApplicant === Options.YES
       ? mockOwnerContactDetails
       : mockApplicantContactDetails
-  )
 
   RedisService.get = jest.fn((request, redisKey) => {
     return redisMockDataMap[redisKey]

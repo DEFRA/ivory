@@ -60,12 +60,10 @@ describe('/make-payment route', () => {
         .mockResolvedValueOnce(
           'Musical instrument made before 1975 with less than 20% ivory'
         )
-        .mockResolvedValueOnce(
-          JSON.stringify({
-            name: 'OWNER_NAME',
-            emailAddress: 'OWNER_EMAIL_ADDRESS'
-          })
-        )
+        .mockResolvedValueOnce({
+          name: 'OWNER_NAME',
+          emailAddress: 'OWNER_EMAIL_ADDRESS'
+        })
 
       const response = await TestHelper.submitGetRequest(
         server,
@@ -122,12 +120,10 @@ describe('/make-payment route', () => {
         .mockResolvedValueOnce(
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
         )
-        .mockResolvedValueOnce(
-          JSON.stringify({
-            name: 'OWNER_NAME',
-            emailAddress: 'OWNER_EMAIL_ADDRESS'
-          })
-        )
+        .mockResolvedValueOnce({
+          name: 'OWNER_NAME',
+          emailAddress: 'OWNER_EMAIL_ADDRESS'
+        })
 
       const response = await TestHelper.submitGetRequest(
         server,

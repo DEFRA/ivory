@@ -59,15 +59,13 @@ describe('/ivory-age route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(
-            JSON.stringify({
-              ivoryAge: [
-                'It has a stamp, serial number or signature to prove its age',
-                'Other reason'
-              ],
-              otherReason: 'Some other reason'
-            })
-          )
+          .mockResolvedValueOnce({
+            ivoryAge: [
+              'It has a stamp, serial number or signature to prove its age',
+              'Other reason'
+            ],
+            otherReason: 'Some other reason'
+          })
           .mockResolvedValueOnce(ItemType.MUSICAL)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -102,11 +100,9 @@ describe('/ivory-age route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(
-            JSON.stringify({
-              ivoryAge: ['It’s been in the family since before 3 March 1947']
-            })
-          )
+          .mockResolvedValueOnce({
+            ivoryAge: ['It’s been in the family since before 3 March 1947']
+          })
           .mockResolvedValueOnce(ItemType.TEN_PERCENT)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -127,11 +123,9 @@ describe('/ivory-age route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(
-            JSON.stringify({
-              ivoryAge: ['It’s been in the family since before 1918']
-            })
-          )
+          .mockResolvedValueOnce({
+            ivoryAge: ['It’s been in the family since before 1918']
+          })
           .mockResolvedValueOnce(ItemType.MINIATURE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -152,11 +146,9 @@ describe('/ivory-age route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(
-            JSON.stringify({
-              ivoryAge: ['It’s been in the family since before 1918']
-            })
-          )
+          .mockResolvedValueOnce({
+            ivoryAge: ['It’s been in the family since before 1918']
+          })
           .mockResolvedValueOnce(ItemType.HIGH_VALUE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -178,15 +170,13 @@ describe('/ivory-age route', () => {
         beforeEach(async () => {
           RedisService.get = jest
             .fn()
-            .mockResolvedValueOnce(
-              JSON.stringify({
-                ivoryAge: [
-                  'It’s been in the family since before 1975',
-                  'Other reason'
-                ],
-                otherReason: 'Some other reason'
-              })
-            )
+            .mockResolvedValueOnce({
+              ivoryAge: [
+                'It’s been in the family since before 1975',
+                'Other reason'
+              ],
+              otherReason: 'Some other reason'
+            })
             .mockResolvedValueOnce(ItemType.MUSICAL)
 
           document = await TestHelper.submitGetRequest(server, getOptions)
@@ -201,15 +191,13 @@ describe('/ivory-age route', () => {
         beforeEach(async () => {
           RedisService.get = jest
             .fn()
-            .mockResolvedValueOnce(
-              JSON.stringify({
-                ivoryAge: [
-                  'It’s been in the family since before 3 March 1947',
-                  'Other reason'
-                ],
-                otherReason: 'Some other reason'
-              })
-            )
+            .mockResolvedValueOnce({
+              ivoryAge: [
+                'It’s been in the family since before 3 March 1947',
+                'Other reason'
+              ],
+              otherReason: 'Some other reason'
+            })
             .mockResolvedValueOnce(ItemType.TEN_PERCENT)
 
           document = await TestHelper.submitGetRequest(server, getOptions)
@@ -224,15 +212,13 @@ describe('/ivory-age route', () => {
         beforeEach(async () => {
           RedisService.get = jest
             .fn()
-            .mockResolvedValueOnce(
-              JSON.stringify({
-                ivoryAge: [
-                  'It’s been in the family since before 1918',
-                  'Other reason'
-                ],
-                otherReason: 'Some other reason'
-              })
-            )
+            .mockResolvedValueOnce({
+              ivoryAge: [
+                'It’s been in the family since before 1918',
+                'Other reason'
+              ],
+              otherReason: 'Some other reason'
+            })
             .mockResolvedValueOnce(ItemType.MINIATURE)
 
           document = await TestHelper.submitGetRequest(server, getOptions)
@@ -247,15 +233,13 @@ describe('/ivory-age route', () => {
         beforeEach(async () => {
           RedisService.get = jest
             .fn()
-            .mockResolvedValueOnce(
-              JSON.stringify({
-                ivoryAge: [
-                  'It’s been in the family since before 1918',
-                  'Other reason'
-                ],
-                otherReason: 'Some other reason'
-              })
-            )
+            .mockResolvedValueOnce({
+              ivoryAge: [
+                'It’s been in the family since before 1918',
+                'Other reason'
+              ],
+              otherReason: 'Some other reason'
+            })
             .mockResolvedValueOnce(ItemType.MUSEUM)
 
           document = await TestHelper.submitGetRequest(server, getOptions)
@@ -270,15 +254,13 @@ describe('/ivory-age route', () => {
         beforeEach(async () => {
           RedisService.get = jest
             .fn()
-            .mockResolvedValueOnce(
-              JSON.stringify({
-                ivoryAge: [
-                  'It’s been in the family since before 1918',
-                  'Other reason'
-                ],
-                otherReason: 'Some other reason'
-              })
-            )
+            .mockResolvedValueOnce({
+              ivoryAge: [
+                'It’s been in the family since before 1918',
+                'Other reason'
+              ],
+              otherReason: 'Some other reason'
+            })
             .mockResolvedValueOnce(ItemType.HIGH_VALUE)
 
           document = await TestHelper.submitGetRequest(server, getOptions)
@@ -306,13 +288,11 @@ describe('/ivory-age route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(
-            JSON.stringify({
-              ivoryAge: [
-                'It has a stamp, serial number or signature to prove its age'
-              ]
-            })
-          )
+          .mockResolvedValueOnce({
+            ivoryAge: [
+              'It has a stamp, serial number or signature to prove its age'
+            ]
+          })
           .mockResolvedValueOnce(ItemType.MUSICAL)
       })
 

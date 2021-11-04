@@ -43,14 +43,16 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  const uploadData = JSON.parse(
-    await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
-  ) || {
-    files: [],
-    fileData: [],
-    fileSizes: [],
-    thumbnails: [],
-    thumbnailData: []
+  let uploadData = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
+
+  if (!uploadData) {
+    uploadData = {
+      files: [],
+      fileData: [],
+      fileSizes: [],
+      thumbnails: [],
+      thumbnailData: []
+    }
   }
 
   for (const [index, thumbnailFilename] of uploadData.thumbnails.entries()) {
