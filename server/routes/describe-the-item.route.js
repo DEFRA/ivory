@@ -89,8 +89,9 @@ const _getContext = async (request, itemType) => {
     isSection2: itemType === ItemType.HIGH_VALUE
   }
 
-  const itemDescription = JSON.parse(
-    await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
+  const itemDescription = await RedisService.get(
+    request,
+    RedisKeys.DESCRIBE_THE_ITEM
   )
 
   _addRedisDataToContext(context, itemDescription)

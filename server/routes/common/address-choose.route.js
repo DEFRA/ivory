@@ -108,8 +108,9 @@ const _getContext = async (request, addressType) => {
     RedisKeys.OWNED_BY_APPLICANT
   )
 
-  const addresses = JSON.parse(
-    await RedisService.get(request, RedisKeys.ADDRESS_FIND_RESULTS)
+  const addresses = await RedisService.get(
+    request,
+    RedisKeys.ADDRESS_FIND_RESULTS
   )
 
   const items = addresses.map(item => {

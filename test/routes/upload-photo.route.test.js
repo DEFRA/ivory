@@ -158,7 +158,7 @@ describe('/upload-photo route', () => {
           thumbnails: ['lamp-thumbnail.png', 'chair-thumbnail.jpeg'],
           thumbnailData: []
         }
-        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
+        RedisService.get = jest.fn().mockResolvedValue(mockData)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -413,7 +413,7 @@ describe('/upload-photo route', () => {
         thumbnails: ['lamp-thumbnail.png'],
         thumbnailData: []
       }
-      RedisService.get = jest.fn().mockReturnValue(JSON.stringify(mockData))
+      RedisService.get = jest.fn().mockReturnValue(mockData)
 
       response = await TestHelper.submitPostRequest(server, postOptions, 400)
     })
@@ -452,9 +452,9 @@ const _createMocks = () => {
   }
   RedisService.get = jest
     .fn()
-    .mockResolvedValueOnce(JSON.stringify(mockData))
+    .mockResolvedValueOnce(mockData)
     .mockResolvedValueOnce('false')
-    .mockResolvedValueOnce(JSON.stringify(mockData))
+    .mockResolvedValueOnce(mockData)
 }
 
 const _checkValidation = async (
@@ -465,7 +465,11 @@ const _checkValidation = async (
   errorCode = 400
 ) => {
   postOptions.payload.files = payloadFile
-  const response = await TestHelper.submitPostRequest(server, postOptions, errorCode)
+  const response = await TestHelper.submitPostRequest(
+    server,
+    postOptions,
+    errorCode
+  )
   await TestHelper.checkValidationError(
     response,
     'files',

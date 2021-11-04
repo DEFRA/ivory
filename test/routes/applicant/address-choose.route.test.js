@@ -57,7 +57,7 @@ describe('/user-details/applicant/address-choose route', () => {
       RedisService.get = jest
         .fn()
         .mockResolvedValueOnce('No')
-        .mockResolvedValueOnce(JSON.stringify(multipleAddresses))
+        .mockResolvedValueOnce(multipleAddresses)
         .mockResolvedValueOnce(nameOrNumber)
         .mockResolvedValueOnce(postcode)
 
@@ -138,7 +138,7 @@ describe('/user-details/applicant/address-choose route', () => {
       RedisService.get = jest
         .fn()
         .mockResolvedValueOnce('No')
-        .mockResolvedValueOnce(JSON.stringify(multipleAddresses))
+        .mockResolvedValueOnce(multipleAddresses)
         .mockResolvedValueOnce(nameOrNumber)
         .mockResolvedValueOnce(postcode)
 
@@ -172,7 +172,7 @@ describe('/user-details/applicant/address-choose route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('No')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce(singleAddress)
       })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
@@ -210,7 +210,7 @@ describe('/user-details/applicant/address-choose route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('Yes')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce(singleAddress)
       })
 
       it('should display a validation error message if the user does not select an address', async () => {

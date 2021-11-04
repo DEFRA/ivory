@@ -213,30 +213,30 @@ const mockImageUploadData = {
 const section10RedisMockDataMap = {
   [RedisKeys.PAYMENT_ID]: '123456789',
   [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.MUSICAL,
-  [RedisKeys.DESCRIBE_THE_ITEM]: JSON.stringify(mockItemDescriptionSection10),
-  [RedisKeys.IVORY_VOLUME]: JSON.stringify({
+  [RedisKeys.DESCRIBE_THE_ITEM]: mockItemDescriptionSection10,
+  [RedisKeys.IVORY_VOLUME]: {
     ivoryVolume: IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT
-  }),
-  [RedisKeys.IVORY_AGE]: JSON.stringify({
+  },
+  [RedisKeys.IVORY_AGE]: {
     ivoryAge: [
       'It has a stamp, serial number or signature to prove its age',
       'Other reason'
     ],
     otherReason: 'Some other reason'
-  }),
+  },
   [RedisKeys.SUBMISSION_DATE]: 'SUBMISSION_DATE',
   [RedisKeys.SUBMISSION_REFERENCE]: 'SUBMISSION_REFERENCE',
   [RedisKeys.INTENTION_FOR_ITEM]: 'Sell it',
-  [RedisKeys.UPLOAD_PHOTO]: JSON.stringify(mockImageUploadData),
+  [RedisKeys.UPLOAD_PHOTO]: mockImageUploadData,
 
-  [RedisKeys.OWNER_CONTACT_DETAILS]: JSON.stringify(mockOwnerData),
+  [RedisKeys.OWNER_CONTACT_DETAILS]: mockOwnerData,
   [RedisKeys.OWNER_ADDRESS]: 'OWNER_ADDRESS',
-  [RedisKeys.APPLICANT_CONTACT_DETAILS]: JSON.stringify(mockApplicantData),
+  [RedisKeys.APPLICANT_CONTACT_DETAILS]: mockApplicantData,
   [RedisKeys.APPLICANT_ADDRESS]: 'APPLICANT_ADDRESS',
-  [RedisKeys.WHAT_CAPACITY]: JSON.stringify({
+  [RedisKeys.WHAT_CAPACITY]: {
     whatCapacity: 'Other',
     otherCapacity: 'Some other capacity'
-  }),
+  },
   [RedisKeys.WORK_FOR_A_BUSINESS]: true,
   [RedisKeys.SELLING_ON_BEHALF_OF]: 'Other'
 }
@@ -244,32 +244,32 @@ const section10RedisMockDataMap = {
 const section2RedisMockDataMap = {
   [RedisKeys.PAYMENT_ID]: '123456789',
   [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
-  [RedisKeys.DESCRIBE_THE_ITEM]: JSON.stringify(mockItemDescriptionSection2),
-  [RedisKeys.IVORY_VOLUME]: JSON.stringify({
+  [RedisKeys.DESCRIBE_THE_ITEM]: mockItemDescriptionSection2,
+  [RedisKeys.IVORY_VOLUME]: {
     ivoryVolume: IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT
-  }),
-  [RedisKeys.IVORY_AGE]: JSON.stringify({
+  },
+  [RedisKeys.IVORY_AGE]: {
     ivoryAge: [
       'It has a stamp, serial number or signature to prove its age',
       'Other reason'
     ],
     otherReason: 'Some other reason'
-  }),
+  },
   [RedisKeys.SUBMISSION_DATE]: 'SUBMISSION_DATE',
   [RedisKeys.SUBMISSION_REFERENCE]: 'SUBMISSION_REFERENCE',
   [RedisKeys.INTENTION_FOR_ITEM]: 'Hire it out',
-  [RedisKeys.UPLOAD_PHOTO]: JSON.stringify(mockImageUploadData),
-  [RedisKeys.OWNER_CONTACT_DETAILS]: JSON.stringify(mockOwnerData),
+  [RedisKeys.UPLOAD_PHOTO]: mockImageUploadData,
+  [RedisKeys.OWNER_CONTACT_DETAILS]: mockOwnerData,
   [RedisKeys.OWNER_ADDRESS]: 'OWNER_ADDRESS',
-  [RedisKeys.APPLICANT_CONTACT_DETAILS]: JSON.stringify(mockApplicantData),
+  [RedisKeys.APPLICANT_CONTACT_DETAILS]: mockApplicantData,
   [RedisKeys.APPLICANT_ADDRESS]: 'APPLICANT_ADDRESS',
   [RedisKeys.TARGET_COMPLETION_DATE]: 'TARGET_COMPLETION_DATE',
-  [RedisKeys.UPLOAD_DOCUMENT]: JSON.stringify(mockFileAttachmentData),
+  [RedisKeys.UPLOAD_DOCUMENT]: mockFileAttachmentData,
   [RedisKeys.WHY_IS_ITEM_RMI]: 'RMI_REASON',
-  [RedisKeys.WHAT_CAPACITY]: JSON.stringify({
+  [RedisKeys.WHAT_CAPACITY]: {
     whatCapacity: 'Other',
     otherCapacity: 'Some other capacity'
-  }),
+  },
   [RedisKeys.WORK_FOR_A_BUSINESS]: true,
   [RedisKeys.SELLING_ON_BEHALF_OF]: 'Other'
 }

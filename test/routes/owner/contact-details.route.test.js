@@ -50,8 +50,8 @@ describe('user-details/owner/contact-details route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(JSON.stringify({}))
-          .mockResolvedValueOnce(JSON.stringify({}))
+          .mockResolvedValueOnce({})
+          .mockResolvedValueOnce({})
           .mockResolvedValueOnce('An individual')
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -123,8 +123,8 @@ describe('user-details/owner/contact-details route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(JSON.stringify({}))
-          .mockResolvedValueOnce(JSON.stringify({}))
+          .mockResolvedValueOnce({})
+          .mockResolvedValueOnce({})
           .mockResolvedValueOnce('A business')
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -143,8 +143,8 @@ describe('user-details/owner/contact-details route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(JSON.stringify({}))
-          .mockResolvedValueOnce(JSON.stringify({}))
+          .mockResolvedValueOnce({})
+          .mockResolvedValueOnce({})
           .mockResolvedValueOnce('A business')
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -176,8 +176,8 @@ describe('user-details/owner/contact-details route', () => {
         beforeEach(() => {
           RedisService.get = jest
             .fn()
-            .mockResolvedValueOnce(JSON.stringify({}))
-            .mockResolvedValueOnce(JSON.stringify({}))
+            .mockResolvedValueOnce({})
+            .mockResolvedValueOnce({})
             .mockResolvedValueOnce('An individual')
         })
 
@@ -211,8 +211,8 @@ describe('user-details/owner/contact-details route', () => {
         beforeEach(() => {
           RedisService.get = jest
             .fn()
-            .mockResolvedValueOnce(JSON.stringify({}))
-            .mockResolvedValueOnce(JSON.stringify({}))
+            .mockResolvedValueOnce({})
+            .mockResolvedValueOnce({})
             .mockResolvedValueOnce('Another business')
         })
 
@@ -247,7 +247,7 @@ describe('user-details/owner/contact-details route', () => {
         beforeEach(() => {
           RedisService.get = jest
             .fn()
-            .mockResolvedValueOnce(JSON.stringify({}))
+            .mockResolvedValueOnce({})
             .mockResolvedValueOnce('An individual')
         })
 
@@ -340,7 +340,7 @@ describe('user-details/owner/contact-details route', () => {
         beforeEach(() => {
           RedisService.get = jest
             .fn()
-            .mockResolvedValueOnce(JSON.stringify({}))
+            .mockResolvedValueOnce({})
             .mockResolvedValueOnce('A business')
         })
 

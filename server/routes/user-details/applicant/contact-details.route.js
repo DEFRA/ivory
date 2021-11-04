@@ -79,14 +79,10 @@ const _getContext = async request => {
     (await RedisService.get(request, RedisKeys.WORK_FOR_A_BUSINESS)) ===
     Options.YES
 
-  let contactDetails = await RedisService.get(
+  const contactDetails = await RedisService.get(
     request,
     RedisKeys.APPLICANT_CONTACT_DETAILS
   )
-
-  if (contactDetails) {
-    contactDetails = JSON.parse(contactDetails)
-  }
 
   const context = { pageTitle, workForABusiness, ...contactDetails }
 

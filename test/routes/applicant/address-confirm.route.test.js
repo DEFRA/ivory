@@ -51,7 +51,7 @@ describe('/user-details/applicant/address-confirm route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('No')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce(singleAddress)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -136,7 +136,7 @@ describe('/user-details/applicant/address-confirm route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('No')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce(singleAddress)
           .mockResolvedValueOnce('No')
       })
 

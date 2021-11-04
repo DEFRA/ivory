@@ -37,7 +37,7 @@ describe('/remove-document route', () => {
 
     describe('GET: One document', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
+        RedisService.get = jest.fn().mockResolvedValue(mockData)
       })
 
       it('should redirect to the "Upload documents" page', async () => {
@@ -75,9 +75,7 @@ describe('/remove-document route', () => {
 
     describe('GET: Multiple documents', () => {
       beforeEach(() => {
-        RedisService.get = jest
-          .fn()
-          .mockResolvedValue(JSON.stringify(mockDataSixPhotos))
+        RedisService.get = jest.fn().mockResolvedValue(mockDataSixPhotos)
       })
 
       it('should redirect to the "Your documents" page', async () => {
@@ -103,9 +101,9 @@ describe('/remove-document route', () => {
           expect.any(Object),
           redisKey,
           JSON.stringify({
-            files: mockDataSixPhotos.files.slice(1),
-            fileData: mockDataSixPhotos.fileData.slice(1),
-            fileSizes: mockDataSixPhotos.fileSizes.slice(1)
+            files: mockDataSixPhotos.files.slice(0),
+            fileData: mockDataSixPhotos.fileData.slice(0),
+            fileSizes: mockDataSixPhotos.fileSizes.slice(0)
           })
         )
 

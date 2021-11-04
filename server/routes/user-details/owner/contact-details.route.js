@@ -79,21 +79,15 @@ const _getContext = async request => {
   if (request.payload) {
     payload = request.payload
   } else {
-    payload = JSON.parse(
-      await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)
-    )
+    await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)
   }
 
   const hasEmailAddress = payload ? payload.hasEmailAddress : null
 
-  let contactDetails = await RedisService.get(
+  const contactDetails = await RedisService.get(
     request,
     RedisKeys.OWNER_CONTACT_DETAILS
   )
-
-  if (contactDetails) {
-    contactDetails = JSON.parse(contactDetails)
-  }
 
   const sellingOnBehalfOf = await RedisService.get(
     request,

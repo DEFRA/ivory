@@ -109,8 +109,9 @@ const _getContext = async (request, addressType, isGet = true) => {
     (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
     Options.YES
 
-  const addresses = JSON.parse(
-    await RedisService.get(request, RedisKeys.ADDRESS_FIND_RESULTS)
+  const addresses = await RedisService.get(
+    request,
+    RedisKeys.ADDRESS_FIND_RESULTS
   )
 
   const resultSize = addresses.length

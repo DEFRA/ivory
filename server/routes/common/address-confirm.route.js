@@ -104,8 +104,9 @@ const _getContext = async (request, addressType) => {
     context = _getContextForApplicantAddressType()
   }
 
-  const addresses = JSON.parse(
-    await RedisService.get(request, RedisKeys.ADDRESS_FIND_RESULTS)
+  const addresses = await RedisService.get(
+    request,
+    RedisKeys.ADDRESS_FIND_RESULTS
   )
 
   context.address = addresses[0].Address

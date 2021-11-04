@@ -53,7 +53,7 @@ describe('/user-details/owner/address-confirm route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('Yes')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce(singleAddress)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -123,7 +123,7 @@ describe('/user-details/owner/address-confirm route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('No')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce(singleAddress)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -207,7 +207,7 @@ describe('/user-details/owner/address-confirm route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('Yes')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce(singleAddress)
           .mockResolvedValueOnce('Yes')
       })
 
@@ -246,7 +246,7 @@ describe('/user-details/owner/address-confirm route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('No')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce(singleAddress)
           .mockResolvedValueOnce('No')
       })
 

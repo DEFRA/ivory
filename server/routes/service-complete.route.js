@@ -77,13 +77,14 @@ const _getContext = async (request, isSection2, ownedByApplicant) => {
     RedisKeys.SUBMISSION_REFERENCE
   )
 
-  const ownerContactDetails = JSON.parse(
-    (await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)) || '{}'
+  const ownerContactDetails = await RedisService.get(
+    request,
+    RedisKeys.OWNER_CONTACT_DETAILS
   )
 
-  const applicantContactDetails = JSON.parse(
-    (await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)) ||
-      '{}'
+  const applicantContactDetails = await RedisService.get(
+    request,
+    RedisKeys.APPLICANT_CONTACT_DETAILS
   )
 
   return {

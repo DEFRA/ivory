@@ -74,8 +74,7 @@ const _getContext = async request => {
   if (request.payload) {
     payload = request.payload
   } else {
-    payload =
-      JSON.parse(await RedisService.get(request, RedisKeys.WHAT_CAPACITY)) || {}
+    payload = await RedisService.get(request, RedisKeys.WHAT_CAPACITY)
   }
 
   const whatCapacity = payload ? payload.whatCapacity : null

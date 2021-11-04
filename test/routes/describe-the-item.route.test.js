@@ -75,7 +75,7 @@ describe('/describe-the-item route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce(ItemTypes.MUSICAL)
-          .mockResolvedValueOnce(JSON.stringify(itemDescription))
+          .mockResolvedValueOnce(itemDescription)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -150,7 +150,7 @@ describe('/describe-the-item route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce(ItemTypes.HIGH_VALUE)
-          .mockResolvedValueOnce(JSON.stringify(itemDescription))
+          .mockResolvedValueOnce(itemDescription)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -245,7 +245,7 @@ describe('/describe-the-item route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce(ItemTypes.HIGH_VALUE)
-          .mockResolvedValueOnce(JSON.stringify(itemDescription))
+          .mockResolvedValueOnce(itemDescription)
       })
 
       it('should display a validation error message if the user does not enter "What is the item?"', async () => {
@@ -370,7 +370,7 @@ const _checkSuccessfulPost = async (
   RedisService.get = jest
     .fn()
     .mockResolvedValueOnce(itemType)
-    .mockResolvedValueOnce(JSON.stringify(itemDescription))
+    .mockResolvedValueOnce(itemDescription)
 
   postOptions.payload = itemDescription
 

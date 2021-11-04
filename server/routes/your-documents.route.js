@@ -34,12 +34,14 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  const uploadData = JSON.parse(
-    await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
-  ) || {
-    files: [],
-    fileData: [],
-    fileSizes: []
+  let uploadData = await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
+
+  if (!uploadData) {
+    uploadData = {
+      files: [],
+      fileData: [],
+      fileSizes: []
+    }
   }
 
   const rows = uploadData.files.map((file, index) => {

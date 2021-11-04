@@ -4,9 +4,24 @@ const { DEFRA_IVORY_SESSION_KEY } = require('../utils/constants')
 const REDIS_TTL_IN_SECONDS = 86400
 
 module.exports = class RedisService {
-  static get (request, key) {
+  static async get (request, key) {
     const client = request.redis.client
-    return client.get(`${request.state[DEFRA_IVORY_SESSION_KEY]}.${key}`)
+    const redisValue = await client.get(
+      `${request.state[DEFRA_IVORY_SESSION_KEY]}.${key}`
+    )
+
+    let parsedValue
+    if (redisValue !== null) {
+      try {
+        parsedValue = JSON.parse(redisValue)
+      } catch (e) {
+        parsedValue = redisValue
+      }
+    } else {
+      parsedValue = null
+    }
+
+    return parsedValue
   }
 
   static set (request, key, value) {

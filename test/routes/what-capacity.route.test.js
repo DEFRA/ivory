@@ -52,7 +52,7 @@ describe('/what-capacity route', () => {
     beforeEach(async () => {
       RedisService.get = jest
         .fn()
-        .mockResolvedValueOnce(JSON.stringify({}))
+        .mockResolvedValueOnce({})
         .mockResolvedValueOnce(ItemType.MINIATURE)
 
       document = await TestHelper.submitGetRequest(server, getOptions)

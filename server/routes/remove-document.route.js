@@ -10,8 +10,9 @@ const { Paths, RedisKeys } = require('../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
-    const uploadData = JSON.parse(
-      await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
+    const uploadData = await RedisService.get(
+      request,
+      RedisKeys.UPLOAD_DOCUMENT
     )
 
     for (const array in uploadData) {

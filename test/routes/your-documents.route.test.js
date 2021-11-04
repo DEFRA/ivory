@@ -46,9 +46,7 @@ describe('/your-documents route', () => {
 
     describe('GET: 0 documents', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockResolvedValue(JSON.stringify(mockNoData))
+        RedisService.get = jest.fn().mockResolvedValue(mockNoData)
       })
 
       it('should redirect back to the "Upload photo" page if there are no uploaded photos to display', async () => {
@@ -65,7 +63,7 @@ describe('/your-documents route', () => {
 
     describe('GET: 6 or less documents', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
+        RedisService.get = jest.fn().mockResolvedValue(mockData)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -114,9 +112,7 @@ describe('/your-documents route', () => {
 
     describe('GET: 6 documents', () => {
       beforeEach(async () => {
-        RedisService.get = jest
-          .fn()
-          .mockResolvedValue(JSON.stringify(mockDataSixDocuments))
+        RedisService.get = jest.fn().mockResolvedValue(mockDataSixDocuments)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })

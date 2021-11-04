@@ -49,7 +49,7 @@ describe('user-details/applicant/contact-details route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('No')
-          .mockResolvedValueOnce(JSON.stringify({}))
+          .mockResolvedValueOnce({})
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -109,7 +109,7 @@ describe('user-details/applicant/contact-details route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('Yes')
-          .mockResolvedValueOnce(JSON.stringify({}))
+          .mockResolvedValueOnce({})
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -140,7 +140,7 @@ describe('user-details/applicant/contact-details route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('Yes')
-          .mockResolvedValueOnce(JSON.stringify({}))
+          .mockResolvedValueOnce({})
       })
 
       it('should store the value in Redis and progress to the next route when all fields have been entered correctly', async () => {
@@ -175,7 +175,7 @@ describe('user-details/applicant/contact-details route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('Yes')
-          .mockResolvedValueOnce(JSON.stringify({}))
+          .mockResolvedValueOnce({})
       })
 
       it('should display a validation error message if the user does not enter the full name', async () => {

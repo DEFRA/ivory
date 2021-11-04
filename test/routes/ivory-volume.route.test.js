@@ -53,7 +53,7 @@ describe('/ivory-volume route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(JSON.stringify({}))
+          .mockResolvedValueOnce({})
           .mockResolvedValueOnce(ItemType.MINIATURE)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -126,7 +126,7 @@ describe('/ivory-volume route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(JSON.stringify({}))
+          .mockResolvedValueOnce({})
           .mockResolvedValueOnce(ItemType.MUSICAL)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -159,7 +159,7 @@ describe('/ivory-volume route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(JSON.stringify({}))
+          .mockResolvedValueOnce({})
           .mockResolvedValueOnce(ItemType.MINIATURE)
       })
 
@@ -206,7 +206,7 @@ describe('/ivory-volume route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce(JSON.stringify({}))
+          .mockResolvedValueOnce({})
           .mockResolvedValueOnce(ItemType.MINIATURE)
       })
 

@@ -57,6 +57,8 @@ const handlers = {
 const _getContext = async request => {
   const whyRmi = await RedisService.get(request, RedisKeys.WHY_IS_ITEM_RMI)
 
+  console.log('whyRmi:', whyRmi)
+
   return {
     pageTitle:
       'Why is your item of outstandingly high artistic, cultural or historical value?',

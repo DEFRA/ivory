@@ -19,7 +19,8 @@ describe('Redis service', () => {
     it('should get a value from Redis', async () => {
       expect(mockRequest.redis.client.get).toBeCalledTimes(0)
 
-      await RedisService.get(mockRequest, redisKey)
+      const redisValue = await RedisService.get(mockRequest, redisKey)
+      expect(redisValue).toEqual(mockRedisValue)
 
       expect(mockRequest.redis.client.get).toBeCalledTimes(1)
       expect(mockRequest.redis.client.get).toBeCalledWith(
@@ -47,6 +48,7 @@ describe('Redis service', () => {
   })
 })
 
+const mockRedisValue = 'MOCK REDIS VALUE'
 const _createMocks = () => {
   mockRequest = jest.fn()
   mockRequest.state = {
@@ -54,7 +56,7 @@ const _createMocks = () => {
   }
   mockRequest.redis = {
     client: {
-      get: jest.fn(),
+      get: jest.fn(() => mockRedisValue),
       setex: jest.fn()
     }
   }

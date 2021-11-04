@@ -37,7 +37,7 @@ describe('/remove-photo route', () => {
 
     describe('GET: One photo', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue(JSON.stringify(mockData))
+        RedisService.get = jest.fn().mockResolvedValue(mockData)
       })
 
       it('should redirect to the "Upload photos" page', async () => {
@@ -77,9 +77,7 @@ describe('/remove-photo route', () => {
 
     describe('GET: Multiple photos', () => {
       beforeEach(() => {
-        RedisService.get = jest
-          .fn()
-          .mockResolvedValue(JSON.stringify(mockDataSixPhotos))
+        RedisService.get = jest.fn().mockResolvedValue(mockDataSixPhotos)
       })
 
       it('should redirect to the "Your photos" page', async () => {
@@ -105,11 +103,11 @@ describe('/remove-photo route', () => {
           expect.any(Object),
           redisKey,
           JSON.stringify({
-            files: mockDataSixPhotos.files.slice(1),
-            fileData: mockDataSixPhotos.fileData.slice(1),
-            fileSizes: mockDataSixPhotos.fileSizes.slice(1),
-            thumbnails: mockDataSixPhotos.thumbnails.slice(1),
-            thumbnailData: mockDataSixPhotos.thumbnailData.slice(1)
+            files: mockDataSixPhotos.files.slice(0),
+            fileData: mockDataSixPhotos.fileData.slice(0),
+            fileSizes: mockDataSixPhotos.fileSizes.slice(0),
+            thumbnails: mockDataSixPhotos.thumbnails.slice(0),
+            thumbnailData: mockDataSixPhotos.thumbnailData.slice(0)
           })
         )
 

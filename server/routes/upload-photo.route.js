@@ -23,9 +23,7 @@ const handlers = {
   get: async (request, h) => {
     const context = await _getContext(request)
 
-    const uploadData = JSON.parse(
-      await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
-    )
+    const uploadData = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
 
     if (
       uploadData &&
@@ -71,7 +69,11 @@ const handlers = {
     }
 
     try {
-      const isInfected = await AntimalwareService.scan(request, payload.files.path, filename)
+      const isInfected = await AntimalwareService.scan(
+        request,
+        payload.files.path,
+        filename
+      )
 
       if (!isInfected) {
         const extension = path.extname(filename)
@@ -155,14 +157,16 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  const uploadData = JSON.parse(
-    await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
-  ) || {
-    files: [],
-    fileData: [],
-    fileSizes: [],
-    thumbnails: [],
-    thumbnailData: []
+  let uploadData = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
+
+  if (!uploadData) {
+    uploadData = {
+      files: [],
+      fileData: [],
+      fileSizes: [],
+      thumbnails: [],
+      thumbnailData: []
+    }
   }
 
   const hideHelpText = uploadData.files.length

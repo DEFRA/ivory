@@ -124,12 +124,17 @@ module.exports = [
 ]
 
 const _getDocumentSummary = async request => {
-  const uploadDocuments = JSON.parse(
-    await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
-  ) || {
-    files: [],
-    fileData: [],
-    fileSizes: []
+  let uploadDocuments = await RedisService.get(
+    request,
+    RedisKeys.UPLOAD_DOCUMENT
+  )
+
+  if (!uploadDocuments) {
+    uploadDocuments = {
+      files: [],
+      fileData: [],
+      fileSizes: []
+    }
   }
 
   const documentRows = uploadDocuments.files.map((file, index) => {
@@ -154,8 +159,7 @@ const _getExemptionReasonSummary = async (
   isSection2,
   isMesuem
 ) => {
-  const ivoryAge =
-    JSON.parse(await RedisService.get(request, RedisKeys.IVORY_AGE)) || {}
+  const ivoryAge = await RedisService.get(request, RedisKeys.IVORY_AGE)
 
   if (ivoryAge.otherReason) {
     ivoryAge.ivoryAge.pop()
@@ -172,13 +176,16 @@ const _getExemptionReasonSummary = async (
   const ivoryAgeList = `<ul>${ivoryAgeFormatted.join('')}</ul>`
 
   const whyRmi = await RedisService.get(request, RedisKeys.WHY_IS_ITEM_RMI)
-  const ivoryVolume = JSON.parse(
-    (await RedisService.get(request, RedisKeys.IVORY_VOLUME)) || '{}'
-  )
-  const ivoryVolumeFormatted =
-    ivoryVolume.ivoryVolume === 'Other reason'
-      ? ivoryVolume.otherReason
-      : ivoryVolume.ivoryVolume
+  const ivoryVolume = await RedisService.get(request, RedisKeys.IVORY_VOLUME)
+
+  let ivoryVolumeFormatted
+
+  if (ivoryVolume) {
+    ivoryVolumeFormatted =
+      ivoryVolume.ivoryVolume === 'Other reason'
+        ? ivoryVolume.otherReason
+        : ivoryVolume.ivoryVolume
+  }
 
   let ivoryIntegral = await RedisService.get(request, RedisKeys.IVORY_INTEGRAL)
   if (ivoryIntegral === 'Both of the above') {
@@ -252,9 +259,10 @@ const _getExemptionTypeSummary = exemptionType => [
 ]
 
 const _getItemDescriptionSummary = async (request, isSection2) => {
-  const itemDescription =
-    JSON.parse(await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)) ||
-    {}
+  const itemDescription = await RedisService.get(
+    request,
+    RedisKeys.DESCRIBE_THE_ITEM
+  )
 
   const itemDescriptionSummary = [
     _getSummaryListRow(
@@ -306,18 +314,19 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
   )
 
   const capacity = _formatCapacity(
-    JSON.parse(await RedisService.get(request, RedisKeys.WHAT_CAPACITY)) || {}
+    await RedisService.get(request, RedisKeys.WHAT_CAPACITY)
   )
 
-  const ownerContactDetails = JSON.parse(
-    (await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)) || '{}'
+  const ownerContactDetails = await RedisService.get(
+    request,
+    RedisKeys.OWNER_CONTACT_DETAILS
   )
 
   const ownerAddress = await RedisService.get(request, RedisKeys.OWNER_ADDRESS)
 
-  const applicantContactDetails = JSON.parse(
-    (await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)) ||
-      '{}'
+  const applicantContactDetails = await RedisService.get(
+    request,
+    RedisKeys.APPLICANT_CONTACT_DETAILS
   )
 
   const applicantAddress = await RedisService.get(
@@ -689,14 +698,16 @@ const _getOwnerSummaryApplicantDefault = async (
 }
 
 const _getPhotoSummary = async request => {
-  const uploadPhotos = JSON.parse(
-    await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
-  ) || {
-    files: [],
-    fileData: [],
-    fileSizes: [],
-    thumbnails: [],
-    thumbnailData: []
+  let uploadPhotos = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
+
+  if (!uploadPhotos) {
+    uploadPhotos = {
+      files: [],
+      fileData: [],
+      fileSizes: [],
+      thumbnails: [],
+      thumbnailData: []
+    }
   }
 
   const imageRows = uploadPhotos.thumbnails.map((file, index) => {

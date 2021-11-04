@@ -62,7 +62,7 @@ describe('/user-details/owner/address-choose route', () => {
       beforeEach(async () => {
         const mockData = {
           [RedisKeys.OWNED_BY_APPLICANT]: 'Yes',
-          [RedisKeys.ADDRESS_FIND_RESULTS]: JSON.stringify(multipleAddresses),
+          [RedisKeys.ADDRESS_FIND_RESULTS]: multipleAddresses,
           [RedisKeys.ADDRESS_FIND_NAME_OR_NUMBER]: nameOrNumber,
           [RedisKeys.ADDRESS_FIND_POSTCODE]: postcode
         }
@@ -149,7 +149,7 @@ describe('/user-details/owner/address-choose route', () => {
 
         const mockData = {
           [RedisKeys.OWNED_BY_APPLICANT]: 'Yes',
-          [RedisKeys.ADDRESS_FIND_RESULTS]: JSON.stringify(multipleAddresses),
+          [RedisKeys.ADDRESS_FIND_RESULTS]: multipleAddresses,
           [RedisKeys.ADDRESS_FIND_NAME_OR_NUMBER]: nameOrNumber,
           [RedisKeys.ADDRESS_FIND_POSTCODE]: postcode
         }
@@ -174,7 +174,7 @@ describe('/user-details/owner/address-choose route', () => {
       beforeEach(async () => {
         const mockData = {
           [RedisKeys.OWNED_BY_APPLICANT]: 'No',
-          [RedisKeys.ADDRESS_FIND_RESULTS]: JSON.stringify(multipleAddresses),
+          [RedisKeys.ADDRESS_FIND_RESULTS]: multipleAddresses,
           [RedisKeys.ADDRESS_FIND_NAME_OR_NUMBER]: nameOrNumber,
           [RedisKeys.ADDRESS_FIND_POSTCODE]: postcode
         }
@@ -261,7 +261,7 @@ describe('/user-details/owner/address-choose route', () => {
 
         const mockData = {
           [RedisKeys.OWNED_BY_APPLICANT]: 'No',
-          [RedisKeys.ADDRESS_FIND_RESULTS]: JSON.stringify(multipleAddresses),
+          [RedisKeys.ADDRESS_FIND_RESULTS]: multipleAddresses,
           [RedisKeys.ADDRESS_FIND_NAME_OR_NUMBER]: nameOrNumber,
           [RedisKeys.ADDRESS_FIND_POSTCODE]: postcode
         }
@@ -300,7 +300,7 @@ describe('/user-details/owner/address-choose route', () => {
       beforeEach(() => {
         const mockData = {
           [RedisKeys.OWNED_BY_APPLICANT]: 'Yes',
-          [RedisKeys.ADDRESS_FIND_RESULTS]: JSON.stringify(multipleAddresses)
+          [RedisKeys.ADDRESS_FIND_RESULTS]: multipleAddresses
         }
 
         RedisService.get = jest.fn((request, redisKey) => {
@@ -344,7 +344,7 @@ describe('/user-details/owner/address-choose route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('No')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce(singleAddress)
       })
 
       it('should store the selected address in Redis and progress to the next route when the user selects an address', async () => {
@@ -384,7 +384,7 @@ describe('/user-details/owner/address-choose route', () => {
         RedisService.get = jest
           .fn()
           .mockResolvedValueOnce('No')
-          .mockResolvedValueOnce(JSON.stringify(singleAddress))
+          .mockResolvedValueOnce(singleAddress)
       })
 
       it('should display a validation error message if the user does not select an address', async () => {
