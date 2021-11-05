@@ -27,8 +27,6 @@ const handlers = {
     const payload = request.payload
     const errors = _validateForm(payload)
 
-    console.log(payload)
-
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,

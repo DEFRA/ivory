@@ -54,9 +54,9 @@ const handlers = {
       label: context.pageTitle
     })
 
-    const isRmi = payload.whatTypeOfItemIsIt === ItemType.HIGH_VALUE
+    const isSection2 = payload.whatTypeOfItemIsIt === ItemType.HIGH_VALUE
 
-    return h.redirect(isRmi ? Paths.ALREADY_CERTIFIED : Paths.CAN_CONTINUE)
+    return h.redirect(isSection2 ? Paths.ALREADY_CERTIFIED : Paths.CAN_CONTINUE)
   }
 }
 

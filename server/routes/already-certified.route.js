@@ -43,9 +43,6 @@ const handlers = {
         .code(400)
     }
 
-    console.log('POST')
-    console.log(payload)
-
     if (payload.alreadyCertified !== AlreadyCertifiedOptions.YES) {
       delete payload.certificateNumber
     }
@@ -84,12 +81,7 @@ const _getContext = async request => {
   if (request.payload) {
     payload = request.payload
   } else {
-    console.log('_getContext')
-    console.log(await RedisService.get(request, RedisKeys.ALREADY_CERTIFIED))
-    payload =
-      JSON.parse(
-        await RedisService.get(request, RedisKeys.ALREADY_CERTIFIED)
-      ) || '{}'
+    payload = await RedisService.get(request, RedisKeys.ALREADY_CERTIFIED)
   }
 
   const alreadyCertified = payload ? payload.alreadyCertified : null
