@@ -30,6 +30,7 @@
     "node": "16.x"
   },
   "dependencies": {
+    "@airbrake/node": "^2.1.7",
     "@defra/hapi-gapi": "^1.2.1",
     "@hapi/basic": "^6.0.0",
     "@hapi/boom": "^9.1.4",
