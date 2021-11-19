@@ -1,6 +1,7 @@
 import { Notifier } from '@airbrake/node'
 import { formatWithOptions, inspect } from 'util'
 const INSPECT_OPTS = { depth: null, maxStringLength: null, maxArrayLength: null, breakLength: null, compact: true, showHidden: true }
+const config = require('../utils/config')
 
 let airbrake = null
 
@@ -15,12 +16,12 @@ export const reset = () => {
  * @returns {boolean} true if the client was initialised, false otherwise.
  */
 export const initialise = () => {
-  if (!airbrake && process.env.AIRBRAKE_PROJECT_KEY && process.env.AIRBRAKE_HOST) {
+  if (!airbrake && config.airbrakeProjectKey && config.airbrakeHost) {
     airbrake = new Notifier({
       projectId: 1,
-      projectKey: process.env.AIRBRAKE_PROJECT_KEY,
-      host: process.env.AIRBRAKE_HOST,
-      environment: process.env.NODE_ENV,
+      projectKey: config.airbrakeProjectKey,
+      host: config.airbrakeHost,
+      environment: config.env,
       performanceStats: false
     })
 
