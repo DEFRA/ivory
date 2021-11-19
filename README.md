@@ -17,9 +17,9 @@ The default values will be used if the environment variables are missing or comm
 | -------------------------- | -------------------------- | :------: | --------------- | :--------------------------------: | ----- |
 | NODE_ENV                   | Node environment           |    no    |                 |    development,test,production     |       |
 | PORT                       | Port number                |    no    | 3000            |                                    |       |
-| SERVICE_NAME               | Name of the service        |    no    |                 |          Any text string           |       |
-| COOKIE_VALIDATION_PASSWORD | Cookie encoding password   |   yes    |                 |          Any text string           |       |
-| REDIS_HOST                 | Redis server IP address    |    no    | 127.0.0.1       |                                    |       |
+| SERVICE_NAME               | Name of the service        |    no    |                 |             Any string             |       |
+| COOKIE_VALIDATION_PASSWORD | Cookie encoding password   |   yes    |                 |             Any string             |       |
+| REDIS_HOST                 | Redis server IP address    |    no    | localhost       |                                    |       |
 | REDIS_PORT                 | Redis port number          |    no    | 6379            |                                    |       |
 | REDIS_PASSWORD             | Redis password             |    no    |                 |                                    |       |
 | REDIS_USE_TLS              | Enable/disable SSL/TLS     |    no    |                 |             true,false             |       |
@@ -28,6 +28,8 @@ The default values will be used if the environment variables are missing or comm
 | ADDRESS_LOOKUP_PASSPHRASE  | Address lookup passphrase  |    no    |                 |                                    |       |
 | ADDRESS_LOOKUP_PFX_CERT    | Address lookup certificate |    no    |                 | PFX file location or Base64 string |       |
 | GOOGLE_ANALYTICS_ID        | GA Tracking ID             |    no    | UA-YYYYYY-YY    |   A Google Analytics Tracking ID   |       |
+| AIRBRAKE_HOST              | Airbrake host              |    no    |                 |         https://some-url.com       |       |
+| AIRBRAKE_PROJECT_KEY       | Airbrake project key       |    no    |                 |             Any string             |       |
 | CLAMSCAN_BINARIES          | Location of the binary     |    no    | /usr/bin/       |                                    |       |
 | CLAMSCAN_PREFERENCE        | Prefered scanning method   |    no    | clamdscan       |         clamdscan, clamscan        |       |
 | CLAMSCAN_DEBUG             | log msgs to the console    |    no    | false           |             true,false             |       |
