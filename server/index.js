@@ -8,9 +8,6 @@ const { options } = require('./utils/cookie-config')
 const { DEFRA_IVORY_SESSION_KEY, Paths } = require('./utils/constants')
 
 const CookieService = require('./services/cookie.service')
-const { airbrake } = require('./services/airbrake.service')
-
-airbrake.initialise()
 
 const users = {
   defra: {
@@ -62,6 +59,7 @@ const _registerPlugins = async server => {
     server.auth.default('simple')
   }
 
+  await server.register(require('./plugins/airbrake.plugin'))
   await server.register(require('./plugins/blipp.plugin'))
   await server.register(require('./plugins/disinfect.plugin'))
   await server.register(require('./plugins/error-pages.plugin'))
