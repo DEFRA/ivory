@@ -166,7 +166,7 @@ const _addWatermark = async (pdfDoc, certificateNumber) => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.DOWNLOAD}/{id}`,
+    path: `${Paths.DOWNLOAD_CERTIFICATE}/{id}`,
     handler: handlers.get
   }
 ]

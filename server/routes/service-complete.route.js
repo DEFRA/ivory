@@ -222,9 +222,9 @@ const _sendEmail = async (
   if (!messageSent) {
     const data = {
       fullName,
+      certificateNumber,
       exemptionType: itemType,
-      submissionReference: context.submissionReference,
-      certificateNumber
+      submissionReference: context.submissionReference
     }
 
     messageSent = await NotificationService.sendEmail(

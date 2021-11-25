@@ -7,7 +7,6 @@ const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
 const { formatNumberWithCommas } = require('../utils/general')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
-// TODO CONFIRM MAX CHARS
 const MAX_LENGTH = 10
 
 const handlers = {
@@ -67,8 +66,8 @@ const _getContext = async request => {
   }
 
   return {
-    pageTitle: 'Enter the submission reference for the previous application',
     previousApplicationNumber,
+    pageTitle: 'Enter the submission reference for the previous application',
     maxLength: MAX_LENGTH
   }
 }

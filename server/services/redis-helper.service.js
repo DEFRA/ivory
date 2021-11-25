@@ -6,11 +6,7 @@ const { ItemType, Options, RedisKeys } = require('../utils/constants')
 
 module.exports = class RedisHelper {
   static async getItemType (request) {
-    const itemType = await RedisService.get(
-      request,
-      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
-    )
-    return itemType
+    return RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
   }
 
   static async isSection2 (request, itemType = null) {
@@ -44,11 +40,10 @@ module.exports = class RedisHelper {
   }
 
   static async isOwnedByApplicant (request) {
-    const isOwnedByApplicant =
+    return (
       (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
       Options.YES
-
-    return isOwnedByApplicant
+    )
   }
 
   static async hasUsedChecker (request) {

@@ -69,7 +69,7 @@ describe('/revoked-certificate route', () => {
       TestHelper.checkFormField(
         document,
         elementIds.revokedCertificateNumber,
-        '',
+        "Enter the certificate number from the cancelled or 'revoked' certificate",
         "For example, '10AB010C'",
         revokedCertificateNumber
       )

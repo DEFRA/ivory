@@ -44,48 +44,53 @@ const handlers = {
           ...buildErrorSummary(errors)
         })
         .code(400)
-    }
+    } else {
+      if (payload.alreadyCertified !== AlreadyCertifiedOptions.YES) {
+        delete payload.certificateNumber
+      }
 
-    if (payload.alreadyCertified !== AlreadyCertifiedOptions.YES) {
-      delete payload.certificateNumber
-    }
+      AnalyticsService.sendEvent(request, {
+        category: Analytics.Category.MAIN_QUESTIONS,
+        action: `${Analytics.Action.SELECTED} ${payload.alreadyCertified}${
+          payload.alreadyCertified === AlreadyCertifiedOptions.YES
+            ? ' - ' + payload.certificateNumber
+            : ''
+        }`,
+        label: context.pageTitle
+      })
 
-    AnalyticsService.sendEvent(request, {
-      category: Analytics.Category.MAIN_QUESTIONS,
-      action: `${Analytics.Action.SELECTED} ${payload.alreadyCertified}${
-        payload.alreadyCertified === AlreadyCertifiedOptions.YES
-          ? ' - ' + payload.certificateNumber
-          : ''
-      }`,
-      label: context.pageTitle
-    })
+      await Promise.all([
+        RedisService.set(
+          request,
+          RedisKeys.ALREADY_CERTIFIED,
+          JSON.stringify(payload)
+        ),
+        RedisService.set(
+          request,
+          RedisKeys.ALREADY_CERTIFIED_EXISTING_RECORD,
+          JSON.stringify(context.existingRecord)
+        ),
 
-    await Promise.all([
-      RedisService.set(
-        request,
-        RedisKeys.ALREADY_CERTIFIED,
-        JSON.stringify(payload)
-      ),
-      RedisService.set(
-        request,
-        RedisKeys.ALREADY_CERTIFIED_EXISTING_RECORD,
-        JSON.stringify(context.existingRecord)
-      ),
+        RedisService.delete(request, RedisKeys.REVOKED_CERTIFICATE),
+        RedisService.delete(request, RedisKeys.APPLIED_BEFORE),
+        RedisService.delete(request, RedisKeys.PREVIOUS_APPLICATION_NUMBER)
+      ])
 
-      RedisService.delete(request, RedisKeys.REVOKED_CERTIFICATE),
-      RedisService.delete(request, RedisKeys.APPLIED_BEFORE),
-      RedisService.delete(request, RedisKeys.PREVIOUS_APPLICATION_NUMBER)
-    ])
+      switch (payload.alreadyCertified) {
+        case AlreadyCertifiedOptions.YES:
+          return h.redirect(Paths.CAN_CONTINUE)
 
-    switch (payload.alreadyCertified) {
-      case AlreadyCertifiedOptions.YES:
-        return h.redirect(Paths.CAN_CONTINUE)
+        case AlreadyCertifiedOptions.NO:
+          return h.redirect(Paths.APPLIED_BEFORE)
 
-      case AlreadyCertifiedOptions.NO:
-        return h.redirect(Paths.APPLIED_BEFORE)
+        case AlreadyCertifiedOptions.USED_TO:
+          return h.redirect(Paths.REVOKED_CERTIFICATE)
 
-      case AlreadyCertifiedOptions.USED_TO:
-        return h.redirect(Paths.REVOKED_CERTIFICATE)
+        default:
+          throw new Error(
+            `Invalid value for Already Certified: ${payload.alreadyCertified}`
+          )
+      }
     }
   }
 }
@@ -109,10 +114,10 @@ const _getContext = async request => {
       : null
 
   return {
-    pageTitle: 'Does the item already have an exemption certificate?',
     existingRecord,
-    items: options,
     yesOption,
+    pageTitle: 'Does the item already have an exemption certificate?',
+    items: options,
     certificateNumber:
       payload && payload.alreadyCertified === AlreadyCertifiedOptions.YES
         ? payload.certificateNumber
@@ -175,13 +180,11 @@ const _validateForm = async (payload, context) => {
       })
     }
 
-    if (errors.length === 0) {
-      if (!context.existingRecord) {
-        errors.push({
-          name: 'certificateNumber',
-          text: 'Invalid certificate number'
-        })
-      }
+    if (errors.length === 0 && !context.existingRecord) {
+      errors.push({
+        name: 'certificateNumber',
+        text: 'Invalid certificate number'
+      })
     }
   }
 

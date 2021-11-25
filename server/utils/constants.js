@@ -218,7 +218,7 @@ const Paths = {
   COOKIE_POLICY: '/cookie-policy',
   DESCRIBE_THE_ITEM: '/describe-the-item',
   DO_NOT_NEED_SERVICE: '/eligibility-checker/do-not-need-service',
-  DOWNLOAD: '/download',
+  DOWNLOAD_CERTIFICATE: '/download-certificate',
   HOW_CERTAIN: '/eligibility-checker/how-certain',
   INTENTION_FOR_ITEM: '/intention-for-item',
   IS_IT_A_MUSICAL_INSTRUMENT: '/eligibility-checker/is-it-a-musical-instrument',

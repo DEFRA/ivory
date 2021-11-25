@@ -7,7 +7,6 @@ const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
 const { formatNumberWithCommas } = require('../utils/general')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
-// TODO CONFIRM MAX CHARS
 const MAX_LENGTH = 10
 
 const handlers = {
@@ -67,9 +66,9 @@ const _getContext = async request => {
   }
 
   return {
+    revokedCertificateNumber,
     pageTitle:
       "Enter the certificate number from the cancelled or 'revoked' certificate",
-    revokedCertificateNumber,
     maxLength: MAX_LENGTH
   }
 }

@@ -70,7 +70,7 @@ describe('/previous-application-number route', () => {
       TestHelper.checkFormField(
         document,
         elementIds.previousApplicationNumber,
-        '',
+        'Enter the submission reference for the previous application',
         "For example, 'RMI-12345678'",
         previousApplicationNumber
       )
