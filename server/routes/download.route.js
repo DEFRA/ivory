@@ -82,18 +82,6 @@ const _getPdf = async entity => {
   )
   uniqueFeaturesField.defaultUpdateAppearances(timesRomanFont)
 
-  const whereItWasMadeField = form.getTextField('Where it was made')
-  whereItWasMadeField.setText(
-    _formatField(entity, DataVerseFieldName.WHERE_IT_WAS_MADE, NOTHING_ENTERED)
-  )
-  whereItWasMadeField.defaultUpdateAppearances(timesRomanFont)
-
-  const whenItWasMadeField = form.getTextField('When it was made')
-  whenItWasMadeField.setText(
-    _formatField(entity, DataVerseFieldName.WHEN_IT_WAS_MADE, NOTHING_ENTERED)
-  )
-  whenItWasMadeField.defaultUpdateAppearances(timesRomanFont)
-
   await _addImages(entity, pdfDoc, form)
 
   // Prevents the form fields from being editable
