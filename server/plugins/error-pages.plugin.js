@@ -18,7 +18,10 @@ module.exports = {
           const statusCode = response.output.statusCode
           const errorName = response.message
 
-          request.airbrake.notify(`${statusCode}: ${errorName}`)
+          console.log(statusCode)
+          console.log(errorName)
+
+          // request.airbrake.notify(`${statusCode}: ${errorName}`)
 
           // Log the error, unless it is just a basic authenication issue
           if (statusCode !== StatusCodes.UNAUTHORIZED) {
