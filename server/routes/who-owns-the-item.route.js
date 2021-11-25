@@ -48,7 +48,7 @@ const handlers = {
     )
 
     if (payload.doYouOwnTheItem === Options.YES) {
-      await RedisService.set(request, RedisKeys.WORK_FOR_A_BUSINESS, null)
+      await RedisService.delete(request, RedisKeys.WORK_FOR_A_BUSINESS)
     }
 
     AnalyticsService.sendEvent(request, {

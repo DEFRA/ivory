@@ -1,5 +1,6 @@
 const {
   AgeExemptionReasons,
+  AlreadyCertifiedOptions,
   BehalfOfBusinessOptions,
   BehalfOfNotBusinessOptions,
   Capacities,
@@ -20,6 +21,12 @@ const AgeExemptionReasonLookup = {
   [AgeExemptionReasons.PROFESSIONAL_OPINION]: 881990007,
   [AgeExemptionReasons.CARBON_DATED]: 881990008,
   [AgeExemptionReasons.OTHER_REASON]: 881990009
+}
+
+const AlreadyCertifiedLookup = {
+  [AlreadyCertifiedOptions.YES]: 881990000,
+  [AlreadyCertifiedOptions.NO]: 881990001,
+  [AlreadyCertifiedOptions.USED_TO]: 881990002
 }
 
 const CapacityLookup = {
@@ -78,6 +85,7 @@ const WhyIvoryIntegral = {
 
 module.exports = {
   AgeExemptionReasonLookup,
+  AlreadyCertifiedLookup,
   CapacityLookup,
   ExemptionTypeLookup,
   IntentionLookup,

@@ -3,18 +3,12 @@
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
 
-const {
-  Capacities,
-  CharacterLimits,
-  Paths,
-  RedisKeys,
-  Views,
-  Analytics
-} = require('../utils/constants')
+const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
 const { formatNumberWithCommas } = require('../utils/general')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
-const otherCapacity = 'Other'
+// TODO CONFIRM MAX CHARS
+const MAX_LENGTH = 10
 
 const handlers = {
   get: async (request, h) => {
@@ -45,24 +39,16 @@ const handlers = {
         .code(400)
     }
 
-    // if (payload.whatCapacity !== otherCapacity) {
-    //   delete payload.otherCapacity
-    // }
-
-    // AnalyticsService.sendEvent(request, {
-    //   category: Analytics.Category.MAIN_QUESTIONS,
-    //   action: `${Analytics.Action.SELECTED} ${payload.whatCapacity}${
-    //     payload.whatCapacity === otherCapacity
-    //       ? ' - ' + payload.otherCapacity
-    //       : ''
-    //   }`,
-    //   label: context.pageTitle
-    // })
+    AnalyticsService.sendEvent(request, {
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: `${Analytics.Action.SELECTED} ${payload.revokedCertificateNumber}`,
+      label: context.pageTitle
+    })
 
     await RedisService.set(
       request,
       RedisKeys.REVOKED_CERTIFICATE,
-      JSON.stringify(payload)
+      payload.revokedCertificateNumber
     )
 
     return h.redirect(Paths.CAN_CONTINUE)
@@ -70,81 +56,41 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  let payload
+  let revokedCertificateNumber
   if (request.payload) {
-    payload = request.payload
+    revokedCertificateNumber = request.payload.revokedCertificateNumber
   } else {
-    payload = await RedisService.get(request, RedisKeys.REVOKED_CERTIFICATE)
+    revokedCertificateNumber = await RedisService.get(
+      request,
+      RedisKeys.REVOKED_CERTIFICATE
+    )
   }
-
-  const whatCapacity = payload ? payload.whatCapacity : null
-
-  const options = _getOptions(whatCapacity)
-  const otherOption = options.pop()
 
   return {
     pageTitle:
-      "Enter the certificate number from the cancelled or 'revoked' certficate",
-    items: options,
-    otherOption,
-    otherCapacity:
-      payload && payload.whatCapacity === Capacities.OTHER
-        ? payload.otherCapacity
-        : null
+      "Enter the certificate number from the cancelled or 'revoked' certificate",
+    revokedCertificateNumber,
+    maxLength: MAX_LENGTH
   }
-}
-
-const _getOptions = whatCapacity => {
-  const options = Object.values(Capacities).map(capacity => {
-    return {
-      label: capacity,
-      checked: whatCapacity && whatCapacity === capacity
-    }
-  })
-
-  const items = options.map(option => {
-    return {
-      text: option.label,
-      value: option.label,
-      checked: option.checked
-    }
-  })
-
-  items[0].hint = {
-    text: 'For example, an antiques dealer or auction house selling the item'
-  }
-
-  return items
 }
 
 const _validateForm = payload => {
   const errors = []
 
-  if (Validators.empty(payload.whatCapacity)) {
+  if (Validators.empty(payload.revokedCertificateNumber)) {
     errors.push({
-      name: 'whatCapacity',
-      text: 'Tell us if the item already has an exemption certificate'
+      name: 'revokedCertificateNumber',
+      text: 'Enter the certificate number from the revoked certificate'
     })
   }
 
-  if (payload.whatCapacity === otherCapacity) {
-    if (Validators.empty(payload.otherCapacity)) {
-      errors.push({
-        name: 'otherCapacity',
-        text: 'Enter the certificate number'
-      })
-    }
-
-    // TODO CONFIRM MAX CHARS
-
-    if (Validators.maxLength(payload.otherCapacity, CharacterLimits.Input)) {
-      errors.push({
-        name: 'otherCapacity',
-        text: `Enter no more than ${formatNumberWithCommas(
-          CharacterLimits.Input
-        )} characters`
-      })
-    }
+  if (Validators.maxLength(payload.revokedCertificateNumber, MAX_LENGTH)) {
+    errors.push({
+      name: 'revokedCertificateNumber',
+      text: `The certificate number should be ${formatNumberWithCommas(
+        MAX_LENGTH
+      )} characters long`
+    })
   }
 
   return errors

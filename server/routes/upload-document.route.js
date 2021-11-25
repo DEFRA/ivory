@@ -85,7 +85,7 @@ const handlers = {
         const base64 = buffer.toString('base64')
         uploadData.fileData.push(base64)
 
-        RedisService.set(
+        await RedisService.set(
           request,
           RedisKeys.UPLOAD_DOCUMENT,
           JSON.stringify(uploadData)

@@ -47,6 +47,7 @@ const schema = joi.object().keys({
     .default('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
   govNotifyKey: joi.string(),
   govNotifyTemplateIdConfirmSection2: joi.string(),
+  govNotifyTemplateIdConfirmSection2Reselling: joi.string(),
   govNotifyTemplateIdConfirmSection10: joi.string(),
   govNotifyTemplateIdEmailToOwnerSection10: joi.string(),
   paymentUrl: joi.string().default(defaultUrl),
@@ -89,6 +90,8 @@ const config = {
   govNotifyKey: process.env.GOV_NOTIFY_KEY,
   govNotifyTemplateIdConfirmSection2:
     process.env.GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_2,
+  govNotifyTemplateIdConfirmSection2Reselling:
+    process.env.GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_2_RESELLING,
   govNotifyTemplateIdConfirmSection10:
     process.env.GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_10,
   govNotifyTemplateIdEmailToOwnerSection10:

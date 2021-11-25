@@ -1,44 +1,73 @@
 const NOTIFICATION_TIMEOUT = 5000;
 const LOGGED_STATUS = 881990000;
-const TARGET_COMPLETION_DATE_DAYS = 30;
+const TARGET_COMPLETION_DATE_DAYS = 49;
 
 const DataVerseFieldName = {
-  SECTION_2_CASE_ID: 'cre2c_ivorysection2caseid',
-  SECTION_10_CASE_ID: 'cre2c_ivorysection10caseid',
-  TARGET_COMPLETION_DATE: 'cre2c_targetcompletiondate',
-  NAME: 'cre2c_name',
-  EXEMPTION_CATEGORY: 'cre2c_exemptioncategory',
-  WHERE_IT_WAS_MADE: 'cre2c_whereitwasmade',
-  WHEN_IT_WAS_MADE: 'cre2c_whenitwasmade',
-  WHY_OUTSTANDINLY_VALUABLE: 'cre2c_whyoutstandinglyvaluable',
-  SUBMISSION_REFERENCE: 'cre2c_submissionreference',
-  EXEMPTION_TYPE: 'cre2c_exemptiontype',
-  WHY_IVORY_EXEMPT: 'cre2c_whyivoryexempt',
-  WHY_IVORY_EXEMPT_OTHER_REASON: 'cre2c_whyivoryexemptotherreason',
-  WHY_IVORY_INTEGRAL: 'cre2c_whyivoryintegral',
-  DATE_STATUS_APPLIED: 'cre2c_datestatusapplied',
-  STATUS: 'cre2c_status',
-  SUBMISSION_DATE: 'cre2c_submissiondate',
-  PAYMENT_REFERENCE: 'cre2c_paymentreference',
-  WHY_AGE_EXEMPT: 'cre2c_whyageexempt',
-  WHY_AGE_EXEMPT_OTHER_REASON: 'cre2c_whyageexemptotherreason',
-  WHERE_IS_THE_IVORY: 'cre2c_wherestheivory',
-  ITEM_SUMMARY: 'cre2c_itemsummary',
-  UNIQUE_FEATURES: 'cre2c_uniquefeatures',
-  INTENTION: 'cre2c_intention',
-  OWNER_NAME: 'cre2c_ownername',
-  OWNER_EMAIL: 'cre2c_owneremail',
-  OWNER_ADDRESS: 'cre2c_owneraddress',
-  APPLICANT_NAME: 'cre2c_applicantname',
-  APPLICANT_EMAIL: 'cre2c_applicantemail',
+  ALREADY_HAS_CERTIFICATE: 'cre2c_alreadyhascertificate',
   APPLICANT_ADDRESS: 'cre2c_applicantaddress',
-  PHOTO_1: 'cre2c_photo1',
-  SUPPORTING_EVIDENCE_1: 'cre2c_supportingevidence1',
-  SUPPORTING_EVIDENCE_1_NAME: 'cre2c_supportingevidence1_name',
+  APPLICANT_EMAIL: 'cre2c_applicantemail',
+  APPLICANT_NAME: 'cre2c_applicantname',
+  APPLICANT_POSTCODE: 'cre2c_applicantpostcode',
+  APPLIED_BEFORE: 'cre2c_appliedbefore',
+  CAPACITY_OTHER: 'cre2c_capacityother',
+  CAPACITY: 'cre2c_capacity',
   CERTIFICATE_ISSUE_DATE: 'cre2c_certificateissuedate',
   CERTIFICATE_KEY: 'cre2c_certificatekey',
   CERTIFICATE_LINK: 'cre2c_certificatelink',
-  CERTIFICATE_NUMBER: 'cre2c_certificatenumber'
+  CERTIFICATE_NUMBER: 'cre2c_certificatenumber',
+  DATE_STATUS_APPLIED: 'cre2c_datestatusapplied',
+  EXEMPTION_CATEGORY: 'cre2c_exemptioncategory',
+  EXEMPTION_TYPE: 'cre2c_exemptiontype',
+  INTENTION: 'cre2c_intention',
+  ITEM_SUMMARY: 'cre2c_itemsummary',
+  NAME: 'cre2c_name',
+  OWNED_BY_APPLICANT: 'cre2c_ownedbyapplicant',
+  OWNER_ADDRESS: 'cre2c_owneraddress',
+  OWNER_EMAIL: 'cre2c_owneremail',
+  OWNER_NAME: 'cre2c_ownername',
+  OWNER_POSTCODE: 'cre2c_ownerpostcode',
+  PAYMENT_REFERENCE: 'cre2c_paymentreference',
+  PHOTO_1: 'cre2c_photo1',
+  PHOTO_2: 'cre2c_photo2',
+  PHOTO_3: 'cre2c_photo3',
+  PHOTO_4: 'cre2c_photo4',
+  PHOTO_5: 'cre2c_photo5',
+  PHOTO_6: 'cre2c_photo6',
+  PREVIOUS_APPLICANT_ADDRESS: 'cre2c_previousapplicantaddress',
+  PREVIOUS_APPLICANT_EMAIL: 'cre2c_previousapplicantemail',
+  PREVIOUS_APPLICANT_NAME: 'cre2c_previousapplicantname',
+  PREVIOUS_APPLICANT_POSTCODE: 'cre2c_previousapplicantpostcode',
+  PREVIOUS_APPLICATION_NUMBER: 'cre2c_previousapplicationnumber',
+  PREVIOUS_CAPACITY_OTHER: 'cre2c_previouscapacityother',
+  PREVIOUS_CAPACITY: 'cre2c_previouscapacity',
+  PREVIOUS_OWNED_BY_APPLICANT: 'cre2c_previousownedbyapplicant',
+  PREVIOUS_OWNER_ADDRESS: 'cre2c_previousowneraddress',
+  PREVIOUS_OWNER_EMAIL: 'cre2c_previousowneremail',
+  PREVIOUS_OWNER_NAME: 'cre2c_previousownername',
+  PREVIOUS_OWNER_POSTCODE: 'cre2c_previousownerpostcode',
+  PREVIOUS_SELLING_ON_BEHALF_OF: 'cre2c_previoussellingonbehalfof',
+  PREVIOUS_WORK_FOR_A_BUSINESS: 'cre2c_previousworkforabusiness',
+  REVOKED_CERTIFICATE_NUMBER: 'cre2c_revokedcertificatenumber',
+  SECTION_10_CASE_ID: 'cre2c_ivorysection10caseid',
+  SECTION_2_CASE_ID: 'cre2c_ivorysection2caseid',
+  SELLING_ON_BEHALF_OF: 'cre2c_sellingonbehalfof',
+  STATUS: 'cre2c_status',
+  SUBMISSION_DATE: 'cre2c_submissiondate',
+  SUBMISSION_REFERENCE: 'cre2c_submissionreference',
+  SUPPORTING_EVIDENCE_1_NAME: 'cre2c_supportingevidence1_name',
+  SUPPORTING_EVIDENCE_1: 'cre2c_supportingevidence1',
+  TARGET_COMPLETION_DATE: 'cre2c_targetcompletiondate',
+  UNIQUE_FEATURES: 'cre2c_uniquefeatures',
+  WHEN_IT_WAS_MADE: 'cre2c_whenitwasmade',
+  WHERE_IS_THE_IVORY: 'cre2c_wherestheivory',
+  WHERE_IT_WAS_MADE: 'cre2c_whereitwasmade',
+  WHY_AGE_EXEMPT_OTHER_REASON: 'cre2c_whyageexemptotherreason',
+  WHY_AGE_EXEMPT: 'cre2c_whyageexempt',
+  WHY_IVORY_EXEMPT_OTHER_REASON: 'cre2c_whyivoryexemptotherreason',
+  WHY_IVORY_EXEMPT: 'cre2c_whyivoryexempt',
+  WHY_IVORY_INTEGRAL: 'cre2c_whyivoryintegral',
+  WHY_OUTSTANDINLY_VALUABLE: 'cre2c_whyoutstandinglyvaluable',
+  WORK_FOR_A_BUSINESS: 'cre2c_workforabusiness'
 };
 
 const ExemptionTypeLookup = {
@@ -68,6 +97,14 @@ const AgeExemptionReasonLookup = {
   CARBON_DATED: 881990008,
   OTHER_REASON: 881990009
 }
+
+const AlreadyCertifiedLookup = {
+  YES: 881990000,
+  NO: 881990001,
+  USED_TO: 881990002
+}
+
+const frontEndCertificateDownloadRoute = 'download-certificate'
 
 this.formOnLoad = async (executionContext, section) => {
   'use strict';
@@ -101,6 +138,7 @@ this.formOnLoad = async (executionContext, section) => {
     this._setCertificateKey(formContext)
     await this._setCertificateLink(formContext);
     this.certificateDetailsOnChange(executionContext);
+    this.alreadyHasCertificateOnChange(executionContext);
   }
 }
 
@@ -173,7 +211,7 @@ this._setCertificateLink = async formContext => {
   const id = formContext.data.entity.getId().toLowerCase().replace('{', '').replace('}', '');
 
   const key = formContext.getAttribute(DataVerseFieldName.CERTIFICATE_KEY).getValue();
-  const link = `${frontEndUrl}/download/${id}?key=${key}`;
+  const link = `${frontEndUrl}/${frontEndCertificateDownloadRoute}/${id}?key=${key}`;
 
   formContext.getAttribute(DataVerseFieldName.CERTIFICATE_LINK).setValue(link);
 }
@@ -278,6 +316,71 @@ this.certificateDetailsOnChange = executionContext => {
   const certificateNumber = formContext.getAttribute(DataVerseFieldName.CERTIFICATE_NUMBER).getValue();
   const certificateIssueDate = formContext.getAttribute(DataVerseFieldName.CERTIFICATE_ISSUE_DATE).getValue();
   formContext.getControl(DataVerseFieldName.CERTIFICATE_LINK).setVisible(certificateNumber !== null && certificateIssueDate !== null);
+}
+
+this.alreadyHasCertificateOnChange = executionContext => {
+  'use strict';
+
+  const formContext = executionContext.getFormContext();
+
+  const alreadyHasCertificate = formContext.getAttribute(DataVerseFieldName.ALREADY_HAS_CERTIFICATE).getValue();
+
+  switch (alreadyHasCertificate) {
+    case AlreadyCertifiedLookup.YES:
+      formContext.getControl(DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER).setVisible(false);
+      formContext.getControl(DataVerseFieldName.APPLIED_BEFORE).setVisible(false);
+      formContext.getControl(DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER).setVisible(false);
+
+      formContext.getAttribute(DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER).setValue(null);
+      formContext.getAttribute(DataVerseFieldName.APPLIED_BEFORE).setValue(null);
+      formContext.getAttribute(DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER).setValue(null);
+      break;
+
+    case AlreadyCertifiedLookup.NO:
+      formContext.getControl(DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER).setVisible(false);
+      formContext.getControl(DataVerseFieldName.APPLIED_BEFORE).setVisible(true);
+      formContext.getControl(DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER).setVisible(false);
+
+      formContext.getAttribute(DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER).setValue(null);
+
+      this.appliedBeforeOnChange(executionContext);
+      break;
+
+    case AlreadyCertifiedLookup.USED_TO:
+      formContext.getControl(DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER).setVisible(true);
+      formContext.getControl(DataVerseFieldName.APPLIED_BEFORE).setVisible(false);
+      formContext.getControl(DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER).setVisible(false);
+
+      formContext.getAttribute(DataVerseFieldName.APPLIED_BEFORE).setValue(null);
+      formContext.getAttribute(DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER).setValue(null);
+      break;
+
+    default:
+      formContext.getControl(DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER).setVisible(false);
+      formContext.getControl(DataVerseFieldName.APPLIED_BEFORE).setVisible(false);
+      formContext.getControl(DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER).setVisible(false);
+
+      formContext.getAttribute(DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER).setValue(null);
+      formContext.getAttribute(DataVerseFieldName.APPLIED_BEFORE).setValue(null);
+      formContext.getAttribute(DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER).setValue(null);
+      break;
+  }
+}
+
+this.appliedBeforeOnChange = executionContext => {
+  'use strict';
+
+  const formContext = executionContext.getFormContext();
+
+  const appliedBefore = formContext.getControl(DataVerseFieldName.APPLIED_BEFORE);
+
+  const hasAppliedBefore = appliedBefore.getValue() === 'Yes';
+
+  const fieldName = DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER
+  formContext.getControl(fieldName).setVisible(hasAppliedBefore);
+  if (!hasAppliedBefore) {
+    formContext.getAttribute(fieldName).setValue(null);
+  }
 }
 
 this.setAgeExemptionReasons = (formContext, isSection2) => {

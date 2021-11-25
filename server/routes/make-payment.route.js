@@ -5,30 +5,24 @@ const RandomString = require('randomstring')
 // TODO GA
 // const AnalyticsService = require('../services/analytics.service')
 const PaymentService = require('../services/payment.service')
+const RedisHelper = require('../services/redis-helper.service')
 const RedisService = require('../services/redis.service')
 
-const { ItemType, Paths, RedisKeys } = require('../utils/constants')
+const { Paths, RedisKeys } = require('../utils/constants')
 
 const TARGET_COMPLETION_DATE_PERIOD_DAYS = 30
 
 const handlers = {
   get: async (request, h) => {
+    const isSection2 = await RedisHelper.isSection2(request)
+
     const amount = parseInt(
       await RedisService.get(request, RedisKeys.PAYMENT_AMOUNT)
     )
 
     const submissionReference = _generateSubmissionReference()
 
-    const itemType = await RedisService.get(
-      request,
-      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
-    )
-
-    const isSection2 = itemType === ItemType.HIGH_VALUE
-
-    const description = isSection2
-      ? 'Ivory Act application for a certificate'
-      : 'Ivory Act self-assessment'
+    const description = await _getPaymentDescription(request, isSection2)
 
     const applicantContactDetails = await RedisService.get(
       request,
@@ -72,6 +66,22 @@ const handlers = {
 
     return h.redirect(response._links.next_url.href)
   }
+}
+
+const _getPaymentDescription = async (request, isSection2) => {
+  let paymentDescription
+
+  if (isSection2) {
+    const isAlreadyCertified = await RedisHelper.isAlreadyCertified(request)
+
+    paymentDescription = isAlreadyCertified
+      ? 'Ivory Act reselling certified item'
+      : 'Ivory Act application for a certificate'
+  } else {
+    paymentDescription = 'Ivory Act self-assessment'
+  }
+
+  return paymentDescription
 }
 
 /**

@@ -2,6 +2,7 @@
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+const RedisHelper = require('../services/redis-helper.service')
 
 const {
   CharacterLimits,
@@ -21,10 +22,7 @@ const pageTitle = 'Tell us about the item'
 
 const handlers = {
   get: async (request, h) => {
-    const itemType = await RedisService.get(
-      request,
-      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
-    )
+    const itemType = await RedisHelper.getItemType(request)
 
     const context = await _getContext(request, itemType)
 

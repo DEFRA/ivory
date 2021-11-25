@@ -3,31 +3,29 @@
 const AnalyticsService = require('../services/analytics.service')
 const NotificationService = require('../services/notification.service')
 const PaymentService = require('../services/payment.service')
+const RedisHelper = require('../services/redis-helper.service')
 const RedisService = require('../services/redis.service')
 const { EmailTypes } = require('../utils/constants')
 
 const {
   Analytics,
-  ItemType,
-  Options,
   Paths,
   PaymentResult,
   RedisKeys,
   Views
 } = require('../utils/constants')
 
+const APHA_EMAIL = 'ivory@apha.gov.uk'
+const SLA = 35
+
 const handlers = {
   get: async (request, h) => {
-    const itemType = await RedisService.get(
-      request,
-      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
-    )
+    const itemType = await RedisHelper.getItemType(request)
+    const isSection2 = await RedisHelper.isSection2(request, itemType)
 
-    const isSection2 = itemType === ItemType.HIGH_VALUE
+    const isAlreadyCertified = await RedisHelper.isAlreadyCertified(request)
 
-    const ownedByApplicant =
-      (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
-      Options.YES
+    const isOwnedByApplicant = await RedisHelper.isOwnedByApplicant(request)
 
     const paymentId = await RedisService.get(request, RedisKeys.PAYMENT_ID)
 
@@ -45,18 +43,17 @@ const handlers = {
       return h.redirect(Paths.CHECK_YOUR_ANSWERS)
     }
 
-    const context = await _getContext(request, isSection2, ownedByApplicant)
+    const context = await _getContext(request, isSection2, isOwnedByApplicant)
 
-    _sendEmail(
-      request,
-      EmailTypes.CONFIRMATION_EMAIL,
-      context,
-      itemType,
-      isSection2
-    )
+    const emailType =
+      isSection2 && isAlreadyCertified
+        ? EmailTypes.CONFIRMATION_EMAIL_RESELLING
+        : EmailTypes.CONFIRMATION_EMAIL
 
-    if (!ownedByApplicant && !isSection2) {
-      _sendEmail(request, EmailTypes.EMAIL_TO_OWNER, context, itemType)
+    _sendEmail(request, context, emailType, itemType, isSection2)
+
+    if (!isOwnedByApplicant && !isSection2) {
+      _sendEmail(request, context, EmailTypes.EMAIL_TO_OWNER, itemType)
     }
 
     AnalyticsService.sendEvent(request, {
@@ -87,10 +84,21 @@ const _getContext = async (request, isSection2, ownedByApplicant) => {
     RedisKeys.APPLICANT_CONTACT_DETAILS
   )
 
+  const alreadyCertified = isSection2
+    ? await RedisService.get(request, RedisKeys.ALREADY_CERTIFIED)
+    : null
+
+  const isAlreadyCertified = await RedisHelper.isAlreadyCertified(request)
+
+  const certificateNumber =
+    isSection2 && isAlreadyCertified ? alreadyCertified.certificateNumber : null
+
   return {
+    isAlreadyCertified,
     ownerContactDetails,
     applicantContactDetails,
     submissionReference,
+    certificateNumber,
     applicantEmail: applicantContactDetails
       ? applicantContactDetails.emailAddress
       : null,
@@ -99,22 +107,72 @@ const _getContext = async (request, isSection2, ownedByApplicant) => {
         ? ownerContactDetails.emailAddress
         : null,
 
-    pageTitle: isSection2 ? 'Application received' : 'Self-assessment complete',
-    helpText1: isSection2
-      ? 'We’ve sent confirmation of this application to:'
-      : 'We’ve also sent these details to:',
-    helpText2: isSection2
-      ? 'An expert will now check your application.'
-      : 'You can sell or hire out the item at your own risk.',
-    helpText3: isSection2
-      ? 'Checks usually happen within 30 days, and we may contact you during this time if we require more information.'
-      : 'If you do so, and we later discover that you’ve given us false information, you could be fined or prosecuted.',
-    helpText4: isSection2
-      ? 'If your application is approved, we will send you an exemption certificate so you can sell or hire out your item.'
-      : 'This self-assessment lasts until the owner of the item changes.',
-    helpText5: isSection2,
-    hideBackLink: true
+    pageTitle: _getPageTitle(isSection2, isAlreadyCertified),
+    initialHelpText: _getInitialHelpText(isSection2, isAlreadyCertified),
+    nextSteps: _getNextSteps(isSection2, isAlreadyCertified),
+    hideBackLink: true,
+    aphaEmail: isSection2 && !isAlreadyCertified ? APHA_EMAIL : null,
+    sla: SLA
   }
+}
+
+const _getPageTitle = (isSection2, isAlreadyCertified) => {
+  let pageTitle
+
+  if (isSection2) {
+    pageTitle = isAlreadyCertified
+      ? 'Submission received'
+      : 'Application received'
+  } else {
+    pageTitle = 'Self-assessment complete'
+  }
+
+  return pageTitle
+}
+
+const _getInitialHelpText = (isSection2, isAlreadyCertified) => {
+  let initialHelpText
+
+  if (isSection2) {
+    initialHelpText = isAlreadyCertified
+      ? 'We’ve sent confirmation of this to:'
+      : 'We’ve sent confirmation of this application to:'
+  } else {
+    initialHelpText = 'We’ve also sent these details to:'
+  }
+
+  return initialHelpText
+}
+
+const _getNextSteps = (isSection2, isAlreadyCertified) => {
+  const helpText = []
+
+  if (isSection2) {
+    if (isAlreadyCertified) {
+      helpText.push('You can now sell or hire out your item.')
+      helpText.push(
+        'You must pass on the item’s certificate to the new owner as part of the transaction.'
+      )
+    } else {
+      helpText.push('An expert will now check your application. ')
+      helpText.push(
+        `Checks usually happen within ${SLA} working days, and we may contact you during this time if we require more information.`
+      )
+      helpText.push(
+        'If your application is approved, we will send you an exemption certificate so you can sell or hire out your item.'
+      )
+    }
+  } else {
+    helpText.push('You can sell or hire out the item at your own risk.')
+    helpText.push(
+      'If you do so, and we later discover that you’ve given us false information, you could be fined or prosecuted.'
+    )
+    helpText.push(
+      'This self-assessment lasts until the owner of the item changes.'
+    )
+  }
+
+  return helpText
 }
 
 const _paymentCancelled = state =>
@@ -131,19 +189,25 @@ const _paymentError = state =>
 
 const _sendEmail = async (
   request,
-  emailType,
   context,
+  emailType,
   itemType,
   isSection2
 ) => {
   let redisSentEmailKey
   let fullName
   let email
+  let certificateNumber
 
   if (emailType === EmailTypes.CONFIRMATION_EMAIL) {
     redisSentEmailKey = RedisKeys.EMAIL_CONFIRMATION_SENT
     fullName = context.applicantContactDetails.fullName
     email = context.applicantEmail
+  } else if (emailType === EmailTypes.CONFIRMATION_EMAIL_RESELLING) {
+    redisSentEmailKey = RedisKeys.EMAIL_CONFIRMATION_SENT
+    fullName = context.applicantContactDetails.fullName
+    email = context.applicantEmail
+    certificateNumber = context.certificateNumber
   } else if (emailType === EmailTypes.EMAIL_TO_OWNER) {
     redisSentEmailKey = RedisKeys.EMAIL_TO_OWNER_SENT
     fullName = context.ownerContactDetails.fullName
@@ -159,7 +223,8 @@ const _sendEmail = async (
     const data = {
       fullName,
       exemptionType: itemType,
-      submissionReference: context.submissionReference
+      submissionReference: context.submissionReference,
+      certificateNumber
     }
 
     messageSent = await NotificationService.sendEmail(

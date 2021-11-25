@@ -3,15 +3,12 @@
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
 
-const {
-  // CharacterLimits,
-  Paths,
-  RedisKeys,
-  Views,
-  Analytics
-} = require('../utils/constants')
+const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
 const { formatNumberWithCommas } = require('../utils/general')
 const { buildErrorSummary, Validators } = require('../utils/validation')
+
+// TODO CONFIRM MAX CHARS
+const MAX_LENGTH = 10
 
 const handlers = {
   get: async (request, h) => {
@@ -51,7 +48,7 @@ const handlers = {
     await RedisService.set(
       request,
       RedisKeys.PREVIOUS_APPLICATION_NUMBER,
-      payload
+      payload.previousApplicationNumber
     )
 
     return h.redirect(Paths.CAN_CONTINUE)
@@ -59,23 +56,20 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  let payload
+  let previousApplicationNumber
   if (request.payload) {
-    payload = request.payload
+    previousApplicationNumber = request.payload.previousApplicationNumber
   } else {
-    payload = await RedisService.get(
+    previousApplicationNumber = await RedisService.get(
       request,
       RedisKeys.PREVIOUS_APPLICATION_NUMBER
     )
   }
 
-  const previousApplicationNumber = payload
-    ? payload.previousApplicationNumber
-    : null
-
   return {
     pageTitle: 'Enter the submission reference for the previous application',
-    previousApplicationNumber
+    previousApplicationNumber,
+    maxLength: MAX_LENGTH
   }
 }
 
@@ -89,20 +83,11 @@ const _validateForm = payload => {
     })
   }
 
-  // TODO CONFIRM MAX CHARS
-  const maxLenth = 10
-  if (
-    Validators.maxLength(
-      payload.previousApplicationNumber,
-      maxLenth
-      // CharacterLimits.Input
-    )
-  ) {
+  if (Validators.maxLength(payload.previousApplicationNumber, MAX_LENGTH)) {
     errors.push({
       name: 'previousApplicationNumber',
       text: `The application number should be ${formatNumberWithCommas(
-        // CharacterLimits.Input
-        maxLenth
+        MAX_LENGTH
       )} characters long`
     })
   }

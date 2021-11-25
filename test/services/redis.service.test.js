@@ -7,16 +7,14 @@ const sessionId = 'the-session-id'
 const redisKey = 'some_key'
 
 describe('Redis service', () => {
-  beforeEach(() => {
-    _createMocks()
-  })
-
   afterEach(() => {
     jest.clearAllMocks()
   })
 
   describe('get method', () => {
     it('should get a value from Redis', async () => {
+      _createMocks(mockRedisValue)
+
       expect(mockRequest.redis.client.get).toBeCalledTimes(0)
 
       const redisValue = await RedisService.get(mockRequest, redisKey)
@@ -27,9 +25,27 @@ describe('Redis service', () => {
         `${sessionId}.${redisKey}`
       )
     })
+
+    it('should return null if the key is not found in Redis', async () => {
+      _createMocks(null)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(0)
+
+      const redisValue = await RedisService.get(mockRequest, redisKey)
+      expect(redisValue).toEqual(null)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(1)
+      expect(mockRequest.redis.client.get).toBeCalledWith(
+        `${sessionId}.${redisKey}`
+      )
+    })
   })
 
   describe('set method', () => {
+    beforeEach(() => {
+      _createMocks(mockRedisValue)
+    })
+
     it('should set a value in Redis with correct expiry (TTL)', async () => {
       const redisValue = 'some_value'
       const redisTtlSeconds = 86400
@@ -46,17 +62,36 @@ describe('Redis service', () => {
       )
     })
   })
+
+  describe('delete method', () => {
+    beforeEach(() => {
+      _createMocks(mockRedisValue)
+    })
+
+    it('should delete a value from Redis', async () => {
+      expect(mockRequest.redis.client.del).toBeCalledTimes(0)
+
+      await RedisService.delete(mockRequest, redisKey)
+
+      expect(mockRequest.redis.client.del).toBeCalledTimes(1)
+      expect(mockRequest.redis.client.del).toBeCalledWith(
+        `${sessionId}.${redisKey}`
+      )
+    })
+  })
 })
 
 const mockRedisValue = 'MOCK REDIS VALUE'
-const _createMocks = () => {
+
+const _createMocks = mockValue => {
   mockRequest = jest.fn()
   mockRequest.state = {
     DefraIvorySession: sessionId
   }
   mockRequest.redis = {
     client: {
-      get: jest.fn(() => mockRedisValue),
+      del: jest.fn(),
+      get: jest.fn(() => mockValue),
       setex: jest.fn()
     }
   }

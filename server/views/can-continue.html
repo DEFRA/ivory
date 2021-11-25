@@ -10,18 +10,15 @@
 
       <h1 class="govuk-heading-l" id="pageTitle">{{ pageTitle }}</h1>
       
-        {% if usedChecker %}
+        {% if hasUsedChecker %}
           <p class="govuk-body" id="preListHeading">Based on your answers, it sounds like your item is exempt from the ivory ban.</p>
         {% endif %}
 
         <p class="govuk-body" id="listHeading">Complete the process by following the steps below:</p>
 
         <ol class="govuk-list govuk-list--number">
-          <li id="listItem-1">Add up to 6 photos of the item.</li>
-          <li id="listItem-2">Describe the item and how it meets the exemption criteria.</li>
-
-          {% for additionalStep in additionalSteps %}
-            <li id="additionalStep-{{ loop.index }}">{{ additionalStep }}</li>
+          {% for step in steps %}
+            <li id="step-{{ loop.index }}">{{ step }}</li>
           {% endfor %}
         </ol>
 
@@ -29,8 +26,8 @@
           <p class="govuk-body" id="timeoutParagraph">You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.</p>
         </div>
         
-        {% if isSection2 %}
-          <p class="govuk-body" id="finalParagraph">After you’ve paid for your application, you’ll need to wait up to 30 days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.</p>
+        {% if isSection2 and not isAlreadyCertified %}
+          <p class="govuk-body" id="finalParagraph">After you’ve paid for your application, you’ll need to wait up to {{ sla }} working days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.</p>
         {% endif %}
 
       {{ govukButton({
@@ -41,7 +38,7 @@
         })
       }}
 
-      {% if usedChecker %}
+      {% if hasUsedChecker %}
         <p class="govuk-body"><a id="cancelLink" class="govuk-link" href="{{ cancelLink }}">Cancel<span class="govuk-visually-hidden"> and return to GOV.UK</span></a></p>
       {% endif %}
 

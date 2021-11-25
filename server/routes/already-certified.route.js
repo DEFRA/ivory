@@ -2,17 +2,20 @@
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+const ODataService = require('../services/odata.service')
 
 const {
   AlreadyCertifiedOptions,
-  CharacterLimits,
   Paths,
   RedisKeys,
   Views,
   Analytics
 } = require('../utils/constants')
+
 const { formatNumberWithCommas } = require('../utils/general')
 const { buildErrorSummary, Validators } = require('../utils/validation')
+
+const CERTIFICATE_NUMBER_MAX_LENGTH = 10
 
 const handlers = {
   get: async (request, h) => {
@@ -26,7 +29,7 @@ const handlers = {
   post: async (request, h) => {
     const context = await _getContext(request)
     const payload = request.payload
-    const errors = _validateForm(payload)
+    const errors = await _validateForm(payload, context)
 
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
@@ -57,11 +60,22 @@ const handlers = {
       label: context.pageTitle
     })
 
-    await RedisService.set(
-      request,
-      RedisKeys.ALREADY_CERTIFIED,
-      JSON.stringify(payload)
-    )
+    await Promise.all([
+      RedisService.set(
+        request,
+        RedisKeys.ALREADY_CERTIFIED,
+        JSON.stringify(payload)
+      ),
+      RedisService.set(
+        request,
+        RedisKeys.ALREADY_CERTIFIED_EXISTING_RECORD,
+        JSON.stringify(context.existingRecord)
+      ),
+
+      RedisService.delete(request, RedisKeys.REVOKED_CERTIFICATE),
+      RedisService.delete(request, RedisKeys.APPLIED_BEFORE),
+      RedisService.delete(request, RedisKeys.PREVIOUS_APPLICATION_NUMBER)
+    ])
 
     switch (payload.alreadyCertified) {
       case AlreadyCertifiedOptions.YES:
@@ -89,8 +103,14 @@ const _getContext = async request => {
   const options = _getOptions(alreadyCertified)
   const yesOption = options.shift()
 
+  const existingRecord =
+    payload && payload.certificateNumber
+      ? await _getRecordForCertificateNumber(payload.certificateNumber)
+      : null
+
   return {
     pageTitle: 'Does the item already have an exemption certificate?',
+    existingRecord,
     items: options,
     yesOption,
     certificateNumber:
@@ -123,7 +143,7 @@ const _getOptions = alreadyCertified => {
   return items
 }
 
-const _validateForm = payload => {
+const _validateForm = async (payload, context) => {
   const errors = []
 
   if (Validators.empty(payload.alreadyCertified)) {
@@ -141,21 +161,45 @@ const _validateForm = payload => {
       })
     }
 
-    // TODO CONFIRM MAX CHARS
-
     if (
-      Validators.maxLength(payload.certificateNumber, CharacterLimits.Input)
+      Validators.maxLength(
+        payload.certificateNumber,
+        CERTIFICATE_NUMBER_MAX_LENGTH
+      )
     ) {
       errors.push({
         name: 'certificateNumber',
         text: `Enter no more than ${formatNumberWithCommas(
-          CharacterLimits.Input
+          CERTIFICATE_NUMBER_MAX_LENGTH
         )} characters`
       })
+    }
+
+    if (errors.length === 0) {
+      if (!context.existingRecord) {
+        errors.push({
+          name: 'certificateNumber',
+          text: 'Invalid certificate number'
+        })
+      }
     }
   }
 
   return errors
+}
+
+/**
+ * Looks up the certificate number in the back office, returns true if the certificate exists, otherwise false
+ * @param {*} certificateNumber
+ */
+const _getRecordForCertificateNumber = async certificateNumber => {
+  const matchingRecords = await ODataService.getRecordsWithCertificateNumber(
+    certificateNumber
+  )
+
+  const hasSingleMatch = matchingRecords && matchingRecords.length === 1
+
+  return hasSingleMatch ? matchingRecords[0] : null
 }
 
 module.exports = [

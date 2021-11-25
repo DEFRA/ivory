@@ -12,37 +12,41 @@
 
       <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
 
-      <h2 id="exemptionTypeHeading" class="govuk-heading-m">The item</h2>
+      <h2 id="itemHeading" class="govuk-heading-m">The item</h2>
 
       {{ govukSummaryList({
         classes: 'govuk-!-margin-bottom-9',
-        rows: exemptionTypeSummary,
+        rows: itemSummary,
         attributes: {
-          id: "exemptionTypeSummary"
+          id: "itemSummary"
         }
       }) }}
 
-      <h2 id="photosSubHeading" class="govuk-heading-m">Photos of the item</h2>
+      {% if not isAlreadyCertified %}
+        <h2 id="photosSubHeading" class="govuk-heading-m">Photos of the item</h2>
 
-      {{ govukSummaryList({
-        classes: 'govuk-!-margin-bottom-9 ivory-summary-list',
-        rows: photoSummary,
-        attributes: {
-          id: "photoSummary"
-        }
-      }) }}
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-9 ivory-summary-list',
+          rows: photoSummary,
+          attributes: {
+            id: "photoSummary"
+          }
+        }) }}
+      {% endif %}
 
-      <h2 id="itemDescriptionSubHeading" class="govuk-heading-m">Description of the item</h2>
+      {% if not isAlreadyCertified %}
+        <h2 id="itemDescriptionSubHeading" class="govuk-heading-m">Description of the item</h2>
 
-      {{ govukSummaryList({
-        classes: 'govuk-!-margin-bottom-9',
-        rows: itemDescriptionSummary,
-        attributes: {
-          id: "itemDescriptionSummary"
-        }
-      }) }}
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-9',
+          rows: itemDescriptionSummary,
+          attributes: {
+            id: "itemDescriptionSummary"
+          }
+        }) }}
+      {% endif %}
 
-      {% if not isMesuem %}
+      {% if not isAlreadyCertified and not isMesuem %}
         <h2 id="exemptionReasonHeading" class="govuk-heading-m">Reasons why item is exempt</h2>
 
         {{ govukSummaryList({
@@ -55,7 +59,7 @@
       {% endif %}
 
 
-      {% if documentSummary %}
+      {% if not isAlreadyCertified and documentSummary %}
         <h2 id="documentsSummaryHeading" class="govuk-heading-m">Documents to support application</h2>
 
         {{ govukSummaryList({
@@ -89,7 +93,7 @@
 
       <h2 id="legalDeclarationHeading" class="govuk-heading-m">Legal declaration</h2>
 
-      {% if ownedByApplicant %}
+      {% if isOwnedByApplicant %}
         <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree with the following:</p>
       {% else %}
         <p id="legalDeclarationPara1" class="govuk-body">Before you continue, you must agree that you have permission to act on the owner’s behalf.</p>

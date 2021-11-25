@@ -1,59 +1,32 @@
 {% extends 'form-layout.html' %}
 
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% block formContent %}
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
 
-      {% set otherHtml %}
-        {{ govukInput({
-            label: {
-              text: "Give details"
-            },
-            classes: "govuk-!-width-one-third",
-            id: "otherCapacity",
-            name: "otherCapacity",
-            value: otherCapacity,
-            errorMessage: fieldErrors['otherCapacity']
-          }) }}
-      {% endset -%}
+      <h1 class="govuk-label-wrapper"><label id="pageTitle" class="govuk-label govuk-label--l" for="more-detail">{{ pageTitle }}</label></h1>
 
-      {% set otherItem = {
-        text: otherOption.text,
-        value: otherOption.value,
-        checked: otherOption.checked,
-        conditional: {
-          html: otherHtml
-        }
-      }
-      %}
-
-      {% set items = (items.push(otherItem), items) %}
-
-      {% call govukFieldset({
-          attributes: {
-            id: "pageTitle"
+      {{ govukInput({
+          hint: {
+            text: "For example, '10AB010C'"
           },
-          legend: {
-            text: pageTitle,
-            classes: "govuk-fieldset__legend--l",
-            isPageHeading: true
-          }
-      }) %}
-
-      {{ govukRadios({
-        idPrefix: "whatCapacity",
-        name: "whatCapacity",
-        errorMessage: fieldErrors['whatCapacity'],
-        items: items
+          classes: "govuk-input govuk-!-width-one-third",
+          id: "revokedCertificateNumber",
+          name: "revokedCertificateNumber",
+          value: revokedCertificateNumber,
+          errorMessage: fieldErrors['revokedCertificateNumber']
       }) }}
 
-      {% endcall %}
+       {{ govukDetails({
+        id: "dontHaveCertificateNumber",
+        summaryText: "I don't have the certificate or certificate number",
+        html: "<p id=\"para1\">You can find the certificate number towards the top of the digital certificate we emailed the owner when their original application was successful. You'll also be able to find it referenced in any emails or letters from when the certificate was revoked.<p id=\"para2\">If you bought the item, the previous owner should have given you the certificate as part of the transaction. You may have received this by email.</p>"
+      }) }}
 
       {{ govukButton({
           attributes: {

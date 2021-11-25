@@ -12,7 +12,6 @@ const other = 'Other reason'
 
 const elementIds = {
   pageTitle: 'pageTitle',
-  helpText: 'helpText',
   ivoryAge: 'ivoryAge',
   ivoryAge2: 'ivoryAge-2',
   ivoryAge3: 'ivoryAge-3',

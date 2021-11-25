@@ -5,16 +5,16 @@ const TestHelper = require('../utils/test-helper')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-describe('/work-for-a-business route', () => {
+describe('/applied-before route', () => {
   let server
-  const url = '/work-for-a-business'
-  const nextUrl = '/selling-on-behalf-of'
+  const url = '/applied-before'
+  const nextUrlCanContinue = '/can-continue'
+  const nextUrlPreviousApplicationNumber = '/previous-application-number'
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    helpText: 'helpText',
-    workForABusiness: 'workForABusiness',
-    workForABusiness2: 'workForABusiness-2',
+    appliedBefore: 'appliedBefore',
+    appliedBefore2: 'appliedBefore-2',
     continue: 'continue'
   }
 
@@ -60,29 +60,21 @@ describe('/work-for-a-business route', () => {
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Do you work for a business who is selling or hiring out the item?'
-      )
-    })
-
-    it('should have the correct help text', () => {
-      const element = document.querySelector(`#${elementIds.helpText}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'This could be an auction house or antiques dealer, for example.'
+        'Has an application been made before?'
       )
     })
 
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
-        elementIds.workForABusiness,
+        elementIds.appliedBefore,
         'Yes',
         'Yes'
       )
 
       TestHelper.checkRadioOption(
         document,
-        elementIds.workForABusiness2,
+        elementIds.appliedBefore2,
         'No',
         'No'
       )
@@ -108,17 +100,27 @@ describe('/work-for-a-business route', () => {
 
     describe('Success', () => {
       it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
-        await _checkSelectedRadioAction(postOptions, server, 'Yes', nextUrl)
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          'Yes',
+          nextUrlPreviousApplicationNumber
+        )
       })
 
       it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
-        await _checkSelectedRadioAction(postOptions, server, 'No', nextUrl)
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          'No',
+          nextUrlCanContinue
+        )
       })
     })
 
     describe('Failure', () => {
       it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.workForABusiness = ''
+        postOptions.payload.doYouOwnTheItem = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -126,9 +128,9 @@ describe('/work-for-a-business route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'workForABusiness',
-          'workForABusiness-error',
-          'Tell us whether you work for a business who is selling or hiring out the item'
+          'appliedBefore',
+          'appliedBefore-error',
+          'Tell us if an application has been made before for this item'
         )
       })
     })
@@ -147,8 +149,8 @@ const _checkSelectedRadioAction = async (
   selectedOption,
   nextUrl
 ) => {
-  const redisKey = 'work-for-a-business'
-  postOptions.payload.workForABusiness = selectedOption
+  const redisKey = 'applied-before'
+  postOptions.payload.appliedBefore = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(0)
 

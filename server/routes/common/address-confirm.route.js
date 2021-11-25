@@ -2,14 +2,14 @@
 
 const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
+const RedisHelper = require('../../services/redis-helper.service')
 
 const {
   AddressType,
-  Options,
+  Analytics,
   Paths,
   RedisKeys,
-  Views,
-  Analytics
+  Views
 } = require('../../utils/constants')
 
 const getAddressType = request =>
@@ -31,11 +31,6 @@ const handlers = {
   post: async (request, h) => {
     const addressType = getAddressType(request)
     const context = await _getContext(request, addressType)
-
-    const ownedByApplicant = await RedisService.get(
-      request,
-      RedisKeys.OWNED_BY_APPLICANT
-    )
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
@@ -59,10 +54,7 @@ const handlers = {
       false
     )
 
-    if (
-      addressType === AddressType.APPLICANT &&
-      ownedByApplicant === Options.YES
-    ) {
+    if (addressType === AddressType.APPLICANT && context.isOwnedByApplicant) {
       await RedisService.set(
         request,
         RedisKeys.OWNER_ADDRESS,
@@ -78,10 +70,9 @@ const handlers = {
 
     let route
     if (addressType === AddressType.OWNER) {
-      route =
-        ownedByApplicant === Options.YES
-          ? Paths.INTENTION_FOR_ITEM
-          : Paths.APPLICANT_CONTACT_DETAILS
+      route = context.isOwnedByApplicant
+        ? Paths.INTENTION_FOR_ITEM
+        : Paths.APPLICANT_CONTACT_DETAILS
     } else {
       route = Paths.INTENTION_FOR_ITEM
     }
@@ -93,16 +84,13 @@ const handlers = {
 const _getContext = async (request, addressType) => {
   let context
 
-  const ownedByApplicant = await RedisService.get(
-    request,
-    RedisKeys.OWNED_BY_APPLICANT
-  )
-
   if (addressType === AddressType.OWNER) {
-    context = _getContextForOwnerAddressType(ownedByApplicant)
+    context = _getContextForOwnerAddressType()
   } else {
     context = _getContextForApplicantAddressType()
   }
+
+  context.isOwnedByApplicant = await RedisHelper.isOwnedByApplicant(request)
 
   const addresses = await RedisService.get(
     request,
@@ -119,7 +107,7 @@ const _getContext = async (request, addressType) => {
   return context
 }
 
-const _getContextForOwnerAddressType = ownedByApplicant => {
+const _getContextForOwnerAddressType = () => {
   return {
     pageTitle: 'Confirm address',
     editAddressUrl: '/user-details/owner/address-enter'

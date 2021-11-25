@@ -2,6 +2,7 @@
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+const RedisHelper = require('../services/redis-helper.service')
 
 const {
   CharacterLimits,
@@ -70,19 +71,13 @@ const handlers = {
       JSON.stringify(payload)
     )
 
-    const itemType = await RedisService.get(
-      request,
-      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
-    )
-
     return h.redirect(
-      itemType === ItemType.TEN_PERCENT ? Paths.IVORY_INTEGRAL : Paths.IVORY_AGE
+      context.itemType === ItemType.TEN_PERCENT
+        ? Paths.IVORY_INTEGRAL
+        : Paths.IVORY_AGE
     )
   }
 }
-
-const _getItemType = async request =>
-  RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
 
 const _getContext = async request => {
   let payload
@@ -92,12 +87,12 @@ const _getContext = async request => {
     payload = await RedisService.get(request, RedisKeys.IVORY_VOLUME)
   }
 
+  const itemType = await RedisHelper.getItemType(request)
   const ivoryVolume = payload ? payload.ivoryVolume : null
-
-  const itemType = await _getItemType(request)
   const percentage = getIvoryVolumePercentage(itemType)
 
   return {
+    itemType,
     pageTitle: `How do you know the item has less than ${percentage}% ivory by volume?`,
     options: _getOptions(ivoryVolume),
     otherReason:

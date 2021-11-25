@@ -28,6 +28,7 @@ module.exports = class TestHelper {
       .mockReturnValue('THE_SESSION_COOKIE')
 
     RedisService.set = jest.fn()
+    RedisService.delete = jest.fn()
   }
 
   static createServer () {

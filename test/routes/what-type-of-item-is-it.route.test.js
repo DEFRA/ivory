@@ -118,7 +118,9 @@ describe('/what-type-of-item-is-it route', () => {
     })
 
     it('should have the correct summary text title', () => {
-      const element = document.querySelector('.govuk-details__summary-text')
+      const element = document.querySelector(
+        `#${elementIds.needMoreHelp} .govuk-details__summary-text`
+      )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'I need more help to work this out'
@@ -126,7 +128,9 @@ describe('/what-type-of-item-is-it route', () => {
     })
 
     it('should have the correct summary text details', () => {
-      const element = document.querySelector('.govuk-details__text')
+      const element = document.querySelector(
+        `#${elementIds.needMoreHelp} .govuk-details__text`
+      )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'Use our eligibility checker to check if you can sell or hire out your item.'

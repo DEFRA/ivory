@@ -1,14 +1,13 @@
 'use strict'
 
 const AnalyticsService = require('../../services/analytics.service')
-const RedisService = require('../../services/redis.service')
+const RedisHelper = require('../../services/redis-helper.service')
 
 const {
   Analytics,
   ItemType,
   Options,
   Paths,
-  RedisKeys,
   Views
 } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
@@ -28,10 +27,7 @@ const handlers = {
     const payload = request.payload
     const errors = _validateForm(payload)
 
-    const whatIsItem = await RedisService.get(
-      request,
-      RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
-    )
+    const itemType = await RedisHelper.getItemType(request)
 
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
@@ -56,7 +52,7 @@ const handlers = {
 
     switch (payload.isItemPre1918) {
       case Options.YES:
-        if (whatIsItem === ItemType.MINIATURE) {
+        if (itemType === ItemType.MINIATURE) {
           return h.redirect(Paths.LESS_THAN_320CM_SQUARED)
         } else {
           return h.redirect(Paths.IS_IT_RMI)

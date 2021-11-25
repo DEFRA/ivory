@@ -27,17 +27,19 @@ describe('/service-complete route', () => {
   const elementIds = {
     pageTitle: 'pageTitle',
     submissionReference: 'submissionReference',
-    helpText1: 'helpText1',
+    initialHelpText: 'initialHelpText',
     applicantEmail: 'applicantEmail',
     ownerEmail: 'ownerEmail',
     heading2: 'heading2',
-    helpText2: 'helpText2',
-    helpText3: 'helpText3',
-    helpText4: 'helpText4',
-    helpText5: 'helpText5',
+    step1: 'step-1',
+    step2: 'step-2',
+    step3: 'step-3',
+    additionalStep: 'additionalStep',
     finish: 'finish',
     feedbackLink: 'feedbackLink'
   }
+
+  const SLA = 35
 
   let document
 
@@ -63,7 +65,7 @@ describe('/service-complete route', () => {
       url
     }
 
-    describe('GET - Section 10 application. Applicant is the owner', () => {
+    describe('Section 10', () => {
       beforeEach(() => {
         _createSection10RedisMock(Options.YES)
       })
@@ -108,8 +110,10 @@ describe('/service-complete route', () => {
           )
         })
 
-        it('should have the correct text in helpText1', () => {
-          const element = document.querySelector(`#${elementIds.helpText1}`)
+        it('should have the correct initial help text', () => {
+          const element = document.querySelector(
+            `#${elementIds.initialHelpText}`
+          )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'We’ve also sent these details to:'
@@ -131,33 +135,24 @@ describe('/service-complete route', () => {
           expect(element).toBeFalsy()
         })
 
-        it('should have the correct text in helpText2', () => {
-          const element = document.querySelector(`#${elementIds.helpText2}`)
+        it('should have the correct "next steps" help Text', () => {
+          let element = document.querySelector(`#${elementIds.step1}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'You can sell or hire out the item at your own risk.'
           )
-        })
 
-        it('should have the correct text in helpText3', () => {
-          const element = document.querySelector(`#${elementIds.helpText3}`)
+          element = document.querySelector(`#${elementIds.step2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'If you do so, and we later discover that you’ve given us false information, you could be fined or prosecuted.'
           )
-        })
 
-        it('should have the correct text in helpText4', () => {
-          const element = document.querySelector(`#${elementIds.helpText4}`)
+          element = document.querySelector(`#${elementIds.step3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'This self-assessment lasts until the owner of the item changes.'
           )
-        })
-
-        it('should NOT have any text in helpText5', () => {
-          const element = document.querySelector(`#${elementIds.helpText5}`)
-          expect(element).toBeFalsy()
         })
 
         it('should have the correct Call to Action button', () => {
@@ -177,12 +172,12 @@ describe('/service-complete route', () => {
       })
     })
 
-    describe('GET - Section 2 application. Applicant is NOT the owner', () => {
-      beforeEach(() => {
-        _createSection2RedisMock(Options.NO)
-      })
+    describe('Section 2 ', () => {
+      describe('Success: Not already certified', () => {
+        beforeEach(() => {
+          _createSection2RedisMock(Options.NO, false)
+        })
 
-      describe('GET: Success', () => {
         beforeEach(async () => {
           const payment = {
             state: {
@@ -214,8 +209,10 @@ describe('/service-complete route', () => {
           )
         })
 
-        it('should have the correct text in helpText1', () => {
-          const element = document.querySelector(`#${elementIds.helpText1}`)
+        it('should have the correct initial help text', () => {
+          const element = document.querySelector(
+            `#${elementIds.initialHelpText}`
+          )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'We’ve sent confirmation of this application to:'
@@ -240,36 +237,126 @@ describe('/service-complete route', () => {
           )
         })
 
-        it('should have the correct text in helpText2', () => {
-          const element = document.querySelector(`#${elementIds.helpText2}`)
+        it('should have the correct "next steps" help Text', () => {
+          let element = document.querySelector(`#${elementIds.step1}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'An expert will now check your application.'
           )
-        })
 
-        it('should have the correct text in helpText3', () => {
-          const element = document.querySelector(`#${elementIds.helpText3}`)
+          element = document.querySelector(`#${elementIds.step2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Checks usually happen within 30 days, and we may contact you during this time if we require more information.'
+            `Checks usually happen within ${SLA} working days, and we may contact you during this time if we require more information.`
           )
-        })
 
-        it('should have the correct text in helpText4', () => {
-          const element = document.querySelector(`#${elementIds.helpText4}`)
+          element = document.querySelector(`#${elementIds.step3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'If your application is approved, we will send you an exemption certificate so you can sell or hire out your item.'
           )
         })
 
-        it('should have the correct text in helpText5', () => {
-          const element = document.querySelector(`#${elementIds.helpText5}`)
+        it('should have the correct additional step help text', () => {
+          const element = document.querySelector(
+            `#${elementIds.additionalStep}`
+          )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'If you have not heard from us within 30 days, you can contact us at ivory@apha.gov.uk. Make sure you have your submission reference number, so we can find your details.'
+            `If you have not heard from us within ${SLA} working days, you can contact us at ivory@apha.gov.uk. Make sure you have your submission reference number, so we can find your details.`
           )
+        })
+
+        it('should have the correct feedback link', () => {
+          const element = document.querySelector(`#${elementIds.feedbackLink}`)
+          TestHelper.checkLink(
+            element,
+            'What did you think of this service?',
+            'https://defragroup.eu.qualtrics.com/jfe/form/SV_0vtTE03cG8IQiBU'
+          )
+        })
+      })
+
+      describe('Success: Already certified', () => {
+        beforeEach(() => {
+          _createSection2RedisMock(Options.NO, true)
+        })
+
+        beforeEach(async () => {
+          const payment = {
+            state: {
+              status: 'success'
+            }
+          }
+          PaymentService.lookupPayment = jest.fn().mockReturnValue(payment)
+
+          document = await TestHelper.submitGetRequest(server, getOptions)
+        })
+
+        it('should have the correct page heading', () => {
+          const element = document.querySelector(
+            `#${elementIds.pageTitle} .govuk-panel__title`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toContain(
+            'Submission received'
+          )
+        })
+
+        it('should NOT have the reference number', () => {
+          const element = document.querySelector(
+            `#${elementIds.submissionReference}`
+          )
+          expect(element).toBeFalsy()
+        })
+
+        it('should have the correct initial help text', () => {
+          const element = document.querySelector(
+            `#${elementIds.initialHelpText}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'We’ve sent confirmation of this to:'
+          )
+        })
+
+        it('should have the correct applicant email address', () => {
+          const element = document.querySelector(
+            `#${elementIds.applicantEmail}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            mockApplicantContactDetails.emailAddress
+          )
+        })
+
+        it('should have the correct owner email address', () => {
+          const element = document.querySelector(`#${elementIds.ownerEmail}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            mockOwnerContactDetails.emailAddress
+          )
+        })
+
+        it('should have the correct "next steps" help Text', () => {
+          let element = document.querySelector(`#${elementIds.step1}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'You can now sell or hire out your item.'
+          )
+
+          element = document.querySelector(`#${elementIds.step2}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'You must pass on the item’s certificate to the new owner as part of the transaction.'
+          )
+        })
+
+        it('should NOT have the additional step help text', () => {
+          const element = document.querySelector(
+            `#${elementIds.additionalStep}`
+          )
+          expect(element).toBeFalsy()
         })
 
         it('should have the correct feedback link', () => {
@@ -351,7 +438,7 @@ describe('/service-complete route', () => {
 
       describe('Section 2, applicant is the owner', () => {
         beforeEach(() => {
-          _createSection2RedisMock(Options.YES)
+          _createSection2RedisMock(Options.YES, false)
         })
 
         it('should send 1 confirmation email', async () => {
@@ -374,7 +461,7 @@ describe('/service-complete route', () => {
 
       describe('Section 2, applicant is NOT the owner', () => {
         beforeEach(() => {
-          _createSection2RedisMock(Options.NO)
+          _createSection2RedisMock(Options.NO, false)
         })
 
         it('should send 1 confirmation email', async () => {
@@ -481,8 +568,11 @@ const _createMocks = () => {
   NotificationService.sendEmail = jest.fn()
 }
 
-const _createSection2RedisMock = ownedByApplicant => {
+const _createSection2RedisMock = (ownedByApplicant, isAlreadyCertified) => {
   redisMockDataMap[RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT] = ItemType.HIGH_VALUE
+  redisMockDataMap[RedisKeys.ALREADY_CERTIFIED] = {
+    alreadyCertified: isAlreadyCertified ? Options.YES : Options.NO
+  }
   redisMockDataMap[RedisKeys.OWNED_BY_APPLICANT] = ownedByApplicant
   redisMockDataMap[RedisKeys.APPLICANT_CONTACT_DETAILS] =
     ownedByApplicant === Options.YES

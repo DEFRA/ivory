@@ -4,13 +4,14 @@ jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
 const TestHelper = require('../utils/test-helper')
-const { ItemType } = require('../../server/utils/constants')
+const { ItemType, Options, RedisKeys } = require('../../server/utils/constants')
 
 describe('/legal-responsibility route', () => {
   let server
   const url = '/legal-responsibility'
   const nextUrlNoPhotos = '/upload-photo'
   const nextUrlSomePhotos = '/your-photos'
+  const nextUrlWhoOwnsTheItem = '/who-owns-the-item'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -153,18 +154,64 @@ describe('/legal-responsibility route', () => {
     })
 
     describe('Success', () => {
-      it('should redirect the correct route when there are no uploaded photos', async () => {
-        RedisService.get = jest.fn().mockResolvedValue({})
+      describe('Already certified', () => {
+        beforeEach(async () => {
+          const mockData = {
+            [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+            [RedisKeys.UPLOAD_PHOTO]: {},
+            [RedisKeys.ALREADY_CERTIFIED]: { alreadyCertified: Options.YES }
+          }
 
-        const response = await TestHelper.submitPostRequest(server, postOptions)
-        expect(response.headers.location).toEqual(nextUrlNoPhotos)
+          RedisService.get = jest.fn((request, redisKey) => {
+            return mockData[redisKey]
+          })
+        })
+
+        it('should redirect the correct route when the item is already certified', async () => {
+          const response = await TestHelper.submitPostRequest(
+            server,
+            postOptions
+          )
+          expect(response.headers.location).toEqual(nextUrlWhoOwnsTheItem)
+        })
       })
 
-      it('should redirect the correct route when there are some uploaded photos', async () => {
-        RedisService.get = jest.fn().mockResolvedValue(mockPhotos)
+      describe('Not already certified', () => {
+        it('should redirect the correct route when there are no uploaded photos', async () => {
+          const mockData = {
+            [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+            [RedisKeys.UPLOAD_PHOTO]: {},
+            [RedisKeys.ALREADY_CERTIFIED]: { alreadyCertified: Options.NO }
+          }
 
-        const response = await TestHelper.submitPostRequest(server, postOptions)
-        expect(response.headers.location).toEqual(nextUrlSomePhotos)
+          RedisService.get = jest.fn((request, redisKey) => {
+            return mockData[redisKey]
+          })
+
+          const response = await TestHelper.submitPostRequest(
+            server,
+            postOptions
+          )
+          expect(response.headers.location).toEqual(nextUrlNoPhotos)
+        })
+
+        it('should redirect the correct route when there are some uploaded photos', async () => {
+          const mockData = {
+            [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+            [RedisKeys.UPLOAD_PHOTO]: mockPhotos,
+            [RedisKeys.ALREADY_CERTIFIED]: { alreadyCertified: Options.NO }
+          }
+
+          RedisService.get = jest.fn((request, redisKey) => {
+            return mockData[redisKey]
+          })
+
+          const response = await TestHelper.submitPostRequest(
+            server,
+            postOptions
+          )
+          expect(response.headers.location).toEqual(nextUrlSomePhotos)
+        })
       })
     })
   })

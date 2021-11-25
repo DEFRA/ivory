@@ -15,19 +15,63 @@ const ContentTypes = {
   APPLICATION_OCTET_STREAM: 'application/octet-stream'
 }
 
-const oDataVersion = '4.0'
+const ODATA_VERSION = 'OData-Version'
+const ODATA_MAX_VERSION = 'OData-MaxVersion'
+const CONTENT_TYPE = 'Content-Type'
+const AUTHORIZATION = 'Authorization'
+const PREFER = 'Prefer'
+
+const ODATA_VERSION_NUMBER = '4.0'
 const PREFER_REPRESENTATION = 'return=representation'
 
 module.exports = class ODataService {
+  /**
+   * Validates a certificate number.
+   * @param {*} certificateNumber
+   * @returns Section 2 records which have the certificate number
+   */
+  static async getRecordsWithCertificateNumber (certificateNumber) {
+    const token = await ActiveDirectoryAuthService.getToken()
+    const headers = {
+      [ODATA_VERSION]: ODATA_VERSION_NUMBER,
+      [ODATA_MAX_VERSION]: ODATA_VERSION_NUMBER,
+      [CONTENT_TYPE]: ContentTypes.APPLICATION_OCTET_STREAM,
+      [AUTHORIZATION]: `Bearer ${token}`,
+      [PREFER]: PREFER_REPRESENTATION
+    }
+
+    const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
+    const url = `${apiEndpoint}/${SECTION_2_ENDPOINT}?$filter=cre2c_certificatenumber eq '${certificateNumber}'`
+
+    console.log(`Fetching URL: [${url}]`)
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers
+    })
+
+    const matchingRecords = await response.json()
+
+    if (response.status !== StatusCodes.OK) {
+      throw new Error(
+        `Error checking for certificate number: ${certificateNumber}`
+      )
+    }
+
+    return matchingRecords && matchingRecords.value
+      ? matchingRecords.value
+      : null
+  }
+
   static async createRecord (body, isSection2) {
     const token = await ActiveDirectoryAuthService.getToken()
 
     const headers = {
-      'OData-Version': oDataVersion,
-      'OData-MaxVersion': oDataVersion,
-      'Content-Type': ContentTypes.APPLICATION_JSON,
-      Authorization: `Bearer ${token}`,
-      Prefer: PREFER_REPRESENTATION
+      [ODATA_VERSION]: ODATA_VERSION_NUMBER,
+      [ODATA_MAX_VERSION]: ODATA_VERSION_NUMBER,
+      [CONTENT_TYPE]: ContentTypes.APPLICATION_JSON,
+      [AUTHORIZATION]: `Bearer ${token}`,
+      [PREFER]: PREFER_REPRESENTATION
     }
 
     const idColumnName = isSection2
@@ -74,11 +118,11 @@ module.exports = class ODataService {
     const token = await ActiveDirectoryAuthService.getToken()
 
     const headers = {
-      'OData-Version': oDataVersion,
-      'OData-MaxVersion': oDataVersion,
-      'Content-Type': ContentTypes.APPLICATION_JSON,
-      Authorization: `Bearer ${token}`,
-      Prefer: PREFER_REPRESENTATION
+      [ODATA_VERSION]: ODATA_VERSION_NUMBER,
+      [ODATA_MAX_VERSION]: ODATA_VERSION_NUMBER,
+      [CONTENT_TYPE]: ContentTypes.APPLICATION_JSON,
+      [AUTHORIZATION]: `Bearer ${token}`,
+      [PREFER]: PREFER_REPRESENTATION
     }
 
     const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
@@ -101,11 +145,11 @@ module.exports = class ODataService {
     const token = await ActiveDirectoryAuthService.getToken()
 
     const headers = {
-      'OData-Version': oDataVersion,
-      'OData-MaxVersion': oDataVersion,
-      'Content-Type': ContentTypes.APPLICATION_OCTET_STREAM,
-      Authorization: `Bearer ${token}`,
-      Prefer: PREFER_REPRESENTATION
+      [ODATA_VERSION]: ODATA_VERSION_NUMBER,
+      [ODATA_MAX_VERSION]: ODATA_VERSION_NUMBER,
+      [CONTENT_TYPE]: ContentTypes.APPLICATION_OCTET_STREAM,
+      [AUTHORIZATION]: `Bearer ${token}`,
+      [PREFER]: PREFER_REPRESENTATION
     }
 
     const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
@@ -122,14 +166,14 @@ module.exports = class ODataService {
     return response
   }
 
-  static async updateRecord (id, body, isSection2) {
+  static async updateRecord (id, body, isSection2 = true) {
     const token = await ActiveDirectoryAuthService.getToken()
 
     const headers = {
-      'OData-Version': oDataVersion,
-      'OData-MaxVersion': oDataVersion,
-      'Content-Type': ContentTypes.APPLICATION_JSON,
-      Authorization: `Bearer ${token}`
+      [ODATA_VERSION]: ODATA_VERSION_NUMBER,
+      [ODATA_MAX_VERSION]: ODATA_VERSION_NUMBER,
+      [CONTENT_TYPE]: ContentTypes.APPLICATION_JSON,
+      [AUTHORIZATION]: `Bearer ${token}`
     }
 
     const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
@@ -167,11 +211,11 @@ module.exports = class ODataService {
       const url = `${apiEndpoint}/${SECTION_2_ENDPOINT}(${id})/${fieldName}`
 
       const headers = {
-        'OData-Version': oDataVersion,
-        'OData-MaxVersion': oDataVersion,
-        Authorization: `Bearer ${token}`,
-        Prefer: PREFER_REPRESENTATION,
-        'Content-Type': ContentTypes.APPLICATION_OCTET_STREAM,
+        'OData-Version': ODATA_VERSION_NUMBER,
+        'OData-MaxVersion': ODATA_VERSION_NUMBER,
+        [AUTHORIZATION]: `Bearer ${token}`,
+        [PREFER]: PREFER_REPRESENTATION,
+        [CONTENT_TYPE]: ContentTypes.APPLICATION_OCTET_STREAM,
         'x-ms-file-name': supportingInformation.files[i]
       }
 
