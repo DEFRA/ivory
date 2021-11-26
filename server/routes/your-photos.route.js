@@ -69,7 +69,8 @@ const _getContext = async request => {
       },
       classes: 'ivory-summary-list',
       value: {
-        html: `<img src="assets\\${imageThumbnailFile}" alt="Photo of item ${index}" width="200">`
+        html: `<img src="assets/${imageThumbnailFile}" alt="Photo ${index +
+          1}" width="200">`
       },
       actions: {
         items: [

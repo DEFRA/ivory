@@ -789,7 +789,8 @@ const _getPhotoSummary = async request => {
   }
 
   const imageRows = uploadPhotos.thumbnails.map((file, index) => {
-    return `<img id="photo${index}" class="govuk-!-padding-bottom-5" src="assets\\${file}" alt="Photo of item ${index}" width="200">`
+    return `<img id="photo${index}" class="govuk-!-padding-bottom-5" src="assets\\${file}" alt="Photo ${index +
+      1}" width="200">`
   })
 
   return [
