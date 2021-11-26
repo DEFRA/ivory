@@ -4,6 +4,7 @@ const fs = require('fs')
 
 const path = require('path')
 const sharp = require('sharp')
+const { v4: uuidv4 } = require('uuid')
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
@@ -80,11 +81,13 @@ const handlers = {
 
         const file = await fs.promises.readFile(payload.files.path)
 
-        const filenameNoExtension = filename.substring(
-          0,
-          filename.length - extension.length
-        )
-        const thumbnailFilename = `${filenameNoExtension}-thumbnail${extension}`
+        // const filenameNoExtension = filename.substring(
+        //   0,
+        //   filename.length - extension.length
+        // )
+        // const thumbnailFilename = `${filenameNoExtension}-thumbnail${extension}`
+
+        const thumbnailFilename = `${uuidv4()}${extension}`
 
         uploadData.files.push(filename)
         uploadData.fileSizes.push(payload.files.bytes)
