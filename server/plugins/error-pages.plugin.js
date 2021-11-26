@@ -17,11 +17,15 @@ module.exports = {
         if (response.isBoom) {
           const statusCode = response.output.statusCode
           const errorName = response.message
+          const myErrorName = response.output.payload.error
 
-          console.log(statusCode)
-          console.log(errorName)
+          console.log(`Status Code: ${statusCode}`)
+          console.log(`Error Name: ${errorName}`)
+          console.log(`My Error Name: ${myErrorName}`)
 
-          // request.airbrake.notify(`${statusCode}: ${errorName}`)
+          if (request.airbrake) {
+            request.airbrake.notify(`${statusCode}: ${errorName}`)
+          }
 
           // Log the error, unless it is just a basic authenication issue
           if (statusCode !== StatusCodes.UNAUTHORIZED) {

@@ -31,11 +31,5 @@ module.exports = [
     method: 'GET',
     path: `${Paths.PAGE_NOT_FOUND}`,
     handler: handlers.get
-  },
-  {
-    // Catch all route
-    method: 'GET',
-    path: '/{p*}',
-    handler: handlers.get
   }
 ]
