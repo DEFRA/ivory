@@ -177,7 +177,7 @@ describe('/selling-on-behalf-of route', () => {
     describe('Success', () => {
       describe('POST: Work for a business', () => {
         beforeEach(async () => {
-          RedisService.get = jest.fn().mockResolvedValueOnce('Yes')
+          RedisService.get = jest.fn().mockResolvedValue('Yes')
         })
 
         it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
@@ -302,21 +302,21 @@ const _checkSelectedRadioAction = async (
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
   if (shouldClearOwnerDetails) {
-    expect(RedisService.set).toBeCalledTimes(3)
+    expect(RedisService.set).toBeCalledTimes(1)
     expect(RedisService.set).toBeCalledWith(
       expect.any(Object),
       redisKey,
       selectedOption
     )
-    expect(RedisService.set).toBeCalledWith(
+
+    expect(RedisService.delete).toBeCalledTimes(2)
+    expect(RedisService.delete).toBeCalledWith(
       expect.any(Object),
-      redisKeyOwnerAddress,
-      null
+      redisKeyOwnerAddress
     )
-    expect(RedisService.set).toBeCalledWith(
+    expect(RedisService.delete).toBeCalledWith(
       expect.any(Object),
-      redisKeyOwnerContactDetails,
-      null
+      redisKeyOwnerContactDetails
     )
   } else {
     expect(RedisService.set).toBeCalledTimes(1)

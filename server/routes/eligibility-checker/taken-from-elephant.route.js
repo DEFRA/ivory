@@ -1,8 +1,9 @@
 'use strict'
 
 const AnalyticsService = require('../../services/analytics.service')
+const RedisHelper = require('../../services/redis-helper.service')
 
-const { Paths, Views, Options, Analytics } = require('../../utils/constants')
+const { Analytics, Options, Paths, Views } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
@@ -45,7 +46,11 @@ const handlers = {
       case Options.YES:
         return h.redirect(Paths.CANNOT_TRADE)
       case Options.NO:
-        return h.redirect(Paths.CAN_CONTINUE)
+        return h.redirect(
+          (await RedisHelper.isSection2(request))
+            ? Paths.APPLIED_BEFORE
+            : Paths.CAN_CONTINUE
+        )
       case Options.I_DONT_KNOW:
         return h.redirect(Paths.CANNOT_CONTINUE)
     }

@@ -153,17 +153,17 @@ const _checkSelectedRadioAction = async (
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
   if (selectedOption === 'Yes') {
-    expect(RedisService.set).toBeCalledTimes(2)
+    expect(RedisService.set).toBeCalledTimes(1)
     expect(RedisService.set).toBeCalledWith(
       expect.any(Object),
       redisKey,
       selectedOption === 'Yes' ? 'Yes' : 'No'
     )
 
-    expect(RedisService.set).toBeCalledWith(
+    expect(RedisService.delete).toBeCalledTimes(1)
+    expect(RedisService.delete).toBeCalledWith(
       expect.any(Object),
-      RedisKeys.WORK_FOR_A_BUSINESS,
-      null
+      RedisKeys.WORK_FOR_A_BUSINESS
     )
   } else {
     expect(RedisService.set).toBeCalledTimes(1)

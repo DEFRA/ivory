@@ -87,7 +87,9 @@ const _getPdf = async entity => {
   // Prevents the form fields from being editable
   form.flatten()
 
-  const certificateNumber = entity[DataVerseFieldName.CERTIFICATE_NUMBER] || 'CERTIFCATE NUMBER NOT ENTERED'
+  const certificateNumber =
+    entity[DataVerseFieldName.CERTIFICATE_NUMBER] ||
+    'CERTIFCATE NUMBER NOT ENTERED'
   if (certificateNumber) {
     _addWatermark(pdfDoc, certificateNumber)
   }
@@ -164,7 +166,7 @@ const _addWatermark = async (pdfDoc, certificateNumber) => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.DOWNLOAD}/{id}`,
+    path: `${Paths.DOWNLOAD_CERTIFICATE}/{id}`,
     handler: handlers.get
   }
 ]

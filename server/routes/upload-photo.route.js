@@ -4,6 +4,7 @@ const fs = require('fs')
 
 const path = require('path')
 const sharp = require('sharp')
+const { v4: uuidv4 } = require('uuid')
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
@@ -16,7 +17,7 @@ const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
 
 const MAX_PHOTOS = 6
 const MAX_FILES_IN_REQUEST_PAYLOAD = 1
-const THUMBNAIL_WIDTH = 1000
+const THUMBNAIL_WIDTH = 300
 const ALLOWED_EXTENSIONS = ['.JPG', '.JPEG', '.PNG']
 
 const handlers = {
@@ -80,11 +81,7 @@ const handlers = {
 
         const file = await fs.promises.readFile(payload.files.path)
 
-        const filenameNoExtension = filename.substring(
-          0,
-          filename.length - extension.length
-        )
-        const thumbnailFilename = `${filenameNoExtension}-thumbnail${extension}`
+        const thumbnailFilename = `${uuidv4()}${extension}`
 
         uploadData.files.push(filename)
         uploadData.fileSizes.push(payload.files.bytes)

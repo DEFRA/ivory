@@ -445,6 +445,8 @@ const _createMocks = () => {
     .mockResolvedValueOnce(mockData)
     .mockResolvedValueOnce('false')
     .mockResolvedValueOnce(mockData)
+
+  AntimalwareService.scan = jest.fn().mockResolvedValue(false)
 }
 
 const _checkValidation = async (

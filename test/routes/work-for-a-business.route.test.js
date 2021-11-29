@@ -118,7 +118,7 @@ describe('/work-for-a-business route', () => {
 
     describe('Failure', () => {
       it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.doYouOwnTheItem = ''
+        postOptions.payload.workForABusiness = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,

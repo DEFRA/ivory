@@ -11,6 +11,8 @@ const RedisService = require('../../server/services/redis.service')
 jest.mock('../../server/services/payment.service')
 const PaymentService = require('../../server/services/payment.service')
 
+const { ItemType, RedisKeys } = require('../../server/utils/constants')
+
 const paymentReference = 'ABCDEF'
 const paymentId = 'THE_PAYMENT_ID'
 
@@ -54,16 +56,19 @@ describe('/make-payment route', () => {
     })
 
     it('should redirect back to the "Service complete" page - Section 10', async () => {
-      RedisService.get = jest
-        .fn()
-        .mockResolvedValueOnce('2000')
-        .mockResolvedValueOnce(
-          'Musical instrument made before 1975 with less than 20% ivory'
-        )
-        .mockResolvedValueOnce({
+      const mockData = {
+        [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.MUSICAL,
+        [RedisKeys.ALREADY_CERTIFIED]: null,
+        [RedisKeys.PAYMENT_AMOUNT]: '2000',
+        [RedisKeys.APPLICANT_CONTACT_DETAILS]: {
           name: 'OWNER_NAME',
           emailAddress: 'OWNER_EMAIL_ADDRESS'
-        })
+        }
+      }
+
+      RedisService.get = jest.fn((request, redisKey) => {
+        return mockData[redisKey]
+      })
 
       const response = await TestHelper.submitGetRequest(
         server,
@@ -76,54 +81,57 @@ describe('/make-payment route', () => {
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'payment-amount'
+        RedisKeys.PAYMENT_AMOUNT
       )
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'applicant.contact-details'
+        RedisKeys.APPLICANT_CONTACT_DETAILS
       )
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'what-type-of-item-is-it'
+        RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
       )
 
       expect(RedisService.set).toBeCalledTimes(3)
 
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
-        'submission-date',
+        RedisKeys.SUBMISSION_DATE,
         // TODO - mock current time
         expect.any(String)
       )
 
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
-        'submission-reference',
+        RedisKeys.SUBMISSION_REFERENCE,
         paymentReference
       )
 
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
-        'payment-id',
+        RedisKeys.PAYMENT_ID,
         paymentId
       )
 
       expect(response.headers.location).toEqual(nextUrl)
     })
 
-    it('should redirect back to the "Service complete" page - Section 2', async () => {
-      RedisService.get = jest
-        .fn()
-        .mockResolvedValueOnce('25000')
-        .mockResolvedValueOnce(
-          'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
-        )
-        .mockResolvedValueOnce({
+    it('should redirect back to the "Service complete" page - Section 2, not already certified', async () => {
+      const mockData = {
+        [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+        [RedisKeys.ALREADY_CERTIFIED]: null,
+        [RedisKeys.PAYMENT_AMOUNT]: '25000',
+        [RedisKeys.APPLICANT_CONTACT_DETAILS]: {
           name: 'OWNER_NAME',
           emailAddress: 'OWNER_EMAIL_ADDRESS'
-        })
+        }
+      }
+
+      RedisService.get = jest.fn((request, redisKey) => {
+        return mockData[redisKey]
+      })
 
       const response = await TestHelper.submitGetRequest(
         server,
@@ -132,48 +140,53 @@ describe('/make-payment route', () => {
         false
       )
 
-      expect(RedisService.get).toBeCalledTimes(3)
+      expect(RedisService.get).toBeCalledTimes(4)
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'payment-amount'
+        RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
       )
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'applicant.contact-details'
+        RedisKeys.ALREADY_CERTIFIED
       )
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
-        'what-type-of-item-is-it'
+        RedisKeys.PAYMENT_AMOUNT
+      )
+
+      expect(RedisService.get).toBeCalledWith(
+        expect.any(Object),
+        RedisKeys.APPLICANT_CONTACT_DETAILS
       )
 
       expect(RedisService.set).toBeCalledTimes(4)
 
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
-        'submission-date',
+        RedisKeys.SUBMISSION_DATE,
         // TODO - mock current time
         expect.any(String)
       )
 
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
-        'target-completion-date',
+        RedisKeys.TARGET_COMPLETION_DATE,
         // TODO - mock current time
         expect.any(String)
       )
 
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
-        'submission-reference',
+        RedisKeys.SUBMISSION_REFERENCE,
         paymentReference
       )
 
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
-        'payment-id',
+        RedisKeys.PAYMENT_ID,
         paymentId
       )
 

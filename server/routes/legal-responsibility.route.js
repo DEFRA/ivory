@@ -2,14 +2,9 @@
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+const RedisHelper = require('../services/redis-helper.service')
 
-const {
-  ItemType,
-  Paths,
-  RedisKeys,
-  Views,
-  Analytics
-} = require('../utils/constants')
+const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
@@ -31,14 +26,20 @@ const handlers = {
 
     const uploadData = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
 
-    return uploadData && uploadData.files && uploadData.files.length
-      ? h.redirect(Paths.YOUR_PHOTOS)
-      : h.redirect(Paths.UPLOAD_PHOTO)
+    const isAlreadyCertified = await RedisHelper.isAlreadyCertified(request)
+
+    if (isAlreadyCertified) {
+      return h.redirect(Paths.WHO_OWNS_ITEM)
+    } else {
+      return uploadData && uploadData.files && uploadData.files.length
+        ? h.redirect(Paths.YOUR_PHOTOS)
+        : h.redirect(Paths.UPLOAD_PHOTO)
+    }
   }
 }
 
 const _getContext = async request => {
-  const isSection2 = (await _getItemType(request)) === ItemType.HIGH_VALUE
+  const isSection2 = await RedisHelper.isSection2(request)
 
   const context = {}
 
@@ -69,9 +70,6 @@ const _getContext = async request => {
 
   return context
 }
-
-const _getItemType = async request =>
-  RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
 
 module.exports = [
   {

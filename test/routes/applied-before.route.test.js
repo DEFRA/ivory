@@ -1,23 +1,20 @@
 'use strict'
 
-const TestHelper = require('../../utils/test-helper')
-const { ItemType } = require('../../../server/utils/constants')
+const TestHelper = require('../utils/test-helper')
 
-jest.mock('../../../server/services/redis.service')
-const RedisService = require('../../../server/services/redis.service')
+jest.mock('../../server/services/redis.service')
+const RedisService = require('../../server/services/redis.service')
 
-describe('/eligibility-checker/taken-from-elephant route', () => {
+describe('/applied-before route', () => {
   let server
-  const url = '/eligibility-checker/taken-from-elephant'
-  const nextUrlAppliedBefore = '/applied-before'
-  const nextUrlCannotTrade = '/eligibility-checker/cannot-trade'
+  const url = '/applied-before'
   const nextUrlCanContinue = '/can-continue'
-  const nextUrlCannotContinue = '/eligibility-checker/cannot-continue'
+  const nextUrlPreviousApplicationNumber = '/previous-application-number'
 
   const elementIds = {
-    takenFromElephant: 'takenFromElephant',
-    takenFromElephant2: 'takenFromElephant-2',
-    takenFromElephant3: 'takenFromElephant-3',
+    pageTitle: 'pageTitle',
+    appliedBefore: 'appliedBefore',
+    appliedBefore2: 'appliedBefore-2',
     continue: 'continue'
   }
 
@@ -58,33 +55,28 @@ describe('/eligibility-checker/taken-from-elephant route', () => {
     })
 
     it('should have the correct page heading', () => {
-      const element = document.querySelector('.govuk-fieldset__legend')
+      const element = document.querySelector(
+        `#${elementIds.pageTitle} > legend > h1`
+      )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Was the replacement ivory taken from an elephant on or after 1 January 1975?'
+        'Has an application been made before?'
       )
     })
 
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
-        elementIds.takenFromElephant,
+        elementIds.appliedBefore,
         'Yes',
         'Yes'
       )
 
       TestHelper.checkRadioOption(
         document,
-        elementIds.takenFromElephant2,
+        elementIds.appliedBefore2,
         'No',
         'No'
-      )
-
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.takenFromElephant3,
-        'I don’t know',
-        'I don’t know'
       )
     })
 
@@ -107,16 +99,16 @@ describe('/eligibility-checker/taken-from-elephant route', () => {
     })
 
     describe('Success', () => {
-      it('should progress to the next route when "Yes" has been selected', async () => {
+      it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
           'Yes',
-          nextUrlCannotTrade
+          nextUrlPreviousApplicationNumber
         )
       })
 
-      it('should progress to the next route when "No" has been selected: Section 10 item', async () => {
+      it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
@@ -124,30 +116,11 @@ describe('/eligibility-checker/taken-from-elephant route', () => {
           nextUrlCanContinue
         )
       })
-
-      it('should progress to the next route when "No" has been selected: Section 2 item', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'No',
-          nextUrlAppliedBefore,
-          true
-        )
-      })
-
-      it('should progress to the next route when "I dont know" has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'I don’t know',
-          nextUrlCannotContinue
-        )
-      })
     })
 
     describe('Failure', () => {
       it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.takenFromElephant = ''
+        postOptions.payload.doYouOwnTheItem = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -155,9 +128,9 @@ describe('/eligibility-checker/taken-from-elephant route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'takenFromElephant',
-          'takenFromElephant-error',
-          'You must tell us whether the replacement ivory was taken from an elephant on or after 1 January 1975'
+          'appliedBefore',
+          'appliedBefore-error',
+          'Tell us if an application has been made before for this item'
         )
       })
     })
@@ -166,24 +139,29 @@ describe('/eligibility-checker/taken-from-elephant route', () => {
 
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  RedisService.get = jest.fn()
 }
 
 const _checkSelectedRadioAction = async (
   postOptions,
   server,
   selectedOption,
-  nextUrl,
-  isSection2 = false
+  nextUrl
 ) => {
-  postOptions.payload.takenFromElephant = selectedOption
+  const redisKey = 'applied-before'
+  postOptions.payload.appliedBefore = selectedOption
 
-  if (isSection2) {
-    RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
-  } else {
-    RedisService.get = jest.fn().mockResolvedValue(ItemType.MUSICAL)
-  }
+  expect(RedisService.set).toBeCalledTimes(0)
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
+
+  expect(RedisService.set).toBeCalledTimes(1)
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    redisKey,
+    selectedOption
+  )
 
   expect(response.headers.location).toEqual(nextUrl)
 }

@@ -29,6 +29,10 @@
 {% endblock %}
 
 {% block pageTitle %}
+  {% if fieldErrors %}
+    Error: 
+  {% endif %}
+
   {{ pageTitle }} - Department for Environment, Food & Rural Affairs – GOV.UK
 {% endblock %}
 

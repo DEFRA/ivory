@@ -15,6 +15,7 @@ describe('OData service', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
+    nock.cleanAll()
   })
 
   describe('createRecord method', () => {
@@ -111,6 +112,73 @@ describe('OData service', () => {
       expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
     })
   })
+
+  describe('getRecord method', () => {
+    it('should get a Section 2 record if the key is correct', async () => {
+      const result = await ODataService.getRecord(
+        '___RECORD_ID_VALID_KEY___',
+        true,
+        '___VALID_KEY___'
+      )
+
+      expect(result).toEqual({
+        cre2c_ivorysection2caseid: '___RECORD_ID_VALID_KEY___',
+        cre2c_certificatenumber: 'ABC-123',
+        cre2c_certificatekey: '___VALID_KEY___'
+      })
+    })
+
+    it('should NOT get a Section 2 record if the key is incorrect', async () => {
+      const result = await ODataService.getRecord(
+        '___RECORD_ID_INVALID_KEY___',
+        true,
+        '___INVALID_KEY___'
+      )
+
+      expect(result).toBeNull()
+    })
+  })
+
+  describe('getImage method', () => {
+    it('should get a Section 2 record', async () => {
+      const result = await ODataService.getImage(
+        '___RECORD_ID_VALID_KEY___',
+        'cre2c_photo1'
+      )
+
+      expect(result.status).toEqual(200)
+    })
+  })
+
+  describe('getRecordsWithCertificateNumber method', () => {
+    it('should return a record if the certificate number is found', async () => {
+      const certificateNumber = 'ABC-123'
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)
+
+      const result = await ODataService.getRecordsWithCertificateNumber(
+        certificateNumber
+      )
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
+      expect(result.length).toEqual(1)
+      expect(result[0]).toEqual({ cre2c_certificatenumber: 'ABC-123' })
+    })
+
+    it('should NOT return a record if the certificate number is NOT found', async () => {
+      const certificateNumber = 'ABC-XXX'
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)
+
+      const result = await ODataService.getRecordsWithCertificateNumber(
+        certificateNumber
+      )
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
+      expect(result.length).toEqual(0)
+      expect(result).toEqual([])
+    })
+  })
 })
 
 const _createMocks = () => {
@@ -141,6 +209,35 @@ const _createMocks = () => {
       `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(SECTION_2_CASE_ID)/cre2c_supportingevidence2`
     )
     .reply(204)
+    .get(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(___RECORD_ID_VALID_KEY___)`
+    )
+    .reply(200, {
+      cre2c_ivorysection2caseid: '___RECORD_ID_VALID_KEY___',
+      cre2c_certificatenumber: 'ABC-123',
+      cre2c_certificatekey: '___VALID_KEY___'
+    })
+    .get(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(___RECORD_ID_INVALID_KEY___)`
+    )
+    .reply(200, {
+      cre2c_ivorysection2caseid: '___RECORD_ID_INVALID_KEY___',
+      cre2c_certificatenumber: 'ABC-123',
+      cre2c_certificatekey: '___SOME_OTHER_KEY___'
+    })
+    .get(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases?$filter=cre2c_certificatenumber eq 'ABC-123'`
+    )
+    .reply(200, { value: [{ cre2c_certificatenumber: 'ABC-123' }] })
+    .get(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases?$filter=cre2c_certificatenumber eq 'ABC-XXX'`
+    )
+    .reply(200, { value: [] })
+
+    .get(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(___RECORD_ID_VALID_KEY___)/cre2c_photo1/$value?size=full`
+    )
+    .reply(200, '___THE_IMAGE___')
 }
 
 const mockSection2Entity = {

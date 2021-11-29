@@ -1,0 +1,44 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-label-wrapper"><label id="pageTitle" class="govuk-label govuk-label--l" for="previousApplicationNumber">{{ pageTitle }}</label></h1>
+
+      <p id="helpText">This is a {{ maxLength }} digit number you can find on any of the emails related to the application.</p>
+
+      {{ govukInput({
+          hint: {
+            text: "For example, 'RMI-12345678'"
+          },
+          classes: "govuk-input govuk-!-width-one-third",
+          id: "previousApplicationNumber",
+          name: "previousApplicationNumber",
+          value: previousApplicationNumber,
+          errorMessage: fieldErrors['previousApplicationNumber']
+      }) }}
+
+       {{ govukDetails({
+        id: "dontHaveSubmissionReference",
+        summaryText: "I don't have the submission reference",
+        html: "<p id=\"para1\">You must provide the submission reference for the previous application so that we can process your new application.<p id=\"para2\">We aim to send all new applications to a different expert for a fresh opinion.</p>"
+      }) }}
+
+      {{ govukButton({
+          attributes: {
+            id: "continue"
+          },
+          text: "Continue"
+        })
+      }}
+
+    </div>
+  </div>
+{% endblock %}
+

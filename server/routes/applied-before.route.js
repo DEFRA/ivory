@@ -16,7 +16,7 @@ const handlers = {
   get: async (request, h) => {
     const context = await _getContext(request)
 
-    return h.view(Views.WHO_OWNS_ITEM, {
+    return h.view(Views.APPLIED_BEFORE, {
       ...context
     })
   },
@@ -34,7 +34,7 @@ const handlers = {
       })
 
       return h
-        .view(Views.WHO_OWNS_ITEM, {
+        .view(Views.APPLIED_BEFORE, {
           ...context,
           ...buildErrorSummary(errors)
         })
@@ -43,44 +43,42 @@ const handlers = {
 
     await RedisService.set(
       request,
-      RedisKeys.OWNED_BY_APPLICANT,
-      payload.doYouOwnTheItem
+      RedisKeys.APPLIED_BEFORE,
+      payload.appliedBefore
     )
-
-    if (payload.doYouOwnTheItem === Options.YES) {
-      await RedisService.delete(request, RedisKeys.WORK_FOR_A_BUSINESS)
-    }
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
-      action: `${Analytics.Action.SELECTED} ${payload.doYouOwnTheItem}`,
+      action: `${Analytics.Action.SELECTED} ${payload.appliedBefore}`,
       label: context.pageTitle
     })
 
-    return payload.doYouOwnTheItem === Options.YES
-      ? h.redirect(Paths.APPLICANT_CONTACT_DETAILS)
-      : h.redirect(Paths.WORK_FOR_A_BUSINESS)
+    return h.redirect(
+      payload.appliedBefore === Options.YES
+        ? Paths.PREVIOUS_APPLICATION_NUMBER
+        : Paths.CAN_CONTINUE
+    )
   }
 }
 
 const _getContext = async request => {
-  const doYouOwnTheItem = await RedisService.get(
+  const appliedBefore = await RedisService.get(
     request,
-    RedisKeys.OWNED_BY_APPLICANT
+    RedisKeys.APPLIED_BEFORE
   )
 
   return {
-    pageTitle: 'Do you own the item?',
+    pageTitle: 'Has an application been made before?',
     items: [
       {
-        value: Options.YES,
-        text: Options.YES,
-        checked: doYouOwnTheItem === Options.YES
+        value: 'Yes',
+        text: 'Yes',
+        checked: appliedBefore === Options.YES
       },
       {
-        value: Options.NO,
-        text: Options.NO,
-        checked: doYouOwnTheItem === Options.NO
+        value: 'No',
+        text: 'No',
+        checked: appliedBefore === Options.NO
       }
     ]
   }
@@ -88,10 +86,10 @@ const _getContext = async request => {
 
 const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.doYouOwnTheItem)) {
+  if (Validators.empty(payload.appliedBefore)) {
     errors.push({
-      name: 'doYouOwnTheItem',
-      text: 'Tell us if you own the item'
+      name: 'appliedBefore',
+      text: 'Tell us if an application has been made before for this item'
     })
   }
   return errors
@@ -100,12 +98,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.WHO_OWNS_ITEM}`,
+    path: `${Paths.APPLIED_BEFORE}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.WHO_OWNS_ITEM}`,
+    path: `${Paths.APPLIED_BEFORE}`,
     handler: handlers.post
   }
 ]

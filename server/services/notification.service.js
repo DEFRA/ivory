@@ -16,7 +16,8 @@ class NotificationService {
     const personalisation = {
       fullName: data.fullName,
       exemptionType: data.exemptionType,
-      submissionReference: data.submissionReference
+      submissionReference: data.submissionReference,
+      certificateNumber: data.certificateNumber
     }
     const reference = uuidv4()
     const emailReplyToId = null
@@ -48,6 +49,8 @@ const _getTemplateId = (emailType, isSection2) => {
     templateId = isSection2
       ? config.govNotifyTemplateIdConfirmSection2
       : config.govNotifyTemplateIdConfirmSection10
+  } else if (emailType === EmailTypes.CONFIRMATION_EMAIL_RESELLING) {
+    templateId = config.govNotifyTemplateIdConfirmSection2Reselling
   } else {
     templateId = config.govNotifyTemplateIdEmailToOwnerSection10
   }

@@ -1,6 +1,7 @@
 'use strict'
 
 const AnalyticsService = require('../services/analytics.service')
+const RedisHelper = require('../services/redis-helper.service')
 const RedisService = require('../services/redis.service')
 
 const {
@@ -53,7 +54,7 @@ const handlers = {
       label: context.pageTitle
     })
 
-    if ((await _getItemType(request)) === ItemType.HIGH_VALUE) {
+    if (await RedisHelper.isSection2(request, context.itemType)) {
       return h.redirect(Paths.WANT_TO_ADD_DOCUMENTS)
     } else {
       return h.redirect(Paths.WHO_OWNS_ITEM)
@@ -71,9 +72,6 @@ const _storeRedisValues = request => {
   return RedisService.set(request, RedisKeys.IVORY_AGE, JSON.stringify(payload))
 }
 
-const _getItemType = async request =>
-  RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
-
 const _getContext = async request => {
   let payload
   if (request.payload) {
@@ -82,7 +80,9 @@ const _getContext = async request => {
     payload = await RedisService.get(request, RedisKeys.IVORY_AGE)
   }
 
-  const itemType = await _getItemType(request)
+  const itemType = await RedisHelper.getItemType(request)
+  const isSection2 = await RedisHelper.isSection2(null, itemType)
+
   const madeBeforeDate = _getMadeBeforeDate(itemType)
 
   const options = await _getCheckboxes(payload, itemType)
@@ -97,10 +97,11 @@ const _getContext = async request => {
   })
 
   return {
+    itemType,
     items,
     otherCheckbox,
     pageTitle: `How do you know the item was made before ${madeBeforeDate}?`,
-    helpText: _getHelpText(itemType),
+    helpText: _getHelpText(isSection2),
     otherReason:
       payload &&
       payload.ivoryAge &&
@@ -124,7 +125,7 @@ const _getCheckboxes = async (payload, itemType) => {
     _getCheckbox(ivoryAge, AgeExemptionReasons.PROFESSIONAL_OPINION)
   ]
 
-  if (itemType === ItemType.HIGH_VALUE) {
+  if (await RedisHelper.isSection2(null, itemType)) {
     checkboxes.push(_getCheckbox(ivoryAge, AgeExemptionReasons.CARBON_DATED))
   }
 
@@ -140,9 +141,9 @@ const _getCheckbox = (ivoryAge, reason) => {
   }
 }
 
-const _getHelpText = itemType =>
+const _getHelpText = isSection2 =>
   `You must keep any physical evidence that supports your answer. We may ask for it at a later date, ${
-    itemType === ItemType.HIGH_VALUE
+    isSection2
       ? 'when we check your application'
       : 'if we decide to check your self-assessment'
   }.`

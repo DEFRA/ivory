@@ -1,10 +1,15 @@
 'use strict'
 
 const TestHelper = require('../../utils/test-helper')
+const { ItemType } = require('../../../server/utils/constants')
+
+jest.mock('../../../server/services/redis.service')
+const RedisService = require('../../../server/services/redis.service')
 
 describe('/eligibility-checker/ivory-added route', () => {
   let server
   const url = '/eligibility-checker/ivory-added'
+  const nextUrlAppliedBefore = '/applied-before'
   const nextUrlTakeFromElephant = '/eligibility-checker/taken-from-elephant'
   const nextUrlCanContinue = '/can-continue'
   const nextUrlCannotContinue = '/eligibility-checker/cannot-continue'
@@ -101,12 +106,22 @@ describe('/eligibility-checker/ivory-added route', () => {
         )
       })
 
-      it('should progress to the next route when "No" has been selected', async () => {
+      it('should progress to the next route when "No" has been selected: Section 10 item', async () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
           'No',
           nextUrlCanContinue
+        )
+      })
+
+      it('should progress to the next route when "No" has been selected: Section 2 item', async () => {
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          'No',
+          nextUrlAppliedBefore,
+          true
         )
       })
 
@@ -147,9 +162,16 @@ const _checkSelectedRadioAction = async (
   postOptions,
   server,
   selectedOption,
-  nextUrl
+  nextUrl,
+  isSection2 = false
 ) => {
   postOptions.payload.ivoryAdded = selectedOption
+
+  if (isSection2) {
+    RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
+  } else {
+    RedisService.get = jest.fn().mockResolvedValue(ItemType.MUSICAL)
+  }
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 

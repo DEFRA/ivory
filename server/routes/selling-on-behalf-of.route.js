@@ -59,8 +59,8 @@ const handlers = {
       payload.sellingOnBehalfOf !== BehalfOfNotBusinessOptions.A_BUSINESS
     ) {
       // Clear out any owner details that may have been previously entered
-      await RedisService.set(request, RedisKeys.OWNER_CONTACT_DETAILS, null)
-      await RedisService.set(request, RedisKeys.OWNER_ADDRESS, null)
+      await RedisService.delete(request, RedisKeys.OWNER_CONTACT_DETAILS)
+      await RedisService.delete(request, RedisKeys.OWNER_ADDRESS)
     }
 
     AnalyticsService.sendEvent(request, {

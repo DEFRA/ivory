@@ -54,7 +54,9 @@ const handlers = {
       label: context.pageTitle
     })
 
-    return h.redirect(Paths.CAN_CONTINUE)
+    const isSection2 = payload.whatTypeOfItemIsIt === ItemType.HIGH_VALUE
+
+    return h.redirect(isSection2 ? Paths.ALREADY_CERTIFIED : Paths.CAN_CONTINUE)
   }
 }
 

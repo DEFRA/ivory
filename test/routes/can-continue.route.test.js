@@ -1,12 +1,16 @@
 'use strict'
 
 const TestHelper = require('../utils/test-helper')
-const { ItemType } = require('../../server/utils/constants')
+const {
+  AlreadyCertifiedOptions,
+  ItemType,
+  RedisKeys
+} = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-describe('/ivory-volume route', () => {
+describe('/can-continue route', () => {
   let server
   const url = '/can-continue'
   const nextUrl = '/legal-responsibility'
@@ -15,12 +19,12 @@ describe('/ivory-volume route', () => {
     pageTitle: 'pageTitle',
     preListHeading: 'preListHeading',
     listHeading: 'listHeading',
-    listItem1: 'listItem-1',
-    listItem2: 'listItem-2',
-    additionalStep1: 'additionalStep-1',
-    additionalStep2: 'additionalStep-2',
-    additionalStep3: 'additionalStep-3',
-    additionalStep4: 'additionalStep-4',
+    step1: 'step-1',
+    step2: 'step-2',
+    step3: 'step-3',
+    step4: 'step-4',
+    step5: 'step-5',
+    step6: 'step-6',
     timeoutParagraph: 'timeoutParagraph',
     finalParagraph: 'finalParagraph',
     cancelLink: 'cancelLink',
@@ -31,6 +35,8 @@ describe('/ivory-volume route', () => {
     'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
   const section10Description =
     'Musical instrument made before 1975 with less than 20% ivory'
+
+  const SLA = 35
 
   let document
 
@@ -59,10 +65,18 @@ describe('/ivory-volume route', () => {
     describe('Section 2 (high value items)', () => {
       describe('Used checker', () => {
         beforeEach(async () => {
-          RedisService.get = jest
-            .fn()
-            .mockResolvedValueOnce('true')
-            .mockResolvedValueOnce(section2Description)
+          RedisService.get = jest.fn((request, redisKey) => {
+            const mockDataMap = {
+              [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+              [RedisKeys.ALREADY_CERTIFIED]: {
+                alreadyCertified: AlreadyCertifiedOptions.NO
+              },
+              [RedisKeys.REVOKED_CERTIFICATE]: null,
+              [RedisKeys.APPLIED_BEFORE]: null,
+              [RedisKeys.USED_CHECKER]: 'true'
+            }
+            return mockDataMap[redisKey]
+          })
 
           document = await TestHelper.submitGetRequest(server, getOptions)
         })
@@ -102,42 +116,40 @@ describe('/ivory-volume route', () => {
         })
 
         it('should have the correct list items', () => {
-          let element = document.querySelector(`#${elementIds.listItem1}`)
+          let element = document.querySelector(`#${elementIds.step1}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Add up to 6 photos of the item.'
           )
 
-          element = document.querySelector(`#${elementIds.listItem2}`)
+          element = document.querySelector(`#${elementIds.step2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Describe the item and how it meets the exemption criteria.'
           )
-        })
 
-        it('should have the correct additional list items', () => {
-          let element = document.querySelector(`#${elementIds.additionalStep1}`)
+          element = document.querySelector(`#${elementIds.step3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Upload any documents that support your application.'
           )
 
-          element = document.querySelector(`#${elementIds.additionalStep2}`)
+          element = document.querySelector(`#${elementIds.step4}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Provide contact details.'
           )
 
-          element = document.querySelector(`#${elementIds.additionalStep3}`)
+          element = document.querySelector(`#${elementIds.step5}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Pay a non-refundable administration fee of £250.'
           )
 
-          element = document.querySelector(`#${elementIds.additionalStep4}`)
+          element = document.querySelector(`#${elementIds.step6}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Wait 30 days for your application to be approved by an expert.'
+            `Wait up to ${SLA} working days for your application to be approved by an expert.`
           )
         })
 
@@ -157,7 +169,7 @@ describe('/ivory-volume route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'After you’ve paid for your application, you’ll need to wait up to 30 days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.'
+            `After you’ve paid for your application, you’ll need to wait up to ${SLA} working days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.`
           )
         })
 
@@ -179,10 +191,18 @@ describe('/ivory-volume route', () => {
 
       describe('Not used checker', () => {
         beforeEach(async () => {
-          RedisService.get = jest
-            .fn()
-            .mockResolvedValueOnce('false')
-            .mockResolvedValueOnce(section2Description)
+          RedisService.get = jest.fn((request, redisKey) => {
+            const mockDataMap = {
+              [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+              [RedisKeys.ALREADY_CERTIFIED]: {
+                alreadyCertified: AlreadyCertifiedOptions.NO
+              },
+              [RedisKeys.REVOKED_CERTIFICATE]: null,
+              [RedisKeys.APPLIED_BEFORE]: null,
+              [RedisKeys.USED_CHECKER]: 'false'
+            }
+            return mockDataMap[redisKey]
+          })
 
           document = await TestHelper.submitGetRequest(server, getOptions)
         })
@@ -219,42 +239,40 @@ describe('/ivory-volume route', () => {
         })
 
         it('should have the correct list items', () => {
-          let element = document.querySelector(`#${elementIds.listItem1}`)
+          let element = document.querySelector(`#${elementIds.step1}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Add up to 6 photos of the item.'
           )
 
-          element = document.querySelector(`#${elementIds.listItem2}`)
+          element = document.querySelector(`#${elementIds.step2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Describe the item and how it meets the exemption criteria.'
           )
-        })
 
-        it('should have the correct additional list items', () => {
-          let element = document.querySelector(`#${elementIds.additionalStep1}`)
+          element = document.querySelector(`#${elementIds.step3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Upload any documents that support your application.'
           )
 
-          element = document.querySelector(`#${elementIds.additionalStep2}`)
+          element = document.querySelector(`#${elementIds.step4}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Provide contact details.'
           )
 
-          element = document.querySelector(`#${elementIds.additionalStep3}`)
+          element = document.querySelector(`#${elementIds.step5}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Pay a non-refundable administration fee of £250.'
           )
 
-          element = document.querySelector(`#${elementIds.additionalStep4}`)
+          element = document.querySelector(`#${elementIds.step6}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Wait 30 days for your application to be approved by an expert.'
+            `Wait up to ${SLA} working days for your application to be approved by an expert.`
           )
         })
 
@@ -274,8 +292,341 @@ describe('/ivory-volume route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'After you’ve paid for your application, you’ll need to wait up to 30 days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.'
+            `After you’ve paid for your application, you’ll need to wait up to ${SLA} working days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.`
           )
+        })
+
+        it('should have the correct Call to Action button', () => {
+          const element = document.querySelector(`#${elementIds.continue}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual('Continue')
+        })
+
+        it('should NOT have the "Cancel" link', () => {
+          const element = document.querySelector(`#${elementIds.cancelLink}`)
+          expect(element).toBeFalsy()
+        })
+      })
+
+      describe('Certificate revoked', () => {
+        beforeEach(async () => {
+          RedisService.get = jest.fn((request, redisKey) => {
+            const mockDataMap = {
+              [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+              [RedisKeys.ALREADY_CERTIFIED]: {
+                alreadyCertified: AlreadyCertifiedOptions.USED_TO
+              },
+              [RedisKeys.REVOKED_CERTIFICATE]: 'REVOKED_CERT_123',
+              [RedisKeys.APPLIED_BEFORE]: null
+            }
+            return mockDataMap[redisKey]
+          })
+
+          document = await TestHelper.submitGetRequest(server, getOptions)
+        })
+
+        it('should have the Beta banner', () => {
+          TestHelper.checkBetaBanner(document)
+        })
+
+        it('should have the Back link', () => {
+          TestHelper.checkBackLink(document)
+        })
+
+        it('should have the correct page heading', () => {
+          const element = document.querySelector(`#${elementIds.pageTitle}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'You can now make a new application for an exemption certificate'
+          )
+        })
+
+        it('should NOT have the pre-list heading', () => {
+          const element = document.querySelector(
+            `#${elementIds.preListHeading}`
+          )
+          expect(element).toBeFalsy()
+        })
+
+        it('should have the correct list heading', () => {
+          const element = document.querySelector(`#${elementIds.listHeading}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Complete the process by following the steps below:'
+          )
+        })
+
+        it('should have the correct list items', () => {
+          let element = document.querySelector(`#${elementIds.step1}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Add up to 6 photos of the item.'
+          )
+
+          element = document.querySelector(`#${elementIds.step2}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Describe the item and how it meets the exemption criteria.'
+          )
+
+          element = document.querySelector(`#${elementIds.step3}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Upload any documents that support your application.'
+          )
+
+          element = document.querySelector(`#${elementIds.step4}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Provide contact details.'
+          )
+
+          element = document.querySelector(`#${elementIds.step5}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Pay a non-refundable administration fee of £250.'
+          )
+
+          element = document.querySelector(`#${elementIds.step6}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            `Wait up to ${SLA} working days for your application to be approved by an expert.`
+          )
+        })
+
+        it('should have the correct timeout paragraph', () => {
+          const element = document.querySelector(
+            `#${elementIds.timeoutParagraph}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.'
+          )
+        })
+
+        it('should have the correct final paragraph', () => {
+          const element = document.querySelector(
+            `#${elementIds.finalParagraph}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            `After you’ve paid for your application, you’ll need to wait up to ${SLA} working days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.`
+          )
+        })
+
+        it('should have the correct Call to Action button', () => {
+          const element = document.querySelector(`#${elementIds.continue}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual('Continue')
+        })
+
+        it('should NOT have the "Cancel" link', () => {
+          const element = document.querySelector(`#${elementIds.cancelLink}`)
+          expect(element).toBeFalsy()
+        })
+      })
+
+      describe('Applied before', () => {
+        beforeEach(async () => {
+          RedisService.get = jest
+            .fn()
+            .mockResolvedValueOnce('false')
+            .mockResolvedValueOnce(section2Description)
+
+          document = await TestHelper.submitGetRequest(server, getOptions)
+        })
+
+        it('should have the Beta banner', () => {
+          TestHelper.checkBetaBanner(document)
+        })
+
+        it('should have the Back link', () => {
+          TestHelper.checkBackLink(document)
+        })
+
+        it('should have the correct page heading', () => {
+          const element = document.querySelector(`#${elementIds.pageTitle}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'You can now make a new application for an exemption certificate'
+          )
+        })
+
+        it('should NOT have the pre-list heading', () => {
+          const element = document.querySelector(
+            `#${elementIds.preListHeading}`
+          )
+          expect(element).toBeFalsy()
+        })
+
+        it('should have the correct list heading', () => {
+          const element = document.querySelector(`#${elementIds.listHeading}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Complete the process by following the steps below:'
+          )
+        })
+
+        it('should have the correct list items', () => {
+          let element = document.querySelector(`#${elementIds.step1}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Add up to 6 photos of the item.'
+          )
+
+          element = document.querySelector(`#${elementIds.step2}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Describe the item and how it meets the exemption criteria.'
+          )
+
+          element = document.querySelector(`#${elementIds.step3}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Upload any documents that support your application.'
+          )
+
+          element = document.querySelector(`#${elementIds.step4}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Provide contact details.'
+          )
+
+          element = document.querySelector(`#${elementIds.step5}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Pay a non-refundable administration fee of £250.'
+          )
+
+          element = document.querySelector(`#${elementIds.step6}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            `Wait up to ${SLA} working days for your application to be approved by an expert.`
+          )
+        })
+
+        it('should have the correct timeout paragraph', () => {
+          const element = document.querySelector(
+            `#${elementIds.timeoutParagraph}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.'
+          )
+        })
+
+        it('should have the correct final paragraph', () => {
+          const element = document.querySelector(
+            `#${elementIds.finalParagraph}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            `After you’ve paid for your application, you’ll need to wait up to ${SLA} working days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.`
+          )
+        })
+
+        it('should have the correct Call to Action button', () => {
+          const element = document.querySelector(`#${elementIds.continue}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual('Continue')
+        })
+
+        it('should NOT have the "Cancel" link', () => {
+          const element = document.querySelector(`#${elementIds.cancelLink}`)
+          expect(element).toBeFalsy()
+        })
+      })
+
+      describe('Already certified (reselling)', () => {
+        beforeEach(async () => {
+          RedisService.get = jest.fn((request, redisKey) => {
+            const mockDataMap = {
+              [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+              [RedisKeys.ALREADY_CERTIFIED]: {
+                alreadyCertified: AlreadyCertifiedOptions.YES,
+                certificateNumber: 'CERT_123'
+              },
+              [RedisKeys.REVOKED_CERTIFICATE]: null,
+              [RedisKeys.APPLIED_BEFORE]: { appliedBefore: null }
+            }
+            return mockDataMap[redisKey]
+          })
+
+          document = await TestHelper.submitGetRequest(server, getOptions)
+        })
+
+        it('should have the Beta banner', () => {
+          TestHelper.checkBetaBanner(document)
+        })
+
+        it('should have the Back link', () => {
+          TestHelper.checkBackLink(document)
+        })
+
+        it('should have the correct page heading', () => {
+          const element = document.querySelector(`#${elementIds.pageTitle}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Reselling your item of outstandingly high artistic, cultural or historical value'
+          )
+        })
+
+        it('should NOT have the pre-list heading', () => {
+          const element = document.querySelector(
+            `#${elementIds.preListHeading}`
+          )
+          expect(element).toBeFalsy()
+        })
+
+        it('should have the correct list heading', () => {
+          const element = document.querySelector(`#${elementIds.listHeading}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Complete the process by following the steps below:'
+          )
+        })
+
+        it('should have the correct list items', () => {
+          let element = document.querySelector(`#${elementIds.step1}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Provide contact details.'
+          )
+
+          element = document.querySelector(`#${elementIds.step2}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Confirm the information on the certificate is still accurate and complete.'
+          )
+
+          element = document.querySelector(`#${elementIds.step3}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Pay a non-refundable administration fee of £20.'
+          )
+
+          element = document.querySelector(`#${elementIds.step4}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Receive confirmation you can now sell or hire out your item.'
+          )
+        })
+
+        it('should have the correct timeout paragraph', () => {
+          const element = document.querySelector(
+            `#${elementIds.timeoutParagraph}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.'
+          )
+        })
+
+        it('should NOT have the final paragraph', () => {
+          const element = document.querySelector(
+            `#${elementIds.finalParagraph}`
+          )
+          expect(element).toBeFalsy()
         })
 
         it('should have the correct Call to Action button', () => {
@@ -294,10 +645,18 @@ describe('/ivory-volume route', () => {
     describe('Section 10 (non high value items)', () => {
       describe('Used checker', () => {
         beforeEach(async () => {
-          RedisService.get = jest
-            .fn()
-            .mockResolvedValueOnce('true')
-            .mockResolvedValueOnce(section10Description)
+          RedisService.get = jest.fn((request, redisKey) => {
+            const mockDataMap = {
+              [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.MUSICAL,
+              [RedisKeys.ALREADY_CERTIFIED]: {
+                alreadyCertified: AlreadyCertifiedOptions.NO
+              },
+              [RedisKeys.REVOKED_CERTIFICATE]: null,
+              [RedisKeys.APPLIED_BEFORE]: null,
+              [RedisKeys.USED_CHECKER]: 'true'
+            }
+            return mockDataMap[redisKey]
+          })
 
           document = await TestHelper.submitGetRequest(server, getOptions)
         })
@@ -337,36 +696,34 @@ describe('/ivory-volume route', () => {
         })
 
         it('should have the correct list items', () => {
-          let element = document.querySelector(`#${elementIds.listItem1}`)
+          let element = document.querySelector(`#${elementIds.step1}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Add up to 6 photos of the item.'
           )
 
-          element = document.querySelector(`#${elementIds.listItem2}`)
+          element = document.querySelector(`#${elementIds.step2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Describe the item and how it meets the exemption criteria.'
           )
-        })
 
-        it('should have the correct additional list items', () => {
-          let element = document.querySelector(`#${elementIds.additionalStep1}`)
+          element = document.querySelector(`#${elementIds.step3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Provide contact details.'
           )
 
-          element = document.querySelector(`#${elementIds.additionalStep2}`)
+          element = document.querySelector(`#${elementIds.step4}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Pay an administration fee of £20.'
           )
 
-          element = document.querySelector(`#${elementIds.additionalStep3}`)
+          element = document.querySelector(`#${elementIds.step5}`)
           expect(element).toBeFalsy()
 
-          element = document.querySelector(`#${elementIds.additionalStep4}`)
+          element = document.querySelector(`#${elementIds.step6}`)
           expect(element).toBeFalsy()
         })
 
@@ -445,36 +802,34 @@ describe('/ivory-volume route', () => {
         })
 
         it('should have the correct list items', () => {
-          let element = document.querySelector(`#${elementIds.listItem1}`)
+          let element = document.querySelector(`#${elementIds.step1}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Add up to 6 photos of the item.'
           )
 
-          element = document.querySelector(`#${elementIds.listItem2}`)
+          element = document.querySelector(`#${elementIds.step2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Describe the item and how it meets the exemption criteria.'
           )
-        })
 
-        it('should have the correct additional list items', () => {
-          let element = document.querySelector(`#${elementIds.additionalStep1}`)
+          element = document.querySelector(`#${elementIds.step3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Provide contact details.'
           )
 
-          element = document.querySelector(`#${elementIds.additionalStep2}`)
+          element = document.querySelector(`#${elementIds.step4}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'Pay an administration fee of £20.'
           )
 
-          element = document.querySelector(`#${elementIds.additionalStep3}`)
+          element = document.querySelector(`#${elementIds.step5}`)
           expect(element).toBeFalsy()
 
-          element = document.querySelector(`#${elementIds.additionalStep4}`)
+          element = document.querySelector(`#${elementIds.step6}`)
           expect(element).toBeFalsy()
         })
 

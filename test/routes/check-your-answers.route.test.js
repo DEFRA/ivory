@@ -18,7 +18,7 @@ const elementIds = {
   pageTitle: 'pageTitle',
   helpText: 'helpText',
   subHeadings: {
-    exemptionType: 'exemptionTypeHeading',
+    item: 'itemHeading',
     photos: 'photosSubHeading',
     itemDescription: 'itemDescriptionSubHeading',
     exemptionReason: 'exemptionReasonHeading',
@@ -27,7 +27,7 @@ const elementIds = {
     saleIntention: 'saleIntentionSubHeading'
   },
   summaries: {
-    exemptionType: 'exemptionTypeSummary',
+    item: 'itemSummary',
     photos: 'photoSummary',
     itemDescription: 'itemDescriptionSummary',
     exemptionReason: 'exemptionReasonSummary',
@@ -121,29 +121,25 @@ describe('/check-your-answers route', () => {
       })
 
       it('should have the correct "Item" summary section', () => {
-        _checkSubheading(
-          document,
-          elementIds.subHeadings.exemptionType,
-          'The item'
-        )
+        _checkSubheading(document, elementIds.subHeadings.item, 'The item')
 
-        _checkSummary(document, elementIds.summaries.exemptionType)
+        _checkSummary(document, elementIds.summaries.item)
 
         _checkSummaryKeys(
           document,
-          elementIds.summaries.exemptionType,
+          elementIds.summaries.item,
           'Type of exemption'
         )
 
         _checkSummaryValues(
           document,
-          elementIds.summaries.exemptionType,
+          elementIds.summaries.item,
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value'
         )
 
         _checkSummaryChangeLinks(
           document,
-          elementIds.summaries.exemptionType,
+          elementIds.summaries.item,
           'Change type of exemption',
           Paths.WHAT_TYPE_OF_ITEM_IS_IT
         )
@@ -1028,7 +1024,12 @@ const _createMocks = (
         otherCapacity: 'Some other capacity'
       },
       [RedisKeys.WORK_FOR_A_BUSINESS]: Options.YES,
-      [RedisKeys.SELLING_ON_BEHALF_OF]: sellingOnBehalfOf
+      [RedisKeys.SELLING_ON_BEHALF_OF]: sellingOnBehalfOf,
+      [RedisKeys.PREVIOUS_APPLICATION_NUMBER]: '',
+      [RedisKeys.ALREADY_CERTIFIED]: '',
+      [RedisKeys.REVOKED_CERTIFICATE]: '',
+      [RedisKeys.APPLIED_BEFORE]: '',
+      [RedisKeys.PREVIOUS_APPLICATION_NUMBER]: ''
     }
 
     return mockDataMap[redisKey]

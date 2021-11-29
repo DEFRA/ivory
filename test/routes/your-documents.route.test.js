@@ -177,5 +177,5 @@ const mockDataSixDocuments = {
 const _createMocks = () => {
   TestHelper.createMocks()
 
-  fs.writeFileSync = jest.fn()
+  fs.writeFile = jest.fn()
 }

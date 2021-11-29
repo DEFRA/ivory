@@ -1,6 +1,7 @@
 'use strict'
 
 const AnalyticsService = require('../services/analytics.service')
+const RedisHelper = require('../services/redis-helper.service')
 const RedisService = require('../services/redis.service')
 
 const {
@@ -9,7 +10,8 @@ const {
   Options,
   Paths,
   RedisKeys,
-  Views
+  Views,
+  AlreadyCertifiedOptions
 } = require('../utils/constants')
 const { getIvoryVolumePercentage } = require('../utils/general')
 const { buildErrorSummary, Validators } = require('../utils/validation')
@@ -54,19 +56,13 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  const exemptionType = await RedisService.get(
-    request,
-    RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
-  )
-
-  const isSection2 = exemptionType === ItemType.HIGH_VALUE
-  const isMesuem = exemptionType === ItemType.MUSEUM
-
-  const ownedByApplicant =
-    (await RedisService.get(request, RedisKeys.OWNED_BY_APPLICANT)) ===
-    Options.YES
+  const itemType = await RedisHelper.getItemType(request)
+  const isSection2 = await RedisHelper.isSection2(request, itemType)
+  const isMesuem = await RedisHelper.isMuseum(request, itemType)
+  const isOwnedByApplicant = await RedisHelper.isOwnedByApplicant(request)
 
   const [
+    itemSummary,
     documentSummary,
     exemptionReasonSummary,
     itemDescriptionSummary,
@@ -74,15 +70,17 @@ const _getContext = async request => {
     photoSummary,
     saleIntentionSummary
   ] = await Promise.all([
+    _getItemSummary(request, itemType),
     isSection2 ? _getDocumentSummary(request) : null,
-    _getExemptionReasonSummary(request, exemptionType, isSection2, isMesuem),
+    _getExemptionReasonSummary(request, itemType, isSection2, isMesuem),
     _getItemDescriptionSummary(request, isSection2),
-    _getOwnerSummary(request, ownedByApplicant),
+    _getOwnerSummary(request, isOwnedByApplicant),
     _getPhotoSummary(request),
     _getSaleIntentionSummary(request)
   ])
 
   return {
+    itemSummary,
     photoSummary,
     itemDescriptionSummary,
     exemptionReasonSummary,
@@ -90,12 +88,12 @@ const _getContext = async request => {
     saleIntentionSummary,
     ownerSummary,
     isSection2,
-    ownedByApplicant,
+    isOwnedByApplicant,
     isMesuem,
+    isAlreadyCertified: await RedisHelper.isAlreadyCertified(request),
     pageTitle: 'Check your answers',
-    legalAssertions: LEGAL_ASSERTIONS[exemptionType],
-    legalAssertionsAdditionalSection2: LEGAL_ASSERTIONS.additionalSection2,
-    exemptionTypeSummary: _getExemptionTypeSummary(exemptionType)
+    legalAssertions: LEGAL_ASSERTIONS[itemType],
+    legalAssertionsAdditionalSection2: LEGAL_ASSERTIONS.additionalSection2
   }
 }
 
@@ -155,13 +153,13 @@ const _getDocumentSummary = async request => {
 
 const _getExemptionReasonSummary = async (
   request,
-  exemptionType,
+  itemType,
   isSection2,
   isMesuem
 ) => {
   const ivoryAge = await RedisService.get(request, RedisKeys.IVORY_AGE)
 
-  if (ivoryAge.otherReason) {
+  if (ivoryAge && ivoryAge.otherReason) {
     ivoryAge.ivoryAge.pop()
     ivoryAge.ivoryAge.push(ivoryAge.otherReason)
   }
@@ -193,7 +191,7 @@ const _getExemptionReasonSummary = async (
       'The ivory is essential to the design or function of the item and you cannot remove the ivory easily or without damaging the item'
   }
 
-  const ivoryVolumePercentage = getIvoryVolumePercentage(exemptionType)
+  const ivoryVolumePercentage = getIvoryVolumePercentage(itemType)
 
   let exemptionReasonSummary
   if (!isMesuem) {
@@ -230,7 +228,7 @@ const _getExemptionReasonSummary = async (
       )
     }
 
-    if (exemptionType === ItemType.TEN_PERCENT) {
+    if (itemType === ItemType.TEN_PERCENT) {
       exemptionReasonSummary.push(
         _getSummaryListRow(
           'Why all ivory is integral',
@@ -247,22 +245,106 @@ const _getExemptionReasonSummary = async (
   return exemptionReasonSummary
 }
 
-const _getExemptionTypeSummary = exemptionType => [
-  _getSummaryListRow(
-    'Type of exemption',
-    exemptionType,
-    _getChangeItems(
-      Paths.WHAT_TYPE_OF_ITEM_IS_IT,
-      CHANGE_LINK_HINT.ExemptionType
+const _getItemSummary = async (request, itemType) => {
+  const itemSummary = [
+    _getSummaryListRow(
+      'Type of exemption',
+      itemType,
+      _getChangeItems(
+        Paths.WHAT_TYPE_OF_ITEM_IS_IT,
+        CHANGE_LINK_HINT.ExemptionType
+      )
     )
-  )
-]
+  ]
+
+  const isSection2 = await RedisHelper.isSection2(null, itemType)
+
+  if (isSection2) {
+    const alreadyCertified = await RedisService.get(
+      request,
+      RedisKeys.ALREADY_CERTIFIED
+    )
+
+    const isAlreadyCertified = await RedisHelper.isAlreadyCertified(
+      null,
+      alreadyCertified
+    )
+
+    const revokedCertificateNumber = await RedisService.get(
+      request,
+      RedisKeys.REVOKED_CERTIFICATE
+    )
+
+    const isRevoked = await RedisHelper.isRevoked(
+      request,
+      revokedCertificateNumber
+    )
+
+    const hasAppliedBefore = await RedisHelper.hasAppliedBefore(request)
+
+    itemSummary.push(
+      _getSummaryListRow(
+        'Already has a certificate',
+        alreadyCertified.alreadyCertified,
+        _getChangeItems(Paths.ALREADY_CERTIFIED, CHANGE_LINK_HINT.WhereMade)
+      )
+    )
+
+    if (isAlreadyCertified) {
+      itemSummary.push(
+        _getSummaryListRow(
+          'Certificate number',
+          alreadyCertified.certificateNumber,
+          _getChangeItems(Paths.ALREADY_CERTIFIED, CHANGE_LINK_HINT.WhereMade)
+        )
+      )
+    }
+
+    if (isRevoked) {
+      itemSummary.push(
+        _getSummaryListRow(
+          'Revoked certificate number',
+          revokedCertificateNumber,
+          _getChangeItems(Paths.REVOKED_CERTIFICATE, CHANGE_LINK_HINT.WhereMade)
+        )
+      )
+    }
+
+    if (alreadyCertified.alreadyCertified === AlreadyCertifiedOptions.NO) {
+      itemSummary.push(
+        _getSummaryListRow(
+          'Applied before',
+          hasAppliedBefore ? Options.YES : Options.NO,
+          _getChangeItems(Paths.APPLIED_BEFORE, CHANGE_LINK_HINT.WhereMade)
+        )
+      )
+    }
+
+    if (hasAppliedBefore) {
+      const previousApplicationNumber = await RedisService.get(
+        request,
+        RedisKeys.PREVIOUS_APPLICATION_NUMBER
+      )
+
+      itemSummary.push(
+        _getSummaryListRow(
+          'Previous application number',
+          previousApplicationNumber,
+          _getChangeItems(
+            Paths.PREVIOUS_APPLICATION_NUMBER,
+            CHANGE_LINK_HINT.WhereMade
+          )
+        )
+      )
+    }
+  }
+
+  return itemSummary
+}
 
 const _getItemDescriptionSummary = async (request, isSection2) => {
-  const itemDescription = await RedisService.get(
-    request,
-    RedisKeys.DESCRIBE_THE_ITEM
-  )
+  const itemDescription =
+    (await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)) || {}
 
   const itemDescriptionSummary = [
     _getSummaryListRow(
@@ -302,7 +384,7 @@ const _getItemDescriptionSummary = async (request, isSection2) => {
   return itemDescriptionSummary
 }
 
-const _getOwnerSummary = async (request, ownedByApplicant) => {
+const _getOwnerSummary = async (request, isOwnedByApplicant) => {
   const sellingOnBehalfOf = await RedisService.get(
     request,
     RedisKeys.SELLING_ON_BEHALF_OF
@@ -317,17 +399,13 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
     await RedisService.get(request, RedisKeys.WHAT_CAPACITY)
   )
 
-  const ownerContactDetails = await RedisService.get(
-    request,
-    RedisKeys.OWNER_CONTACT_DETAILS
-  )
+  const ownerContactDetails =
+    (await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)) || {}
 
   const ownerAddress = await RedisService.get(request, RedisKeys.OWNER_ADDRESS)
 
-  const applicantContactDetails = await RedisService.get(
-    request,
-    RedisKeys.APPLICANT_CONTACT_DETAILS
-  )
+  const applicantContactDetails =
+    (await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)) || {}
 
   const applicantAddress = await RedisService.get(
     request,
@@ -337,12 +415,12 @@ const _getOwnerSummary = async (request, ownedByApplicant) => {
   const ownerSummary = [
     _getSummaryListRow(
       'Do you own the item?',
-      ownedByApplicant ? Options.YES : Options.NO,
+      isOwnedByApplicant ? Options.YES : Options.NO,
       _getChangeItems(Paths.WHO_OWNS_ITEM, CHANGE_LINK_HINT.WhoOwnsTheItem)
     )
   ]
 
-  if (ownedByApplicant) {
+  if (isOwnedByApplicant) {
     await _getOwnerSummaryOwnedByApplicant(
       ownerSummary,
       ownerContactDetails,
@@ -711,7 +789,8 @@ const _getPhotoSummary = async request => {
   }
 
   const imageRows = uploadPhotos.thumbnails.map((file, index) => {
-    return `<img id="photo${index}" class="govuk-!-padding-bottom-5" src="assets\\${file}" alt="Photo of item ${index}" width="200">`
+    return `<img id="photo${index}" class="govuk-!-padding-bottom-5" src="assets\\${file}" alt="Photo ${index +
+      1}" width="200">`
   })
 
   return [
