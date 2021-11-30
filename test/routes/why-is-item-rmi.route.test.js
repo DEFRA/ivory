@@ -40,8 +40,8 @@ describe('/why-is-item-rmi route', () => {
     server = await TestHelper.createServer()
   })
 
-  afterAll(() => {
-    server.stop()
+  afterAll(async () => {
+    await server.stop()
   })
 
   beforeEach(() => {
