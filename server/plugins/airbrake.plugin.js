@@ -3,12 +3,14 @@ const config = require('../utils/config')
 const { formatWithOptions, inspect } = require('util')
 const INSPECT_OPTS = { depth: null, maxStringLength: null, maxArrayLength: null, breakLength: null, compact: true, showHidden: true }
 
+let airbrake = null
+
 module.exports = {
   plugin: {
     name: 'airbrake',
     register: (server, options) => {
-      if (config.airbrakeProjectKey && config.airbrakeHost) {
-        const airbrake = new Notifier({
+      if (!airbrake && config.airbrakeProjectKey && config.airbrakeHost) {
+        airbrake = new Notifier({
           projectId: 1,
           projectKey: config.airbrakeProjectKey,
           host: config.airbrakeHost,
