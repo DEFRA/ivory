@@ -6,7 +6,7 @@ module.exports = class CookieService {
   static checkSessionCookie (request) {
     const sessionCookie = request.state[DEFRA_IVORY_SESSION_KEY]
     if (!sessionCookie) {
-      console.warn(`Session cookie not found for page ${request.url.pathname}`)
+      console.log(`Session cookie not found for page ${request.url.pathname}`)
     }
     return sessionCookie
   }
