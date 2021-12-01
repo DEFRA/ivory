@@ -58,8 +58,12 @@ const _getContext = async request => {
   const thumbnails = uploadData.thumbnails
 
   for (let i = 0; i < thumbnails.length; i++) {
-    const buffer = await Buffer.from(uploadData.thumbnailData[i], 'base64')
-    await fs.promises.writeFile(`${os.tmpdir()}/${thumbnails[i]}`, buffer)
+    const buffer = Buffer.from(uploadData.thumbnailData[i], 'base64')
+    try {
+      await fs.promises.writeFile(`${os.tmpdir()}/${thumbnails[i]}`, buffer)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const rows = uploadData.thumbnails.map((imageThumbnailFile, index) => {
