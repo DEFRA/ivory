@@ -27,7 +27,7 @@ module.exports = class RedisService {
   static set (request, key, value) {
     const client = request.redis.client
     const keyWithSessionId = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${key}`
-    client.setex(keyWithSessionId, REDIS_TTL_IN_SECONDS, value)
+    return client.setex(keyWithSessionId, REDIS_TTL_IN_SECONDS, value)
   }
 
   static delete (request, key) {
