@@ -99,11 +99,22 @@ const handlers = {
 
         uploadData.thumbnailData.push(thumbnailBuffer.toString('base64'))
 
-        await RedisService.set(
+        RedisService.set(
           request,
           RedisKeys.UPLOAD_PHOTO,
           JSON.stringify(uploadData)
         )
+
+        AnalyticsService.sendEvent(request, {
+          category: Analytics.Category.MAIN_QUESTIONS,
+          action: context.pageTitle,
+          label: `${filename} ${(payload.files.bytes / Math.pow(1024, 2)).toFixed(
+            2
+          )}MB`,
+          value: (payload.files.bytes / 1024).toFixed()
+        })
+
+        return h.redirect(Paths.YOUR_PHOTOS)
       } else {
         errors.push({
           name: 'files',
@@ -139,17 +150,6 @@ const handlers = {
           .code(400)
       }
     }
-
-    AnalyticsService.sendEvent(request, {
-      category: Analytics.Category.MAIN_QUESTIONS,
-      action: context.pageTitle,
-      label: `${filename} ${(payload.files.bytes / Math.pow(1024, 2)).toFixed(
-        2
-      )}MB`,
-      value: (payload.files.bytes / 1024).toFixed()
-    })
-
-    return h.redirect(Paths.YOUR_PHOTOS)
   }
 }
 
