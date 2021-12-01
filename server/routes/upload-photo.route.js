@@ -97,7 +97,7 @@ const handlers = {
           })
           .toBuffer()
 
-        uploadData.thumbnailData.push(thumbnailBuffer.toString('base64'))
+        await uploadData.thumbnailData.push(thumbnailBuffer.toString('base64'))
 
         await RedisService.set(
           request,
