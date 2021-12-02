@@ -1,5 +1,7 @@
 'use strict'
 
+const path = require('path')
+
 const AnalyticsService = require('../services/analytics.service')
 const RedisHelper = require('../services/redis-helper.service')
 const RedisService = require('../services/redis.service')
@@ -788,9 +790,11 @@ const _getPhotoSummary = async request => {
     }
   }
 
-  const imageRows = uploadPhotos.thumbnails.map((file, index) => {
-    return `<img id="photo${index}" class="govuk-!-padding-bottom-5" src="assets\\${file}" alt="Photo ${index +
-      1}" width="200">`
+  const imageRows = uploadPhotos.thumbnailData.map((imageThumbnailFile, index) => {
+    const extension = (path.extname(uploadPhotos.thumbnails[index])).substring(1)
+    const imageFile = `data:image/${extension};base64,${imageThumbnailFile}`
+
+    return `<img id="photo${index}" class="govuk-!-padding-bottom-5" src=${imageFile} alt="Photo ${index + 1}" width="200">`
   })
 
   return [

@@ -1,7 +1,6 @@
 'use strict'
 
-const os = require('os')
-const fs = require('fs')
+const path = require('path')
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
@@ -55,26 +54,17 @@ const _getContext = async request => {
     }
   }
 
-  const thumbnails = uploadData.thumbnails
+  const rows = uploadData.thumbnailData.map((imageThumbnailFile, index) => {
+    const extension = (path.extname(uploadData.thumbnails[index])).substring(1)
+    const imageFile = `data:image/${extension};base64,${imageThumbnailFile}`
 
-  for (let i = 0; i < thumbnails.length; i++) {
-    const buffer = Buffer.from(uploadData.thumbnailData[i], 'base64')
-    try {
-      await fs.promises.writeFile(`${os.tmpdir()}/${thumbnails[i]}`, buffer)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const rows = uploadData.thumbnails.map((imageThumbnailFile, index) => {
     return {
       key: {
         text: `Photo ${index + 1}`
       },
       classes: 'ivory-summary-list',
       value: {
-        html: `<img src="assets/${imageThumbnailFile}" alt="Photo ${index +
-          1}" width="200">`
+        html: `<img src=${imageFile} alt="Photo ${index + 1}" width="200">`
       },
       actions: {
         items: [
