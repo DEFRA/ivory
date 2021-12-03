@@ -5,7 +5,7 @@ const NotificationService = require('../services/notification.service')
 const PaymentService = require('../services/payment.service')
 const RedisHelper = require('../services/redis-helper.service')
 const RedisService = require('../services/redis.service')
-const { EmailTypes } = require('../utils/constants')
+const { EmailTypes, DEFRA_IVORY_SESSION_KEY } = require('../utils/constants')
 
 const {
   Analytics,
@@ -45,6 +45,10 @@ const handlers = {
 
     const context = await _getContext(request, isSection2, isOwnedByApplicant)
 
+    if (!context.applicantContactDetails) {
+      return h.redirect(Paths.SESSION_TIMED_OUT)
+    }
+
     const emailType =
       isSection2 && isAlreadyCertified
         ? EmailTypes.CONFIRMATION_EMAIL_RESELLING
@@ -62,9 +66,11 @@ const handlers = {
       label: context.pageTitle
     })
 
-    return h.view(Views.SERVICE_COMPLETE, {
-      ...context
-    })
+    return h
+      .view(Views.SERVICE_COMPLETE, {
+        ...context
+      })
+      .unstate(DEFRA_IVORY_SESSION_KEY)
   }
 }
 
