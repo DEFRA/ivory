@@ -62,6 +62,7 @@ const _getContext = async request => {
   const isSection2 = await RedisHelper.isSection2(request, itemType)
   const isMesuem = await RedisHelper.isMuseum(request, itemType)
   const isOwnedByApplicant = await RedisHelper.isOwnedByApplicant(request)
+  const isAlreadyCertified = await RedisHelper.isAlreadyCertified(request)
 
   const [
     itemSummary,
@@ -92,10 +93,14 @@ const _getContext = async request => {
     isSection2,
     isOwnedByApplicant,
     isMesuem,
-    isAlreadyCertified: await RedisHelper.isAlreadyCertified(request),
+    isAlreadyCertified,
     pageTitle: 'Check your answers',
-    legalAssertions: LEGAL_ASSERTIONS[itemType],
-    legalAssertionsAdditionalSection2: LEGAL_ASSERTIONS.additionalSection2
+    legalAssertions: isAlreadyCertified
+      ? LEGAL_ASSERTIONS.Section2AlreadyCertified
+      : LEGAL_ASSERTIONS[itemType],
+    legalAssertionsAdditionalSection2: isAlreadyCertified
+      ? null
+      : LEGAL_ASSERTIONS.additionalSection2
   }
 }
 
@@ -790,12 +795,17 @@ const _getPhotoSummary = async request => {
     }
   }
 
-  const imageRows = uploadPhotos.thumbnailData.map((imageThumbnailFile, index) => {
-    const extension = (path.extname(uploadPhotos.thumbnails[index])).substring(1)
-    const imageFile = `data:image/${extension};base64,${imageThumbnailFile}`
+  const imageRows = uploadPhotos.thumbnailData.map(
+    (imageThumbnailFile, index) => {
+      const extension = path
+        .extname(uploadPhotos.thumbnails[index])
+        .substring(1)
+      const imageFile = `data:image/${extension};base64,${imageThumbnailFile}`
 
-    return `<img id="photo${index}" class="govuk-!-padding-bottom-5" src=${imageFile} alt="Photo ${index + 1}" width="200">`
-  })
+      return `<img id="photo${index}" class="govuk-!-padding-bottom-5" src=${imageFile} alt="Photo ${index +
+        1}" width="200">`
+    }
+  )
 
   return [
     _getSummaryListRow(
@@ -897,6 +907,10 @@ const LEGAL_ASSERTIONS = {
     'the item was made before 1918',
     BEFORE_1975,
     COMPLETE_AND_CORRECT
+  ],
+  Section2AlreadyCertified: [
+    'the information on the certificate is still accurate and complete',
+    'the certificate was issued for this item'
   ],
   additionalSection2: [
     'the item is of outstandingly high artistic, cultural or historical value'

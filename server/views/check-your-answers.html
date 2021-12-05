@@ -2,6 +2,7 @@
 
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 
@@ -106,7 +107,7 @@
         {% endfor %}
       </ul>
 
-      {% if isSection2 %}
+      {% if isSection2 and not isAlreadyCertified %}
         <p id="legalDeclarationPara3" class="govuk-body">By making this application, I confirm that I believe:</p>
 
         <ul class="govuk-list govuk-list--bullet">
@@ -114,6 +115,19 @@
             <li id="legalAssertionsAdditional{{ loop.index }}">{{ legalAssertion }}</li>
           {% endfor %}
         </ul>
+      {% endif %}
+
+      {% if isSection2 and isAlreadyCertified %}
+        {% set expanderHtml %}
+          <p id="legalDeclarationPara3">If you notice something is inaccurate or missing from the item's certificate, you must contact the Animal Health and Plant Agency (APHA): <a href="mailto:IvoryAct@apha.gov.uk">IvoryAct@apha.gov.uk</a> before continuing.</p>
+          <p id="legalDeclarationPara4">Make sure you include the certificate number in your email.</p>
+        {% endset -%}
+
+        {{ govukDetails({
+          id: "somethingWrongWithCertificate",
+          summaryText: "Something is wrong with the certificate",
+          html: expanderHtml
+        }) }}
       {% endif %}
 
       {{ govukCheckboxes({

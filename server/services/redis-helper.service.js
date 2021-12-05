@@ -2,7 +2,12 @@
 
 const RedisService = require('./redis.service')
 
-const { ItemType, Options, RedisKeys } = require('../utils/constants')
+const {
+  ItemType,
+  Options,
+  RedisKeys,
+  AlreadyCertifiedOptions
+} = require('../utils/constants')
 
 module.exports = class RedisHelper {
   static async getItemType (request) {
@@ -66,7 +71,10 @@ module.exports = class RedisHelper {
         RedisKeys.ALREADY_CERTIFIED
       )
     }
-    return alreadyCertified && alreadyCertified.alreadyCertified === Options.YES
+    return (
+      alreadyCertified &&
+      alreadyCertified.alreadyCertified === AlreadyCertifiedOptions.YES
+    )
   }
 
   static async isRevoked (request, revokedCertificateNumber = null) {

@@ -2,6 +2,7 @@
 
 const TestHelper = require('../utils/test-helper')
 const {
+  AlreadyCertifiedOptions,
   BehalfOfBusinessOptions,
   ItemType,
   Options,
@@ -52,12 +53,14 @@ const elementIds = {
   legalDeclarationPara1: 'legalDeclarationPara1',
   legalDeclarationPara2: 'legalDeclarationPara2',
   legalDeclarationPara3: 'legalDeclarationPara3',
+  legalDeclarationPara4: 'legalDeclarationPara4',
   legalAssertion1: 'legalAssertion1',
   legalAssertion2: 'legalAssertion2',
   legalAssertion3: 'legalAssertion3',
   legalAssertion4: 'legalAssertion4',
   legalAssertion5: 'legalAssertion5',
   legalAssertionsAdditional1: 'legalAssertionsAdditional1',
+  somethingWrongWithCertificate: 'somethingWrongWithCertificate',
   agree: 'agree',
   agreeAndSubmit: 'agreeAndSubmit'
 }
@@ -809,7 +812,7 @@ describe('/check-your-answers route', () => {
           )
         })
 
-        it('should have the correct legal declarations for ItemType = HIGH_VALUE', async () => {
+        it('should have the correct legal declarations for ItemType = HIGH_VALUE, not already certified', async () => {
           _createMocks(ItemType.HIGH_VALUE)
 
           document = await TestHelper.submitGetRequest(server, getOptions)
@@ -846,6 +849,80 @@ describe('/check-your-answers route', () => {
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
             'the item is of outstandingly high artistic, cultural or historical value'
+          )
+        })
+
+        it('should have the correct legal declarations for ItemType = HIGH_VALUE, Already Certified', async () => {
+          _createMocks(
+            ItemType.HIGH_VALUE,
+            false,
+            BehalfOfBusinessOptions.AN_INDIVIDUAL,
+            true
+          )
+
+          document = await TestHelper.submitGetRequest(server, getOptions)
+
+          let element = document.querySelector(`#${elementIds.legalAssertion1}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'the information on the certificate is still accurate and complete'
+          )
+
+          element = document.querySelector(`#${elementIds.legalAssertion2}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'the certificate was issued for this item'
+          )
+
+          element = document.querySelector(
+            `#${elementIds.legalAssertionsAdditional1}`
+          )
+          expect(element).toBeFalsy()
+        })
+
+        it('should have the correct summary text title, ItemType = HIGH_VALUE, Already Certified', async () => {
+          _createMocks(
+            ItemType.HIGH_VALUE,
+            false,
+            BehalfOfBusinessOptions.AN_INDIVIDUAL,
+            true
+          )
+
+          document = await TestHelper.submitGetRequest(server, getOptions)
+
+          const element = document.querySelector(
+            `#${elementIds.somethingWrongWithCertificate} .govuk-details__summary-text`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Something is wrong with the certificate'
+          )
+        })
+
+        it('should have the correct summary text details, ItemType = HIGH_VALUE, Already Certified', async () => {
+          _createMocks(
+            ItemType.HIGH_VALUE,
+            false,
+            BehalfOfBusinessOptions.AN_INDIVIDUAL,
+            true
+          )
+
+          document = await TestHelper.submitGetRequest(server, getOptions)
+
+          let element = document.querySelector(
+            `#${elementIds.somethingWrongWithCertificate} .govuk-details__text > #${elementIds.legalDeclarationPara3}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            "If you notice something is inaccurate or missing from the item's certificate, you must contact the Animal Health and Plant Agency (APHA): IvoryAct@apha.gov.uk before continuing."
+          )
+
+          element = document.querySelector(
+            `#${elementIds.somethingWrongWithCertificate} .govuk-details__text > #${elementIds.legalDeclarationPara4}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Make sure you include the certificate number in your email.'
           )
         })
       })
@@ -995,7 +1072,8 @@ const saleIntention = 'Sell it'
 const _createMocks = (
   itemType,
   ownedByApplicant = true,
-  sellingOnBehalfOf = null
+  sellingOnBehalfOf = null,
+  isAlreadyCertified = false
 ) => {
   TestHelper.createMocks()
 
@@ -1026,7 +1104,11 @@ const _createMocks = (
       [RedisKeys.WORK_FOR_A_BUSINESS]: Options.YES,
       [RedisKeys.SELLING_ON_BEHALF_OF]: sellingOnBehalfOf,
       [RedisKeys.PREVIOUS_APPLICATION_NUMBER]: '',
-      [RedisKeys.ALREADY_CERTIFIED]: '',
+      [RedisKeys.ALREADY_CERTIFIED]: {
+        alreadyCertified: isAlreadyCertified
+          ? AlreadyCertifiedOptions.YES
+          : AlreadyCertifiedOptions.NO
+      },
       [RedisKeys.REVOKED_CERTIFICATE]: '',
       [RedisKeys.APPLIED_BEFORE]: '',
       [RedisKeys.PREVIOUS_APPLICATION_NUMBER]: ''
