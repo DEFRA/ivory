@@ -211,7 +211,11 @@ describe('/save-record route', () => {
             [DataVerseFieldName.WORK_FOR_A_BUSINESS]: false,
             [DataVerseFieldName.SELLING_ON_BEHALF_OF]: 881990005,
             [DataVerseFieldName.CAPACITY]: 881990003,
-            [DataVerseFieldName.CAPACITY_OTHER]: 'Some other capacity'
+            [DataVerseFieldName.CAPACITY_OTHER]: 'Some other capacity',
+            [DataVerseFieldName.ALREADY_HAS_CERTIFICATE]: 881990000,
+            [DataVerseFieldName.APPLIED_BEFORE]: false,
+            [DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER]: undefined,
+            [DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER]: undefined
           }
         )
 

@@ -95,6 +95,8 @@ const _updateRecordAttachments = async (request, entity) => {
 const _resellRecord = async request => {
   const updateBody = await _getNewOwnerDetails(request)
 
+  Object.assign(updateBody, await _getPreviousSubmission(request))
+
   return ODataService.updateRecord(
     updateBody[DataVerseFieldName.SECTION_2_CASE_ID],
     updateBody
