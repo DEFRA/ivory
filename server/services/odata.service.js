@@ -166,6 +166,31 @@ module.exports = class ODataService {
     return response
   }
 
+  static async getDocument (id, documentName) {
+    const token = await ActiveDirectoryAuthService.getToken()
+
+    const headers = {
+      [ODATA_VERSION]: ODATA_VERSION_NUMBER,
+      [ODATA_MAX_VERSION]: ODATA_VERSION_NUMBER,
+      [CONTENT_TYPE]: ContentTypes.APPLICATION_OCTET_STREAM,
+      [AUTHORIZATION]: `Bearer ${token}`,
+      [PREFER]: PREFER_REPRESENTATION
+    }
+
+    const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
+
+    const url = `${apiEndpoint}/${SECTION_2_ENDPOINT}(${id})/${documentName}/$value?size=full`
+
+    console.log(`Fetching URL: [${url}]`)
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers
+    })
+
+    return response
+  }
+
   static async updateRecord (id, body, isSection2 = true) {
     const token = await ActiveDirectoryAuthService.getToken()
 

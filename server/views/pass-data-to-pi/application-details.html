@@ -1,0 +1,83 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 id="pageTitle" class="govuk-heading-l">{{ pageTitle }}</h1>
+
+      <div class="govuk-inset-text">
+        <p class="govuk-body" id="downloadApplicationPdfLink">
+          <a class="govuk-link" href="{{ pdfDownloadLink }}">Download details of application (PDF)</a>
+        </p>
+        <p class="govuk-body" id="downloadApplicationPdfHelpText">You will need to download images and supporting documents separately.</p>
+      </div>
+
+      <h2 id="ownerSubHeading" class="govuk-heading-m">Owner’s details</h2>
+
+      {{ govukSummaryList({
+        classes: 'govuk-!-margin-bottom-9',
+        rows: ownerSummary,
+        attributes: {
+          id: "ownerSummary"
+        }
+      }) }}
+
+      <h2 id="itemHeading" class="govuk-heading-m">The item</h2>
+
+      {{ govukSummaryList({
+        classes: 'govuk-!-margin-bottom-9',
+        rows: itemSummary,
+        attributes: {
+          id: "itemSummary"
+        }
+      }) }}
+
+      <h2 id="itemDescriptionSubHeading" class="govuk-heading-m">Description of the item</h2>
+
+      {{ govukSummaryList({
+        classes: 'govuk-!-margin-bottom-9',
+        rows: itemDescriptionSummary,
+        attributes: {
+          id: "itemDescriptionSummary"
+        }
+      }) }}
+
+      <h2 id="exemptionReasonHeading" class="govuk-heading-m">Reasons why item is exempt</h2>
+
+      {{ govukSummaryList({
+        classes: 'govuk-!-margin-bottom-9',
+        rows: exemptionReasonSummary,
+        attributes: {
+          id: "exemptionReasonSummary"
+        }
+      }) }}
+
+      <h2 id="photosSubHeading" class="govuk-heading-m">Photos of the item</h2>
+
+      {{ govukSummaryList({
+        classes: 'govuk-!-margin-bottom-9 ivory-summary-list',
+        rows: photoSummary,
+        attributes: {
+          id: "photoSummary"
+        }
+      }) }}
+      
+      {% if documentSummary.length > 0 %}
+
+        <h2 id="documentsSummaryHeading" class="govuk-heading-m">Documents to support application</h2>
+
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-9',
+          rows: documentSummary,
+          attributes: {
+            id: "documentSummary"
+          }
+        }) }}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

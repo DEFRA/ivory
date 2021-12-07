@@ -29,6 +29,12 @@ const AlreadyCertifiedLookup = {
   [AlreadyCertifiedOptions.USED_TO]: 881990002
 }
 
+const AlreadyCertifiedReverseLookup = {
+  881990000: AlreadyCertifiedOptions.YES,
+  881990001: AlreadyCertifiedOptions.NO,
+  881990002: AlreadyCertifiedOptions.USED_TO
+}
+
 const CapacityLookup = {
   [Capacities.AGENT]: 881990000,
   [Capacities.EXECUTOR_ADMINISTRATOR]: 881990001,
@@ -72,6 +78,15 @@ const SellingOnBehalfOfLookup = {
   [BehalfOfBusinessOptions.OTHER]: 881990005
 }
 
+const SellingOnBehalfOfReverseLookup = {
+  881990000: BehalfOfBusinessOptions.BUSINESS_I_WORK_FOR,
+  881990001: BehalfOfBusinessOptions.AN_INDIVIDUAL,
+  881990002: BehalfOfBusinessOptions.ANOTHER_BUSINESS,
+  881990003: BehalfOfNotBusinessOptions.FRIEND_OR_RELATIVE,
+  881990004: BehalfOfNotBusinessOptions.A_BUSINESS,
+  881990005: BehalfOfBusinessOptions.OTHER
+}
+
 const Status = {
   Logged: 881990000
 }
@@ -86,12 +101,14 @@ const WhyIvoryIntegral = {
 module.exports = {
   AgeExemptionReasonLookup,
   AlreadyCertifiedLookup,
+  AlreadyCertifiedReverseLookup,
   CapacityLookup,
   ExemptionTypeLookup,
   IntentionLookup,
   IvoryIntegralLookup,
   IvoryVolumeLookup,
   SellingOnBehalfOfLookup,
+  SellingOnBehalfOfReverseLookup,
   Status,
   WhyIvoryIntegral
 }
