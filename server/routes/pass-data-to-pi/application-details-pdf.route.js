@@ -10,9 +10,10 @@ const {
 
 const handlers = {
   get: async (request, h) => {
-    const id = request.params.id
-    const key = request.params.key
+    const id = request.query.id
+    const key = request.query.key
 
+    console.log('Application details PDF')
     console.log('id:', id)
     console.log('key:', key)
 
@@ -22,6 +23,9 @@ const handlers = {
       return h.redirect(Paths.RECORD_NOT_FOUND)
     }
 
+    console.log(entity)
+
+    // TODO load PDF template and fill in with details from the entity object
     // const pdfBytes = await _getPdf(entity)
     const pdfBytes = []
 

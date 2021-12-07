@@ -76,6 +76,11 @@ const _getContext = async (request, entity, key) => {
     _getPhotoSummary(entity, key)
   ])
 
+  const id = entity[DataVerseFieldName.SECTION_2_CASE_ID]
+  const submissionReference = entity[DataVerseFieldName.NAME]
+
+  console.log(entity)
+
   return {
     itemSummary,
     photoSummary,
@@ -83,8 +88,8 @@ const _getContext = async (request, entity, key) => {
     exemptionReasonSummary,
     documentSummary,
     ownerSummary,
-    pageTitle: `Ivory application: ${entity[DataVerseFieldName.NAME]}`,
-    pdfDownloadLink: `${Paths.PASS_DATA_TO_PI_APPLICATION_PDF}/{id}`
+    pageTitle: `Ivory application: ${submissionReference}`,
+    pdfDownloadLink: `${Paths.PASS_DATA_TO_PI_APPLICATION_PDF}?id=${id}&key=${key}`
   }
 }
 
