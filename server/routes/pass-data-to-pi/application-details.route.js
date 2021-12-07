@@ -34,9 +34,6 @@ const handlers = {
     const id = request.query.id
     const key = request.query.key
 
-    console.log('id:', id)
-    console.log('key:', key)
-
     const entity = await _getRecord(id, key)
 
     if (!entity) {
