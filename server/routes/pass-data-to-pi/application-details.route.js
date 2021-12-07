@@ -5,6 +5,7 @@ const RedisService = require('../../services/redis.service')
 const ODataService = require('../../services/odata.service')
 
 const {
+  AgeExemptionReasons,
   AlreadyCertifiedOptions,
   // Analytics,
   DataVerseFieldName,
@@ -16,14 +17,8 @@ const {
 } = require('../../utils/constants')
 
 const {
-  // AgeExemptionReasonLookup,
-  // ExemptionTypeLookup,
-  // IntentionLookup,
-  // IvoryIntegralLookup,
-  // IvoryVolumeLookup,
-  // Status,
-  // SellingOnBehalfOfLookup,
-  // CapacityLookup,
+  AgeExemptionReasonLookup,
+  AgeExemptionReasonReverseLookup,
   AlreadyCertifiedLookup,
   AlreadyCertifiedReverseLookup,
   SellingOnBehalfOfReverseLookup
@@ -57,7 +52,6 @@ const handlers = {
 }
 
 const _getContext = async (request, entity, key) => {
-  const itemType = ItemType.HIGH_VALUE
   const isOwnedByApplicant = entity[DataVerseFieldName.OWNED_BY_APPLICANT]
 
   const [
@@ -68,9 +62,9 @@ const _getContext = async (request, entity, key) => {
     ownerSummary,
     photoSummary
   ] = await Promise.all([
-    _getItemSummary(entity, itemType),
+    _getItemSummary(entity),
     _getDocumentSummary(entity, key),
-    _getExemptionReasonSummary(entity, request, itemType),
+    _getExemptionReasonSummary(entity),
     _getItemDescriptionSummary(entity),
     _getOwnerSummary(entity, request, isOwnedByApplicant),
     _getPhotoSummary(entity, key)
@@ -78,8 +72,6 @@ const _getContext = async (request, entity, key) => {
 
   const id = entity[DataVerseFieldName.SECTION_2_CASE_ID]
   const submissionReference = entity[DataVerseFieldName.NAME]
-
-  console.log(entity)
 
   return {
     itemSummary,
@@ -126,30 +118,25 @@ const _getDocumentSummary = async (entity, key) => {
   })
 }
 
-const _getExemptionReasonSummary = async (entity, request, itemType) => {
-  const ivoryAge = await RedisService.get(request, RedisKeys.IVORY_AGE)
+const _getExemptionReasonSummary = async entity => {
+  const whyAgeExempt = entity[DataVerseFieldName.WHY_AGE_EXEMPT]
+  const whyAgeExemptOtherReason =
+    entity[DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON]
 
-  if (ivoryAge && ivoryAge.otherReason) {
-    ivoryAge.ivoryAge.pop()
-    ivoryAge.ivoryAge.push(ivoryAge.otherReason)
-  }
+  const whyAgeExemptReasons = whyAgeExempt.split(',')
 
-  const ivoryAgeFormatted =
-    ivoryAge && ivoryAge.ivoryAge
-      ? ivoryAge.ivoryAge.map((reason, index) => {
-          return `<li id="ivoryAgeReason${index}">${reason}</li>`
-        })
-      : []
+  const ivoryAgeFormatted = whyAgeExemptReasons.map((reason, index) => {
+    const reasonText =
+      reason === `${AgeExemptionReasonLookup[AgeExemptionReasons.OTHER_REASON]}`
+        ? whyAgeExemptOtherReason
+        : AgeExemptionReasonReverseLookup[parseInt(reason)]
+
+    return `<li id="ivoryAgeReason${index}">${reasonText}</li>`
+  })
 
   const ivoryAgeList = `<ul>${ivoryAgeFormatted.join('')}</ul>`
 
   const whyRmi = entity[DataVerseFieldName.WHY_OUTSTANDINLY_VALUABLE]
-
-  let ivoryIntegral = await RedisService.get(request, RedisKeys.IVORY_INTEGRAL)
-  if (ivoryIntegral === 'Both of the above') {
-    ivoryIntegral =
-      'The ivory is essential to the design or function of the item and you cannot remove the ivory easily or without damaging the item'
-  }
 
   const exemptionReasonSummary = [
     _getSummaryListRow('Proof of item’s age', ivoryAgeList, null, true)
@@ -159,17 +146,13 @@ const _getExemptionReasonSummary = async (entity, request, itemType) => {
     _getSummaryListRow('Why it’s of outstandingly high value', whyRmi)
   )
 
-  if (itemType === ItemType.TEN_PERCENT) {
-    exemptionReasonSummary.push(
-      _getSummaryListRow('Why all ivory is integral', ivoryIntegral)
-    )
-  }
-
   return exemptionReasonSummary
 }
 
-const _getItemSummary = async (entity, itemType) => {
-  const itemSummary = [_getSummaryListRow('Type of exemption', itemType)]
+const _getItemSummary = async entity => {
+  const itemSummary = [
+    _getSummaryListRow('Type of exemption', ItemType.HIGH_VALUE)
+  ]
 
   const alreadyCertified =
     AlreadyCertifiedReverseLookup[
@@ -256,6 +239,7 @@ const _getItemDescriptionSummary = async entity => {
   return itemDescriptionSummary
 }
 
+// TODO pull owner details from entity instead of Redis, remove request parameter
 const _getOwnerSummary = async (entity, request, isOwnedByApplicant) => {
   const sellingOnBehalfOf =
     SellingOnBehalfOfReverseLookup[
@@ -479,8 +463,6 @@ const _getOwnerSummaryApplicantDefault = async (
 
 const _getPhotoSummary = async (entity, key) => {
   const uploadPhotos = []
-
-  console.log(entity)
 
   for (let i = 1; i <= MAX_PHOTOS; i++) {
     const id = entity[DataVerseFieldName[`PHOTO_${i}_ID`]]

@@ -23,6 +23,19 @@ const AgeExemptionReasonLookup = {
   [AgeExemptionReasons.OTHER_REASON]: 881990009
 }
 
+const AgeExemptionReasonReverseLookup = {
+  881990000: AgeExemptionReasons.STAMP_OR_SERIAL,
+  881990001: AgeExemptionReasons.DATED_RECEIPT,
+  881990002: AgeExemptionReasons.DATED_PUBLICATION,
+  881990003: AgeExemptionReasons.BEEN_IN_FAMILY_1975,
+  881990004: AgeExemptionReasons.BEEN_IN_FAMILY_1947,
+  881990005: AgeExemptionReasons.BEEN_IN_FAMILY_1918,
+  881990006: AgeExemptionReasons.EXPERT_VERIFICATION,
+  881990007: AgeExemptionReasons.PROFESSIONAL_OPINION,
+  881990008: AgeExemptionReasons.CARBON_DATED,
+  881990009: AgeExemptionReasons.OTHER_REASON
+}
+
 const AlreadyCertifiedLookup = {
   [AlreadyCertifiedOptions.YES]: 881990000,
   [AlreadyCertifiedOptions.NO]: 881990001,
@@ -100,6 +113,7 @@ const WhyIvoryIntegral = {
 
 module.exports = {
   AgeExemptionReasonLookup,
+  AgeExemptionReasonReverseLookup,
   AlreadyCertifiedLookup,
   AlreadyCertifiedReverseLookup,
   CapacityLookup,
