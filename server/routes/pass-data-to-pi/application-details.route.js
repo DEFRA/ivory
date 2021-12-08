@@ -1,7 +1,6 @@
 'use strict'
 
 // const AnalyticsService = require('../services/analytics.service')
-const RedisService = require('../../services/redis.service')
 const ODataService = require('../../services/odata.service')
 
 const {
@@ -12,7 +11,6 @@ const {
   ItemType,
   Options,
   Paths,
-  RedisKeys,
   Views
 } = require('../../utils/constants')
 
@@ -20,8 +18,7 @@ const {
   AgeExemptionReasonLookup,
   AgeExemptionReasonReverseLookup,
   AlreadyCertifiedLookup,
-  AlreadyCertifiedReverseLookup,
-  SellingOnBehalfOfReverseLookup
+  AlreadyCertifiedReverseLookup
 } = require('../../services/dataverse-choice-lookups')
 
 const NOTHING_ENTERED = 'Nothing entered'
@@ -40,37 +37,28 @@ const handlers = {
       return h.redirect(Paths.RECORD_NOT_FOUND)
     }
 
-    const context = await _getContext(request, entity, key)
-
     return h.view(Views.PASS_DATA_TO_PI, {
-      ...context
+      ..._getContext(request, entity, key)
     })
   }
 }
 
-const _getContext = async (request, entity, key) => {
+const _getContext = (request, entity, key) => {
   const isOwnedByApplicant = entity[DataVerseFieldName.OWNED_BY_APPLICANT]
-
-  const [
-    itemSummary,
-    documentSummary,
-    exemptionReasonSummary,
-    itemDescriptionSummary,
-    ownerSummary,
-    photoSummary
-  ] = await Promise.all([
-    _getItemSummary(entity),
-    _getDocumentSummary(entity, key),
-    _getExemptionReasonSummary(entity),
-    _getItemDescriptionSummary(entity),
-    _getOwnerSummary(entity, request, isOwnedByApplicant),
-    _getPhotoSummary(entity, key)
-  ])
-
   const id = entity[DataVerseFieldName.SECTION_2_CASE_ID]
   const submissionReference = entity[DataVerseFieldName.NAME]
 
+  const itemSummary = _getItemSummary(entity)
+  const documentSummary = _getDocumentSummary(entity, key)
+  const exemptionReasonSummary = _getExemptionReasonSummary(entity)
+  const itemDescriptionSummary = _getItemDescriptionSummary(entity)
+  const ownerSummary = _getOwnerSummary(entity, isOwnedByApplicant)
+  const photoSummary = _getPhotoSummary(entity, key)
+
   return {
+    ownerSummaryHeading: isOwnedByApplicant
+      ? 'Owner’s details'
+      : 'Owner and applicant details',
     itemSummary,
     photoSummary,
     itemDescriptionSummary,
@@ -86,7 +74,7 @@ const _getRecord = (id, key) => {
   return ODataService.getRecord(id, true, key)
 }
 
-const _getDocumentSummary = async (entity, key) => {
+const _getDocumentSummary = (entity, key) => {
   const uploadDocuments = []
 
   for (let i = 1; i <= MAX_DOCUMENTS; i++) {
@@ -115,7 +103,7 @@ const _getDocumentSummary = async (entity, key) => {
   })
 }
 
-const _getExemptionReasonSummary = async entity => {
+const _getExemptionReasonSummary = entity => {
   const whyAgeExempt = entity[DataVerseFieldName.WHY_AGE_EXEMPT]
   const whyAgeExemptOtherReason =
     entity[DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON]
@@ -146,7 +134,7 @@ const _getExemptionReasonSummary = async entity => {
   return exemptionReasonSummary
 }
 
-const _getItemSummary = async entity => {
+const _getItemSummary = entity => {
   const itemSummary = [
     _getSummaryListRow('Type of exemption', ItemType.HIGH_VALUE)
   ]
@@ -204,7 +192,7 @@ const _getItemSummary = async entity => {
   return itemSummary
 }
 
-const _getItemDescriptionSummary = async entity => {
+const _getItemDescriptionSummary = entity => {
   const itemDescriptionSummary = [
     _getSummaryListRow('What is it?', entity[DataVerseFieldName.ITEM_SUMMARY]),
 
@@ -236,229 +224,49 @@ const _getItemDescriptionSummary = async entity => {
   return itemDescriptionSummary
 }
 
-// TODO pull owner details from entity instead of Redis, remove request parameter
-const _getOwnerSummary = async (entity, request, isOwnedByApplicant) => {
-  const sellingOnBehalfOf =
-    SellingOnBehalfOfReverseLookup[
-      entity[DataVerseFieldName.SELLING_ON_BEHALF_OF]
-    ]
+const _getOwnerSummary = (entity, isOwnedByApplicant) => {
+  const ownerName = entity[DataVerseFieldName.OWNER_NAME]
+  let ownerAddress = entity[DataVerseFieldName.OWNER_ADDRESS]
+  const ownerPostcode = entity[DataVerseFieldName.OWNER_POSTCODE]
+  if (ownerPostcode) {
+    ownerAddress += `, ${ownerPostcode}`
+  }
 
-  const workForABusiness = entity[DataVerseFieldName.WORK_FOR_A_BUSINESS]
-    ? Options.YES
-    : Options.NO
-
-  const capacity = _formatCapacity(
-    await RedisService.get(request, RedisKeys.WHAT_CAPACITY)
-  )
-
-  const ownerContactDetails =
-    (await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)) || {}
-
-  const ownerAddress = await RedisService.get(request, RedisKeys.OWNER_ADDRESS)
-
-  const applicantContactDetails =
-    (await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)) || {}
-
-  const applicantAddress = await RedisService.get(
-    request,
-    RedisKeys.APPLICANT_ADDRESS
-  )
-
-  const ownerSummary = [
-    _getSummaryListRow(
-      'Do you own the item?',
-      isOwnedByApplicant ? Options.YES : Options.NO
-    )
-  ]
+  const applicantName = entity[DataVerseFieldName.APPLICANT_NAME]
+  let applicantAddress = entity[DataVerseFieldName.APPLICANT_ADDRESS]
+  const applicantPostcode = entity[DataVerseFieldName.APPLICANT_POSTCODE]
+  if (applicantPostcode) {
+    applicantAddress += `, ${applicantPostcode}`
+  }
+  const ownerSummary = []
 
   if (isOwnedByApplicant) {
-    await _getOwnerSummaryOwnedByApplicant(
-      ownerSummary,
-      ownerContactDetails,
-      ownerAddress
-    )
+    _getOwnerDetails(ownerSummary, ownerName, ownerAddress)
   } else {
-    if (sellingOnBehalfOf === 'The business I work for') {
-      await _getOwnerSummaryApplicantBusiness(
-        ownerSummary,
-        workForABusiness,
-        sellingOnBehalfOf,
-        applicantContactDetails,
-        applicantAddress
-      )
-    } else if (sellingOnBehalfOf === 'Other') {
-      await _getOwnerSummaryApplicantOther(
-        ownerSummary,
-        workForABusiness,
-        sellingOnBehalfOf,
-        capacity,
-        applicantContactDetails,
-        applicantAddress
-      )
-    } else {
-      await _getOwnerSummaryApplicantDefault(
-        ownerSummary,
-        workForABusiness,
-        sellingOnBehalfOf,
-        ownerContactDetails,
-        ownerAddress,
-        applicantContactDetails,
-        applicantAddress
-      )
+    if (ownerName) {
+      _getOwnerDetails(ownerSummary, ownerName, ownerAddress)
     }
+    _getApplicantDetails(ownerSummary, applicantName, applicantAddress)
   }
 
   return ownerSummary
 }
 
-const _formatCapacity = whatCapacity => {
-  let capacity
-  if (whatCapacity && whatCapacity.whatCapacity) {
-    capacity = whatCapacity.whatCapacity
-
-    if (capacity === 'Other') {
-      capacity += ` - ${whatCapacity.otherCapacity}`
-    }
-  }
-
-  return capacity
-}
-
-const _getOwnerSummaryOwnedByApplicant = async (
-  ownerSummary,
-  ownerContactDetails,
-  ownerAddress
-) => {
-  ownerSummary.push(
-    _getSummaryListRow('Your name', ownerContactDetails.fullName)
-  )
-
-  ownerSummary.push(
-    _getSummaryListRow('Your email', ownerContactDetails.emailAddress)
-  )
-
-  ownerSummary.push(_getSummaryListRow('Your address', ownerAddress))
-}
-
-const _getOwnerSummaryApplicantBusiness = async (
-  ownerSummary,
-  workForABusiness,
-  sellingOnBehalfOf,
-  applicantContactDetails,
-  applicantAddress
-) => {
-  ownerSummary.push(_getSummaryListRow('Work for a business', workForABusiness))
-
-  ownerSummary.push(
-    _getSummaryListRow('Selling on behalf of', sellingOnBehalfOf)
-  )
-
-  ownerSummary.push(
-    _getSummaryListRow('Your name', applicantContactDetails.fullName)
-  )
-
-  if (workForABusiness === Options.YES) {
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Business name',
-        applicantContactDetails.businessName || NOTHING_ENTERED
-      )
-    )
-  }
-
-  ownerSummary.push(
-    _getSummaryListRow('Your email', applicantContactDetails.emailAddress)
-  )
-
-  ownerSummary.push(_getSummaryListRow('Your address', applicantAddress))
-}
-
-const _getOwnerSummaryApplicantOther = async (
-  ownerSummary,
-  workForABusiness,
-  sellingOnBehalfOf,
-  capacity,
-  applicantContactDetails,
-  applicantAddress
-) => {
-  ownerSummary.push(_getSummaryListRow('Work for a business', workForABusiness))
-
-  ownerSummary.push(_getSummaryListRow(sellingOnBehalfOf))
-
-  ownerSummary.push(_getSummaryListRow('Capacity you’re acting', capacity))
-
-  ownerSummary.push(
-    _getSummaryListRow('Your name', applicantContactDetails.fullName)
-  )
-
-  if (workForABusiness === Options.YES) {
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Business name',
-        applicantContactDetails.businessName || NOTHING_ENTERED
-      )
-    )
-  }
-
-  ownerSummary.push(
-    _getSummaryListRow('Your email', applicantContactDetails.emailAddress)
-  )
-
-  ownerSummary.push(_getSummaryListRow('Your address', applicantAddress))
-}
-
-const _getOwnerSummaryApplicantDefault = async (
-  ownerSummary,
-  workForABusiness,
-  sellingOnBehalfOf,
-  ownerContactDetails,
-  ownerAddress,
-  applicantContactDetails,
-  applicantAddress
-) => {
-  ownerSummary.push(_getSummaryListRow('Work for a business', workForABusiness))
-
-  ownerSummary.push(
-    _getSummaryListRow('Selling on behalf of', sellingOnBehalfOf)
-  )
-
-  ownerSummary.push(
-    _getSummaryListRow(
-      'Owner’s name',
-      ownerContactDetails.fullName || ownerContactDetails.businessName
-    )
-  )
-
-  ownerSummary.push(
-    _getSummaryListRow(
-      'Owner’s email',
-      ownerContactDetails.emailAddress || 'None given'
-    )
-  )
-
+const _getOwnerDetails = (ownerSummary, ownerName, ownerAddress) => {
+  ownerSummary.push(_getSummaryListRow('Owner’s name', ownerName))
   ownerSummary.push(_getSummaryListRow('Owner’s address', ownerAddress))
-
-  ownerSummary.push(
-    _getSummaryListRow('Your name', applicantContactDetails.fullName)
-  )
-
-  if (workForABusiness === Options.YES) {
-    ownerSummary.push(
-      _getSummaryListRow(
-        'Business name',
-        applicantContactDetails.businessName || NOTHING_ENTERED
-      )
-    )
-  }
-
-  ownerSummary.push(
-    _getSummaryListRow('Your email', applicantContactDetails.emailAddress)
-  )
-
-  ownerSummary.push(_getSummaryListRow('Your address', applicantAddress))
 }
 
-const _getPhotoSummary = async (entity, key) => {
+const _getApplicantDetails = (
+  ownerSummary,
+  applicantName,
+  applicantAddress
+) => {
+  ownerSummary.push(_getSummaryListRow('Applicant’s name', applicantName))
+  ownerSummary.push(_getSummaryListRow('Applicant’s address', applicantAddress))
+}
+
+const _getPhotoSummary = (entity, key) => {
   const uploadPhotos = []
 
   for (let i = 1; i <= MAX_PHOTOS; i++) {
