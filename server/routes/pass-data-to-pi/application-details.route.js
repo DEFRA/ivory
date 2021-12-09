@@ -38,12 +38,12 @@ const handlers = {
     }
 
     return h.view(Views.PASS_DATA_TO_PI, {
-      ..._getContext(request, entity, key)
+      ..._getContext(entity, key)
     })
   }
 }
 
-const _getContext = (request, entity, key) => {
+const _getContext = (entity, key) => {
   const isOwnedByApplicant = entity[DataVerseFieldName.OWNED_BY_APPLICANT]
   const id = entity[DataVerseFieldName.SECTION_2_CASE_ID]
   const submissionReference = entity[DataVerseFieldName.NAME]
@@ -56,15 +56,16 @@ const _getContext = (request, entity, key) => {
   const photoSummary = _getPhotoSummary(entity, key)
 
   return {
-    ownerSummaryHeading: isOwnedByApplicant
-      ? 'Owner’s details'
-      : 'Owner and applicant details',
     itemSummary,
     photoSummary,
     itemDescriptionSummary,
     exemptionReasonSummary,
     documentSummary,
     ownerSummary,
+    ownerSummaryHeading: isOwnedByApplicant
+      ? 'Owner’s details'
+      : 'Owner and applicant details',
+    hideBackLink: true,
     pageTitle: `Ivory application: ${submissionReference}`,
     pdfDownloadLink: `${Paths.PASS_DATA_TO_PI_APPLICATION_PDF}?id=${id}&key=${key}`
   }
@@ -96,7 +97,7 @@ const _getDocumentSummary = (entity, key) => {
       uploadDocument.row,
       _getChangeItems(
         `${Paths.PASS_DATA_TO_PI_DOCUMENTS}?id=${uploadDocument.id}&key=${key}`,
-        DOWNLOAD_LINK_TEXT
+        `Document ${index + 1}`
       ),
       true
     )
@@ -291,7 +292,7 @@ const _getPhotoSummary = (entity, key) => {
       uploadPhoto.row,
       _getChangeItems(
         `${Paths.PASS_DATA_TO_PI_PHOTOS}?id=${uploadPhoto.id}&key=${key}`,
-        DOWNLOAD_LINK_TEXT
+        `Photo ${index + 1}`
       ),
       true
     )
