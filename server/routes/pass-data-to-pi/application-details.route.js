@@ -325,7 +325,11 @@ const _getSummaryListRow = (key, value, items = null, isHtml = false) => {
 const _getChangeItems = (href, visuallyHiddenText) => [
   {
     href,
-    visuallyHiddenText
+    visuallyHiddenText,
+    attributes: {
+      target: '_blank',
+      rel: 'noopener noreferrer'
+    }
   }
 ]
 
