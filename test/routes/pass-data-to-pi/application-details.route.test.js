@@ -374,7 +374,7 @@ describe('/pass-data-to-pi/application-details route', () => {
           'Photo 4'
         ])
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 1; i <= 4; i++) {
           const element = document.querySelector(
             `#${elementIds.summaries.photos} #photo${i}`
           )
@@ -391,10 +391,18 @@ describe('/pass-data-to-pi/application-details route', () => {
             'Download Photo 4'
           ],
           [
-            `/pass-data-to-pi/application-photos?id=3119c472-954c-ec11-8f8e-000d3ad55255&key=${KEY}`,
-            `/pass-data-to-pi/application-photos?id=26451b45-3957-ec11-8f8f-000d3ad5b2ab&key=${KEY}`,
-            `/pass-data-to-pi/application-photos?id=b040ed29-3a57-ec11-8f8f-000d3ad5b2ab&key=${KEY}`,
-            `/pass-data-to-pi/application-photos?id=3b31854c-3957-ec11-8f8f-000d3ad5b2ab&key=${KEY}`
+            `/pass-data-to-pi/application-photos?record_id=${
+              mockEntity[DataVerseFieldName.SECTION_2_CASE_ID]
+            }&index=1&key=${KEY}`,
+            `/pass-data-to-pi/application-photos?record_id=${
+              mockEntity[DataVerseFieldName.SECTION_2_CASE_ID]
+            }&index=3&key=${KEY}`,
+            `/pass-data-to-pi/application-photos?record_id=${
+              mockEntity[DataVerseFieldName.SECTION_2_CASE_ID]
+            }&index=4&key=${KEY}`,
+            `/pass-data-to-pi/application-photos?record_id=${
+              mockEntity[DataVerseFieldName.SECTION_2_CASE_ID]
+            }&index=5&key=${KEY}`
           ]
         )
       })

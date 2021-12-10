@@ -270,19 +270,22 @@ const _getApplicantDetails = (
 const _getPhotoSummary = (entity, key) => {
   const uploadPhotos = []
 
+  const recordId = entity[DataVerseFieldName.SECTION_2_CASE_ID]
+
   for (let i = 1; i <= MAX_PHOTOS; i++) {
     const id = entity[DataVerseFieldName[`PHOTO_${i}_ID`]]
     const file = entity[DataVerseFieldName[`PHOTO_${i}`]]
 
     if (file) {
-      uploadPhotos.push({ id, file })
+      uploadPhotos.push({ id, file, index: i })
     }
   }
 
   uploadPhotos.forEach((uploadPhoto, index) => {
     const imageFile = `data:image;base64,${uploadPhoto.file}`
 
-    uploadPhoto.row = `<img id="photo${index}" class="govuk-!-padding-bottom-5" src=${imageFile} alt="Photo ${index +
+    uploadPhoto.row = `<img id="photo${index +
+      1}" class="govuk-!-padding-bottom-5" src=${imageFile} alt="Photo ${index +
       1}" width="200">`
   })
 
@@ -291,7 +294,7 @@ const _getPhotoSummary = (entity, key) => {
       `Photo ${index + 1}`,
       uploadPhoto.row,
       _getChangeItems(
-        `${Paths.PASS_DATA_TO_PI_PHOTOS}?id=${uploadPhoto.id}&key=${key}`,
+        `${Paths.PASS_DATA_TO_PI_PHOTOS}?record_id=${recordId}&index=${uploadPhoto.index}&key=${key}`,
         `Photo ${index + 1}`
       ),
       true

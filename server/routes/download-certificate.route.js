@@ -7,9 +7,9 @@ const moment = require('moment')
 const ODataService = require('../services/odata.service')
 const { DataVerseFieldName } = require('../utils/constants')
 const { Paths } = require('../utils/constants')
+const { isPngImage } = require('../utils/general')
 
 const NOTHING_ENTERED = 'Nothing entered'
-const PNG_IMAGE_REGEXP = /^iVBORw0KGgo/g
 
 const formPdfBytes = fs.readFileSync(
   './server/public/static/ivory-certificate-template.pdf'
@@ -120,7 +120,7 @@ const _addImages = async (entity, pdfDoc, form) => {
       const imageBase64 = imageBuffered.toString('base64')
 
       let embeddedImage
-      if (_isPngImage(imageBase64)) {
+      if (isPngImage(imageBase64)) {
         embeddedImage = await pdfDoc.embedPng(imageBuffered)
       } else {
         embeddedImage = await pdfDoc.embedJpg(imageBuffered)
@@ -131,11 +131,6 @@ const _addImages = async (entity, pdfDoc, form) => {
     }
   }
 }
-
-// Returns a boolean to indicate if the base64 string parameter contains a PNG image.
-// All PNG images, when encoded in base64, begin with iVBORw0KGgo
-// When we get the image out of the Dataverse we don't know if it is PNG or JPG.
-const _isPngImage = imageBase64 => imageBase64.match(PNG_IMAGE_REGEXP)
 
 // Uses the certificate number to create a repeating text watermark across all of the pages
 const _addWatermark = async (pdfDoc, certificateNumber) => {
