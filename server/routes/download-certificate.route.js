@@ -5,8 +5,7 @@ const { degrees, PDFDocument, rgb, StandardFonts } = require('pdf-lib')
 const moment = require('moment')
 
 const ODataService = require('../services/odata.service')
-const { DataVerseFieldName } = require('../utils/constants')
-const { Paths } = require('../utils/constants')
+const { DataVerseFieldName, DownloadReason, Paths } = require('../utils/constants')
 const { isPngImage } = require('../utils/general')
 
 const NOTHING_ENTERED = 'Nothing entered'
@@ -37,7 +36,7 @@ const handlers = {
 }
 
 const _getRecord = (id, key) => {
-  return ODataService.getRecord(id, true, key)
+  return ODataService.getRecord(id, true, key, DownloadReason.GENERATE_CERTIFICATE)
 }
 
 const _getImage = (id, imageName) => {

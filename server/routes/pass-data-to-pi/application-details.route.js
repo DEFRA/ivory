@@ -8,6 +8,7 @@ const {
   AlreadyCertifiedOptions,
   // Analytics,
   DataVerseFieldName,
+  DownloadReason,
   ItemType,
   Options,
   Paths,
@@ -72,7 +73,7 @@ const _getContext = (entity, key) => {
 }
 
 const _getRecord = (id, key) => {
-  return ODataService.getRecord(id, true, key)
+  return ODataService.getRecord(id, true, key, DownloadReason.SEND_DATA_TO_PI)
 }
 
 const _getDocumentSummary = (entity, key) => {

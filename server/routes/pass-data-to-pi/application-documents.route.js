@@ -5,6 +5,7 @@ const ODataService = require('../../services/odata.service')
 
 const {
   // Analytics,
+  DownloadReason,
   Paths
 } = require('../../utils/constants')
 
@@ -34,7 +35,7 @@ const handlers = {
 }
 
 const _getRecord = (id, key) => {
-  return ODataService.getRecord(id, true, key)
+  return ODataService.getRecord(id, true, key, DownloadReason.SEND_DATA_TO_PI)
 }
 
 const _getDocument = async (id, dataverseFieldName, key) => {

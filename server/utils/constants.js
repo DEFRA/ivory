@@ -96,6 +96,7 @@ const DataVerseFieldName = {
   CERTIFICATE_ISSUE_DATE: 'cre2c_certificateissuedate',
   CERTIFICATE_KEY: 'cre2c_certificatekey',
   CERTIFICATE_LINK: 'cre2c_certificatelink',
+  CERTIFICATE_LINK_EXPIRY: 'cre2c_certificatelinkexpiry',
   CERTIFICATE_NUMBER: 'cre2c_certificatenumber',
   DATE_STATUS_APPLIED: 'cre2c_datestatusapplied',
   EXEMPTION_CATEGORY: 'cre2c_exemptioncategory',
@@ -121,6 +122,8 @@ const DataVerseFieldName = {
   PHOTO_5_ID: 'cre2c_photo5id',
   PHOTO_6: 'cre2c_photo6',
   PHOTO_6_ID: 'cre2c_photo6id',
+  PI_LINK: 'cre2c_pilink',
+  PI_LINK_EXPIRY: 'cre2c_pilinkexpiry',
   PREVIOUS_APPLICANT_ADDRESS: 'cre2c_previousapplicantaddress',
   PREVIOUS_APPLICANT_EMAIL: 'cre2c_previousapplicantemail',
   PREVIOUS_APPLICANT_NAME: 'cre2c_previousapplicantname',
@@ -166,6 +169,11 @@ const DataVerseFieldName = {
   WHY_IVORY_INTEGRAL: 'cre2c_whyivoryintegral',
   WHY_OUTSTANDINLY_VALUABLE: 'cre2c_whyoutstandinglyvaluable',
   WORK_FOR_A_BUSINESS: 'cre2c_workforabusiness'
+}
+
+const DownloadReason = {
+  SEND_DATA_TO_PI: 'send-data-to-pi',
+  GENERATE_CERTIFICATE: 'generate-certificate'
 }
 
 const Intention = {
@@ -422,6 +430,7 @@ module.exports = Object.freeze({
   Capacities,
   CharacterLimits,
   DataVerseFieldName,
+  DownloadReason,
   EmailTypes,
   HOME_URL,
   Intention,

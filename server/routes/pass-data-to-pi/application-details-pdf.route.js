@@ -10,6 +10,7 @@ const ODataService = require('../../services/odata.service')
 const {
   // Analytics,
   DataVerseFieldName,
+  DownloadReason,
   Paths,
   ItemType
 } = require('../../utils/constants')
@@ -45,10 +46,6 @@ const handlers = {
     const id = request.query.id
     const key = request.query.key
 
-    console.log('Application details PDF')
-    console.log('id:', id)
-    console.log('key:', key)
-
     const entity = await _getRecord(id, key)
 
     if (!entity) {
@@ -69,7 +66,7 @@ const handlers = {
 }
 
 const _getRecord = (id, key) => {
-  return ODataService.getRecord(id, true, key)
+  return ODataService.getRecord(id, true, key, DownloadReason.SEND_DATA_TO_PI)
 }
 
 const _getPdf = async entity => {

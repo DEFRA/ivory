@@ -14,6 +14,7 @@ const DataVerseFieldName = {
   CERTIFICATE_ISSUE_DATE: 'cre2c_certificateissuedate',
   CERTIFICATE_KEY: 'cre2c_certificatekey',
   CERTIFICATE_LINK: 'cre2c_certificatelink',
+  CERTIFICATE_LINK_EXPIRY: 'cre2c_certificatelinkexpiry',
   CERTIFICATE_NUMBER: 'cre2c_certificatenumber',
   DATE_STATUS_APPLIED: 'cre2c_datestatusapplied',
   EXEMPTION_CATEGORY: 'cre2c_exemptioncategory',
@@ -27,6 +28,8 @@ const DataVerseFieldName = {
   OWNER_NAME: 'cre2c_ownername',
   OWNER_POSTCODE: 'cre2c_ownerpostcode',
   PAYMENT_REFERENCE: 'cre2c_paymentreference',
+  PI_LINK: 'cre2c_pilink',
+  PI_LINK_EXPIRY: 'cre2c_pilinkexpiry',
   PHOTO_1: 'cre2c_photo1',
   PHOTO_2: 'cre2c_photo2',
   PHOTO_3: 'cre2c_photo3',
@@ -105,6 +108,7 @@ const AlreadyCertifiedLookup = {
 }
 
 const frontEndCertificateDownloadRoute = 'download-certificate'
+const frontEndPIDownloadRoute = 'pass-data-to-pi/application-details'
 
 this.formOnLoad = async (executionContext, section) => {
   'use strict';
@@ -137,6 +141,7 @@ this.formOnLoad = async (executionContext, section) => {
   if (isSection2) {
     this._setCertificateKey(formContext)
     await this._setCertificateLink(formContext);
+    await this._setPILink(formContext);
     this.certificateDetailsOnChange(executionContext);
     this.alreadyHasCertificateOnChange(executionContext);
   }
@@ -214,6 +219,18 @@ this._setCertificateLink = async formContext => {
   const link = `${frontEndUrl}/${frontEndCertificateDownloadRoute}/${id}?key=${key}`;
 
   formContext.getAttribute(DataVerseFieldName.CERTIFICATE_LINK).setValue(link);
+}
+
+this._setPILink = async formContext => {
+  'use strict';
+
+  const frontEndUrl = await this.getEnvironmentVariableValue('cre2c_FRONT_END_URL');
+  const id = formContext.data.entity.getId().toLowerCase().replace('{', '').replace('}', '');
+
+  const key = formContext.getAttribute(DataVerseFieldName.CERTIFICATE_KEY).getValue();
+  const link = `${frontEndUrl}/${frontEndPIDownloadRoute}?id=${id}&key=${key}`;
+
+  formContext.getAttribute(DataVerseFieldName.PI_LINK).setValue(link);
 }
 
 this.submissionStatusOnChange = executionContext => {

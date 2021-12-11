@@ -8,6 +8,7 @@ const { isPngImage } = require('../../utils/general')
 
 const {
   // Analytics,
+  DownloadReason,
   Paths
 } = require('../../utils/constants')
 
@@ -38,8 +39,8 @@ const handlers = {
   }
 }
 
-const _getRecord = (recordId, key) => {
-  return ODataService.getRecord(recordId, true, key)
+const _getRecord = (id, key) => {
+  return ODataService.getRecord(id, true, key, DownloadReason.SEND_DATA_TO_PI)
 }
 
 const _getImage = async (entity, index) => {

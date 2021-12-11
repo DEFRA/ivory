@@ -3,7 +3,11 @@
 const fetch = require('node-fetch')
 
 const config = require('../utils/config')
-const { DataVerseFieldName, StatusCodes } = require('../utils/constants')
+const {
+  DataVerseFieldName,
+  DownloadReason,
+  StatusCodes
+} = require('../utils/constants')
 
 const ActiveDirectoryAuthService = require('../services/active-directory-auth.service')
 
@@ -114,7 +118,7 @@ module.exports = class ODataService {
     return responseDetail
   }
 
-  static async getRecord (id, isSection2 = true, key) {
+  static async getRecord (id, isSection2 = true, key, downloadReason) {
     const token = await ActiveDirectoryAuthService.getToken()
 
     const headers = {
@@ -138,7 +142,10 @@ module.exports = class ODataService {
 
     const entity = await response.json()
 
-    return entity[DataVerseFieldName.CERTIFICATE_KEY] === key ? entity : null
+    return entity[DataVerseFieldName.CERTIFICATE_KEY] === key &&
+      !_linkIsExpired(entity, downloadReason)
+      ? entity
+      : null
   }
 
   static async getImage (id, imageName) {
@@ -254,6 +261,20 @@ module.exports = class ODataService {
       })
     }
   }
+}
+
+const _linkIsExpired = (entity, downloadReason) => {
+  const linkExpiryDate =
+    entity[
+      downloadReason === DownloadReason.SEND_DATA_TO_PI
+        ? DataVerseFieldName.PI_LINK_EXPIRY
+        : DataVerseFieldName.CERTIFICATE_LINK_EXPIRY
+    ]
+
+  const now = new Date().setHours(0, 0, 0, 0)
+  const expiry = new Date(Date.parse(linkExpiryDate)).setHours(0, 0, 0, 0)
+
+  return linkExpiryDate === null || now > expiry
 }
 
 const _setContentLength = (headers, body) => {

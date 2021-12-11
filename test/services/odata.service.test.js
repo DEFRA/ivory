@@ -7,6 +7,7 @@ jest.mock('../../server/services/active-directory-auth.service')
 const ActiveDirectoryAuthService = require('../../server/services/active-directory-auth.service')
 
 const ODataService = require('../../server/services/odata.service')
+const { DownloadReason } = require('../../server/utils/constants')
 
 describe('OData service', () => {
   beforeEach(() => {
@@ -118,7 +119,8 @@ describe('OData service', () => {
       const result = await ODataService.getRecord(
         '___RECORD_ID_VALID_KEY___',
         true,
-        '___VALID_KEY___'
+        '___VALID_KEY___',
+        DownloadReason.SEND_DATA_TO_PI
       )
 
       expect(result).toEqual({
@@ -132,7 +134,8 @@ describe('OData service', () => {
       const result = await ODataService.getRecord(
         '___RECORD_ID_INVALID_KEY___',
         true,
-        '___INVALID_KEY___'
+        '___INVALID_KEY___',
+        DownloadReason.GENERATE_CERTIFICATE
       )
 
       expect(result).toBeNull()
