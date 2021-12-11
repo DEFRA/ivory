@@ -23,12 +23,16 @@ const handlers = {
     }
 
     const pdfDocument = await _getDocument(id, dataverseFieldName, key)
+
     const arrayBuffer = await pdfDocument.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
     return h
       .response(buffer)
-      .header('Content-Type', 'application/pdf')
+      .header(
+        'Content-Type',
+        _isPdf(filename) ? 'application/pdf' : 'application/octet-stream'
+      )
       .header('Content-Disposition', `inline; filename=${filename}`)
       .takeover()
   }
@@ -40,6 +44,10 @@ const _getRecord = (id, key) => {
 
 const _getDocument = async (id, dataverseFieldName, key) => {
   return ODataService.getDocument(id, dataverseFieldName, true, key)
+}
+
+const _isPdf = filename => {
+  return filename.substring(filename.length - 4).toUpperCase() === '.PDF'
 }
 
 module.exports = [

@@ -142,11 +142,22 @@ describe('OData service', () => {
     })
   })
 
-  describe('getImage method', () => {
-    it('should get a Section 2 record', async () => {
+  describe.only('getImage method', () => {
+    it('should get a Section 2 image', async () => {
       const result = await ODataService.getImage(
         '___RECORD_ID_VALID_KEY___',
         'cre2c_photo1'
+      )
+
+      expect(result.status).toEqual(200)
+    })
+  })
+
+  describe('getDocument method', () => {
+    it('should get a Section 2 document', async () => {
+      const result = await ODataService.getDocument(
+        '___RECORD_ID_VALID_KEY___',
+        'cre2c_supportingevidence1'
       )
 
       expect(result.status).toEqual(200)
@@ -241,6 +252,11 @@ const _createMocks = () => {
       `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(___RECORD_ID_VALID_KEY___)/cre2c_photo1/$value?size=full`
     )
     .reply(200, '___THE_IMAGE___')
+
+    .get(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(___RECORD_ID_VALID_KEY___)/cre2c_supportingevidence1/$value`
+    )
+    .reply(200, '___THE_DOCUMENT___')
 }
 
 const mockSection2Entity = {

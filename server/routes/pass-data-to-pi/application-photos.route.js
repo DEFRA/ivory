@@ -46,14 +46,12 @@ const _getRecord = (id, key) => {
 const _getImage = async (entity, index) => {
   const dataverseImageNameStub = DataVerseFieldName.PHOTO_1.slice(0, -1)
 
-  const image = await ODataService.getImage(
+  const bufferedImage = await ODataService.getImage(
     entity[DataVerseFieldName.SECTION_2_CASE_ID],
     `${dataverseImageNameStub}${index}`
   )
 
-  const imageBuffered = await image.buffer()
-
-  return imageBuffered
+  return bufferedImage
 }
 
 module.exports = [

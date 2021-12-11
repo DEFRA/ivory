@@ -170,7 +170,7 @@ module.exports = class ODataService {
       headers
     })
 
-    return response
+    return response.buffer()
   }
 
   static async getDocument (id, dataverseFieldName, key) {

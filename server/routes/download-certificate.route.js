@@ -5,7 +5,11 @@ const { degrees, PDFDocument, rgb, StandardFonts } = require('pdf-lib')
 const moment = require('moment')
 
 const ODataService = require('../services/odata.service')
-const { DataVerseFieldName, DownloadReason, Paths } = require('../utils/constants')
+const {
+  DataVerseFieldName,
+  DownloadReason,
+  Paths
+} = require('../utils/constants')
 const { isPngImage } = require('../utils/general')
 
 const NOTHING_ENTERED = 'Nothing entered'
@@ -36,7 +40,12 @@ const handlers = {
 }
 
 const _getRecord = (id, key) => {
-  return ODataService.getRecord(id, true, key, DownloadReason.GENERATE_CERTIFICATE)
+  return ODataService.getRecord(
+    id,
+    true,
+    key,
+    DownloadReason.GENERATE_CERTIFICATE
+  )
 }
 
 const _getImage = (id, imageName) => {
@@ -108,21 +117,19 @@ const _addImages = async (entity, pdfDoc, form) => {
   const dataverseImageNameStub = DataVerseFieldName.PHOTO_1.slice(0, -1)
 
   for (let i = 1; i <= NUMBER_OF_IMAGES; i++) {
-    const image = await _getImage(
+    const bufferedImage = await _getImage(
       entity[DataVerseFieldName.SECTION_2_CASE_ID],
       `${dataverseImageNameStub}${i}`
     )
 
-    const imageBuffered = await image.buffer()
-
-    if (imageBuffered.length) {
-      const imageBase64 = imageBuffered.toString('base64')
+    if (bufferedImage.length) {
+      const imageBase64 = bufferedImage.toString('base64')
 
       let embeddedImage
       if (isPngImage(imageBase64)) {
-        embeddedImage = await pdfDoc.embedPng(imageBuffered)
+        embeddedImage = await pdfDoc.embedPng(bufferedImage)
       } else {
-        embeddedImage = await pdfDoc.embedJpg(imageBuffered)
+        embeddedImage = await pdfDoc.embedJpg(bufferedImage)
       }
 
       const photo = form.getButton(`Photo ${i}`)
