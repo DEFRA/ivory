@@ -10,12 +10,10 @@ const {
 
 const handlers = {
   get: async (request, h) => {
-    const id = request.query.id
+    const id = request.query.record_id
     const key = request.query.key
-
-    console.log('Application documents')
-    console.log('id:', id)
-    console.log('key:', key)
+    const filename = request.query.filename
+    const dataverseFieldName = request.query.dataverseFieldName
 
     const entity = await _getRecord(id, key)
 
@@ -23,19 +21,24 @@ const handlers = {
       return h.redirect(Paths.RECORD_NOT_FOUND)
     }
 
-    // const pdfBytes = await _getPdf(entity)
-    const pdfBytes = []
+    const pdfDocument = await _getDocument(id, dataverseFieldName, key)
+    const arrayBuffer = await pdfDocument.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
 
     return h
-      .response(Buffer.from(pdfBytes))
+      .response(buffer)
       .header('Content-Type', 'application/pdf')
-      .header('Content-Disposition', 'inline; filename=document.pdf')
+      .header('Content-Disposition', `inline; filename=${filename}`)
       .takeover()
   }
 }
 
 const _getRecord = (id, key) => {
   return ODataService.getRecord(id, true, key)
+}
+
+const _getDocument = async (id, dataverseFieldName, key) => {
+  return ODataService.getDocument(id, dataverseFieldName, true, key)
 }
 
 module.exports = [

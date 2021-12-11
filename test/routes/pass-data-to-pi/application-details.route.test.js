@@ -447,10 +447,18 @@ describe('/pass-data-to-pi/application-details route', () => {
             'Download Document 4'
           ],
           [
-            `/pass-data-to-pi/application-documents?id=97b52b94-e758-ec11-8f8f-000d3ad5417a&key=${KEY}`,
-            `/pass-data-to-pi/application-documents?id=4e9f249a-e758-ec11-8f8f-000d3ad5417a&key=${KEY}`,
-            `/pass-data-to-pi/application-documents?id=e1b0249a-e758-ec11-8f8f-000d3ad5417a&key=${KEY}`,
-            `/pass-data-to-pi/application-documents?id=3bff1ca0-e758-ec11-8f8f-000d3ad5417a&key=${KEY}`
+            `/pass-data-to-pi/application-documents?record_id=${
+              mockEntity[DataVerseFieldName.SECTION_2_CASE_ID]
+            }&dataverseFieldName=cre2c_supportingevidence1&filename=samplePDF1.pdf&key=${KEY}`,
+            `/pass-data-to-pi/application-documents?record_id=${
+              mockEntity[DataVerseFieldName.SECTION_2_CASE_ID]
+            }&dataverseFieldName=cre2c_supportingevidence2&filename=samplePDF2.pdf&key=${KEY}`,
+            `/pass-data-to-pi/application-documents?record_id=${
+              mockEntity[DataVerseFieldName.SECTION_2_CASE_ID]
+            }&dataverseFieldName=cre2c_supportingevidence3&filename=samplePDF3.pdf&key=${KEY}`,
+            `/pass-data-to-pi/application-documents?record_id=${
+              mockEntity[DataVerseFieldName.SECTION_2_CASE_ID]
+            }&dataverseFieldName=cre2c_supportingevidence5&filename=samplePDF4.pdf&key=${KEY}`
           ]
         )
       })

@@ -79,11 +79,16 @@ const _getDocumentSummary = (entity, key) => {
   const uploadDocuments = []
 
   for (let i = 1; i <= MAX_DOCUMENTS; i++) {
+    const dataverseFieldName = DataVerseFieldName[`SUPPORTING_EVIDENCE_${i}`]
     const filename = entity[DataVerseFieldName[`SUPPORTING_EVIDENCE_${i}_NAME`]]
-    const id = entity[DataVerseFieldName[`SUPPORTING_EVIDENCE_${i}`]]
+    const id = entity[DataVerseFieldName[dataverseFieldName]]
 
     if (filename) {
-      uploadDocuments.push({ id, filename })
+      uploadDocuments.push({
+        id,
+        filename,
+        dataverseFieldName
+      })
     }
   }
 
@@ -96,7 +101,11 @@ const _getDocumentSummary = (entity, key) => {
       `Document ${index + 1}`,
       uploadDocument.row,
       _getChangeItems(
-        `${Paths.PASS_DATA_TO_PI_DOCUMENTS}?id=${uploadDocument.id}&key=${key}`,
+        `${Paths.PASS_DATA_TO_PI_DOCUMENTS}?record_id=${
+          entity[DataVerseFieldName.SECTION_2_CASE_ID]
+        }&dataverseFieldName=${uploadDocument.dataverseFieldName}&filename=${
+          uploadDocument.filename
+        }&key=${key}`,
         `Document ${index + 1}`
       ),
       true
