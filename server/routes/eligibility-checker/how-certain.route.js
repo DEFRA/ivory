@@ -10,7 +10,7 @@ const completelyCertain = 'Completely'
 
 const handlers = {
   get: (request, h) => {
-    const context = _getContext()
+    const context = _getContext(request)
 
     return h.view(Views.HOW_CERTAIN, {
       ...context
@@ -18,9 +18,20 @@ const handlers = {
   },
 
   post: async (request, h) => {
-    const context = _getContext()
+    const context = _getContext(request)
     const payload = request.payload
     const errors = _validateForm(payload)
+
+    if (payload.cookies) {
+      h.state('CookieBanner', 'Hidden', {
+        ttl: 24 * 60 * 60 * 1000 * 365, // 1 year
+        path: '/'
+      })
+      return h.view(Views.HOW_CERTAIN, {
+        ...context,
+        hideBanner: true
+      })
+    }
 
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
@@ -57,10 +68,12 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
+const _getContext = (request) => {
+  const hideBanner = request.state.CookieBanner
   return {
     pageTitle:
-      'How certain are you that your item is exempt from the ivory ban?'
+      'How certain are you that your item is exempt from the ivory ban?',
+    hideBanner
   }
 }
 
