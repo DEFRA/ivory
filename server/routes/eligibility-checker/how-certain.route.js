@@ -68,7 +68,7 @@ const handlers = {
   }
 }
 
-const _getContext = (request) => {
+const _getContext = request => {
   const hideBanner = request.state.CookieBanner
   return {
     pageTitle:
