@@ -12,7 +12,8 @@ const {
   DataVerseFieldName,
   DownloadReason,
   Paths,
-  ItemType
+  ItemType,
+  Options
 } = require('../../utils/constants')
 
 const formPdfBytes = fs.readFileSync(
@@ -77,6 +78,8 @@ const _getPdf = async entity => {
   const form = pdfDoc.getForm()
 
   let field
+  const revokedCertNumber = _formatField(entity, DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER, false)
+  const appliedBefore = _formatField(entity, DataVerseFieldName.APPLIED_BEFORE, false)
 
   field = form.getTextField(FormFields.OWNER_NAME)
   field.setText(_formatField(entity, DataVerseFieldName.OWNER_NAME))
@@ -92,6 +95,24 @@ const _getPdf = async entity => {
 
   field = form.getTextField(FormFields.EXEMPTION_TYPE)
   field.setText(ItemType.HIGH_VALUE)
+
+  field = form.getTextField(FormFields.ALREADY_CERTIFIED)
+  field.setText(revokedCertNumber ? Options.YES : Options.NO)
+
+  field = form.getTextField(FormFields.REVOKED_CERTIFICATE_NUMBER)
+  field.setText(revokedCertNumber || NOTHING_ENTERED)
+
+  field = form.getTextField(FormFields.APPLIED_BEFORE)
+  field.setText(appliedBefore ? Options.YES : Options.NO)
+
+  field = form.getTextField(FormFields.PREVIOUS_APPLICATION_NUMBER)
+  field.setText(
+    _formatField(
+      entity,
+      DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER,
+      NOTHING_ENTERED
+    )
+  )
 
   field = form.getTextField(FormFields.WHAT_IS_IT)
   field.setText(_formatField(entity, DataVerseFieldName.ITEM_SUMMARY))
