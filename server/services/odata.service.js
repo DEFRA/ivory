@@ -194,7 +194,7 @@ module.exports = class ODataService {
       headers
     })
 
-    return response
+    return response.buffer()
   }
 
   static async updateRecord (id, body, isSection2 = true) {

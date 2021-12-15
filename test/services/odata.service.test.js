@@ -142,14 +142,14 @@ describe('OData service', () => {
     })
   })
 
-  describe.only('getImage method', () => {
+  describe('getImage method', () => {
     it('should get a Section 2 image', async () => {
       const result = await ODataService.getImage(
         '___RECORD_ID_VALID_KEY___',
         'cre2c_photo1'
       )
 
-      expect(result.status).toEqual(200)
+      expect(Buffer.isBuffer(result)).toBeTruthy()
     })
   })
 

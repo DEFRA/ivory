@@ -22,13 +22,15 @@ const handlers = {
       return h.redirect(Paths.RECORD_NOT_FOUND)
     }
 
-    const pdfDocument = await _getDocument(id, dataverseFieldName, key)
+    const bufferedDocument = await _getDocument(id, dataverseFieldName, key)
 
-    const arrayBuffer = await pdfDocument.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
+    console.log(bufferedDocument)
+
+    // const arrayBuffer = await pdfDocument.arrayBuffer()
+    // const buffer = Buffer.from(arrayBuffer)
 
     return h
-      .response(buffer)
+      .response(bufferedDocument)
       .header(
         'Content-Type',
         _isPdf(filename) ? 'application/pdf' : 'application/octet-stream'
