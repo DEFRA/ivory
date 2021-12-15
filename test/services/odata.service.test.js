@@ -160,7 +160,7 @@ describe('OData service', () => {
         'cre2c_supportingevidence1'
       )
 
-      expect(result.status).toEqual(200)
+      expect(Buffer.isBuffer(result)).toBeTruthy()
     })
   })
 

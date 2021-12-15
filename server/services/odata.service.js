@@ -170,6 +170,12 @@ module.exports = class ODataService {
       headers
     })
 
+    // TODO only return image if key is correct
+    // return entity[DataVerseFieldName.CERTIFICATE_KEY] === key &&
+    // !_linkIsExpired(entity, downloadReason)
+    // ? entity
+    // : null
+
     return response.buffer()
   }
 
@@ -193,6 +199,12 @@ module.exports = class ODataService {
       method: 'GET',
       headers
     })
+
+    // TODO only return image if key is correct
+    // return entity[DataVerseFieldName.CERTIFICATE_KEY] === key &&
+    // !_linkIsExpired(entity, downloadReason)
+    // ? entity
+    // : null
 
     return response.buffer()
   }
