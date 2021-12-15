@@ -26,9 +26,6 @@ const handlers = {
 
     console.log(bufferedDocument)
 
-    // const arrayBuffer = await pdfDocument.arrayBuffer()
-    // const buffer = Buffer.from(arrayBuffer)
-
     return h
       .response(bufferedDocument)
       .header(
@@ -44,8 +41,8 @@ const _getRecord = (id, key) => {
   return ODataService.getRecord(id, true, key, DownloadReason.SEND_DATA_TO_PI)
 }
 
-const _getDocument = async (id, dataverseFieldName, key) => {
-  return ODataService.getDocument(id, dataverseFieldName, true, key)
+const _getDocument = async (id, dataverseFieldName) => {
+  return ODataService.getDocument(id, dataverseFieldName)
 }
 
 const _isPdf = filename => {
