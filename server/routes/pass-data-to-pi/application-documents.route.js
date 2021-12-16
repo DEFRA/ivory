@@ -17,7 +17,7 @@ const handlers = {
       return h.redirect(Paths.RECORD_NOT_FOUND)
     }
 
-    const bufferedDocument = await _getDocument(id, dataverseFieldName, key)
+    const bufferedDocument = await _getDocument(id, dataverseFieldName)
 
     console.log(bufferedDocument)
 
