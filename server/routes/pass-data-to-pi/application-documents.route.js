@@ -19,8 +19,6 @@ const handlers = {
 
     const bufferedDocument = await _getDocument(id, dataverseFieldName)
 
-    console.log(bufferedDocument)
-
     return h
       .response(bufferedDocument)
       .header(
