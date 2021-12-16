@@ -1,13 +1,8 @@
 'use strict'
 
-// const AnalyticsService = require('../services/analytics.service')
 const ODataService = require('../../services/odata.service')
 
-const {
-  // Analytics,
-  DownloadReason,
-  Paths
-} = require('../../utils/constants')
+const { DownloadReason, Paths } = require('../../utils/constants')
 
 const handlers = {
   get: async (request, h) => {

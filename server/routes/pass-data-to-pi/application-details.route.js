@@ -1,12 +1,10 @@
 'use strict'
 
-// const AnalyticsService = require('../services/analytics.service')
 const ODataService = require('../../services/odata.service')
 
 const {
   AgeExemptionReasons,
   AlreadyCertifiedOptions,
-  // Analytics,
   DataVerseFieldName,
   DownloadReason,
   ItemType,

@@ -4,17 +4,21 @@ const fs = require('fs')
 
 const { PDFDocument, StandardFonts } = require('pdf-lib')
 
-// const AnalyticsService = require('../services/analytics.service')
 const ODataService = require('../../services/odata.service')
 
 const {
-  // Analytics,
+  AgeExemptionReasons,
   DataVerseFieldName,
   DownloadReason,
   Paths,
   ItemType,
   Options
 } = require('../../utils/constants')
+
+const {
+  AgeExemptionReasonLookup,
+  AgeExemptionReasonReverseLookup
+} = require('../../services/dataverse-choice-lookups')
 
 const formPdfBytes = fs.readFileSync(
   './server/public/static/ivory-application-download-template.pdf'
@@ -26,6 +30,7 @@ const FormFields = {
   APPLICANT_NAME: 'Applicant name',
   APPLIED_BEFORE: 'Applied before',
   EXEMPTION_TYPE: 'Type of exemption',
+  IVORY_APPLICATION: 'Ivory application',
   IVORY_LOCATION: 'Where is it',
   OWNER_ADDRESS: 'Owner address',
   OWNER_NAME: 'Owner name',
@@ -53,9 +58,6 @@ const handlers = {
       return h.redirect(Paths.RECORD_NOT_FOUND)
     }
 
-    // TODO remove this
-    console.log(entity)
-
     const pdfBytes = await _getPdf(entity)
 
     return h
@@ -78,20 +80,35 @@ const _getPdf = async entity => {
   const form = pdfDoc.getForm()
 
   let field
-  const revokedCertNumber = _formatField(entity, DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER, false)
-  const appliedBefore = _formatField(entity, DataVerseFieldName.APPLIED_BEFORE, false)
+  const revokedCertNumber = _formatField(
+    entity,
+    DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER,
+    false
+  )
+  const appliedBefore = _formatField(
+    entity,
+    DataVerseFieldName.APPLIED_BEFORE,
+    false
+  )
+
+  field = form.getTextField(FormFields.IVORY_APPLICATION)
+  field.setText(_formatField(entity, DataVerseFieldName.NAME))
 
   field = form.getTextField(FormFields.OWNER_NAME)
   field.setText(_formatField(entity, DataVerseFieldName.OWNER_NAME))
 
   field = form.getTextField(FormFields.OWNER_ADDRESS)
-  field.setText(_formatField(entity, DataVerseFieldName.OWNER_ADDRESS))
+  const ownerAddress = entity[DataVerseFieldName.OWNER_ADDRESS]
+  const ownerPostcode = entity[DataVerseFieldName.OWNER_POSTCODE]
+  field.setText(_formatAddress(ownerAddress, ownerPostcode))
 
   field = form.getTextField(FormFields.APPLICANT_NAME)
   field.setText(_formatField(entity, DataVerseFieldName.APPLICANT_NAME))
 
   field = form.getTextField(FormFields.APPLICANT_ADDRESS)
-  field.setText(_formatField(entity, DataVerseFieldName.APPLICANT_ADDRESS))
+  const applicantAddress = entity[DataVerseFieldName.APPLICANT_ADDRESS]
+  const applicantPostcode = entity[DataVerseFieldName.APPLICANT_POSTCODE]
+  field.setText(_formatAddress(applicantAddress, applicantPostcode))
 
   field = form.getTextField(FormFields.EXEMPTION_TYPE)
   field.setText(ItemType.HIGH_VALUE)
@@ -135,6 +152,9 @@ const _getPdf = async entity => {
     _formatField(entity, DataVerseFieldName.WHEN_IT_WAS_MADE, NOTHING_ENTERED)
   )
 
+  field = form.getTextField(FormFields.PROOF_OF_AGE)
+  field.setText(_getExemptionReasonSummary(entity))
+
   field = form.getTextField(FormFields.WHY_RMI)
   field.setText(
     _formatField(
@@ -159,6 +179,33 @@ const _getPdf = async entity => {
 
 const _formatField = (entity, fieldName, blankValue = '') => {
   return entity[fieldName] || blankValue
+}
+
+const _formatAddress = (address, postcode) => {
+  return `${address}${
+    postcode && postcode.length ? ', ' + postcode : ''
+  }`.replaceAll(', ', '\n')
+}
+
+const _getExemptionReasonSummary = entity => {
+  const whyAgeExempt = entity[DataVerseFieldName.WHY_AGE_EXEMPT]
+  const whyAgeExemptOtherReason =
+    entity[DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON]
+
+  const whyAgeExemptReasons = whyAgeExempt.split(',')
+
+  const ivoryAgeFormatted = whyAgeExemptReasons.map((reason, index) => {
+    const reasonText =
+      reason === `${AgeExemptionReasonLookup[AgeExemptionReasons.OTHER_REASON]}`
+        ? whyAgeExemptOtherReason
+        : AgeExemptionReasonReverseLookup[parseInt(reason)]
+
+    return `- ${reasonText}`
+  })
+
+  const ivoryAgeList = `${ivoryAgeFormatted.join('\n')}`
+
+  return ivoryAgeList
 }
 
 module.exports = [
