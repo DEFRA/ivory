@@ -17,6 +17,11 @@ module.exports = {
         if (response.isBoom) {
           const statusCode = response.output.statusCode
 
+          if (request.path === '/favicon.ico') {
+            // Ignore 404 error when favicon.ico can't be found
+            return h.continue
+          }
+
           // Log the error, unless it is just a basic authenication issue
           if (statusCode !== StatusCodes.UNAUTHORIZED) {
             request.log('error', {
