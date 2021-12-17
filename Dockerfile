@@ -9,8 +9,6 @@ RUN apt-get update && \
   apt-get upgrade -y && \
   apt-get install -y bash clamav clamav-base clamav-daemon clamav-freshclam libclamav9
 
-VOLUME ["/data"]
-
 # Create this directory or the clamd daemon will throw the error: "Could not create socket directory: /var/run/clamav: Permission denied"
 RUN mkdir /var/run/clamav && \
   chown clamav:clamav /var/run/clamav
