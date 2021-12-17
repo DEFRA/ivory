@@ -56,10 +56,19 @@ const getStandardOptions = (includeIdk = true) => {
   return items
 }
 
+const PNG_IMAGE_REGEXP = /^iVBORw0KGgo/g
+
+// Returns a boolean to indicate if the base64 string parameter contains a PNG image.
+// All PNG images, when encoded in base64, begin with iVBORw0KGgo
+// This is needed because when we get the image out of the Dataverse we don't know
+// if it is PNG or JPEG.
+const isPngImage = imageBase64 => imageBase64.match(PNG_IMAGE_REGEXP) !== null
+
 module.exports = {
   addPayloadToContext,
   convertToCommaSeparatedTitleCase,
   formatNumberWithCommas,
   getIvoryVolumePercentage,
-  getStandardOptions
+  getStandardOptions,
+  isPngImage
 }

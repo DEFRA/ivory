@@ -7,6 +7,7 @@ jest.mock('../../server/services/active-directory-auth.service')
 const ActiveDirectoryAuthService = require('../../server/services/active-directory-auth.service')
 
 const ODataService = require('../../server/services/odata.service')
+const { DownloadReason } = require('../../server/utils/constants')
 
 describe('OData service', () => {
   beforeEach(() => {
@@ -118,7 +119,8 @@ describe('OData service', () => {
       const result = await ODataService.getRecord(
         '___RECORD_ID_VALID_KEY___',
         true,
-        '___VALID_KEY___'
+        '___VALID_KEY___',
+        DownloadReason.SEND_DATA_TO_PI
       )
 
       expect(result).toEqual({
@@ -132,7 +134,8 @@ describe('OData service', () => {
       const result = await ODataService.getRecord(
         '___RECORD_ID_INVALID_KEY___',
         true,
-        '___INVALID_KEY___'
+        '___INVALID_KEY___',
+        DownloadReason.GENERATE_CERTIFICATE
       )
 
       expect(result).toBeNull()
@@ -140,13 +143,24 @@ describe('OData service', () => {
   })
 
   describe('getImage method', () => {
-    it('should get a Section 2 record', async () => {
+    it('should get a Section 2 image', async () => {
       const result = await ODataService.getImage(
         '___RECORD_ID_VALID_KEY___',
         'cre2c_photo1'
       )
 
-      expect(result.status).toEqual(200)
+      expect(Buffer.isBuffer(result)).toBeTruthy()
+    })
+  })
+
+  describe('getDocument method', () => {
+    it('should get a Section 2 document', async () => {
+      const result = await ODataService.getDocument(
+        '___RECORD_ID_VALID_KEY___',
+        'cre2c_supportingevidence1'
+      )
+
+      expect(Buffer.isBuffer(result)).toBeTruthy()
     })
   })
 
@@ -238,6 +252,11 @@ const _createMocks = () => {
       `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(___RECORD_ID_VALID_KEY___)/cre2c_photo1/$value?size=full`
     )
     .reply(200, '___THE_IMAGE___')
+
+    .get(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(___RECORD_ID_VALID_KEY___)/cre2c_supportingevidence1/$value`
+    )
+    .reply(200, '___THE_DOCUMENT___')
 }
 
 const mockSection2Entity = {

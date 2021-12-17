@@ -1,7 +1,5 @@
 'use strict'
 
-const fs = require('fs')
-
 const TestHelper = require('../utils/test-helper')
 
 jest.mock('../../server/services/redis.service')
@@ -134,6 +132,4 @@ const mockDataSixPhotos = {
 
 const _createMocks = () => {
   TestHelper.createMocks()
-
-  fs.writeFile = jest.fn()
 }

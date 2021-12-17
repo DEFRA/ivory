@@ -84,6 +84,7 @@ const _checkSessionCookie = (request, h) => {
   if (
     pathname.startsWith('/assets/') ||
     pathname.startsWith('/errors/') ||
+    pathname.startsWith('/pass-data-to-pi/') ||
     excludeCookieCheckUrls.includes(pathname) ||
     _isUnknownRoute(pathname)
   ) {

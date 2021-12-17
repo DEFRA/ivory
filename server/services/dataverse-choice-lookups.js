@@ -23,10 +23,29 @@ const AgeExemptionReasonLookup = {
   [AgeExemptionReasons.OTHER_REASON]: 881990009
 }
 
+const AgeExemptionReasonReverseLookup = {
+  881990000: AgeExemptionReasons.STAMP_OR_SERIAL,
+  881990001: AgeExemptionReasons.DATED_RECEIPT,
+  881990002: AgeExemptionReasons.DATED_PUBLICATION,
+  881990003: AgeExemptionReasons.BEEN_IN_FAMILY_1975,
+  881990004: AgeExemptionReasons.BEEN_IN_FAMILY_1947,
+  881990005: AgeExemptionReasons.BEEN_IN_FAMILY_1918,
+  881990006: AgeExemptionReasons.EXPERT_VERIFICATION,
+  881990007: AgeExemptionReasons.PROFESSIONAL_OPINION,
+  881990008: AgeExemptionReasons.CARBON_DATED,
+  881990009: AgeExemptionReasons.OTHER_REASON
+}
+
 const AlreadyCertifiedLookup = {
   [AlreadyCertifiedOptions.YES]: 881990000,
   [AlreadyCertifiedOptions.NO]: 881990001,
   [AlreadyCertifiedOptions.USED_TO]: 881990002
+}
+
+const AlreadyCertifiedReverseLookup = {
+  881990000: AlreadyCertifiedOptions.YES,
+  881990001: AlreadyCertifiedOptions.NO,
+  881990002: AlreadyCertifiedOptions.USED_TO
 }
 
 const CapacityLookup = {
@@ -72,6 +91,15 @@ const SellingOnBehalfOfLookup = {
   [BehalfOfBusinessOptions.OTHER]: 881990005
 }
 
+const SellingOnBehalfOfReverseLookup = {
+  881990000: BehalfOfBusinessOptions.BUSINESS_I_WORK_FOR,
+  881990001: BehalfOfBusinessOptions.AN_INDIVIDUAL,
+  881990002: BehalfOfBusinessOptions.ANOTHER_BUSINESS,
+  881990003: BehalfOfNotBusinessOptions.FRIEND_OR_RELATIVE,
+  881990004: BehalfOfNotBusinessOptions.A_BUSINESS,
+  881990005: BehalfOfBusinessOptions.OTHER
+}
+
 const Status = {
   Logged: 881990000
 }
@@ -85,13 +113,16 @@ const WhyIvoryIntegral = {
 
 module.exports = {
   AgeExemptionReasonLookup,
+  AgeExemptionReasonReverseLookup,
   AlreadyCertifiedLookup,
+  AlreadyCertifiedReverseLookup,
   CapacityLookup,
   ExemptionTypeLookup,
   IntentionLookup,
   IvoryIntegralLookup,
   IvoryVolumeLookup,
   SellingOnBehalfOfLookup,
+  SellingOnBehalfOfReverseLookup,
   Status,
   WhyIvoryIntegral
 }

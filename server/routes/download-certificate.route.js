@@ -5,11 +5,14 @@ const { degrees, PDFDocument, rgb, StandardFonts } = require('pdf-lib')
 const moment = require('moment')
 
 const ODataService = require('../services/odata.service')
-const { DataVerseFieldName } = require('../utils/constants')
-const { Paths } = require('../utils/constants')
+const {
+  DataVerseFieldName,
+  DownloadReason,
+  Paths
+} = require('../utils/constants')
+const { isPngImage } = require('../utils/general')
 
 const NOTHING_ENTERED = 'Nothing entered'
-const PNG_IMAGE_REGEXP = /^iVBORw0KGgo/g
 
 const formPdfBytes = fs.readFileSync(
   './server/public/static/ivory-certificate-template.pdf'
@@ -37,7 +40,12 @@ const handlers = {
 }
 
 const _getRecord = (id, key) => {
-  return ODataService.getRecord(id, true, key)
+  return ODataService.getRecord(
+    id,
+    true,
+    key,
+    DownloadReason.GENERATE_CERTIFICATE
+  )
 }
 
 const _getImage = (id, imageName) => {
@@ -109,21 +117,19 @@ const _addImages = async (entity, pdfDoc, form) => {
   const dataverseImageNameStub = DataVerseFieldName.PHOTO_1.slice(0, -1)
 
   for (let i = 1; i <= NUMBER_OF_IMAGES; i++) {
-    const image = await _getImage(
+    const bufferedImage = await _getImage(
       entity[DataVerseFieldName.SECTION_2_CASE_ID],
       `${dataverseImageNameStub}${i}`
     )
 
-    const imageBuffered = await image.buffer()
-
-    if (imageBuffered.length) {
-      const imageBase64 = imageBuffered.toString('base64')
+    if (bufferedImage.length) {
+      const imageBase64 = bufferedImage.toString('base64')
 
       let embeddedImage
-      if (_isPngImage(imageBase64)) {
-        embeddedImage = await pdfDoc.embedPng(imageBuffered)
+      if (isPngImage(imageBase64)) {
+        embeddedImage = await pdfDoc.embedPng(bufferedImage)
       } else {
-        embeddedImage = await pdfDoc.embedJpg(imageBuffered)
+        embeddedImage = await pdfDoc.embedJpg(bufferedImage)
       }
 
       const photo = form.getButton(`Photo ${i}`)
@@ -131,11 +137,6 @@ const _addImages = async (entity, pdfDoc, form) => {
     }
   }
 }
-
-// Returns a boolean to indicate if the base64 string parameter contains a PNG image.
-// All PNG images, when encoded in base64, begin with iVBORw0KGgo
-// When we get the image out of the Dataverse we don't know if it is PNG or JPG.
-const _isPngImage = imageBase64 => imageBase64.match(PNG_IMAGE_REGEXP)
 
 // Uses the certificate number to create a repeating text watermark across all of the pages
 const _addWatermark = async (pdfDoc, certificateNumber) => {
