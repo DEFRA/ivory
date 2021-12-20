@@ -47,7 +47,6 @@
     "hapi-pino": "8.5.0",
     "hapi-redis2": "^3.0.1",
     "hapi-robots": "^3.2.2",
-    "hapi-sanitize-payload": "^3.0.0",
     "joi": "^17.5.0",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.6",
