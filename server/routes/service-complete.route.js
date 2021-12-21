@@ -5,7 +5,11 @@ const NotificationService = require('../services/notification.service')
 const PaymentService = require('../services/payment.service')
 const RedisHelper = require('../services/redis-helper.service')
 const RedisService = require('../services/redis.service')
-const { EmailTypes, DEFRA_IVORY_SESSION_KEY } = require('../utils/constants')
+const {
+  EmailTypes,
+  DEFRA_IVORY_SESSION_KEY,
+  Options
+} = require('../utils/constants')
 
 const {
   Analytics,
@@ -26,6 +30,14 @@ const handlers = {
     const isAlreadyCertified = await RedisHelper.isAlreadyCertified(request)
 
     const isOwnedByApplicant = await RedisHelper.isOwnedByApplicant(request)
+
+    const ownerContactDetails = await RedisService.get(
+      request,
+      RedisKeys.OWNER_CONTACT_DETAILS
+    )
+
+    const hasOwnerEmail =
+      ownerContactDetails && ownerContactDetails.hasEmailAddress === Options.YES
 
     const paymentId = await RedisService.get(request, RedisKeys.PAYMENT_ID)
 
@@ -56,7 +68,7 @@ const handlers = {
 
     _sendEmail(request, context, emailType, itemType, isSection2)
 
-    if (!isOwnedByApplicant && !isSection2) {
+    if (!isOwnedByApplicant && !isSection2 && hasOwnerEmail) {
       _sendEmail(request, context, EmailTypes.EMAIL_TO_OWNER, itemType)
     }
 

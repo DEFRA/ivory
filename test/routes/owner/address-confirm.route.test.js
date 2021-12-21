@@ -79,26 +79,23 @@ describe('/user-details/owner/address-confirm route', () => {
       let element = document.querySelector(`#${elementIds.address1}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        singleAddress[0].Address.SubBuildingName
+        `${singleAddress[0].Address.SubBuildingName}, ${singleAddress[0].Address.Locality}`
       )
 
       element = document.querySelector(`#${elementIds.address2}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        singleAddress[0].Address.Locality
+        singleAddress[0].Address.Town
       )
 
       element = document.querySelector(`#${elementIds.address3}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        singleAddress[0].Address.Town
+        singleAddress[0].Address.Postcode
       )
 
       element = document.querySelector(`#${elementIds.address4}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        singleAddress[0].Address.Postcode
-      )
+      expect(element).toBeFalsy()
     })
 
     it('should have the correct "Edit the address" link', () => {

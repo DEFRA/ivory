@@ -359,12 +359,16 @@ const _formatAddress = (address, isInternationalAddress) => {
   }
 
   let formattedAddress
-  if (address && !isInternationalAddress) {
+  if (address) {
     const postcodeIndex = address.lastIndexOf(', ')
     if (postcodeIndex) {
       formattedAddress = address.substring(postcodeIndex, -1)
     }
   }
+
+  formattedAddress = formattedAddress.replace(', ', '###')
+  formattedAddress = formattedAddress.replaceAll(', ', '\n')
+  formattedAddress = formattedAddress.replace('###', ', ')
 
   return formattedAddress
 }

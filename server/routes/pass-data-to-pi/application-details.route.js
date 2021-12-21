@@ -235,18 +235,30 @@ const _getItemDescriptionSummary = entity => {
 
 const _getOwnerSummary = (entity, isOwnedByApplicant) => {
   const ownerName = entity[DataVerseFieldName.OWNER_NAME]
+
   let ownerAddress = entity[DataVerseFieldName.OWNER_ADDRESS]
+
   const ownerPostcode = entity[DataVerseFieldName.OWNER_POSTCODE]
   if (ownerPostcode) {
-    ownerAddress += `, ${ownerPostcode}`
+    ownerAddress += `\n${ownerPostcode}`
+  }
+
+  if (ownerAddress) {
+    ownerAddress = ownerAddress.replaceAll('\n', '<br/>')
   }
 
   const applicantName = entity[DataVerseFieldName.APPLICANT_NAME]
+
   let applicantAddress = entity[DataVerseFieldName.APPLICANT_ADDRESS]
   const applicantPostcode = entity[DataVerseFieldName.APPLICANT_POSTCODE]
   if (applicantPostcode) {
-    applicantAddress += `, ${applicantPostcode}`
+    applicantAddress += `\n${applicantPostcode}`
   }
+
+  if (applicantAddress) {
+    applicantAddress = applicantAddress.replaceAll('\n', '<br/>')
+  }
+
   const ownerSummary = []
 
   if (isOwnedByApplicant) {
@@ -263,7 +275,9 @@ const _getOwnerSummary = (entity, isOwnedByApplicant) => {
 
 const _getOwnerDetails = (ownerSummary, ownerName, ownerAddress) => {
   ownerSummary.push(_getSummaryListRow('Owner’s name', ownerName))
-  ownerSummary.push(_getSummaryListRow('Owner’s address', ownerAddress))
+  ownerSummary.push(
+    _getSummaryListRow('Owner’s address', ownerAddress, null, true)
+  )
 }
 
 const _getApplicantDetails = (
@@ -272,7 +286,9 @@ const _getApplicantDetails = (
   applicantAddress
 ) => {
   ownerSummary.push(_getSummaryListRow('Applicant’s name', applicantName))
-  ownerSummary.push(_getSummaryListRow('Applicant’s address', applicantAddress))
+  ownerSummary.push(
+    _getSummaryListRow('Applicant’s address', applicantAddress, null, true)
+  )
 }
 
 const _getPhotoSummary = (entity, key) => {

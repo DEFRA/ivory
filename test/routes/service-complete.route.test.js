@@ -402,7 +402,7 @@ describe('/service-complete route', () => {
         })
       })
 
-      describe('Section 10, applicant is NOT the owner', () => {
+      describe('Section 10, applicant is NOT the owner, no owner email address available', () => {
         beforeEach(() => {
           _createSection10RedisMock(Options.NO)
         })
@@ -410,7 +410,7 @@ describe('/service-complete route', () => {
         it('should send 2 confirmation emails', async () => {
           expect(NotificationService.sendEmail).toBeCalledTimes(0)
           document = await TestHelper.submitGetRequest(server, getOptions)
-          expect(NotificationService.sendEmail).toBeCalledTimes(2)
+          expect(NotificationService.sendEmail).toBeCalledTimes(1)
 
           expect(NotificationService.sendEmail).toBeCalledWith(
             EmailTypes.CONFIRMATION_EMAIL,
@@ -419,17 +419,6 @@ describe('/service-complete route', () => {
             {
               exemptionType: ItemType.MUSICAL,
               fullName: mockApplicantContactDetails.fullName,
-              submissionReference
-            }
-          )
-
-          expect(NotificationService.sendEmail).toBeCalledWith(
-            EmailTypes.EMAIL_TO_OWNER,
-            undefined,
-            mockOwnerContactDetails.emailAddress,
-            {
-              exemptionType: ItemType.MUSICAL,
-              fullName: mockOwnerContactDetails.fullName,
               submissionReference
             }
           )

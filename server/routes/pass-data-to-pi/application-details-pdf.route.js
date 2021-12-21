@@ -182,9 +182,7 @@ const _formatField = (entity, fieldName, blankValue = '') => {
 }
 
 const _formatAddress = (address, postcode) => {
-  return `${address}${
-    postcode && postcode.length ? ', ' + postcode : ''
-  }`.replaceAll(', ', '\n')
+  return `${address}${postcode && postcode.length ? '\n' + postcode : ''}`
 }
 
 const _getExemptionReasonSummary = entity => {

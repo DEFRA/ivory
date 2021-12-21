@@ -409,15 +409,17 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
   const ownerContactDetails =
     (await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)) || {}
 
-  const ownerAddress = await RedisService.get(request, RedisKeys.OWNER_ADDRESS)
+  let ownerAddress = await RedisService.get(request, RedisKeys.OWNER_ADDRESS)
+  ownerAddress = _formatAddress(ownerAddress)
 
   const applicantContactDetails =
     (await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)) || {}
 
-  const applicantAddress = await RedisService.get(
+  let applicantAddress = await RedisService.get(
     request,
     RedisKeys.APPLICANT_ADDRESS
   )
+  applicantAddress = _formatAddress(applicantAddress)
 
   const ownerSummary = [
     _getSummaryListRow(
@@ -467,6 +469,17 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
   return ownerSummary
 }
 
+const _formatAddress = address => {
+  const firstCommaReplacementToken = '###'
+
+  if (address) {
+    address = address.replace(', ', firstCommaReplacementToken)
+    address = address.replaceAll(', ', '<br/>')
+    address = address.replace(firstCommaReplacementToken, ', ')
+  }
+  return address
+}
+
 const _formatCapacity = whatCapacity => {
   let capacity
   if (whatCapacity && whatCapacity.whatCapacity) {
@@ -514,7 +527,8 @@ const _getOwnerSummaryOwnedByApplicant = async (
       _getChangeItems(
         Paths.APPLICANT_ADDRESS_FIND,
         CHANGE_LINK_HINT.YourAddress
-      )
+      ),
+      true
     )
   )
 }
@@ -590,7 +604,8 @@ const _getOwnerSummaryApplicantBusiness = async (
       _getChangeItems(
         Paths.APPLICANT_ADDRESS_FIND,
         CHANGE_LINK_HINT.YourAddress
-      )
+      ),
+      true
     )
   )
 }
@@ -675,7 +690,8 @@ const _getOwnerSummaryApplicantOther = async (
       _getChangeItems(
         Paths.APPLICANT_ADDRESS_FIND,
         CHANGE_LINK_HINT.YourAddress
-      )
+      ),
+      true
     )
   )
 }
@@ -731,7 +747,8 @@ const _getOwnerSummaryApplicantDefault = async (
     _getSummaryListRow(
       'Owner’s address',
       ownerAddress,
-      _getChangeItems(Paths.OWNER_ADDRESS_FIND, CHANGE_LINK_HINT.OwnerAddress)
+      _getChangeItems(Paths.OWNER_ADDRESS_FIND, CHANGE_LINK_HINT.OwnerAddress),
+      true
     )
   )
 
@@ -777,7 +794,8 @@ const _getOwnerSummaryApplicantDefault = async (
       _getChangeItems(
         Paths.APPLICANT_ADDRESS_FIND,
         CHANGE_LINK_HINT.YourAddress
-      )
+      ),
+      true
     )
   )
 }
