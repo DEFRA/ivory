@@ -392,8 +392,6 @@ const _getItemDescriptionSummary = async (request, isSection2) => {
 }
 
 const _getOwnerSummary = async (request, isOwnedByApplicant) => {
-  const firstCommaReplacementToken = '###'
-
   const sellingOnBehalfOf = await RedisService.get(
     request,
     RedisKeys.SELLING_ON_BEHALF_OF
@@ -412,11 +410,7 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
     (await RedisService.get(request, RedisKeys.OWNER_CONTACT_DETAILS)) || {}
 
   let ownerAddress = await RedisService.get(request, RedisKeys.OWNER_ADDRESS)
-  if (ownerAddress) {
-    ownerAddress = ownerAddress.replace(', ', firstCommaReplacementToken)
-    ownerAddress = ownerAddress.replaceAll(', ', '<br/>')
-    ownerAddress = ownerAddress.replace(firstCommaReplacementToken, ', ')
-  }
+  ownerAddress = _formatAddress(ownerAddress)
 
   const applicantContactDetails =
     (await RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)) || {}
@@ -425,18 +419,7 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
     request,
     RedisKeys.APPLICANT_ADDRESS
   )
-
-  if (applicantAddress) {
-    applicantAddress = applicantAddress.replace(
-      ', ',
-      firstCommaReplacementToken
-    )
-    applicantAddress = applicantAddress.replaceAll(', ', '<br/>')
-    applicantAddress = applicantAddress.replace(
-      firstCommaReplacementToken,
-      ', '
-    )
-  }
+  applicantAddress = _formatAddress(applicantAddress)
 
   const ownerSummary = [
     _getSummaryListRow(
@@ -484,6 +467,17 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
   }
 
   return ownerSummary
+}
+
+const _formatAddress = address => {
+  const firstCommaReplacementToken = '###'
+
+  if (address) {
+    address = address.replace(', ', firstCommaReplacementToken)
+    address = address.replaceAll(', ', '<br/>')
+    address = address.replace(firstCommaReplacementToken, ', ')
+  }
+  return address
 }
 
 const _formatCapacity = whatCapacity => {
