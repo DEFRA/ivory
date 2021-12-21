@@ -219,6 +219,9 @@ module.exports = [
     path: `${Paths.UPLOAD_DOCUMENT}`,
     handler: handlers.post,
     config: {
+      plugins: {
+        disinfect: false
+      },
       payload: {
         maxBytes: 1024 * 1024 * config.maximumFileSize,
         multipart: {
