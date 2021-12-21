@@ -6,12 +6,12 @@ const entity = {
   cre2c_photo3_url:
     '/Image/download.aspx?Entity=cre2c_ivorysection2case&Attribute=cre2c_photo3&Id=3019c472-954c-ec11-8f8e-000d3ad55255&Timestamp=637744632079250083',
   cre2c_previousapplicantname: 'Duncan Nixon',
-  cre2c_previousowneraddress: '123 Some Street, Some Town',
+  cre2c_previousowneraddress: '123, Some Street\nSome Town',
   statecode: 0,
   cre2c_ownedbyapplicant: false,
   cre2c_status: 881990000,
   cre2c_photo5id: '3b31854c-3957-ec11-8f8f-000d3ad5b2ab',
-  cre2c_previousapplicantaddress: '123 Some Street, Some Town',
+  cre2c_previousapplicantaddress: '123, Some Street\nSome Town',
   cre2c_certificatekey:
     'zhnpaw7pvgmzen2pwgc8mdwatwbheenop4kirqvxxj268pu5vcdo6u9wr8h7vnqfwztw8nqta93lazcx1j3vdxjf2mfe06qxx24272s9ohl38ii78vat7vko6ijc40m',
   cre2c_previousapplicantemail: 'duncannixon@me.com',
@@ -74,7 +74,7 @@ const entity = {
   cre2c_exemptioncategory: 881990004,
   cre2c_photo4_url:
     '/Image/download.aspx?Entity=cre2c_ivorysection2case&Attribute=cre2c_photo4&Id=3019c472-954c-ec11-8f8e-000d3ad55255&Timestamp=637744635906341002',
-  cre2c_applicantaddress: '456 Some Street, Some Town',
+  cre2c_applicantaddress: '456, Some Street\nSome Town',
   cre2c_previousowneremail: 'duncannixon@me.com',
   cre2c_whyageexempt:
     '881990000,881990001,881990002,881990005,881990006,881990007,881990008,881990009',
@@ -90,7 +90,7 @@ const entity = {
   cre2c_previousownerpostcode: 'SM1 1AB',
   cre2c_photo1_timestamp: 637732933311091200,
   cre2c_certificateissuedate: '2021-11-23T00:00:00Z',
-  cre2c_owneraddress: '123 Some Street, Some Town',
+  cre2c_owneraddress: '999, Some Street\nSome Town',
   cre2c_appliedbefore: false,
   cre2c_supportingevidence3_name: 'samplePDF3.pdf',
   cre2c_supportingevidence5_name: 'samplePDF4.pdf',

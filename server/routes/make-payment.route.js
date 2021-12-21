@@ -75,10 +75,10 @@ const _getPaymentDescription = async (request, isSection2) => {
     const isAlreadyCertified = await RedisHelper.isAlreadyCertified(request)
 
     paymentDescription = isAlreadyCertified
-      ? 'Ivory Act reselling certified item'
-      : 'Ivory Act application for a certificate'
+      ? 'Payment for an item that has been previously certified'
+      : 'Payment for an exemption certificate application'
   } else {
-    paymentDescription = 'Ivory Act self-assessment'
+    paymentDescription = 'Payment for the registration of an ivory item'
   }
 
   return paymentDescription

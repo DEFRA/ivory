@@ -150,13 +150,14 @@ describe('/pass-data-to-pi/application-details route', () => {
 
         _checkSummaryValues(document, elementIds.summaries.owner, [
           mockEntity[DataVerseFieldName.OWNER_NAME],
-          `${mockEntity[DataVerseFieldName.OWNER_ADDRESS]}, ${
+
+          `${mockEntity[DataVerseFieldName.OWNER_ADDRESS]}${
             mockEntity[DataVerseFieldName.OWNER_POSTCODE]
           }`
         ])
       })
 
-      it('should have the correct content - NOT owned by appicant', async () => {
+      it.only('should have the correct content - NOT owned by appicant', async () => {
         _createMocks({
           isOwnedByApplicant: false,
           alreadyCertified: AlreadyCertifiedLookup[AlreadyCertifiedOptions.NO],
@@ -182,13 +183,15 @@ describe('/pass-data-to-pi/application-details route', () => {
 
         _checkSummaryValues(document, elementIds.summaries.owner, [
           mockEntity[DataVerseFieldName.OWNER_NAME],
-          `${mockEntity[DataVerseFieldName.OWNER_ADDRESS]}, ${
-            mockEntity[DataVerseFieldName.OWNER_POSTCODE]
-          }`,
+          `${mockEntity[DataVerseFieldName.OWNER_ADDRESS].replaceAll(
+            '\n',
+            ''
+          )}${mockEntity[DataVerseFieldName.OWNER_POSTCODE]}`,
           mockEntity[DataVerseFieldName.APPLICANT_NAME],
-          `${mockEntity[DataVerseFieldName.APPLICANT_ADDRESS]}, ${
-            mockEntity[DataVerseFieldName.APPLICANT_POSTCODE]
-          }`
+          `${mockEntity[DataVerseFieldName.APPLICANT_ADDRESS].replaceAll(
+            '\n',
+            ''
+          )}${mockEntity[DataVerseFieldName.APPLICANT_POSTCODE]}`
         ])
       })
     })

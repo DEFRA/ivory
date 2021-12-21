@@ -122,7 +122,14 @@ const _getContextForApplicantAddressType = () => {
 }
 
 const _convertSingleLineAddressToMultipleLines = (context, address) => {
+  const firstCommaReplacementToken = '###'
+
+  address = address.replace(', ', firstCommaReplacementToken)
   context.addressLines = address.split(',')
+  context.addressLines[0] = context.addressLines[0].replace(
+    firstCommaReplacementToken,
+    ', '
+  )
   context.addressLines = context.addressLines.map(address => address.trim())
 }
 
