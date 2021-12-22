@@ -147,7 +147,7 @@ describe('/already-certified route', () => {
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Without this number, you will have to make a fresh application for your item.'
+        'Without this number, you may have to make a new application for your item. Before doing so, you can contact the Animal Health and Plant Agency (APHA) at IvoryAct@apha.gov.uk with the contact details of the previous owner and a description of the item. With this information, APHA may be able to locate the certificate and send you a copy. You can then continue with notifying us that you intend to sell your certified item.'
       )
     })
 

@@ -1016,7 +1016,7 @@ const mockIvoryVolume = {
   otherReason: 'IVORY VOLUME REASON'
 }
 const ivoryIntegral =
-  'The ivory is essential to the design or function of the item'
+  'The ivory is essential to the design, if detached the item could no longer function as intended'
 
 const mockIvoryAge = {
   ivoryAge: [

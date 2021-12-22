@@ -60,7 +60,7 @@ describe('/applied-before route', () => {
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Has an application been made before?'
+        'Has an application for an exemption certificate for this item been made before?'
       )
     })
 

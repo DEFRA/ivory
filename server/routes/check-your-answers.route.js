@@ -195,7 +195,7 @@ const _getExemptionReasonSummary = async (
   let ivoryIntegral = await RedisService.get(request, RedisKeys.IVORY_INTEGRAL)
   if (ivoryIntegral === 'Both of the above') {
     ivoryIntegral =
-      'The ivory is essential to the design or function of the item and you cannot remove the ivory easily or without damaging the item'
+      'The ivory is essential to the design, if detached the item could no longer function as intended and you cannot remove the ivory easily or without damaging the item'
   }
 
   const ivoryVolumePercentage = getIvoryVolumePercentage(itemType)

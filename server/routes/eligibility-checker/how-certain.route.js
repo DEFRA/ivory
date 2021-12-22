@@ -72,7 +72,7 @@ const _getContext = request => {
   const hideBanner = request.state.CookieBanner
   return {
     pageTitle:
-      'How certain are you that your item is exempt from the ivory ban?',
+      'How certain are you that your item will qualify for exemption from the ban on dealing in ivory?',
     hideBanner
   }
 }
@@ -83,7 +83,7 @@ const _validateForm = payload => {
     errors.push({
       name: 'howCertain',
       text:
-        'Tell us how certain you are that your item is exempt from the ivory ban'
+        'Tell us how certain you are that your item will qualify for exemption from the ban on dealing in ivory?'
     })
   }
   return errors

@@ -64,8 +64,8 @@ describe('/ivory-integral route', () => {
       TestHelper.checkRadioOption(
         document,
         elementIds.ivoryIsIntegral,
-        'The ivory is essential to the design or function of the item',
-        'The ivory is essential to the design or function of the item'
+        'The ivory is essential to the design, if detached the item could no longer function as intended',
+        'The ivory is essential to the design, if detached the item could no longer function as intended'
       )
 
       TestHelper.checkRadioOption(
@@ -106,7 +106,7 @@ describe('/ivory-integral route', () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'The ivory is essential to the design or function of the item',
+          'The ivory is essential to the design, if detached the item could no longer function as intended',
           nextUrl
         )
       })

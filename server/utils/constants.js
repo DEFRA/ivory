@@ -194,7 +194,7 @@ const ItemType = {
 
 const IvoryIntegralReasons = {
   ESSENTIAL_TO_DESIGN_OR_FUNCTION:
-    'The ivory is essential to the design or function of the item',
+    'The ivory is essential to the design, if detached the item could no longer function as intended',
   CANNOT_EASILY_REMOVE:
     'You cannot remove the ivory easily or without damaging the item',
   BOTH_OF_ABOVE: 'Both of the above'

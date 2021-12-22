@@ -68,7 +68,8 @@ const _getContext = async request => {
   )
 
   return {
-    pageTitle: 'Has an application been made before?',
+    pageTitle:
+      'Has an application for an exemption certificate for this item been made before?',
     items: [
       {
         value: 'Yes',

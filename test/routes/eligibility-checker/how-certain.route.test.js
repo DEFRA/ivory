@@ -60,7 +60,7 @@ describe('/eligibility-checker/how-certain route', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'How certain are you that your item is exempt from the ivory ban?'
+        'How certain are you that your item will qualify for exemption from the ban on dealing in ivory?'
       )
     })
 
@@ -156,7 +156,7 @@ describe('/eligibility-checker/how-certain route', () => {
           response,
           'howCertain',
           'howCertain-error',
-          'Tell us how certain you are that your item is exempt from the ivory ban'
+          'Tell us how certain you are that your item will qualify for exemption from the ban on dealing in ivory?'
         )
       })
     })
