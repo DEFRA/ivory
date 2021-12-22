@@ -13,6 +13,7 @@ describe('/eligibility-checker/selling-to-museum route', () => {
     pageTitle: 'pageTitle',
     helpText: 'helpText',
     helpTextList: 'helpTextList',
+    moreInfoLink: 'moreInfoLink',
     sellingToMuseum: 'sellingToMuseum',
     sellingToMuseum2: 'sellingToMuseum-2',
     sellingToMuseum3: 'sellingToMuseum-3',
@@ -61,7 +62,7 @@ describe('/eligibility-checker/selling-to-museum route', () => {
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Are you selling or hiring your item out to a museum?'
+        'Are you intending to sell or hire out your item out to a museum?'
       )
     })
 
@@ -75,6 +76,11 @@ describe('/eligibility-checker/selling-to-museum route', () => {
 
     it('should have a help text list', () => {
       const element = document.querySelector(`#${elementIds.helpTextList}`)
+      expect(element).toBeTruthy()
+    })
+
+    it('should have the more information link', () => {
+      const element = document.querySelector(`#${elementIds.moreInfoLink}`)
       expect(element).toBeTruthy()
     })
 

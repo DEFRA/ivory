@@ -54,7 +54,8 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Are you selling or hiring your item out to a museum?',
+    pageTitle:
+      'Are you intending to sell or hire out your item out to a museum?',
     helpText:
       'The museum must be a member of the International Council of Museums, or accredited by one of the following:',
     items: getStandardOptions()
