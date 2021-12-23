@@ -14,6 +14,7 @@ describe('/eligibility-checker/are-you-a-museum route', () => {
     pageTitle: 'pageTitle',
     helpText: 'helpText',
     helpTextList: 'helpTextList',
+    moreInfoLink: 'moreInfoLink',
     areYouAMuseum: 'areYouAMuseum',
     areYouAMuseum2: 'areYouAMuseum-2',
     continue: 'continue'
@@ -75,6 +76,11 @@ describe('/eligibility-checker/are-you-a-museum route', () => {
 
     it('should have a help text list', () => {
       const element = document.querySelector(`#${elementIds.helpTextList}`)
+      expect(element).toBeTruthy()
+    })
+
+    it('should have the more information link', () => {
+      const element = document.querySelector(`#${elementIds.moreInfoLink}`)
       expect(element).toBeTruthy()
     })
 

@@ -220,11 +220,6 @@ const _getOwnerAndApplicantDetails = async request => {
     RedisService.get(request, RedisKeys.WORK_FOR_A_BUSINESS)
   ])
 
-  const ownerAddressIsInternational = ownerAddressInternational === 'true'
-
-  const applicantAddressIsInternational =
-    applicantAddressInternational === 'true'
-
   const capacity = capacityResponse ? capacityResponse.whatCapacity : null
   const capacityOther = capacityResponse ? capacityResponse.otherCapacity : null
 
@@ -238,21 +233,21 @@ const _getOwnerAndApplicantDetails = async request => {
       : null,
     [DataVerseFieldName.OWNER_ADDRESS]: _formatAddress(
       ownerAddress,
-      ownerAddressIsInternational
+      ownerAddressInternational
     ),
     [DataVerseFieldName.OWNER_POSTCODE]: _getPostcode(
       ownerAddress,
-      ownerAddressIsInternational
+      ownerAddressInternational
     ),
     [DataVerseFieldName.APPLICANT_NAME]: applicantContactDetails.fullName,
     [DataVerseFieldName.APPLICANT_EMAIL]: applicantContactDetails.emailAddress,
     [DataVerseFieldName.APPLICANT_ADDRESS]: _formatAddress(
       applicantAddress,
-      applicantAddressIsInternational
+      applicantAddressInternational
     ),
     [DataVerseFieldName.APPLICANT_POSTCODE]: _getPostcode(
       applicantAddress,
-      applicantAddressIsInternational
+      applicantAddressInternational
     ),
 
     [DataVerseFieldName.WORK_FOR_A_BUSINESS]: workForABusiness === Options.YES,
@@ -366,9 +361,10 @@ const _formatAddress = (address, isInternationalAddress) => {
     }
   }
 
-  formattedAddress = formattedAddress.replace(', ', '###')
+  const firstCommaReplacementToken = '###'
+  formattedAddress = formattedAddress.replace(', ', firstCommaReplacementToken)
   formattedAddress = formattedAddress.replaceAll(', ', '\n')
-  formattedAddress = formattedAddress.replace('###', ', ')
+  formattedAddress = formattedAddress.replace(firstCommaReplacementToken, ', ')
 
   return formattedAddress
 }
