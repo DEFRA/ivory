@@ -41,8 +41,7 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  const isMuseum =
-    (await RedisService.get(request, RedisKeys.ARE_YOU_A_MUSEUM)) === 'true'
+  const isMuseum = await RedisService.get(request, RedisKeys.ARE_YOU_A_MUSEUM)
 
   const notContainingIvory =
     (await RedisService.get(request, RedisKeys.CONTAIN_ELEPHANT_IVORY)) ===

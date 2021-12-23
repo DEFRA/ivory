@@ -185,7 +185,7 @@ describe('RedisHelper service', () => {
     })
 
     it('should return false if the user has NOT used the eligibility checker', async () => {
-      RedisService.get = jest.fn().mockResolvedValue('false')
+      RedisService.get = jest.fn().mockResolvedValue(false)
 
       expect(RedisService.get).toBeCalledTimes(0)
       const value = await RedisHelper.hasUsedChecker()

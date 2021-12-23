@@ -73,7 +73,7 @@ describe('/can-continue route', () => {
               },
               [RedisKeys.REVOKED_CERTIFICATE]: null,
               [RedisKeys.APPLIED_BEFORE]: null,
-              [RedisKeys.USED_CHECKER]: 'true'
+              [RedisKeys.USED_CHECKER]: true
             }
             return mockDataMap[redisKey]
           })
@@ -199,7 +199,7 @@ describe('/can-continue route', () => {
               },
               [RedisKeys.REVOKED_CERTIFICATE]: null,
               [RedisKeys.APPLIED_BEFORE]: null,
-              [RedisKeys.USED_CHECKER]: 'false'
+              [RedisKeys.USED_CHECKER]: false
             }
             return mockDataMap[redisKey]
           })
@@ -653,7 +653,7 @@ describe('/can-continue route', () => {
               },
               [RedisKeys.REVOKED_CERTIFICATE]: null,
               [RedisKeys.APPLIED_BEFORE]: null,
-              [RedisKeys.USED_CHECKER]: 'true'
+              [RedisKeys.USED_CHECKER]: true
             }
             return mockDataMap[redisKey]
           })
