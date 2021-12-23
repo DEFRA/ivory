@@ -219,7 +219,7 @@ describe('/can-continue route', () => {
           const element = document.querySelector(`#${elementIds.pageTitle}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'You must now apply for an exemption certificate'
+            'You can now apply for an exemption certificate'
           )
         })
 
@@ -567,7 +567,7 @@ describe('/can-continue route', () => {
           const element = document.querySelector(`#${elementIds.pageTitle}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Reselling your item of outstandingly high artistic, cultural or historical value'
+            'Selling your certified item of outstandingly high artistic, cultural or historical value'
           )
         })
 
@@ -673,7 +673,7 @@ describe('/can-continue route', () => {
           const element = document.querySelector(`#${elementIds.pageTitle}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'You can now make a self-assessment to sell or hire out your item'
+            'You can now make a self-declaration to sell or hire out your item'
           )
         })
 
@@ -782,7 +782,7 @@ describe('/can-continue route', () => {
           const element = document.querySelector(`#${elementIds.pageTitle}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'You must now make a self-assessment to sell or hire out your item'
+            'You can now make a self-declaration to sell or hire out your item'
           )
         })
 

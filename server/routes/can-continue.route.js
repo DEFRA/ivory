@@ -72,7 +72,7 @@ const _getContext = async request => {
 const _getPageTitle = context => {
   return context.isSection2
     ? _getSection2PageTitle(context)
-    : _getSection10PageTitle(context)
+    : 'You can now make a self-declaration to sell or hire out your item'
 }
 
 const _getSection2PageTitle = context => {
@@ -83,20 +83,12 @@ const _getSection2PageTitle = context => {
       'You can now make a new application for an exemption certificate'
   } else if (context.isAlreadyCertified) {
     pageTitle =
-      'Reselling your item of outstandingly high artistic, cultural or historical value'
+      'Selling your certified item of outstandingly high artistic, cultural or historical value'
   } else {
-    pageTitle = context.hasUsedChecker
-      ? 'You can now apply for an exemption certificate'
-      : 'You must now apply for an exemption certificate'
+    pageTitle = 'You can now apply for an exemption certificate'
   }
 
   return pageTitle
-}
-
-const _getSection10PageTitle = context => {
-  return `You ${
-    context.hasUsedChecker ? 'can' : 'must'
-  } now make a self-assessment to sell or hire out your item`
 }
 
 const _getSteps = context => {
