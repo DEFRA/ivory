@@ -25,7 +25,9 @@ describe('/can-continue route', () => {
     step4: 'step-4',
     step5: 'step-5',
     step6: 'step-6',
+    step7: 'step-7',
     timeoutParagraph: 'timeoutParagraph',
+    previousOwnerParagraph: 'previousOwnerParagraph',
     finalParagraph: 'finalParagraph',
     cancelLink: 'cancelLink',
     continue: 'continue'
@@ -103,7 +105,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Based on your answers, it sounds like your item is exempt from the ivory ban.'
+            'Based on your answers, you are able to make an application for an exemption certificate for your item as a pre-1918 item of outstandingly high artistic, cultural or historical value.'
           )
         })
 
@@ -143,13 +145,19 @@ describe('/can-continue route', () => {
           element = document.querySelector(`#${elementIds.step5}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Pay a non-refundable administration fee of £250.'
+            'Declare that the item in your opinion meets the relevant exemption criteria.'
           )
 
           element = document.querySelector(`#${elementIds.step6}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            `Wait up to ${SLA} working days for your application to be approved by an expert.`
+            'Pay a non-refundable administration fee of £250.'
+          )
+
+          element = document.querySelector(`#${elementIds.step7}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            `We will aim to respond to your application within ${SLA} working days, if it is going to take longer, we will let you know.`
           )
         })
 
@@ -169,7 +177,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            `After you’ve paid for your application, you’ll need to wait up to ${SLA} working days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.`
+            `After you’ve paid for your application, it will be sent to an expert for assessment. We'll aim to let you know the outcome of your application within ${SLA} working days, we'll let you know if it is going to take longer. Once we've received this assessment, we'll decide whether to award the item an exemption certificate. If your application is unsuccessful, we will tell you the reasons why. You cannot deal in this item until it has an exemption certificate.`
           )
         })
 
@@ -266,13 +274,19 @@ describe('/can-continue route', () => {
           element = document.querySelector(`#${elementIds.step5}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Pay a non-refundable administration fee of £250.'
+            'Declare that the item in your opinion meets the relevant exemption criteria.'
           )
 
           element = document.querySelector(`#${elementIds.step6}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            `Wait up to ${SLA} working days for your application to be approved by an expert.`
+            'Pay a non-refundable administration fee of £250.'
+          )
+
+          element = document.querySelector(`#${elementIds.step7}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            `We will aim to respond to your application within ${SLA} working days, if it is going to take longer, we will let you know.`
           )
         })
 
@@ -292,7 +306,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            `After you’ve paid for your application, you’ll need to wait up to ${SLA} working days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.`
+            `After you’ve paid for your application, it will be sent to an expert for assessment. We'll aim to let you know the outcome of your application within ${SLA} working days, we'll let you know if it is going to take longer. Once we've received this assessment, we'll decide whether to award the item an exemption certificate. If your application is unsuccessful, we will tell you the reasons why. You cannot deal in this item until it has an exemption certificate.`
           )
         })
 
@@ -384,13 +398,19 @@ describe('/can-continue route', () => {
           element = document.querySelector(`#${elementIds.step5}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Pay a non-refundable administration fee of £250.'
+            'Declare that the item in your opinion meets the relevant exemption criteria.'
           )
 
           element = document.querySelector(`#${elementIds.step6}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            `Wait up to ${SLA} working days for your application to be approved by an expert.`
+            'Pay a non-refundable administration fee of £250.'
+          )
+
+          element = document.querySelector(`#${elementIds.step7}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            `We will aim to respond to your application within ${SLA} working days, if it is going to take longer, we will let you know.`
           )
         })
 
@@ -410,7 +430,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            `After you’ve paid for your application, you’ll need to wait up to ${SLA} working days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.`
+            `After you’ve paid for your application, it will be sent to an expert for assessment. We'll aim to let you know the outcome of your application within ${SLA} working days, we'll let you know if it is going to take longer. Once we've received this assessment, we'll decide whether to award the item an exemption certificate. If your application is unsuccessful, we will tell you the reasons why. You cannot deal in this item until it has an exemption certificate.`
           )
         })
 
@@ -495,13 +515,19 @@ describe('/can-continue route', () => {
           element = document.querySelector(`#${elementIds.step5}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Pay a non-refundable administration fee of £250.'
+            'Declare that the item in your opinion meets the relevant exemption criteria.'
           )
 
           element = document.querySelector(`#${elementIds.step6}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            `Wait up to ${SLA} working days for your application to be approved by an expert.`
+            'Pay a non-refundable administration fee of £250.'
+          )
+
+          element = document.querySelector(`#${elementIds.step7}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            `We will aim to respond to your application within ${SLA} working days, if it is going to take longer, we will let you know.`
           )
         })
 
@@ -521,7 +547,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            `After you’ve paid for your application, you’ll need to wait up to ${SLA} working days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.`
+            `After you’ve paid for your application, it will be sent to an expert for assessment. We'll aim to let you know the outcome of your application within ${SLA} working days, we'll let you know if it is going to take longer. Once we've received this assessment, we'll decide whether to award the item an exemption certificate. If your application is unsuccessful, we will tell you the reasons why. You cannot deal in this item until it has an exemption certificate.`
           )
         })
 
@@ -576,6 +602,16 @@ describe('/can-continue route', () => {
             `#${elementIds.preListHeading}`
           )
           expect(element).toBeFalsy()
+        })
+
+        it('should have the correct previous owner paragraph', () => {
+          const element = document.querySelector(
+            `#${elementIds.previousOwnerParagraph}`
+          )
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'A certificate for this item would have been issued to a previous owner.'
+          )
         })
 
         it('should have the correct list heading', () => {
@@ -683,7 +719,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Based on your answers, it sounds like your item is exempt from the ivory ban.'
+            'Based on your answers, your item may qualify as exempt from the ivory ban.'
           )
         })
 
@@ -691,7 +727,7 @@ describe('/can-continue route', () => {
           const element = document.querySelector(`#${elementIds.listHeading}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Complete the process by following the steps below:'
+            'This is a registration under the Ivory Act, complete the process by following the steps below:'
           )
         })
 
@@ -717,11 +753,14 @@ describe('/can-continue route', () => {
           element = document.querySelector(`#${elementIds.step4}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Pay an administration fee of £20.'
+            'Declare that the item in your opinion meets the relevant exemption criteria.'
           )
 
           element = document.querySelector(`#${elementIds.step5}`)
-          expect(element).toBeFalsy()
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Pay an administration fee of £20.'
+          )
 
           element = document.querySelector(`#${elementIds.step6}`)
           expect(element).toBeFalsy()
@@ -797,7 +836,7 @@ describe('/can-continue route', () => {
           const element = document.querySelector(`#${elementIds.listHeading}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Complete the process by following the steps below:'
+            'This is a registration under the Ivory Act, complete the process by following the steps below:'
           )
         })
 
@@ -823,11 +862,14 @@ describe('/can-continue route', () => {
           element = document.querySelector(`#${elementIds.step4}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Pay an administration fee of £20.'
+            'Declare that the item in your opinion meets the relevant exemption criteria.'
           )
 
           element = document.querySelector(`#${elementIds.step5}`)
-          expect(element).toBeFalsy()
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'Pay an administration fee of £20.'
+          )
 
           element = document.querySelector(`#${elementIds.step6}`)
           expect(element).toBeFalsy()

@@ -98,20 +98,18 @@ const _getSteps = context => {
     PROVIDE_CONTACT_DETAILS: 'Provide contact details.',
     PAY_FEE: `Pay an administration fee of £${config.paymentAmountBandA /
       100}.`,
-
     UPLOAD_DOCUMENTS: 'Upload any documents that support your application.',
-
     PAY_NON_REFUNDABLE_FEE_20: `Pay a non-refundable administration fee of £${config.paymentAmountBandA /
       100}.`,
-
     PAY_NON_REFUNDABLE_FEE_250: `Pay a non-refundable administration fee of £${config.paymentAmountBandB /
       100}.`,
-
+    DECLARE_ITEM_MEETS_CRITERIA:
+      'Declare that the item in your opinion meets the relevant exemption criteria.',
     CONFIRM_STILL_ACCURATE:
       'Confirm the information on the certificate is still accurate and complete.',
     RECEIVE_CONFIRMATION:
       'Receive confirmation you can now sell or hire out your item.',
-    WAIT: `Wait up to ${SLA} working days for your application to be approved by an expert.`
+    WAIT: `We will aim to respond to your application within ${SLA} working days, if it is going to take longer, we will let you know.`
   }
   const steps = []
 
@@ -126,6 +124,7 @@ const _getSteps = context => {
       steps.push(stepOptions.DESCRIBE_ITEM)
       steps.push(stepOptions.UPLOAD_DOCUMENTS)
       steps.push(stepOptions.PROVIDE_CONTACT_DETAILS)
+      steps.push(stepOptions.DECLARE_ITEM_MEETS_CRITERIA)
       steps.push(stepOptions.PAY_NON_REFUNDABLE_FEE_250)
       steps.push(stepOptions.WAIT)
     }
@@ -133,6 +132,7 @@ const _getSteps = context => {
     steps.push(stepOptions.ADD_PHOTOS)
     steps.push(stepOptions.DESCRIBE_ITEM)
     steps.push(stepOptions.PROVIDE_CONTACT_DETAILS)
+    steps.push(stepOptions.DECLARE_ITEM_MEETS_CRITERIA)
     steps.push(stepOptions.PAY_FEE)
   }
   return steps
