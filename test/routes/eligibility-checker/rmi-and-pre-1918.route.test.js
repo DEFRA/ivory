@@ -14,7 +14,9 @@ describe('/eligibility-checker/rmi-and-pre-1918 route', () => {
   const elementIds = {
     pageTitle: 'pageTitle',
     helpText: 'helpText',
-    helpTextList: 'helpTextList',
+    bullet1: 'bullet1',
+    bullet2: 'bullet2',
+    bullet3: 'bullet3',
     rmiAndPre1918: 'rmiAndPre1918',
     rmiAndPre19182: 'rmiAndPre1918-2',
     rmiAndPre19183: 'rmiAndPre1918-3',
@@ -70,12 +72,25 @@ describe('/eligibility-checker/rmi-and-pre-1918 route', () => {
     it('should have the correct help text', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual('The item must:')
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'The item must have been made before 1 January 1918 and be:'
+      )
     })
 
     it('should have a help text list', () => {
-      const element = document.querySelector(`#${elementIds.helpTextList}`)
+      let element = document.querySelector(`#${elementIds.bullet1}`)
       expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual('rare')
+
+      element = document.querySelector(`#${elementIds.bullet2}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'an important example of its type'
+      )
+
+      element = document.querySelector(`#${elementIds.bullet3}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual('or both of the above')
     })
 
     it('should have the correct summary text title', () => {

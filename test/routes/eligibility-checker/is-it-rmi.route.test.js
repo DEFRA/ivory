@@ -14,6 +14,23 @@ describe('/eligibility-checker/is-it-rmi route', () => {
     pageTitle: 'pageTitle',
     helpText: 'helpText',
     callOutText: 'callOutText',
+    howDoIKnow: 'howDoIKnow',
+    para1: 'para1',
+    para2: 'para2',
+    para3: 'para3',
+    para4: 'para4',
+    para5: 'para5',
+    para6: 'para6',
+    bullet1: 'bullet1',
+    bullet2: 'bullet2',
+    bullet3: 'bullet3',
+    bullet4: 'bullet4',
+    bullet5: 'bullet5',
+    bullet6: 'bullet6',
+    bullet7: 'bullet7',
+    bullet8: 'bullet8',
+    bullet9: 'bullet9',
+    bullet10: 'bullet10',
     isItRmi: 'isItRmi',
     isItRmi2: 'isItRmi-2',
     continue: 'continue'
@@ -73,18 +90,96 @@ describe('/eligibility-checker/is-it-rmi route', () => {
       )
     })
 
-    it('should have the correct summary text title', () => {
-      const element = document.querySelector('.govuk-details__summary-text')
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
+    it('should have the correct summary details', () => {
+      _checkElement(
+        document,
+        `${elementIds.howDoIKnow} .govuk-details__summary-text`,
         'How do I know if my item has outstandingly high artistic, cultural or historic value?'
+      )
+
+      _checkElement(
+        document,
+        elementIds.para3,
+        'The item must have been made before 1 January 1918 and be:'
+      )
+
+      _checkElement(document, elementIds.bullet1, 'rare')
+
+      _checkElement(
+        document,
+        elementIds.bullet2,
+        'an important example of its type'
+      )
+
+      _checkElement(document, elementIds.bullet3, 'or both of the above')
+
+      _checkElement(
+        document,
+        elementIds.para4,
+        'An item that only has sentimental value would not qualify, regardless of how important it is to you personally.'
+      )
+
+      _checkElement(
+        document,
+        elementIds.para5,
+        'Each item is assessed individually by recognised experts. They set a very high threshold when advising whether an item meets these criteria.'
+      )
+
+      _checkElement(
+        document,
+        elementIds.para6,
+        'They’ll consider various things, such as whether an item:'
+      )
+
+      _checkElement(document, elementIds.bullet4, 'is unique or extremely rare')
+
+      _checkElement(
+        document,
+        elementIds.bullet5,
+        'is of high artistic or aesthetic quality, for example from a known artist, school or studio'
+      )
+
+      _checkElement(
+        document,
+        elementIds.bullet6,
+        'is in better condition than other items like it'
+      )
+
+      _checkElement(
+        document,
+        elementIds.bullet7,
+        'is part of a well-known collection'
+      )
+
+      _checkElement(document, elementIds.bullet8, 'has an important history')
+
+      _checkElement(
+        document,
+        elementIds.bullet9,
+        'is important to a specific place or region'
+      )
+
+      _checkElement(
+        document,
+        elementIds.bullet10,
+        'has previously been recognised for its value or status, for example being recognised as a national treasure'
       )
     })
 
-    it('should have some summary text details', () => {
-      const element = document.querySelector('.govuk-details__text')
-      expect(element).toBeTruthy()
-    })
+    // it('should have the correct summary text title', () => {
+    //   const element = document.querySelector('.govuk-details__summary-text')
+    //   expect(element).toBeTruthy()
+    //   expect(TestHelper.getTextContent(element)).toEqual(
+    //     'How do I know if my item has outstandingly high artistic, cultural or historic value?'
+    //   )
+    // })
+
+    // it('should have some summary text details', () => {
+    //   const element = document.querySelector('.govuk-details__text')
+    //   expect(element).toBeTruthy()
+
+    //   ///
+    // })
 
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(document, elementIds.isItRmi, 'Yes', 'Yes')
@@ -178,4 +273,10 @@ const _checkSelectedRadioAction = async (
   }
 
   expect(response.headers.location).toEqual(nextUrl)
+}
+
+const _checkElement = (document, id, expectedValue) => {
+  const element = document.querySelector(`#${id}`)
+  expect(element).toBeTruthy()
+  expect(TestHelper.getTextContent(element)).toEqual(expectedValue)
 }
