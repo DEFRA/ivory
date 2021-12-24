@@ -5,6 +5,8 @@ const TestHelper = require('../utils/test-helper')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
+const { ItemType, RedisKeys, Options } = require('../../server/utils/constants')
+
 describe('/selling-on-behalf-of route', () => {
   let server
   const url = '/selling-on-behalf-of'
@@ -31,10 +33,6 @@ describe('/selling-on-behalf-of route', () => {
     await server.stop()
   })
 
-  beforeEach(() => {
-    _createMocks()
-  })
-
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -45,9 +43,9 @@ describe('/selling-on-behalf-of route', () => {
       url
     }
 
-    describe('GET: Work for a business', () => {
+    describe('GET: Work for a business - Section 10', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('Yes')
+        _createMocks(true)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -66,7 +64,7 @@ describe('/selling-on-behalf-of route', () => {
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Who are you selling or hiring out the item on behalf of?'
+          'Who are you completing this registration on behalf of?'
         )
       })
 
@@ -107,9 +105,27 @@ describe('/selling-on-behalf-of route', () => {
       })
     })
 
-    describe('GET: Does not work for a business', () => {
+    describe('GET: Work for a business - Section 2', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('No')
+        _createMocks(true, true)
+
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the correct page heading', () => {
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Who are you completing this application on behalf of?'
+        )
+      })
+    })
+
+    describe('GET: Does not work for a business - Section 10', () => {
+      beforeEach(async () => {
+        _createMocks(false)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -128,7 +144,7 @@ describe('/selling-on-behalf-of route', () => {
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Who are you selling or hiring out the item on behalf of?'
+          'Who are you completing this registration on behalf of?'
         )
       })
 
@@ -161,6 +177,24 @@ describe('/selling-on-behalf-of route', () => {
         )
       })
     })
+
+    describe('GET: Does not work for a business - Section 2', () => {
+      beforeEach(async () => {
+        _createMocks(false, true)
+
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the correct page heading', () => {
+        const element = document.querySelector(
+          `#${elementIds.pageTitle} > legend > h1`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Who are you completing this application on behalf of?'
+        )
+      })
+    })
   })
 
   describe('POST', () => {
@@ -177,7 +211,7 @@ describe('/selling-on-behalf-of route', () => {
     describe('Success', () => {
       describe('POST: Work for a business', () => {
         beforeEach(async () => {
-          RedisService.get = jest.fn().mockResolvedValue('Yes')
+          _createMocks(true)
         })
 
         it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
@@ -223,7 +257,7 @@ describe('/selling-on-behalf-of route', () => {
 
       describe('POST: Does not work for a business', () => {
         beforeEach(async () => {
-          RedisService.get = jest.fn().mockResolvedValue('No')
+          _createMocks(false)
         })
 
         it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
@@ -260,7 +294,7 @@ describe('/selling-on-behalf-of route', () => {
 
     describe('Failure', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('Yes')
+        _createMocks(true)
       })
 
       it('should display a validation error message if the user does not select an item', async () => {
@@ -281,8 +315,22 @@ describe('/selling-on-behalf-of route', () => {
   })
 })
 
-const _createMocks = () => {
+const _createMocks = (worksForAbusiness, isSection2 = false) => {
   TestHelper.createMocks()
+
+  const mockData = {
+    [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: isSection2
+      ? ItemType.HIGH_VALUE
+      : ItemType.MUSICAL,
+    [RedisKeys.WORK_FOR_A_BUSINESS]: worksForAbusiness
+      ? Options.YES
+      : Options.NO,
+    [RedisKeys.SELLING_ON_BEHALF_OF]: ''
+  }
+
+  RedisService.get = jest.fn((request, redisKey) => {
+    return mockData[redisKey]
+  })
 }
 
 const _checkSelectedRadioAction = async (
