@@ -57,7 +57,7 @@ const _getContext = () => {
     pageTitle:
       'Are you intending to sell or hire out your item out to a museum?',
     helpText:
-      'The museum must be a member of the International Council of Museums, or accredited by one of the following:',
+      'The museum must be a member of the International Council of Museums, or accredited by or on behalf of one of the following:',
     items: getStandardOptions()
   }
 }

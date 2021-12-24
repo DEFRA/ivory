@@ -65,7 +65,7 @@ const _getContext = async request => {
 
   return {
     pageTitle:
-      'Do you work for a business who is selling or hiring out the item?',
+      'Do you work for a business that is intending to sell or hire out the item?',
     items: [
       {
         value: 'Yes',

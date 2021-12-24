@@ -286,7 +286,7 @@ describe('/already-certified route', () => {
           response,
           'certificateNumber',
           'certificateNumber-error',
-          'Invalid certificate number'
+          'This certificate number is not recognised'
         )
       })
     })
