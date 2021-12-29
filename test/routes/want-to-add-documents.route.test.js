@@ -11,7 +11,6 @@ describe('/want-to-add-documents route', () => {
   const elementIds = {
     pageTitle: 'pageTitle',
     helpText: 'helpText',
-    helpTextList: 'helpTextList',
     wantToAddDocuments: 'wantToAddDocuments',
     wantToAddDocuments2: 'wantToAddDocuments-2',
     continue: 'continue'
@@ -59,7 +58,15 @@ describe('/want-to-add-documents route', () => {
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Do you want to add any documents to support your application?'
+        'Do you want to upload any evidence to support your application?'
+      )
+    })
+
+    it('should have the correct help text', () => {
+      const element = document.querySelector(`#${elementIds.helpText}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        "You must upload any physical evidence you have to support your answers about the exemption criteria. If you don't do this, your application could be delayed or rejected."
       )
     })
 
@@ -129,7 +136,7 @@ describe('/want-to-add-documents route', () => {
             response,
             'wantToAddDocuments',
             'wantToAddDocuments-error',
-            'You must tell us if you want to add any documents to support your application'
+            'You must tell us if you want to add any evidence to support your application'
           )
         })
       })

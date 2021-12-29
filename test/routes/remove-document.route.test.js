@@ -76,7 +76,7 @@ describe('/remove-document route', () => {
         RedisService.get = jest.fn().mockResolvedValue(mockDataSixPhotos)
       })
 
-      it('should redirect to the "Your documents" page', async () => {
+      it('should redirect to the "Your supporting evidence" page', async () => {
         getOptions.url = `${url}/1`
 
         expect(RedisService.get).toBeCalledTimes(0)

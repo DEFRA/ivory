@@ -69,7 +69,6 @@ const _getContext = () => {
   return {
     pageTitle:
       'Is it a pre-1918 item of outstandingly high artistic, cultural or historical value?',
-    helpText: 'The item must:',
     items: getStandardOptions()
   }
 }

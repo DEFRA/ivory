@@ -21,14 +21,14 @@
           }
       }) %}
 
-        <p class="govuk-body" id="helpText">You can add up to {{ maxPhotos }} documents.</p>
+        <p class="govuk-body" id="helpText">You can add up to {{ maxPhotos }} files.</p>
 
         {{ govukSummaryList({
           rows: rows
         }) }}
 
         {% if allowMorePhotos %}
-          <p class="govuk-body govuk-!-margin-bottom-7"><a id="addAnotherDocument" class="govuk-link" href="{{ addPhotoUrl }}">Add another document</a></p>
+          <p class="govuk-body govuk-!-margin-bottom-7"><a id="addAnotherFile" class="govuk-link" href="{{ addPhotoUrl }}">Add another file</a></p>
         {% endif %}
 
       {% endcall %}

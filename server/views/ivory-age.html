@@ -46,7 +46,9 @@
           }
       }) %}
 
-        <p id="helpText" class="govuk-body">{{ helpText }}</p>
+        {% if helpText %}
+          <p id="helpText" class="govuk-body">{{ helpText }}</p>
+        {% endif %}
 
         {{ govukCheckboxes({
           idPrefix: "ivoryAge",

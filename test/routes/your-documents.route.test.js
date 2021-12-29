@@ -14,7 +14,7 @@ describe('/your-documents route', () => {
   const elementIds = {
     pageTitle: 'pageTitle',
     helpText: 'helpText',
-    addAnotherDocument: 'addAnotherDocument',
+    addAnotherFile: 'addAnotherFile',
     continue: 'continue'
   }
 
@@ -79,26 +79,22 @@ describe('/your-documents route', () => {
           `#${elementIds.pageTitle} > legend > h1`
         )
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('Your documents')
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Your supporting evidence'
+        )
       })
 
       it('should have the correct help text', () => {
         const element = document.querySelector(`#${elementIds.helpText}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'You can add up to 6 documents.'
+          'You can add up to 6 files.'
         )
       })
 
-      it('should have the "Add another document" link', () => {
-        const element = document.querySelector(
-          `#${elementIds.addAnotherDocument}`
-        )
-        TestHelper.checkLink(
-          element,
-          'Add another document',
-          '/upload-document'
-        )
+      it('should have the "Add another file" link', () => {
+        const element = document.querySelector(`#${elementIds.addAnotherFile}`)
+        TestHelper.checkLink(element, 'Add another file', '/upload-document')
       })
 
       it('should have the correct Call to Action button', () => {
@@ -115,10 +111,8 @@ describe('/your-documents route', () => {
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
-      it('should not have the "Add another document" link', () => {
-        const element = document.querySelector(
-          `#${elementIds.addAnotherDocument}`
-        )
+      it('should not have the "Add another file" link', () => {
+        const element = document.querySelector(`#${elementIds.addAnotherFile}`)
         expect(element).toBeFalsy()
       })
     })
