@@ -37,10 +37,12 @@
           
           <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload file</h2>
 
-          <p id="helpText2" class="govuk-body">The document must be:</p>
+          <p id="helpText2" class="govuk-body">Files must be:</p>
 
           <ul id="helpText3" class="govuk-list govuk-list--bullet">
-            <li>a PDF or Microsoft Word document</li>
+            <li>PDF</li>
+            <li>Microsoft Word document (.DOC or .DOCX)</li>
+            <li>an image file (JPG or PNG)</li>
             <li>smaller than {{ maximumFileSize }}MB</li>
           </ul>
 
@@ -66,7 +68,7 @@
 
       {% if hideHelpText %}
         <p class="govuk-body">
-          <a id="cancel" class="govuk-link" href="{{ fileListUrl }}">Cancel and return to ‘Your documents‘</a>
+          <a id="cancel" class="govuk-link" href="{{ fileListUrl }}">Cancel and return to ‘Your supporting evidence‘</a>
         </p>
       {% endif %}
 

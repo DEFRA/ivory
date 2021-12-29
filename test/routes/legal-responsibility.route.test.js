@@ -49,6 +49,15 @@ describe('/legal-responsibility route', () => {
 
     describe('GET: Has the correct details when it is a section 10 item', () => {
       beforeEach(async () => {
+        const mockData = {
+          [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.MUSICAL,
+          [RedisKeys.ALREADY_CERTIFIED]: null
+        }
+
+        RedisService.get = jest.fn((request, redisKey) => {
+          return mockData[redisKey]
+        })
+
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
@@ -64,7 +73,7 @@ describe('/legal-responsibility route', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Both the owner and applicant are jointly responsible for providing accurate information within the self-assessment'
+          'Both the owner and applicant are jointly responsible for providing accurate information'
         )
       })
 
@@ -72,13 +81,13 @@ describe('/legal-responsibility route', () => {
         let element = document.querySelector(`#${elementIds.helpTextPara1}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'This is a self-assessment, both the owner and applicant are jointly responsible for ensuring the item is exempt.'
+          'This is a self-declaration, both the owner and applicant are responsible for ensuring the item qualifies for exemption.'
         )
 
         element = document.querySelector(`#${elementIds.helpTextPara2}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'The Ivory Act 2018 permits you to do a self-assessment for someone else, but you must have permission to act on their behalf.'
+          'If you are not the owner of the item, you must have permission to act on their behalf.'
         )
 
         element = document.querySelector(`#${elementIds.helpTextPara3}`)
@@ -92,7 +101,7 @@ describe('/legal-responsibility route', () => {
         const element = document.querySelector(`#${elementIds.callOutText}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'If we later find out that the item is not exempt, the applicant or owner could be fined or prosecuted.'
+          'If we later find out that any of the information you have given is incorrect, your registration may be cancelled. The applicant or owner may be subject to a fine of up to £250,000 or 5 years imprisonment.'
         )
       })
 
@@ -103,9 +112,16 @@ describe('/legal-responsibility route', () => {
       })
     })
 
-    describe('GET: Has the correct details when it is a section 2 (high value) item', () => {
+    describe('GET: Has the correct details when it is a section 2 (high value) item - NOT already certified', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
+        const mockData = {
+          [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+          [RedisKeys.ALREADY_CERTIFIED]: { alreadyCertified: Options.NO }
+        }
+
+        RedisService.get = jest.fn((request, redisKey) => {
+          return mockData[redisKey]
+        })
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -114,7 +130,7 @@ describe('/legal-responsibility route', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Both the owner and applicant are jointly responsible for providing accurate information when making an application'
+          'Both the owner and applicant are jointly responsible for providing accurate information'
         )
       })
 
@@ -122,7 +138,7 @@ describe('/legal-responsibility route', () => {
         let element = document.querySelector(`#${elementIds.helpTextPara1}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'The Ivory Act 2018 permits you to do an application for someone else, but you must have permission to act on their behalf.'
+          'If you are not the owner of the item, you must have permission to act on their behalf.'
         )
 
         element = document.querySelector(`#${elementIds.helpTextPara2}`)
@@ -130,13 +146,70 @@ describe('/legal-responsibility route', () => {
         expect(TestHelper.getTextContent(element)).toEqual(
           'Stop at any point if you’re unsure about the right answer.'
         )
+
+        element = document.querySelector(`#${elementIds.helpTextPara3}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          "If we later find out that the information you’ve given is not accurate, the exemption certificate may be cancelled or 'revoked'."
+        )
       })
 
       it('should have the correct call out text', () => {
         const element = document.querySelector(`#${elementIds.callOutText}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'If we later find out that the information you’ve given is not accurate, the applicant or owner could be fined or prosecuted.'
+          'Dealing that relies on inaccurate information on the certificate may be a criminal offence. Anyone involved could be subject to a fine of up to £250,000, or 5 years imprisonment.'
+        )
+      })
+    })
+
+    describe('GET: Has the correct details when it is a section 2 (high value) item - already certified', () => {
+      beforeEach(async () => {
+        const mockData = {
+          [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+          [RedisKeys.ALREADY_CERTIFIED]: { alreadyCertified: Options.YES }
+        }
+
+        RedisService.get = jest.fn((request, redisKey) => {
+          return mockData[redisKey]
+        })
+
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the correct page heading', () => {
+        const element = document.querySelector(`#${elementIds.pageTitle}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Both the owner and the person selling the certified item are jointly responsible for ensuring it remains exempt'
+        )
+      })
+
+      it('should have the correct help text', () => {
+        let element = document.querySelector(`#${elementIds.helpTextPara1}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'If you are not the owner of the item, you must have permission to act on their behalf.'
+        )
+
+        element = document.querySelector(`#${elementIds.helpTextPara2}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Stop at any point if you’re unsure about the right answer.'
+        )
+
+        element = document.querySelector(`#${elementIds.helpTextPara3}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          "If we later find out that the information you’ve given is not accurate, the exemption certificate may be cancelled or 'revoked'."
+        )
+      })
+
+      it('should have the correct call out text', () => {
+        const element = document.querySelector(`#${elementIds.callOutText}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Dealing that relies on inaccurate information on the certificate may be a criminal offence. Anyone involved could be subject to a fine of up to £250,000, or 5 years imprisonment.'
         )
       })
     })

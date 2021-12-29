@@ -68,7 +68,7 @@ const _getContext = async request => {
   return {
     uploadData,
     rows,
-    pageTitle: 'Your documents',
+    pageTitle: 'Your supporting evidence',
     addPhotoUrl: Paths.UPLOAD_DOCUMENT,
     maxPhotos: MAX_PHOTOS,
     allowMorePhotos: uploadData.files.length < MAX_PHOTOS

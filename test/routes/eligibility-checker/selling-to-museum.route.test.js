@@ -70,7 +70,7 @@ describe('/eligibility-checker/selling-to-museum route', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'The museum must be a member of the International Council of Museums, or accredited by one of the following:'
+        'The museum must be a member of the International Council of Museums, or accredited by or on behalf of one of the following:'
       )
     })
 
