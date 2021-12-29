@@ -47,32 +47,34 @@ const _getContext = async request => {
   const haveOwnerPermission =
     'If you are not the owner of the item, you must have permission to act on their behalf.'
 
+  const stopIfUnsure =
+    'Stop at any point if you’re unsure about the right answer.'
+
+  const certificateCancelledOrRevoked =
+    "If we later find out that the information you’ve given is not accurate, the exemption certificate may be cancelled or 'revoked'."
+
   if (!isSection2) {
     context.pageTitle =
       'Both the owner and applicant are jointly responsible for providing accurate information'
     context.helpTextParas = [
       'This is a self-declaration, both the owner and applicant are responsible for ensuring the item qualifies for exemption.',
       haveOwnerPermission,
-      'Stop at any point if you’re unsure about the right answer.'
+      stopIfUnsure
     ]
   } else {
     if (isAlreadyCertified) {
       context.pageTitle =
         'Both the owner and the person selling the certified item are jointly responsible for ensuring it remains exempt'
-      context.helpTextParas = [
-        haveOwnerPermission,
-        'Stop at any point if you’re unsure about the right answer.',
-        "If we later find out that the information you’ve given is not accurate, the exemption certificate may be cancelled or 'revoked'."
-      ]
     } else {
       context.pageTitle =
         'Both the owner and applicant are jointly responsible for providing accurate information'
-      context.helpTextParas = [
-        haveOwnerPermission,
-        'Stop at any point if you’re unsure about the right answer.',
-        "If we later find out that the information you’ve given is not accurate, the exemption certificate may be cancelled or 'revoked'."
-      ]
     }
+
+    context.helpTextParas = [
+      haveOwnerPermission,
+      stopIfUnsure,
+      certificateCancelledOrRevoked
+    ]
   }
 
   context.callOutText = isSection2
