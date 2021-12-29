@@ -166,21 +166,6 @@ describe('/eligibility-checker/is-it-rmi route', () => {
       )
     })
 
-    // it('should have the correct summary text title', () => {
-    //   const element = document.querySelector('.govuk-details__summary-text')
-    //   expect(element).toBeTruthy()
-    //   expect(TestHelper.getTextContent(element)).toEqual(
-    //     'How do I know if my item has outstandingly high artistic, cultural or historic value?'
-    //   )
-    // })
-
-    // it('should have some summary text details', () => {
-    //   const element = document.querySelector('.govuk-details__text')
-    //   expect(element).toBeTruthy()
-
-    //   ///
-    // })
-
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(document, elementIds.isItRmi, 'Yes', 'Yes')
 
