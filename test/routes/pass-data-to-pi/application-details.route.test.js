@@ -151,13 +151,14 @@ describe('/pass-data-to-pi/application-details route', () => {
         _checkSummaryValues(document, elementIds.summaries.owner, [
           mockEntity[DataVerseFieldName.OWNER_NAME],
 
-          `${mockEntity[DataVerseFieldName.OWNER_ADDRESS]}${
-            mockEntity[DataVerseFieldName.OWNER_POSTCODE]
-          }`
+          `${mockEntity[DataVerseFieldName.OWNER_ADDRESS].replaceAll(
+            '\n',
+            ''
+          )}${mockEntity[DataVerseFieldName.OWNER_POSTCODE]}`
         ])
       })
 
-      it.only('should have the correct content - NOT owned by appicant', async () => {
+      it('should have the correct content - NOT owned by appicant', async () => {
         _createMocks({
           isOwnedByApplicant: false,
           alreadyCertified: AlreadyCertifiedLookup[AlreadyCertifiedOptions.NO],
