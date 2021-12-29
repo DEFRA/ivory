@@ -14,7 +14,7 @@ const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
 
 const MAX_DOCUMENTS = 6
 const MAX_FILES_IN_REQUEST_PAYLOAD = 1
-const ALLOWED_EXTENSIONS = ['.DOC', '.DOCX', '.PDF']
+const ALLOWED_EXTENSIONS = ['.DOC', '.DOCX', '.PDF', '.JPG', '.JPEG', '.PNG']
 
 const handlers = {
   get: async (request, h) => {
@@ -153,8 +153,8 @@ const _getContext = async request => {
     hideHelpText,
     uploadData,
     pageTitle: !hideHelpText
-      ? 'Add a document to support your case'
-      : 'Add another document',
+      ? 'Add evidence to support your case'
+      : 'Add another file',
     accept: ALLOWED_EXTENSIONS.join(','),
     fileListUrl: Paths.YOUR_DOCUMENTS,
     maximumFileSize: config.maximumFileSize
@@ -196,12 +196,13 @@ const _validateForm = (payload, uploadData) => {
     // - accept: ".pdf,.doc,.docx"
     errors.push({
       name: 'files',
-      text: 'The file must be a PDF or Microsoft Word document (.DOC or .DOCX)'
+      text:
+        'The file must be a PDF, Microsoft Word document (.DOC or .DOCX) or image file'
     })
   } else if (checkForDuplicates(payload, uploadData)) {
     errors.push({
       name: 'files',
-      text: "You've already uploaded that document. Choose a different one"
+      text: "You've already uploaded that file. Choose a different one"
     })
   }
 

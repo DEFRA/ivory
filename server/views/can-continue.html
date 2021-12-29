@@ -10,11 +10,25 @@
 
       <h1 class="govuk-heading-l" id="pageTitle">{{ pageTitle }}</h1>
       
-        {% if hasUsedChecker %}
-          <p class="govuk-body" id="preListHeading">Based on your answers, it sounds like your item is exempt from the ivory ban.</p>
+        {% if not isSection2 %}
+          {% if hasUsedChecker %}
+            <p class="govuk-body" id="preListHeading">Based on your answers, your item may qualify as exempt from the ivory ban.</p>
+          {% endif %}
         {% endif %}
 
-        <p class="govuk-body" id="listHeading">Complete the process by following the steps below:</p>
+        {% if isSection2 and hasUsedChecker %}
+          <p class="govuk-body" id="preListHeading">Based on your answers, you are able to make an application for an exemption certificate for your item as a pre-1918 item of outstandingly high artistic, cultural or historical value.</p>
+        {% endif %}
+
+        {% if isSection2 and isAlreadyCertified %}
+          <p class="govuk-body" id="previousOwnerParagraph">A certificate for this item would have been issued to a previous owner.</p>
+        {% endif %}
+
+        {% if not isSection2 %}
+          <p class="govuk-body" id="listHeading">This is a registration under the Ivory Act, complete the process by following the steps below:</p>
+        {% else  %}
+          <p class="govuk-body" id="listHeading">Complete the process by following the steps below:</p>
+        {% endif %}
 
         <ol class="govuk-list govuk-list--number">
           {% for step in steps %}
@@ -27,7 +41,7 @@
         </div>
         
         {% if isSection2 and not isAlreadyCertified %}
-          <p class="govuk-body" id="finalParagraph">After you’ve paid for your application, you’ll need to wait up to {{ sla }} working days for it to be approved by an expert. If it is successful, we’ll send you an exemption certificate so you can sell or hire out your item.</p>
+          <p class="govuk-body" id="finalParagraph">After you’ve paid for your application, it will be sent to an expert for assessment. We'll aim to let you know the outcome of your application within {{ sla }} working days, we'll let you know if it is going to take longer. Once we've received this assessment, we'll decide whether to award the item an exemption certificate. If your application is unsuccessful, we will tell you the reasons why. You cannot deal in this item until it has an exemption certificate.</p>
         {% endif %}
 
       {{ govukButton({

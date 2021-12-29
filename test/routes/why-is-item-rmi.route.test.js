@@ -31,6 +31,7 @@ describe('/why-is-item-rmi route', () => {
     bullet7: 'bullet7',
     bullet8: 'bullet8',
     bullet9: 'bullet9',
+    bullet10: 'bullet10',
     continue: 'continue'
   }
 
@@ -92,7 +93,7 @@ describe('/why-is-item-rmi route', () => {
       _checkElement(
         document,
         elementIds.para2,
-        'You can upload supporting documents later on. If you’d prefer to make your case within these documents, use the text box to summarise any documents you want to upload.'
+        'You can upload supporting documents later on in this service. If you’d prefer to make your case within these documents, use the text box to summarise any documents you want to upload.'
       )
 
       _checkElement(
@@ -101,19 +102,21 @@ describe('/why-is-item-rmi route', () => {
         'What qualifies as ‘outstandingly high artistic, cultural or historical value’?'
       )
 
-      _checkElement(document, elementIds.para3, 'The item must:')
-
       _checkElement(
         document,
-        elementIds.bullet1,
-        'have been made before 1 January 1918'
+        elementIds.para3,
+        'The item must have been made before 1 January 1918 and be:'
       )
+
+      _checkElement(document, elementIds.bullet1, 'rare')
 
       _checkElement(
         document,
         elementIds.bullet2,
-        'be a rare and socially significant example of its type'
+        'an important example of its type'
       )
+
+      _checkElement(document, elementIds.bullet3, 'or both of the above')
 
       _checkElement(
         document,
@@ -124,7 +127,7 @@ describe('/why-is-item-rmi route', () => {
       _checkElement(
         document,
         elementIds.para5,
-        'Each item is assessed individually by recognised experts. They set a very high threshold when approving items for sale or hire.'
+        'Each item is assessed individually by recognised experts. They set a very high threshold when advising whether an item meets these criteria.'
       )
 
       _checkElement(
@@ -133,37 +136,37 @@ describe('/why-is-item-rmi route', () => {
         'They’ll consider various things, such as whether an item:'
       )
 
-      _checkElement(document, elementIds.bullet3, 'is unique or extremely rare')
+      _checkElement(document, elementIds.bullet4, 'is unique or extremely rare')
 
       _checkElement(
         document,
-        elementIds.bullet4,
+        elementIds.bullet5,
         'is of high artistic or aesthetic quality, for example from a known artist, school or studio'
       )
 
       _checkElement(
         document,
-        elementIds.bullet5,
+        elementIds.bullet6,
         'is in better condition than other items like it'
       )
 
       _checkElement(
         document,
-        elementIds.bullet6,
+        elementIds.bullet7,
         'is part of a well-known collection'
       )
 
-      _checkElement(document, elementIds.bullet7, 'has an important history')
+      _checkElement(document, elementIds.bullet8, 'has an important history')
 
       _checkElement(
         document,
-        elementIds.bullet8,
+        elementIds.bullet9,
         'is important to a specific place or region'
       )
 
       _checkElement(
         document,
-        elementIds.bullet9,
+        elementIds.bullet10,
         'has previously been recognised for its value or status, for example being recognised as a national treasure'
       )
     })

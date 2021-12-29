@@ -49,7 +49,8 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Do you want to add any documents to support your application?',
+    pageTitle:
+      'Do you want to upload any evidence to support your application?',
     helpText:
       'You must be acting on behalf of a museum that is a member of the International Council of Museums, or accredited by one of the following:',
     items: getStandardOptions(false)
@@ -62,7 +63,7 @@ const _validateForm = payload => {
     errors.push({
       name: 'wantToAddDocuments',
       text:
-        'You must tell us if you want to add any documents to support your application'
+        'You must tell us if you want to add any evidence to support your application'
     })
   }
   return errors

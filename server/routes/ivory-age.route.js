@@ -142,11 +142,9 @@ const _getCheckbox = (ivoryAge, reason) => {
 }
 
 const _getHelpText = isSection2 =>
-  `You must keep any physical evidence that supports your answer. We may ask for it at a later date, ${
-    isSection2
-      ? 'when we check your application'
-      : 'if we decide to check your self-assessment'
-  }.`
+  !isSection2
+    ? 'You must keep any physical evidence that supports your answer. We may ask for it at a later date, if we decide to check your self-declaration.'
+    : null
 
 const _getMadeBeforeDate = itemType => {
   if (itemType === ItemType.MUSICAL) {
