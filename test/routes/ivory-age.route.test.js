@@ -12,6 +12,7 @@ const other = 'Other reason'
 
 const elementIds = {
   pageTitle: 'pageTitle',
+  helpText: 'helpText',
   ivoryAge: 'ivoryAge',
   ivoryAge2: 'ivoryAge-2',
   ivoryAge3: 'ivoryAge-3',
@@ -88,6 +89,14 @@ describe('/ivory-age route', () => {
         )
       })
 
+      it('should have the correct help text', () => {
+        const element = document.querySelector(`#${elementIds.helpText}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'You must keep any physical evidence that supports your answer. We may ask for it at a later date, if we decide to check your self-declaration.'
+        )
+      })
+
       it('should have the correct Call to Action button', () => {
         const element = document.querySelector(`#${elementIds.continue}`)
         expect(element).toBeTruthy()
@@ -116,6 +125,14 @@ describe('/ivory-age route', () => {
           'How do you know the item was made before 3 March 1947?'
         )
       })
+
+      it('should have the correct help text', () => {
+        const element = document.querySelector(`#${elementIds.helpText}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'You must keep any physical evidence that supports your answer. We may ask for it at a later date, if we decide to check your self-declaration.'
+        )
+      })
     })
 
     describe('GET: Has correct details for a portrait miniature', () => {
@@ -137,6 +154,14 @@ describe('/ivory-age route', () => {
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'How do you know the item was made before 1918?'
+        )
+      })
+
+      it('should have the correct help text', () => {
+        const element = document.querySelector(`#${elementIds.helpText}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'You must keep any physical evidence that supports your answer. We may ask for it at a later date, if we decide to check your self-declaration.'
         )
       })
     })
@@ -161,6 +186,11 @@ describe('/ivory-age route', () => {
         expect(TestHelper.getTextContent(element)).toEqual(
           'How do you know the item was made before 1918?'
         )
+      })
+
+      it('should NOT have the help text', () => {
+        const element = document.querySelector(`#${elementIds.helpText}`)
+        expect(element).toBeFalsy()
       })
     })
 

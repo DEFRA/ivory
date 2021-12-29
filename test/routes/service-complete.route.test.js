@@ -96,7 +96,7 @@ describe('/service-complete route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toContain(
-            'Self-assessment complete'
+            'Self-declaration complete'
           )
         })
 
@@ -145,13 +145,13 @@ describe('/service-complete route', () => {
           element = document.querySelector(`#${elementIds.step2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'If you do so, and we later discover that you’ve given us false information, you could be fined or prosecuted.'
+            'If we later discover that any of the information you have given is incorrect, your registration may be cancelled, and you may be subject to a fine of up to £250,000, or 5 years imprisonment.'
           )
 
           element = document.querySelector(`#${elementIds.step3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'This self-assessment lasts until the owner of the item changes.'
+            'This registration expires when the owner of the item changes.'
           )
         })
 
@@ -241,19 +241,19 @@ describe('/service-complete route', () => {
           let element = document.querySelector(`#${elementIds.step1}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'An expert will now check your application.'
+            'Your application will now be sent to an expert for assessment.'
           )
 
           element = document.querySelector(`#${elementIds.step2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            `Checks usually happen within ${SLA} working days, and we may contact you during this time if we require more information.`
+            `We’ll aim to let you know the outcome of your application within ${SLA}  working days, we’ll let you know if it is going to take longer.`
           )
 
           element = document.querySelector(`#${elementIds.step3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'If your application is approved, we will send you an exemption certificate so you can sell or hire out your item.'
+            'Following advice from the expert, we will determine whether to award the item an exemption certificate. We’ll contact you if we need more information.'
           )
         })
 

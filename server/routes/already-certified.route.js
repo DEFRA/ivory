@@ -183,7 +183,7 @@ const _validateForm = async (payload, context) => {
     if (errors.length === 0 && !context.existingRecord) {
       errors.push({
         name: 'certificateNumber',
-        text: 'Invalid certificate number'
+        text: 'This certificate number is not recognised'
       })
     }
   }

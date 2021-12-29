@@ -70,7 +70,7 @@ describe('/upload-document route', () => {
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Add a document to support your case'
+          'Add evidence to support your case'
         )
       })
 
@@ -87,40 +87,38 @@ describe('/upload-document route', () => {
           'Be careful not to upload too much material, as this could affect how long it takes an assessor to review it.'
         )
 
-        element = document.querySelector(`#${elementIds.helpText2}`)
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'The document must be:'
-        )
-
-        element = document.querySelector(
-          `#${elementIds.helpText3} > li:nth-child(1)`
-        )
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'a PDF or Microsoft Word document'
-        )
-
         element = document.querySelector(`#${elementIds.helpTextSubHeading}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual('Upload file')
 
         element = document.querySelector(`#${elementIds.helpText2}`)
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'The document must be:'
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Files must be:')
 
         element = document.querySelector(
           `#${elementIds.helpText3} > li:nth-child(1)`
         )
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'a PDF or Microsoft Word document'
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('PDF')
 
         element = document.querySelector(
           `#${elementIds.helpText3} > li:nth-child(2)`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Microsoft Word document (.DOC or .DOCX)'
+        )
+
+        element = document.querySelector(
+          `#${elementIds.helpText3} > li:nth-child(3)`
+        )
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'an image file (JPG or PNG)'
+        )
+
+        element = document.querySelector(
+          `#${elementIds.helpText3} > li:nth-child(4)`
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual('smaller than 10MB')
@@ -168,9 +166,7 @@ describe('/upload-document route', () => {
           `#${elementIds.pageTitle} > legend > h1`
         )
         expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'Add another document'
-        )
+        expect(TestHelper.getTextContent(element)).toEqual('Add another file')
       })
 
       it('should have the correct help text', () => {
@@ -207,7 +203,7 @@ describe('/upload-document route', () => {
         const element = document.querySelector(`#${elementIds.cancel}`)
         TestHelper.checkLink(
           element,
-          'Cancel and return to ‘Your documents‘',
+          'Cancel and return to ‘Your supporting evidence‘',
           '/your-documents'
         )
       })
@@ -337,10 +333,10 @@ describe('/upload-document route', () => {
         const payloadFile = {
           path: tempFolder,
           bytes: 5000,
-          filename: 'image1.png',
+          filename: 'file.txt',
           headers: {
             'content-disposition':
-              'form-data; name="files"; filename="image1.png"',
+              'form-data; name="files"; filename="file.txt"',
             'content-type': 'image/png'
           }
         }
@@ -348,7 +344,7 @@ describe('/upload-document route', () => {
           server,
           postOptions,
           payloadFile,
-          'The file must be a PDF or Microsoft Word document (.DOC or .DOCX)'
+          'The file must be a PDF, Microsoft Word document (.DOC or .DOCX) or image file'
         )
       })
 
@@ -424,7 +420,7 @@ describe('/upload-document route', () => {
         response,
         'files',
         'files-error',
-        "You've already uploaded that document. Choose a different one"
+        "You've already uploaded that file. Choose a different one"
       )
     })
   })

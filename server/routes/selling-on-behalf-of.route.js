@@ -2,6 +2,8 @@
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+const RedisHelper = require('../services/redis-helper.service')
+
 const {
   BehalfOfBusinessOptions,
   BehalfOfNotBusinessOptions
@@ -84,8 +86,12 @@ const handlers = {
 }
 
 const _getContext = async request => {
+  const isSection2 = await RedisHelper.isSection2(request)
+
   return {
-    pageTitle: 'Who are you selling or hiring out the item on behalf of?',
+    pageTitle: `Who are you completing this ${
+      isSection2 ? 'application' : 'registration'
+    } on behalf of?`,
     items: await _getOptions(request)
   }
 }
