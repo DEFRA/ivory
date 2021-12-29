@@ -142,7 +142,7 @@ const _getPageTitle = (isSection2, isAlreadyCertified) => {
       ? 'Submission received'
       : 'Application received'
   } else {
-    pageTitle = 'Self-assessment complete'
+    pageTitle = 'Self-declaration complete'
   }
 
   return pageTitle
@@ -172,21 +172,23 @@ const _getNextSteps = (isSection2, isAlreadyCertified) => {
         'You must pass on the item’s certificate to the new owner as part of the transaction.'
       )
     } else {
-      helpText.push('An expert will now check your application. ')
       helpText.push(
-        `Checks usually happen within ${SLA} working days, and we may contact you during this time if we require more information.`
+        'Your application will now be sent to an expert for assessment. '
       )
       helpText.push(
-        'If your application is approved, we will send you an exemption certificate so you can sell or hire out your item.'
+        `We’ll aim to let you know the outcome of your application within ${SLA}  working days, we’ll let you know if it is going to take longer.`
+      )
+      helpText.push(
+        'Following advice from the expert, we will determine whether to award the item an exemption certificate. We’ll contact you if we need more information.'
       )
     }
   } else {
     helpText.push('You can sell or hire out the item at your own risk.')
     helpText.push(
-      'If you do so, and we later discover that you’ve given us false information, you could be fined or prosecuted.'
+      'If we later discover that any of the information you have given is incorrect, your registration may be cancelled, and you may be subject to a fine of up to £250,000, or 5 years imprisonment.'
     )
     helpText.push(
-      'This self-assessment lasts until the owner of the item changes.'
+      'This registration expires when the owner of the item changes.'
     )
   }
 

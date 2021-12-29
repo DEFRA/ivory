@@ -60,7 +60,7 @@ describe('/work-for-a-business route', () => {
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Do you work for a business who is selling or hiring out the item?'
+        'Do you work for a business that is intending to sell or hire out the item?'
       )
     })
 

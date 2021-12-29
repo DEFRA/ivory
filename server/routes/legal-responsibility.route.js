@@ -26,9 +26,7 @@ const handlers = {
 
     const uploadData = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
 
-    const isAlreadyCertified = await RedisHelper.isAlreadyCertified(request)
-
-    if (isAlreadyCertified) {
+    if (context.isAlreadyCertified) {
       return h.redirect(Paths.WHO_OWNS_ITEM)
     } else {
       return uploadData && uploadData.files && uploadData.files.length
@@ -40,33 +38,48 @@ const handlers = {
 
 const _getContext = async request => {
   const isSection2 = await RedisHelper.isSection2(request)
+  const isAlreadyCertified = await RedisHelper.isAlreadyCertified(request)
 
-  const context = {}
-
-  if (isSection2) {
-    context.pageTitle =
-      'Both the owner and applicant are jointly responsible for providing accurate information when making an application'
-
-    context.helpTextParas = [
-      'The Ivory Act 2018 permits you to do an application for someone else, but you must have permission to act on their behalf.'
-    ]
-    context.callOutText =
-      'If we later find out that the information you’ve given is not accurate, the applicant or owner could be fined or prosecuted.'
-  } else {
-    context.pageTitle =
-      'Both the owner and applicant are jointly responsible for providing accurate information within the self-assessment'
-
-    context.helpTextParas = [
-      'This is a self-assessment, both the owner and applicant are jointly responsible for ensuring the item is exempt.',
-      'The Ivory Act 2018 permits you to do a self-assessment for someone else, but you must have permission to act on their behalf.'
-    ]
-    context.callOutText =
-      'If we later find out that the item is not exempt, the applicant or owner could be fined or prosecuted.'
+  const context = {
+    isAlreadyCertified
   }
 
-  context.helpTextParas.push(
+  const haveOwnerPermission =
+    'If you are not the owner of the item, you must have permission to act on their behalf.'
+
+  const stopIfUnsure =
     'Stop at any point if you’re unsure about the right answer.'
-  )
+
+  const certificateCancelledOrRevoked =
+    "If we later find out that the information you’ve given is not accurate, the exemption certificate may be cancelled or 'revoked'."
+
+  if (!isSection2) {
+    context.pageTitle =
+      'Both the owner and applicant are jointly responsible for providing accurate information'
+    context.helpTextParas = [
+      'This is a self-declaration, both the owner and applicant are responsible for ensuring the item qualifies for exemption.',
+      haveOwnerPermission,
+      stopIfUnsure
+    ]
+  } else {
+    if (isAlreadyCertified) {
+      context.pageTitle =
+        'Both the owner and the person selling the certified item are jointly responsible for ensuring it remains exempt'
+    } else {
+      context.pageTitle =
+        'Both the owner and applicant are jointly responsible for providing accurate information'
+    }
+
+    context.helpTextParas = [
+      haveOwnerPermission,
+      stopIfUnsure,
+      certificateCancelledOrRevoked
+    ]
+  }
+
+  context.callOutText = isSection2
+    ? 'Dealing that relies on inaccurate information on the certificate may be a criminal offence. Anyone involved could be subject to a fine of up to £250,000, or 5 years imprisonment.'
+    : 'If we later find out that any of the information you have given is incorrect, your registration may be cancelled. The applicant or owner may be subject to a fine of up to £250,000 or 5 years imprisonment.'
 
   return context
 }

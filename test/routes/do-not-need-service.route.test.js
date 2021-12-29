@@ -122,7 +122,7 @@ describe('Eligibility checker - do not need service route', () => {
         const element = document.querySelector(`#${elementIds.para1}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'You only need to tell us if you are selling or hiring out an item that contains elephant ivory.'
+          'You only need to tell us if you are intending to sell or hire out an item that contains elephant ivory.'
         )
       })
     })
@@ -137,7 +137,7 @@ describe('Eligibility checker - do not need service route', () => {
         let element = document.querySelector(`#${elementIds.para2}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Qualifying accredited museums do not need to tell us when they sell or hire out ivory items to each other.'
+          'Qualifying museums do not need to tell us when they sell or hire out ivory items to each other.'
         )
 
         element = document.querySelector(`#${elementIds.subHeading}`)
