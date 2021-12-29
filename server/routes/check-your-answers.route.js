@@ -273,7 +273,7 @@ const _getItemSummary = async (request, itemType) => {
     )
 
     const isAlreadyCertified = await RedisHelper.isAlreadyCertified(
-      null,
+      request,
       alreadyCertified
     )
 
