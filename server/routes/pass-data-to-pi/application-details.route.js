@@ -20,6 +20,7 @@ const {
   AlreadyCertifiedReverseLookup
 } = require('../../services/dataverse-choice-lookups')
 
+const NONE = 'None'
 const NOTHING_ENTERED = 'Nothing entered'
 const DOWNLOAD_LINK_TEXT = 'Download'
 const MAX_DOCUMENTS = 6
@@ -211,8 +212,8 @@ const _getItemDescriptionSummary = entity => {
     ),
 
     _getSummaryListRow(
-      'Unique, identifying features (optional)',
-      entity[DataVerseFieldName.UNIQUE_FEATURES] || NOTHING_ENTERED
+      'Does the item have any distinguishing features?',
+      entity[DataVerseFieldName.UNIQUE_FEATURES] || NONE
     )
   ]
 

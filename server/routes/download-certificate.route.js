@@ -84,11 +84,11 @@ const _getPdf = async entity => {
   )
   ivoryLocationField.defaultUpdateAppearances(timesRomanFont)
 
-  const uniqueFeaturesField = form.getTextField('Unique features')
-  uniqueFeaturesField.setText(
+  const distinguishingFeaturesField = form.getTextField('Unique features')
+  distinguishingFeaturesField.setText(
     _formatField(entity, DataVerseFieldName.UNIQUE_FEATURES, NOTHING_ENTERED)
   )
-  uniqueFeaturesField.defaultUpdateAppearances(timesRomanFont)
+  distinguishingFeaturesField.defaultUpdateAppearances(timesRomanFont)
 
   await _addImages(entity, pdfDoc, form)
 

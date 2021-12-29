@@ -49,15 +49,15 @@
 
       {{ govukInput({
           label: {
-            html: '<span class="govuk-!-font-weight-bold">Describe any unique, identifying features (optional)</span>'
+            html: '<span class="govuk-!-font-weight-bold">Does the item have any distinguishing features?</span>'
           },
           hint: {
             text: "For example, 'handle has a carved image of a soldier', 'one of the feet is cracked'"
           },
-          id: "uniqueFeatures",
-          name: "uniqueFeatures",
-          value: uniqueFeatures,
-          errorMessage: fieldErrors['uniqueFeatures']
+          id: "distinguishingFeatures",
+          name: "distinguishingFeatures",
+          value: distinguishingFeatures,
+          errorMessage: fieldErrors['distinguishingFeatures']
       }) }}      
 
       {% if isSection2 %}

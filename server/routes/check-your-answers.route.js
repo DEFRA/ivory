@@ -152,7 +152,7 @@ const _getDocumentSummary = async request => {
       documentRows && documentRows.length
         ? documentRows.join('')
         : NO_DOCUMENTS_ADDED,
-      _getChangeItems(Paths.YOUR_DOCUMENTS, CHANGE_LINK_HINT.YourDocuments),
+      _getChangeItems(Paths.YOUR_DOCUMENTS, CHANGE_LINK_HINT.YourFiles),
       true
     )
   ]
@@ -365,9 +365,12 @@ const _getItemDescriptionSummary = async (request, isSection2) => {
       _getChangeItems(Paths.DESCRIBE_THE_ITEM, CHANGE_LINK_HINT.WhereIsIvory)
     ),
     _getSummaryListRow(
-      'Unique, identifying features (optional)',
-      itemDescription.uniqueFeatures || NOTHING_ENTERED,
-      _getChangeItems(Paths.DESCRIBE_THE_ITEM, CHANGE_LINK_HINT.UniqueFeatures)
+      'Distinguishing features',
+      itemDescription.distinguishingFeatures || NONE,
+      _getChangeItems(
+        Paths.DESCRIBE_THE_ITEM,
+        CHANGE_LINK_HINT.DistinguishingFeatures
+      )
     )
   ]
 
@@ -876,7 +879,7 @@ const CHANGE_LINK_HINT = {
   OwnerName: 'owner’s name',
   SellingOnBehalfOf: 'who owns the item',
   SaleIntention: 'what owner intends to do',
-  UniqueFeatures: 'any unique features',
+  DistinguishingFeatures: 'any distinguishing features',
   WhatIsItem: 'your description of the item',
   WhenMade: 'when it was made',
   WhereIsIvory: 'where the ivory is',
@@ -886,7 +889,7 @@ const CHANGE_LINK_HINT = {
   WhyRmi: 'reason why item is of outstandingly high value',
   WorkForABusiness: 'if you work for a business',
   YourAddress: 'your address',
-  YourDocuments: 'your documents',
+  YourFiles: 'your files',
   YourEmail: 'your email',
   YourName: 'your name',
   YourPhotos: 'your photos'
@@ -927,13 +930,14 @@ const LEGAL_ASSERTIONS = {
     COMPLETE_AND_CORRECT
   ],
   Section2AlreadyCertified: [
-    'the information on the certificate is still accurate and complete',
-    'the certificate was issued for this item'
+    'the information on the certificate remains accurate and complete',
+    'the exemption certificate relates to the item that is to be sold or hired out'
   ],
   additionalSection2: [
     'the item is of outstandingly high artistic, cultural or historical value'
   ]
 }
 
+const NONE = 'None'
 const NOTHING_ENTERED = 'Nothing entered'
-const NO_DOCUMENTS_ADDED = 'No documents added'
+const NO_DOCUMENTS_ADDED = 'No files added'

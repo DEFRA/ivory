@@ -132,12 +132,19 @@ const _validateForm = payload => {
     })
   }
 
-  if (Validators.maxLength(payload.uniqueFeatures, CharacterLimits.Input)) {
+  if (Validators.empty(payload.distinguishingFeatures)) {
     errors.push({
-      name: 'uniqueFeatures',
+      name: 'distinguishingFeatures',
+      text: 'You must give details about the item’s distinguishing features'
+    })
+  } else if (
+    Validators.maxLength(payload.distinguishingFeatures, CharacterLimits.Input)
+  ) {
+    errors.push({
+      name: 'distinguishingFeatures',
       text: `You must use fewer than ${formatNumberWithCommas(
         CharacterLimits.Input
-      )} characters to describe any unique, identifying features`
+      )} characters to describe any distinguishing features`
     })
   }
 

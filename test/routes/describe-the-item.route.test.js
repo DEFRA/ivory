@@ -32,7 +32,7 @@ describe('/describe-the-item route', () => {
     pageTitle: 'pageTitle',
     whatIsItem: 'whatIsItem',
     whereIsIvory: 'whereIsIvory',
-    uniqueFeatures: 'uniqueFeatures',
+    distinguishingFeatures: 'distinguishingFeatures',
     whereMade: 'whereMade',
     whenMade: 'whenMade',
     continue: 'continue'
@@ -41,7 +41,7 @@ describe('/describe-the-item route', () => {
   const itemDescription = {
     whatIsItem: 'Chest of drawers',
     whereIsIvory: 'Chest has ivory knobs',
-    uniqueFeatures: 'One of the feet is cracked',
+    distinguishingFeatures: 'One of the feet is cracked',
     whereMade: 'Europe',
     whenMade: 'Georgian era'
   }
@@ -121,10 +121,10 @@ describe('/describe-the-item route', () => {
       it('should have the "unique features" form field', () => {
         TestHelper.checkFormField(
           document,
-          elementIds.uniqueFeatures,
-          'Describe any unique, identifying features (optional)',
+          elementIds.distinguishingFeatures,
+          'Does the item have any distinguishing features?',
           "For example, 'handle has a carved image of a soldier', 'one of the feet is cracked'",
-          itemDescription.uniqueFeatures
+          itemDescription.distinguishingFeatures
         )
       })
 
@@ -251,7 +251,8 @@ describe('/describe-the-item route', () => {
       it('should display a validation error message if the user does not enter "What is the item?"', async () => {
         postOptions.payload = {
           whatIsItem: '',
-          whereIsIvory: 'SOME_VALUE_2'
+          whereIsIvory: 'SOME_VALUE_2',
+          distinguishingFeatures: 'SOME_VALUE_3'
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
@@ -264,7 +265,8 @@ describe('/describe-the-item route', () => {
       it('should display a validation error message if "What is the item?" is too long', async () => {
         postOptions.payload = {
           whatIsItem: `${CharacterLimits.fourThousandCharacters}X`,
-          whereIsIvory: 'SOME_VALUE_2'
+          whereIsIvory: 'SOME_VALUE_2',
+          distinguishingFeatures: 'SOME_VALUE_3'
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
@@ -277,7 +279,8 @@ describe('/describe-the-item route', () => {
       it('should display a validation error message if the user does not enter "Where is the ivory"', async () => {
         postOptions.payload = {
           whatIsItem: 'SOME_VALUE_1',
-          whereIsIvory: ''
+          whereIsIvory: '',
+          distinguishingFeatures: 'SOME_VALUE_3'
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
@@ -290,7 +293,8 @@ describe('/describe-the-item route', () => {
       it('should display a validation error message if "Where is the ivory?" is too long', async () => {
         postOptions.payload = {
           whatIsItem: 'SOME_VALUE_1',
-          whereIsIvory: `${CharacterLimits.fourThousandCharacters}X`
+          whereIsIvory: `${CharacterLimits.fourThousandCharacters}X`,
+          distinguishingFeatures: 'SOME_VALUE_3'
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
@@ -304,13 +308,13 @@ describe('/describe-the-item route', () => {
         postOptions.payload = {
           whatIsItem: 'SOME_VALUE_1',
           whereIsIvory: 'SOME_VALUE_2',
-          uniqueFeatures: `${CharacterLimits.fourThousandCharacters}X`
+          distinguishingFeatures: `${CharacterLimits.fourThousandCharacters}X`
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
           server,
-          elementIds.uniqueFeatures,
-          'You must use fewer than 4,000 characters to describe any unique, identifying features'
+          elementIds.distinguishingFeatures,
+          'You must use fewer than 4,000 characters to describe any distinguishing features'
         )
       })
 
@@ -318,6 +322,7 @@ describe('/describe-the-item route', () => {
         postOptions.payload = {
           whatIsItem: 'SOME_VALUE_1',
           whereIsIvory: 'SOME_VALUE_2',
+          distinguishingFeatures: 'SOME_VALUE_3',
           whereMade: `${CharacterLimits.fourThousandCharacters}X`
         }
         await TestHelper.checkFormFieldValidation(
@@ -332,6 +337,7 @@ describe('/describe-the-item route', () => {
         postOptions.payload = {
           whatIsItem: 'SOME_VALUE_1',
           whereIsIvory: 'SOME_VALUE_2',
+          distinguishingFeatures: 'SOME_VALUE_3',
           whenMade: `${CharacterLimits.fourThousandCharacters}X`
         }
         await TestHelper.checkFormFieldValidation(
@@ -346,7 +352,7 @@ describe('/describe-the-item route', () => {
         postOptions.payload = {
           whatIsItem: 'SOME_VALUE_1',
           whereIsIvory: 'SOME_VALUE_2',
-          uniqueFeatures: '',
+          distinguishingFeatures: 'SOME_VALUE_3',
           whereMade: '',
           whenMade: ''
         }

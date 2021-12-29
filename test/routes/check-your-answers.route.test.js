@@ -178,7 +178,7 @@ describe('/check-your-answers route', () => {
         _checkSubheading(
           document,
           elementIds.subHeadings.itemDescription,
-          'Description of the item'
+          'Why item qualifies for exemption'
         )
 
         _checkSummary(document, elementIds.summaries.itemDescription)
@@ -186,7 +186,7 @@ describe('/check-your-answers route', () => {
         _checkSummaryKeys(document, elementIds.summaries.itemDescription, [
           'What is it?',
           'Where’s the ivory?',
-          'Unique, identifying features (optional)',
+          'Distinguishing features',
           'Where was it made? (optional)',
           'When was it made? (optional)'
         ])
@@ -203,7 +203,7 @@ describe('/check-your-answers route', () => {
           [
             'Change your description of the item',
             'Change where the ivory is',
-            'Change any unique features',
+            'Change any distinguishing features',
             'Change where it was made',
             'Change when it was made'
           ],
@@ -270,7 +270,7 @@ describe('/check-your-answers route', () => {
         _checkSubheading(
           document,
           elementIds.subHeadings.documents,
-          'Documents to support application'
+          'Supporting evidence'
         )
 
         _checkSummary(document, elementIds.summaries.documents)
@@ -291,7 +291,7 @@ describe('/check-your-answers route', () => {
         _checkSummaryChangeLinks(
           document,
           elementIds.summaries.documents,
-          'Change your documents',
+          'Change your files',
           Paths.YOUR_DOCUMENTS
         )
       })
@@ -865,13 +865,13 @@ describe('/check-your-answers route', () => {
           let element = document.querySelector(`#${elementIds.legalAssertion1}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'the information on the certificate is still accurate and complete'
+            'the information on the certificate remains accurate and complete'
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'the certificate was issued for this item'
+            'the exemption certificate relates to the item that is to be sold or hired out'
           )
 
           element = document.querySelector(
@@ -977,7 +977,7 @@ const LINK_CLASS = 'govuk-link'
 const mockItemDescription = {
   whatIsItem: 'Chest of drawers',
   whereIsIvory: 'Chest has ivory knobs',
-  uniqueFeatures: 'One of the feet is cracked',
+  distinguishingFeatures: 'One of the feet is cracked',
   whereMade: 'Europe',
   whenMade: 'Georgian era'
 }

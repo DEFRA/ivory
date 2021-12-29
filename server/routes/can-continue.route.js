@@ -116,7 +116,7 @@ const _getSteps = context => {
       100}.`,
 
     CONFIRM_STILL_ACCURATE:
-      'Confirm the information on the certificate is still accurate and complete.',
+      'Confirm the information on the certificate remains accurate and complete.',
     RECEIVE_CONFIRMATION:
       'Receive confirmation you can now sell or hire out your item.',
     WAIT: `Wait up to ${SLA} working days for your application to be approved by an expert.`

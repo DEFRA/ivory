@@ -47,7 +47,7 @@ const _getContext = async request => {
   const rows = uploadData.files.map((file, index) => {
     return {
       key: {
-        text: `Document ${index + 1}`
+        text: `File ${index + 1}`
       },
       classes: 'ivory-summary-list',
       value: {
@@ -58,7 +58,7 @@ const _getContext = async request => {
           {
             href: `/remove-document/${index + 1}`,
             text: 'Remove',
-            visuallyHiddenText: `document ${index + 1}`
+            visuallyHiddenText: `file ${index + 1}`
           }
         ]
       }
