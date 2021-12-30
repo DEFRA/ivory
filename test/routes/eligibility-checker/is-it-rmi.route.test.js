@@ -80,13 +80,7 @@ describe('/eligibility-checker/is-it-rmi route', () => {
       )
     })
 
-    it('should have the correct summary details', () => {
-      _checkElement(
-        document,
-        `${elementIds.howDoIKnow} .govuk-details__summary-text`,
-        'How do I know if my item has outstandingly high artistic, cultural or historic value?'
-      )
-
+    it('should have the correct initial help text', () => {
       _checkElement(document, elementIds.para3, 'The item must be:')
 
       _checkElement(document, elementIds.bullet1, 'rare')
@@ -98,6 +92,14 @@ describe('/eligibility-checker/is-it-rmi route', () => {
       )
 
       _checkElement(document, elementIds.bullet3, 'or both of the above')
+    })
+
+    it('should have the correct summary details', () => {
+      _checkElement(
+        document,
+        `${elementIds.howDoIKnow} .govuk-details__summary-text`,
+        'How do I know if my item has outstandingly high artistic, cultural or historic value?'
+      )
 
       _checkElement(
         document,
