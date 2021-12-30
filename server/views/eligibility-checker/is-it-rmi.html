@@ -23,7 +23,12 @@
           }
       }) %}
 
-        <p id="helpText">{{ helpText }}</p>
+        <p class="govuk-body" id="para3">The item must be:</p>
+        <ul class="govuk-body">
+          <li id="bullet1">rare</li>
+          <li id="bullet2">an important example of its type</li>
+          <li id="bullet3">or both of the above</li>
+        </ul>
 
         {{ govukInsetText({
           id: "callOutText",
@@ -31,15 +36,6 @@
         }) }}
 
         {% set detailHtml %}
-          <p class="govuk-body" id="para3">The item must have been made before 1 January 1918 and be:</p>
-          <ul>
-            <li id="bullet1">rare</li>
-            <li id="bullet2">an important example of its type</li>
-            <li id="bullet3">or both of the above</li>
-          </ul>
-
-          <p class="govuk-body govuk-!-margin-top-3" id="para4">An item that only has sentimental value would not qualify, regardless of how important it is to you personally.</p>
-
           <p class="govuk-body" id="para5">Each item is assessed individually by recognised experts. They set a very high threshold when advising whether an item meets these criteria.</p>
 
           <p class="govuk-body" id="para6">They’ll consider various things, such as whether an item:</p>
