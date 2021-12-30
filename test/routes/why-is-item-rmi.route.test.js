@@ -93,7 +93,7 @@ describe('/why-is-item-rmi route', () => {
       _checkElement(
         document,
         elementIds.para2,
-        'You can upload supporting documents later on in this service. If you’d prefer to make your case within these documents, use the text box to summarise any documents you want to upload.'
+        'You can upload supporting documents later in this service. If you’d prefer to make your case within these documents, use the text box to summarise any documents you want to upload.'
       )
 
       _checkElement(
