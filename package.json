@@ -1,6 +1,6 @@
 {
   "name": "ivory",
-  "version": "0.24.20",
+  "version": "0.24.23",
   "description": "Digital service to support the Ivory Act",
   "main": "index.js",
   "scripts": {
@@ -46,11 +46,10 @@
     "govuk-frontend": "^4.0.0",
     "hapi-pino": "8.5.0",
     "hapi-redis2": "^3.0.1",
-    "hapi-robots": "^3.2.2",
     "joi": "^17.5.0",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.6",
-    "node-sass": "^7.0.0",
+    "node-sass": "^7.0.1",
     "notifications-node-client": "^5.1.0",
     "nunjucks": "3.2.3",
     "pdf-lib": "^1.17.1",

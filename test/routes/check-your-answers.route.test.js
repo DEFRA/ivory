@@ -874,6 +874,12 @@ describe('/check-your-answers route', () => {
             'the exemption certificate relates to the item that is to be sold or hired out'
           )
 
+          element = document.querySelector(`#${elementIds.legalAssertion3}`)
+          expect(element).toBeTruthy()
+          expect(TestHelper.getTextContent(element)).toEqual(
+            'the item continues to satisfy the criteria of being of outstandingly high artistic, cultural or historical value'
+          )
+
           element = document.querySelector(
             `#${elementIds.legalAssertionsAdditional1}`
           )

@@ -29,6 +29,7 @@ const FormFields = {
   APPLICANT_ADDRESS: 'Applicant address',
   APPLICANT_NAME: 'Applicant name',
   APPLIED_BEFORE: 'Applied before',
+  DISTINGUISHING_FEATURES: 'Distinguishing features',
   EXEMPTION_TYPE: 'Type of exemption',
   IVORY_APPLICATION: 'Ivory application',
   IVORY_LOCATION: 'Where is it',
@@ -37,7 +38,6 @@ const FormFields = {
   PREVIOUS_APPLICATION_NUMBER: 'Previous app number',
   PROOF_OF_AGE: 'Proof of age',
   REVOKED_CERTIFICATE_NUMBER: 'Revoked cert number',
-  UNIQUE_FEATURES: 'Unique features',
   WHAT_IS_IT: 'What is it',
   WHEN_MADE: 'When was it made',
   WHERE_IS_IT: 'Where is it',
@@ -45,6 +45,7 @@ const FormFields = {
   WHY_RMI: 'Why is it high value'
 }
 
+const NONE = 'None'
 const NOTHING_ENTERED = 'Nothing entered'
 
 const handlers = {
@@ -137,10 +138,8 @@ const _getPdf = async entity => {
   field = form.getTextField(FormFields.IVORY_LOCATION)
   field.setText(_formatField(entity, DataVerseFieldName.WHERE_IS_THE_IVORY))
 
-  field = form.getTextField(FormFields.UNIQUE_FEATURES)
-  field.setText(
-    _formatField(entity, DataVerseFieldName.UNIQUE_FEATURES, NOTHING_ENTERED)
-  )
+  field = form.getTextField(FormFields.DISTINGUISHING_FEATURES)
+  field.setText(_formatField(entity, DataVerseFieldName.DISTINGUISHING_FEATURES, NONE))
 
   field = form.getTextField(FormFields.WHERE_MADE)
   field.setText(

@@ -298,7 +298,7 @@ describe('/pass-data-to-pi/application-details route', () => {
         _checkSummaryKeys(document, elementIds.summaries.itemDescription, [
           'What is it?',
           'Where’s the ivory?',
-          'distinguishing features (optional)',
+          'Distinguishing features',
           'Where was it made? (optional)',
           'When was it made? (optional)'
         ])
@@ -306,7 +306,7 @@ describe('/pass-data-to-pi/application-details route', () => {
         _checkSummaryValues(document, elementIds.summaries.itemDescription, [
           mockEntity[DataVerseFieldName.ITEM_SUMMARY],
           mockEntity[DataVerseFieldName.WHERE_IS_THE_IVORY],
-          mockEntity[DataVerseFieldName.UNIQUE_FEATURES],
+          mockEntity[DataVerseFieldName.DISTINGUISHING_FEATURES],
           mockEntity[DataVerseFieldName.WHERE_IT_WAS_MADE],
           mockEntity[DataVerseFieldName.WHEN_IT_WAS_MADE]
         ])

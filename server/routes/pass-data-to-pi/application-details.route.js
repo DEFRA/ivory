@@ -212,8 +212,8 @@ const _getItemDescriptionSummary = entity => {
     ),
 
     _getSummaryListRow(
-      'Does the item have any distinguishing features?',
-      entity[DataVerseFieldName.UNIQUE_FEATURES] || NONE
+      'Distinguishing features',
+      entity[DataVerseFieldName.DISTINGUISHING_FEATURES] || NONE
     )
   ]
 

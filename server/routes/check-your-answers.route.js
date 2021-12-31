@@ -931,7 +931,8 @@ const LEGAL_ASSERTIONS = {
   ],
   Section2AlreadyCertified: [
     'the information on the certificate remains accurate and complete',
-    'the exemption certificate relates to the item that is to be sold or hired out'
+    'the exemption certificate relates to the item that is to be sold or hired out',
+    'the item continues to satisfy the criteria of being of outstandingly high artistic, cultural or historical value'
   ],
   additionalSection2: [
     'the item is of outstandingly high artistic, cultural or historical value'
