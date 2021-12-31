@@ -12,13 +12,11 @@ describe('/eligibility-checker/is-it-rmi route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    helpText: 'helpText',
     callOutText: 'callOutText',
     howDoIKnow: 'howDoIKnow',
     para1: 'para1',
     para2: 'para2',
     para3: 'para3',
-    para4: 'para4',
     para5: 'para5',
     para6: 'para6',
     bullet1: 'bullet1',
@@ -82,26 +80,8 @@ describe('/eligibility-checker/is-it-rmi route', () => {
       )
     })
 
-    it('should have the correct help text', () => {
-      const element = document.querySelector(`#${elementIds.helpText}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'The item must be a rare and socially significant example of its type.'
-      )
-    })
-
-    it('should have the correct summary details', () => {
-      _checkElement(
-        document,
-        `${elementIds.howDoIKnow} .govuk-details__summary-text`,
-        'How do I know if my item has outstandingly high artistic, cultural or historic value?'
-      )
-
-      _checkElement(
-        document,
-        elementIds.para3,
-        'The item must have been made before 1 January 1918 and be:'
-      )
+    it('should have the correct initial help text', () => {
+      _checkElement(document, elementIds.para3, 'The item must be:')
 
       _checkElement(document, elementIds.bullet1, 'rare')
 
@@ -112,11 +92,13 @@ describe('/eligibility-checker/is-it-rmi route', () => {
       )
 
       _checkElement(document, elementIds.bullet3, 'or both of the above')
+    })
 
+    it('should have the correct summary details', () => {
       _checkElement(
         document,
-        elementIds.para4,
-        'An item that only has sentimental value would not qualify, regardless of how important it is to you personally.'
+        `${elementIds.howDoIKnow} .govuk-details__summary-text`,
+        'How do I know if my item has outstandingly high artistic, cultural or historic value?'
       )
 
       _checkElement(
