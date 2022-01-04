@@ -48,6 +48,10 @@ const handlers = {
       payload.containElephantIvory
     )
 
+    if (payload.containElephantIvory === Options.NO) {
+      await RedisService.set(request, RedisKeys.ARE_YOU_A_MUSEUM, false)
+    }
+
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.containElephantIvory}`,

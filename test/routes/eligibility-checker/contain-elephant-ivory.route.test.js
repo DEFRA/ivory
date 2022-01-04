@@ -3,6 +3,7 @@
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 const TestHelper = require('../../utils/test-helper')
+const { Options, RedisKeys } = require('../../../server/utils/constants')
 
 describe('/eligibility-checker/contain-elephant-ivory route', () => {
   let server
@@ -188,12 +189,23 @@ const _checkSelectedRadioAction = async (
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
+  expect(RedisService.set).toBeCalledTimes(
+    selectedOption === Options.NO ? 2 : 1
+  )
+
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
-    'eligibility-checker.contain-elephant-ivory',
+    RedisKeys.CONTAIN_ELEPHANT_IVORY,
     selectedOption
   )
-  expect(RedisService.set).toBeCalledTimes(1)
+
+  if (selectedOption === Options.NO) {
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      RedisKeys.ARE_YOU_A_MUSEUM,
+      false
+    )
+  }
 
   expect(response.headers.location).toEqual(nextUrl)
 }
