@@ -272,13 +272,13 @@ const _createSection2ResaleRedisMock = () => {
 const mockItemDescriptionSection10 = {
   whatIsItem: 'Piano',
   whereIsIvory: 'On the keys',
-  uniqueFeatures: 'one of the keys is cracked'
+  distinguishingFeatures: 'one of the keys is cracked'
 }
 
 const mockItemDescriptionSection2 = {
   whatIsItem: 'Chest of drawers',
   whereIsIvory: 'Chest has ivory knobs',
-  uniqueFeatures: 'One of the feet is cracked',
+  distinguishingFeatures: 'One of the feet is cracked',
   whereMade: 'Europe',
   whenMade: 'Georgian era'
 }
