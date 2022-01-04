@@ -267,10 +267,19 @@ const _getItemSummary = async (request, itemType) => {
   const isSection2 = await RedisHelper.isSection2(null, itemType)
 
   if (isSection2) {
-    const alreadyCertified = await RedisService.get(
+    let alreadyCertified = await RedisService.get(
       request,
       RedisKeys.ALREADY_CERTIFIED
     )
+
+    if (!alreadyCertified) {
+      // If the user went via the eligibility checker, they do not visit the
+      // "'Does the item already have an exemption certificate?'" screen,
+      // so set default the corresponding redis object to "No"
+      alreadyCertified = {
+        alreadyCertified: Options.NO
+      }
+    }
 
     const isAlreadyCertified = await RedisHelper.isAlreadyCertified(
       request,
