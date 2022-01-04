@@ -12,7 +12,7 @@ const {
 } = require('../utils/constants')
 const { isPngImage } = require('../utils/general')
 
-const NOTHING_ENTERED = 'Nothing entered'
+const NONE = 'None'
 
 const formPdfBytes = fs.readFileSync(
   './server/public/static/ivory-certificate-template.pdf'
@@ -84,11 +84,11 @@ const _getPdf = async entity => {
   )
   ivoryLocationField.defaultUpdateAppearances(timesRomanFont)
 
-  const uniqueFeaturesField = form.getTextField('Unique features')
-  uniqueFeaturesField.setText(
-    _formatField(entity, DataVerseFieldName.UNIQUE_FEATURES, NOTHING_ENTERED)
+  const distinguishingFeaturesField = form.getTextField('Distinguishing features')
+  distinguishingFeaturesField.setText(
+    _formatField(entity, DataVerseFieldName.DISTINGUISHING_FEATURES, NONE)
   )
-  uniqueFeaturesField.defaultUpdateAppearances(timesRomanFont)
+  distinguishingFeaturesField.defaultUpdateAppearances(timesRomanFont)
 
   await _addImages(entity, pdfDoc, form)
 

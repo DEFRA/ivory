@@ -7,6 +7,7 @@ const RedisHelper = require('../services/redis-helper.service')
 const {
   CharacterLimits,
   ItemType,
+  Options,
   Paths,
   RedisKeys,
   Views,
@@ -56,6 +57,10 @@ const handlers = {
         .code(400)
     }
 
+    if (payload && payload.hasDistinguishingFeatures !== Options.YES) {
+      delete payload.distinguishingFeatures
+    }
+
     await RedisService.set(
       request,
       RedisKeys.DESCRIBE_THE_ITEM,
@@ -82,17 +87,28 @@ const handlers = {
 }
 
 const _getContext = async (request, itemType) => {
+  let payload
+  if (request.payload) {
+    payload = request.payload
+  } else {
+    payload = await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
+  }
+
+  const hasDistinguishingFeatures = payload
+    ? payload.hasDistinguishingFeatures
+    : null
+
+  const options = _getOptions(hasDistinguishingFeatures).slice(0, -1)
+  const yesOption = options.shift()
+
   const context = {
     pageTitle,
+    yesOption,
+    items: options,
     isSection2: itemType === ItemType.HIGH_VALUE
   }
 
-  const itemDescription = await RedisService.get(
-    request,
-    RedisKeys.DESCRIBE_THE_ITEM
-  )
-
-  _addRedisDataToContext(context, itemDescription)
+  _addRedisDataToContext(context, payload)
 
   addPayloadToContext(request, context)
 
@@ -132,12 +148,29 @@ const _validateForm = payload => {
     })
   }
 
-  if (Validators.maxLength(payload.uniqueFeatures, CharacterLimits.Input)) {
+  if (Validators.empty(payload.hasDistinguishingFeatures)) {
     errors.push({
-      name: 'uniqueFeatures',
+      name: 'hasDistinguishingFeatures',
+      text: 'You must tell us if the item has any distinguishing features'
+    })
+  }
+
+  if (
+    payload.hasDistinguishingFeatures === Options.YES &&
+    Validators.empty(payload.distinguishingFeatures)
+  ) {
+    errors.push({
+      name: 'distinguishingFeatures',
+      text: 'You must give details about the item’s distinguishing features'
+    })
+  } else if (
+    Validators.maxLength(payload.distinguishingFeatures, CharacterLimits.Input)
+  ) {
+    errors.push({
+      name: 'distinguishingFeatures',
       text: `You must use fewer than ${formatNumberWithCommas(
         CharacterLimits.Input
-      )} characters to describe any unique, identifying features`
+      )} characters to describe any distinguishing features`
     })
   }
 
@@ -168,6 +201,25 @@ const _addRedisDataToContext = (context, itemDescription) => {
       context[fieldName] = itemDescription[fieldName]
     }
   }
+}
+
+const _getOptions = hasDistinguishingFeatures => {
+  const options = Object.values(Options).map(option => {
+    return {
+      label: option,
+      checked: hasDistinguishingFeatures && hasDistinguishingFeatures === option
+    }
+  })
+
+  const items = options.map(option => {
+    return {
+      text: option.label,
+      value: option.label,
+      checked: option.checked
+    }
+  })
+
+  return items
 }
 
 module.exports = [

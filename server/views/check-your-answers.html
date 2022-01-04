@@ -36,7 +36,7 @@
       {% endif %}
 
       {% if not isAlreadyCertified %}
-        <h2 id="itemDescriptionSubHeading" class="govuk-heading-m">Description of the item</h2>
+        <h2 id="itemDescriptionSubHeading" class="govuk-heading-m">Why item qualifies for exemption</h2>
 
         {{ govukSummaryList({
           classes: 'govuk-!-margin-bottom-9',
@@ -61,7 +61,7 @@
 
 
       {% if not isAlreadyCertified and documentSummary %}
-        <h2 id="documentsSummaryHeading" class="govuk-heading-m">Documents to support application</h2>
+        <h2 id="documentsSummaryHeading" class="govuk-heading-m">Supporting evidence</h2>
 
         {{ govukSummaryList({
           classes: 'govuk-!-margin-bottom-9',

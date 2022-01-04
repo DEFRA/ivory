@@ -632,7 +632,7 @@ describe('/can-continue route', () => {
           element = document.querySelector(`#${elementIds.step2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'Confirm the information on the certificate is still accurate and complete.'
+            'Confirm the information on the certificate remains accurate and complete.'
           )
 
           element = document.querySelector(`#${elementIds.step3}`)

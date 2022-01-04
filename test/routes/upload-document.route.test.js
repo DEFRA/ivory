@@ -51,7 +51,7 @@ describe('/upload-document route', () => {
       url
     }
 
-    describe('GET: No documents', () => {
+    describe('GET: No files', () => {
       beforeEach(async () => {
         document = await TestHelper.submitGetRequest(server, getOptions)
       })

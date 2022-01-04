@@ -188,7 +188,10 @@ const _getCommonFields = async (request, itemDescription) => {
       : null,
     [DataVerseFieldName.WHERE_IS_THE_IVORY]: itemDescription.whereIsIvory,
     [DataVerseFieldName.ITEM_SUMMARY]: itemDescription.whatIsItem,
-    [DataVerseFieldName.UNIQUE_FEATURES]: itemDescription.uniqueFeatures,
+    [DataVerseFieldName.HAS_DISTINGUISHING_FEATURES]:
+      itemDescription.hasDistinguishingFeatures === Options.YES,
+    [DataVerseFieldName.DISTINGUISHING_FEATURES]:
+      itemDescription.distinguishingFeatures,
     [DataVerseFieldName.INTENTION]: _getIntentionCategoryCode(intentionForItem),
     ...(await _getInitialPhoto(request)),
     ...(await _getOwnerAndApplicantDetails(request))

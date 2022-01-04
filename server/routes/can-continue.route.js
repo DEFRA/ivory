@@ -106,7 +106,7 @@ const _getSteps = context => {
     DECLARE_ITEM_MEETS_CRITERIA:
       'Declare that the item in your opinion meets the relevant exemption criteria.',
     CONFIRM_STILL_ACCURATE:
-      'Confirm the information on the certificate is still accurate and complete.',
+      'Confirm the information on the certificate remains accurate and complete.',
     RECEIVE_CONFIRMATION:
       'Receive confirmation you can now sell or hire out your item.',
     WAIT: `We will aim to respond to your application within ${SLA} working days, if it is going to take longer, we will let you know.`
