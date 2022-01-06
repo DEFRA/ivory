@@ -219,7 +219,7 @@ module.exports = [
     method: 'POST',
     path: `${Paths.UPLOAD_DOCUMENT}`,
     handler: handlers.post,
-    config: {
+    options: {
       plugins: {
         // Disinfect disabled on this route as caused an issue with the payload code below.
         // Note that while the payload isn't being sanitised no text boxes allowing user input should be used on this page.

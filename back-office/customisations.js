@@ -110,6 +110,15 @@ const AlreadyCertifiedLookup = {
   USED_TO: 881990002
 };
 
+const SellingOnBehalfOfLookup = {
+  BUSINESS_I_WORK_FOR: 881990000,
+  AN_INDIVIDUAL: 881990001,
+  ANOTHER_BUSINESS: 881990002,
+  FRIEND_OR_RELATIVE: 881990003,
+  A_BUSINESS: 881990004,
+  OTHER: 881990005
+};
+
 const Statuses = {
   LOGGED: 881990000,
   GRANTED: 881990005,
@@ -170,13 +179,13 @@ this.formOnLoad = async (executionContext, section) => {
     this.initialiseRecord(executionContext, isSection2);
   }
 
-  if (!isSection2) {
-    formContext.getControl(DataVerseFieldName.EXEMPTION_TYPE).removeOption(ExemptionTypeLookup.HIGH_VALUE);
-  }
+  this._filterExemptionTypes(formContext, isSection2);
+
+  this._filterSellingOnBehalfOfChoices(formContext, true);
+  this._filterSellingOnBehalfOfChoices(formContext, false);
 
   if (!isSection2) {
     this.exemptionTypeOnChange(executionContext);
-    this.ivoryVolumeOnChange(executionContext);
   }
 
   this.setStatuses(formContext, isSection2);
@@ -245,6 +254,61 @@ this.initialiseRecord = (executionContext, isSection2) => {
       formContext.getAttribute(DataVerseFieldName.TARGET_COMPLETION_DATE).setValue(targetCompletionDate);
     }
   }
+}
+
+this._filterExemptionTypes = (formContext, isSection2) => {
+  'use strict';
+
+  if (!isSection2) {
+    formContext.getControl(DataVerseFieldName.EXEMPTION_TYPE).removeOption(ExemptionTypeLookup.HIGH_VALUE);
+  }
+}
+
+this._filterSellingOnBehalfOfChoices = (formContext, isCurrent) => {
+  'use strict';
+
+  const workForABusiness = isCurrent ? 
+    formContext.getAttribute(DataVerseFieldName.WORK_FOR_A_BUSINESS).getValue() : 
+    formContext.getAttribute(DataVerseFieldName.PREVIOUS_WORK_FOR_A_BUSINESS).getValue();
+
+  const sellingOnBehalfOfControl = isCurrent ? 
+    formContext.getControl(DataVerseFieldName.SELLING_ON_BEHALF_OF) : 
+    formContext.getControl(DataVerseFieldName.PREVIOUS_SELLING_ON_BEHALF_OF);
+
+  sellingOnBehalfOfControl.clearOptions();
+
+  if (workForABusiness) {
+    sellingOnBehalfOfControl.addOption({
+      text: 'The business I work for',
+      value: SellingOnBehalfOfLookup.BUSINESS_I_WORK_FOR
+    });
+
+    sellingOnBehalfOfControl.addOption({
+      text: 'An individual',
+      value: SellingOnBehalfOfLookup.AN_INDIVIDUAL
+    });
+
+    sellingOnBehalfOfControl.addOption({
+      text: 'Another business',
+      value: SellingOnBehalfOfLookup.ANOTHER_BUSINESS
+    });
+
+  } else {
+    sellingOnBehalfOfControl.addOption({
+      text: 'A friend or relative',
+      value: SellingOnBehalfOfLookup.FRIEND_OR_RELATIVE
+    });
+
+    sellingOnBehalfOfControl.addOption({
+      text: 'A business',
+      value: SellingOnBehalfOfLookup.A_BUSINESS
+    });
+  }
+
+  sellingOnBehalfOfControl.addOption({
+    text: 'Other',
+    value: SellingOnBehalfOfLookup.OTHER
+  });
 }
 
 this._setCertificateKey = formContext => {
@@ -398,22 +462,7 @@ this.exemptionTypeOnChange = executionContext => {
 
   this.setAgeExemptionReasons(formContext, false);
 
-  this.ivoryVolumeOnChange(executionContext);
   this.ivoryAgeOnChange(executionContext);
-}
-
-this.ivoryVolumeOnChange = executionContext => {
-  'use strict';
-
-  const formContext = executionContext.getFormContext();
-
-  const selectedIvoryVolumeReason = formContext.getAttribute(DataVerseFieldName.WHY_IVORY_EXEMPT).getValue();
-  if (selectedIvoryVolumeReason === IvoryVolumeLookup.OTHER_REASON) {
-    formContext.getControl(DataVerseFieldName.WHY_IVORY_EXEMPT_OTHER_REASON).setVisible(true);
-  } else {
-    formContext.getControl(DataVerseFieldName.WHY_IVORY_EXEMPT_OTHER_REASON).setVisible(false);
-    formContext.getAttribute(DataVerseFieldName.WHY_IVORY_EXEMPT_OTHER_REASON).setValue(null);
-  }
 }
 
 this.ivoryAgeOnChange = executionContext => {
@@ -505,6 +554,20 @@ this.appliedBeforeOnChange = executionContext => {
   }
 }
 
+this.workForABusinessOnChange = executionContext => {
+  'use strict';
+
+  const formContext = executionContext.getFormContext();
+  this._filterSellingOnBehalfOfChoices(formContext, true);
+}
+
+this.previousWorkForABusinessOnChange = executionContext => {
+  'use strict';
+
+  const formContext = executionContext.getFormContext();
+  this._filterSellingOnBehalfOfChoices(formContext, false);
+}
+
 this.setStatuses = (formContext, isSection2) => {
   'use strict';
 
@@ -522,20 +585,21 @@ this.setAgeExemptionReasons = (formContext, isSection2) => {
   const fieldName = isSection2 ? DataVerseFieldName.EXEMPTION_CATEGORY : DataVerseFieldName.EXEMPTION_TYPE;
   const selectedExemptionType = formContext.getAttribute(fieldName).getValue();
 
-  formContext.getControl(DataVerseFieldName.WHY_AGE_EXEMPT).removeOption(AgeExemptionReasonLookup.BEEN_IN_FAMILY_1975);
-  formContext.getControl(DataVerseFieldName.WHY_AGE_EXEMPT).removeOption(AgeExemptionReasonLookup.BEEN_IN_FAMILY_1947);
-  formContext.getControl(DataVerseFieldName.WHY_AGE_EXEMPT).removeOption(AgeExemptionReasonLookup.BEEN_IN_FAMILY_1918);
+  const whyAgeExemptControl = formContext.getControl(DataVerseFieldName.WHY_AGE_EXEMPT);
+  whyAgeExemptControl.removeOption(AgeExemptionReasonLookup.BEEN_IN_FAMILY_1975);
+  whyAgeExemptControl.removeOption(AgeExemptionReasonLookup.BEEN_IN_FAMILY_1947);
+  whyAgeExemptControl.removeOption(AgeExemptionReasonLookup.BEEN_IN_FAMILY_1918);
 
   switch (selectedExemptionType) {
     case ExemptionTypeLookup.MUSICAL:
-      formContext.getControl(DataVerseFieldName.WHY_AGE_EXEMPT).addOption({
+      whyAgeExemptControl.addOption({
         text: 'It’s been in the family since before 1975',
         value: AgeExemptionReasonLookup.BEEN_IN_FAMILY_1975
       }, 3);
       break;
 
     case ExemptionTypeLookup.TEN_PERCENT:
-      formContext.getControl(DataVerseFieldName.WHY_AGE_EXEMPT).addOption({
+      whyAgeExemptControl.addOption({
         text: 'It’s been in the family since before 3 March 1947',
         value: AgeExemptionReasonLookup.BEEN_IN_FAMILY_1947
       }, 3);
@@ -543,7 +607,7 @@ this.setAgeExemptionReasons = (formContext, isSection2) => {
 
     case ExemptionTypeLookup.MINIATURE:
     case ExemptionTypeLookup.HIGH_VALUE:
-      formContext.getControl(DataVerseFieldName.WHY_AGE_EXEMPT).addOption({
+      whyAgeExemptControl.addOption({
         text: 'It’s been in the family since before 1918',
         value: AgeExemptionReasonLookup.BEEN_IN_FAMILY_1918
       }, 3);
