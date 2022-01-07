@@ -26,6 +26,8 @@ const convertToCommaSeparatedTitleCase = value => {
     })
 
     return words.join(' ')
+  } else {
+    return value
   }
 }
 

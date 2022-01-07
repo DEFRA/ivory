@@ -17,7 +17,8 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Record not found'
+    pageTitle: 'Record not found',
+    hideBackLink: true
   }
 }
 
