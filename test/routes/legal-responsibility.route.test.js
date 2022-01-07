@@ -201,7 +201,7 @@ describe('/legal-responsibility route', () => {
         element = document.querySelector(`#${elementIds.helpTextPara3}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          "If we later find out that the information you’ve given is not accurate, the exemption certificate may be cancelled or 'revoked'."
+          "If we later find out that the item has been damaged or altered, the exemption certificate is likely to be cancelled or 'revoked'. In this case a new application for an exemption certificate would have to be made before you can sell or hire out the item."
         )
       })
 
