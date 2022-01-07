@@ -114,7 +114,7 @@ const _getContext = async request => {
 }
 
 const _getOptions = selectedOption => {
-  const options = Object.values(Options)
+  return Object.values(Options)
     .slice(0, 2)
     .map(option => {
       return {
@@ -123,8 +123,6 @@ const _getOptions = selectedOption => {
         checked: selectedOption === option
       }
     })
-
-  return options
 }
 
 const _validateForm = (payload, isBusiness) => {

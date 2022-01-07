@@ -52,7 +52,7 @@ module.exports = class RedisHelper {
   }
 
   static async hasUsedChecker (request) {
-    return await RedisService.get(request, RedisKeys.USED_CHECKER)
+    return RedisService.get(request, RedisKeys.USED_CHECKER)
   }
 
   static async hasAppliedBefore (request) {

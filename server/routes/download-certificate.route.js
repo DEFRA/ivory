@@ -39,18 +39,10 @@ const handlers = {
   }
 }
 
-const _getRecord = (id, key) => {
-  return ODataService.getRecord(
-    id,
-    true,
-    key,
-    DownloadReason.GENERATE_CERTIFICATE
-  )
-}
+const _getRecord = (id, key) =>
+  ODataService.getRecord(id, key, DownloadReason.GENERATE_CERTIFICATE, true)
 
-const _getImage = (id, imageName) => {
-  return ODataService.getImage(id, imageName)
-}
+const _getImage = (id, imageName) => ODataService.getImage(id, imageName)
 
 const _getPdf = async entity => {
   const pdfDoc = await PDFDocument.load(formPdfBytes)
@@ -84,7 +76,9 @@ const _getPdf = async entity => {
   )
   ivoryLocationField.defaultUpdateAppearances(timesRomanFont)
 
-  const distinguishingFeaturesField = form.getTextField('Distinguishing features')
+  const distinguishingFeaturesField = form.getTextField(
+    'Distinguishing features'
+  )
   distinguishingFeaturesField.setText(
     _formatField(entity, DataVerseFieldName.DISTINGUISHING_FEATURES, NONE)
   )
@@ -107,9 +101,8 @@ const _getPdf = async entity => {
   return pdfBytes
 }
 
-const _formatField = (entity, fieldName, blankValue = '') => {
-  return entity[fieldName] || blankValue
-}
+const _formatField = (entity, fieldName, blankValue = '') =>
+  entity[fieldName] || blankValue
 
 const _addImages = async (entity, pdfDoc, form) => {
   const NUMBER_OF_IMAGES = 6

@@ -211,15 +211,13 @@ const _getOptions = hasDistinguishingFeatures => {
     }
   })
 
-  const items = options.map(option => {
+  return options.map(option => {
     return {
       text: option.label,
       value: option.label,
       checked: option.checked
     }
   })
-
-  return items
 }
 
 module.exports = [

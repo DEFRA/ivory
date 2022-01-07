@@ -5,7 +5,7 @@ const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
   get: (request, h) => {
-    const context = _getContext(request)
+    const context = _getContext()
 
     return h.view(Views.ACCESSIBILITY_STATEMENT, {
       ...context
@@ -21,7 +21,7 @@ module.exports = [
   }
 ]
 
-const _getContext = request => {
+const _getContext = () => {
   return {
     pageTitle: `Accessibility statement for ‘${config.serviceName}’`,
     serviceName: config.serviceName
