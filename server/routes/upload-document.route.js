@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
+const { PDFDocument } = require('pdf-lib')
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
@@ -14,7 +15,15 @@ const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
 
 const MAX_DOCUMENTS = 6
 const MAX_FILES_IN_REQUEST_PAYLOAD = 1
-const ALLOWED_EXTENSIONS = ['.DOC', '.DOCX', '.PDF', '.JPG', '.JPEG', '.PNG']
+const PDF_EXTENSION = '.PDF'
+const ALLOWED_EXTENSIONS = [
+  '.DOC',
+  '.DOCX',
+  PDF_EXTENSION,
+  '.JPG',
+  '.JPEG',
+  '.PNG'
+]
 
 const handlers = {
   get: async (request, h) => {
@@ -50,8 +59,25 @@ const handlers = {
     const filename = payload.files.filename
 
     const uploadData = context.uploadData
+    let buffer
 
-    let errors = _validateForm(payload, uploadData)
+    const errors = _validateForm(payload, uploadData)
+
+    if (!errors.length) {
+      buffer = await _checkForVirus(
+        request,
+        payload,
+        filename,
+        uploadData,
+        errors
+      )
+    }
+
+    if (!errors.length) {
+      if (filename.toUpperCase().endsWith(PDF_EXTENSION)) {
+        await _checkPdfEncryption(buffer, errors)
+      }
+    }
 
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
@@ -66,61 +92,12 @@ const handlers = {
           ...buildErrorSummary(errors)
         })
         .code(400)
-    }
-
-    try {
-      const isInfected = await AntimalwareService.scan(
+    } else {
+      await RedisService.set(
         request,
-        payload.files.path,
-        filename
+        RedisKeys.UPLOAD_DOCUMENT,
+        JSON.stringify(uploadData)
       )
-
-      if (!isInfected) {
-        const file = await fs.promises.readFile(payload.files.path)
-
-        uploadData.files.push(filename)
-        uploadData.fileSizes.push(payload.files.bytes)
-
-        const buffer = Buffer.from(file)
-        const base64 = buffer.toString('base64')
-        uploadData.fileData.push(base64)
-
-        await RedisService.set(
-          request,
-          RedisKeys.UPLOAD_DOCUMENT,
-          JSON.stringify(uploadData)
-        )
-      } else {
-        errors.push({
-          name: 'files',
-          text: 'The file could not be uploaded - try a different one'
-        })
-        return h.view(Views.UPLOAD_DOCUMENT, {
-          ...context,
-          ...buildErrorSummary(errors)
-        })
-      }
-    } catch (error) {
-      errors = []
-      errors.push({
-        name: 'files',
-        text: error.message
-      })
-
-      if (errors.length) {
-        AnalyticsService.sendEvent(request, {
-          category: Analytics.Category.ERROR,
-          action: JSON.stringify(errors),
-          label: context.pageTitle
-        })
-
-        return h
-          .view(Views.UPLOAD_DOCUMENT, {
-            ...context,
-            ...buildErrorSummary(errors)
-          })
-          .code(400)
-      }
     }
 
     AnalyticsService.sendEvent(request, {
@@ -147,7 +124,7 @@ const _getContext = async request => {
     }
   }
 
-  const hideHelpText = uploadData.files.length
+  const hideHelpText = uploadData.files.length !== 0
 
   return {
     hideHelpText,
@@ -207,6 +184,56 @@ const _validateForm = (payload, uploadData) => {
   }
 
   return errors
+}
+
+const _checkForVirus = async (
+  request,
+  payload,
+  filename,
+  uploadData,
+  errors
+) => {
+  const isInfected = await AntimalwareService.scan(
+    request,
+    payload.files.path,
+    filename
+  )
+
+  if (!isInfected) {
+    const file = await fs.promises.readFile(payload.files.path)
+
+    uploadData.files.push(filename)
+    uploadData.fileSizes.push(payload.files.bytes)
+
+    const buffer = Buffer.from(file)
+    const base64 = buffer.toString('base64')
+    uploadData.fileData.push(base64)
+
+    return buffer
+  } else {
+    errors.push({
+      name: 'files',
+      text: 'The file could not be uploaded - try a different one'
+    })
+  }
+}
+
+const _checkPdfEncryption = async (buffer, errors) => {
+  try {
+    console.log('####### ', PDFDocument.load)
+
+    await PDFDocument.load(buffer)
+  } catch (e) {
+    console.log('####### in error')
+    const errorMessage = e.message.includes('is encrypted')
+      ? 'The file is protected with a password'
+      : 'The file could not could not be uploaded - try again'
+
+    errors.push({
+      name: 'files',
+      text: errorMessage
+    })
+  }
 }
 
 module.exports = [

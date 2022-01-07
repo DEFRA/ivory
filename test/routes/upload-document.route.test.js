@@ -8,6 +8,10 @@ const RedisService = require('../../server/services/redis.service')
 jest.mock('../../server/services/antimalware.service')
 const AntimalwareService = require('../../server/services/antimalware.service')
 
+jest.mock('pdf-lib')
+const { PDFDocument } = require('pdf-lib')
+console.log(PDFDocument)
+
 describe('/upload-document route', () => {
   let server
   const url = '/upload-document'
@@ -364,8 +368,47 @@ describe('/upload-document route', () => {
           server,
           postOptions,
           payloadFile,
-          'The file could not be uploaded - try a different one',
-          200
+          'The file could not be uploaded - try a different one'
+        )
+      })
+
+      it.only('should display a validation error message if the user tries to upload a password protected PDF file', async () => {
+        // AntimalwareService.scan = jest.fn().mockResolvedValue('OMG a virus!')
+        // PDFDocument.load = jest.fn().mockImplementation(() => {
+        //   throw new Error('The file is encrypted')
+        // })
+        // PDFDocument.mockImplementation(() => {
+        //   return {
+        //     load: jest.fn().mockImplementation(() => {
+        //       console.log('MOCK XXXXXXX')
+        //       // throw new Error()
+        //     })
+        //   }
+        // })
+
+        // PDFDocument.mockImplementation(() => {
+        //   return {
+        //     download: jest.fn().mockImplementation(() => {
+        //       throw new Error()
+        //     })
+        //   }
+        // })
+
+        const payloadFile = {
+          path: tempFolder,
+          bytes: 5000,
+          filename: 'file.png',
+          headers: {
+            'content-disposition':
+              'form-data; name="files"; filename="file.png"',
+            'content-type': 'image/png'
+          }
+        }
+        await _checkValidation(
+          server,
+          postOptions,
+          payloadFile,
+          'The file could not be uploaded - try a different one'
         )
       })
     })
