@@ -2,7 +2,7 @@
 
 const TestHelper = require('../../utils/test-helper')
 
-describe('/errors/page-not-found (404) route', () => {
+describe('/errors/record-not-found (deep link) route', () => {
   let server
   const url = '/errors/record-not-found'
 
