@@ -31,10 +31,12 @@ module.exports = {
   }
 }
 
-const _canIgnoreError = request => {
-  // 404 errors can be ignored when favicon.ico can't be found
-  return request.path === '/favicon.ico'
-}
+/**
+ * 404 errors can be ignored when favicon.ico can't be found
+ * @param {*} request
+ * @returns true if the error can be ignored, otherwise false
+ */
+const _canIgnoreError = request => request.path === '/favicon.ico'
 
 const _getErrorPagePath = (request, response) => {
   let path
