@@ -220,11 +220,8 @@ const _checkForVirus = async (
 
 const _checkPdfEncryption = async (buffer, errors) => {
   try {
-    console.log('####### ', PDFDocument.load)
-
     await PDFDocument.load(buffer)
   } catch (e) {
-    console.log('####### in error')
     const errorMessage = e.message.includes('is encrypted')
       ? 'The file is protected with a password'
       : 'The file could not could not be uploaded - try again'
