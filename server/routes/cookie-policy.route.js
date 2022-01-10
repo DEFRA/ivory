@@ -4,7 +4,7 @@ const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
-    const context = _getContext(request)
+    const context = _getContext()
 
     return h.view(Views.COOKIE_POLICY, {
       ...context
@@ -20,7 +20,7 @@ module.exports = [
   }
 ]
 
-const _getContext = request => {
+const _getContext = () => {
   return {
     pageTitle: 'Cookies'
   }

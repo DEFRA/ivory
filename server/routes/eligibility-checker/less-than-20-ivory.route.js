@@ -59,7 +59,7 @@ const handlers = {
         return h.redirect(Paths.IVORY_ADDED)
       case Options.NO:
         return h.redirect(Paths.RMI_AND_PRE_1918)
-      case Options.I_DONT_KNOW:
+      default:
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }

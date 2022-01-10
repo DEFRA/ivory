@@ -118,6 +118,16 @@ const _getContext = async (request, itemType) => {
 const _validateForm = payload => {
   const errors = []
 
+  _validateWhatIsItem(payload, errors)
+  _validateWhereIsIvory(payload, errors)
+  _validateDistinguishingFeatures(payload, errors)
+  _validateWhereMade(payload, errors)
+  _validateWhenMade(payload, errors)
+
+  return errors
+}
+
+const _validateWhatIsItem = (payload, errors) => {
   if (Validators.empty(payload.whatIsItem)) {
     errors.push({
       name: 'whatIsItem',
@@ -131,7 +141,9 @@ const _validateForm = payload => {
       )} characters to tell us what the item is`
     })
   }
+}
 
+const _validateWhereIsIvory = (payload, errors) => {
   if (Validators.empty(payload.whereIsIvory)) {
     errors.push({
       name: 'whereIsIvory',
@@ -147,7 +159,9 @@ const _validateForm = payload => {
       )} characters to tell us where the ivory is`
     })
   }
+}
 
+const _validateDistinguishingFeatures = (payload, errors) => {
   if (Validators.empty(payload.hasDistinguishingFeatures)) {
     errors.push({
       name: 'hasDistinguishingFeatures',
@@ -173,7 +187,9 @@ const _validateForm = payload => {
       )} characters to describe any distinguishing features`
     })
   }
+}
 
+const _validateWhereMade = (payload, errors) => {
   if (Validators.maxLength(payload.whereMade, CharacterLimits.Input)) {
     errors.push({
       name: 'whereMade',
@@ -182,7 +198,9 @@ const _validateForm = payload => {
       )} characters to tell us where the item was made`
     })
   }
+}
 
+const _validateWhenMade = (payload, errors) => {
   if (Validators.maxLength(payload.whenMade, CharacterLimits.Input)) {
     errors.push({
       name: 'whenMade',
@@ -191,8 +209,6 @@ const _validateForm = payload => {
       )} characters to tell us when the item was made`
     })
   }
-
-  return errors
 }
 
 const _addRedisDataToContext = (context, itemDescription) => {
@@ -211,15 +227,13 @@ const _getOptions = hasDistinguishingFeatures => {
     }
   })
 
-  const items = options.map(option => {
+  return options.map(option => {
     return {
       text: option.label,
       value: option.label,
       checked: option.checked
     }
   })
-
-  return items
 }
 
 module.exports = [

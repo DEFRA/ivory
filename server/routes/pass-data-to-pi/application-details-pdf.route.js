@@ -69,9 +69,8 @@ const handlers = {
   }
 }
 
-const _getRecord = (id, key) => {
-  return ODataService.getRecord(id, true, key, DownloadReason.SEND_DATA_TO_PI)
-}
+const _getRecord = (id, key) =>
+  ODataService.getRecord(id, key, DownloadReason.SEND_DATA_TO_PI, true)
 
 const _getPdf = async entity => {
   const pdfDoc = await PDFDocument.load(formPdfBytes)
@@ -139,7 +138,9 @@ const _getPdf = async entity => {
   field.setText(_formatField(entity, DataVerseFieldName.WHERE_IS_THE_IVORY))
 
   field = form.getTextField(FormFields.DISTINGUISHING_FEATURES)
-  field.setText(_formatField(entity, DataVerseFieldName.DISTINGUISHING_FEATURES, NONE))
+  field.setText(
+    _formatField(entity, DataVerseFieldName.DISTINGUISHING_FEATURES, NONE)
+  )
 
   field = form.getTextField(FormFields.WHERE_MADE)
   field.setText(
@@ -171,18 +172,14 @@ const _getPdf = async entity => {
   // Prevents the form fields from being editable
   form.flatten()
 
-  const pdfBytes = await pdfDoc.save()
-
-  return pdfBytes
+  return pdfDoc.save()
 }
 
-const _formatField = (entity, fieldName, blankValue = '') => {
-  return entity[fieldName] || blankValue
-}
+const _formatField = (entity, fieldName, blankValue = '') =>
+  entity[fieldName] || blankValue
 
-const _formatAddress = (address, postcode) => {
-  return `${address}${postcode && postcode.length ? '\n' + postcode : ''}`
-}
+const _formatAddress = (address, postcode) =>
+  `${address}${postcode && postcode.length ? '\n' + postcode : ''}`
 
 const _getExemptionReasonSummary = entity => {
   const whyAgeExempt = entity[DataVerseFieldName.WHY_AGE_EXEMPT]
@@ -191,7 +188,7 @@ const _getExemptionReasonSummary = entity => {
 
   const whyAgeExemptReasons = whyAgeExempt.split(',')
 
-  const ivoryAgeFormatted = whyAgeExemptReasons.map((reason, index) => {
+  const ivoryAgeFormatted = whyAgeExemptReasons.map(reason => {
     const reasonText =
       reason === `${AgeExemptionReasonLookup[AgeExemptionReasons.OTHER_REASON]}`
         ? whyAgeExemptOtherReason
@@ -200,9 +197,7 @@ const _getExemptionReasonSummary = entity => {
     return `- ${reasonText}`
   })
 
-  const ivoryAgeList = `${ivoryAgeFormatted.join('\n')}`
-
-  return ivoryAgeList
+  return `${ivoryAgeFormatted.join('\n')}`
 }
 
 module.exports = [

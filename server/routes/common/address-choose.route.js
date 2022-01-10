@@ -21,8 +21,7 @@ const getAddressType = request =>
 
 const handlers = {
   get: async (request, h) => {
-    const addressType = getAddressType(request)
-    const context = await _getContext(request, addressType)
+    const context = await _getContext(request)
 
     return h.view(Views.ADDRESS_CHOOSE, {
       ...context
@@ -31,7 +30,7 @@ const handlers = {
 
   post: async (request, h) => {
     const addressType = getAddressType(request)
-    const context = await _getContext(request, addressType)
+    const context = await _getContext(request)
     const payload = request.payload
     const errors = _validateForm(payload)
 
@@ -95,7 +94,7 @@ const handlers = {
   }
 }
 
-const _getContext = async (request, addressType) => {
+const _getContext = async request => {
   const context = {
     pageTitle: 'Choose address'
   }

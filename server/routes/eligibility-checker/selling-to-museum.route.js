@@ -46,7 +46,7 @@ const handlers = {
         return h.redirect(Paths.ARE_YOU_A_MUSEUM)
       case Options.NO:
         return h.redirect(Paths.IS_IT_A_MUSICAL_INSTRUMENT)
-      case Options.I_DONT_KNOW:
+      default:
         return h.redirect(Paths.IS_IT_A_MUSICAL_INSTRUMENT)
     }
   }

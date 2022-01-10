@@ -107,22 +107,20 @@ const _getOptions = async request => {
     RedisKeys.SELLING_ON_BEHALF_OF
   )
 
-  const businessOptions = Object.values(BehalfOfBusinessOptions).map(option => {
+  const _buildOption = option => {
     return {
       value: option,
       text: option,
       checked: sellingOnBehalfOf === option
     }
-  })
+  }
+
+  const businessOptions = Object.values(BehalfOfBusinessOptions).map(option =>
+    _buildOption(option)
+  )
 
   const notBusinessOptions = Object.values(BehalfOfNotBusinessOptions).map(
-    option => {
-      return {
-        value: option,
-        text: option,
-        checked: sellingOnBehalfOf === option
-      }
-    }
+    option => _buildOption(option)
   )
 
   return workForABusiness === Options.YES ? businessOptions : notBusinessOptions

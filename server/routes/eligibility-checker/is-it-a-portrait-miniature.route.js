@@ -60,7 +60,7 @@ const handlers = {
       case Options.NO:
         await RedisService.set(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT, '')
         return h.redirect(Paths.IS_ITEM_PRE_1918)
-      case Options.I_DONT_KNOW:
+      default:
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }

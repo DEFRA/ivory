@@ -2,7 +2,7 @@
 
 const RandomString = require('randomstring')
 
-// TODO GA
+// TODO IVORY-557
 // const AnalyticsService = require('../services/analytics.service')
 const PaymentService = require('../services/payment.service')
 const RedisHelper = require('../services/redis-helper.service')

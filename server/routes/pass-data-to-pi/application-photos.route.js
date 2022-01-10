@@ -34,19 +34,16 @@ const handlers = {
   }
 }
 
-const _getRecord = (id, key) => {
-  return ODataService.getRecord(id, true, key, DownloadReason.SEND_DATA_TO_PI)
-}
+const _getRecord = (id, key) =>
+  ODataService.getRecord(id, key, DownloadReason.SEND_DATA_TO_PI, true)
 
 const _getImage = async (entity, index) => {
   const dataverseImageNameStub = DataVerseFieldName.PHOTO_1.slice(0, -1)
 
-  const bufferedImage = await ODataService.getImage(
+  return ODataService.getImage(
     entity[DataVerseFieldName.SECTION_2_CASE_ID],
     `${dataverseImageNameStub}${index}`
   )
-
-  return bufferedImage
 }
 
 module.exports = [

@@ -114,7 +114,7 @@ const _getContext = async request => {
 }
 
 const _getOptions = selectedOption => {
-  const options = Object.values(Options)
+  return Object.values(Options)
     .slice(0, 2)
     .map(option => {
       return {
@@ -123,77 +123,91 @@ const _getOptions = selectedOption => {
         checked: selectedOption === option
       }
     })
-
-  return options
 }
 
 const _validateForm = (payload, isBusiness) => {
   const errors = []
 
   if (isBusiness) {
-    if (Validators.empty(payload.businessName)) {
-      errors.push({
-        name: 'businessName',
-        text: 'Enter the owner’s business name'
-      })
-    } else if (
-      Validators.maxLength(payload.businessName, CharacterLimits.Input)
-    ) {
-      errors.push({
-        name: 'businessName',
-        text: `Business name must have fewer than ${formatNumberWithCommas(
-          CharacterLimits.Input
-        )} characters`
-      })
-    }
+    _validateBusinessName(payload, errors)
   } else {
-    if (Validators.empty(payload.fullName)) {
-      errors.push({
-        name: 'fullName',
-        text: 'Enter the owner’s full name'
-      })
-    } else if (Validators.maxLength(payload.fullName, CharacterLimits.Input)) {
-      errors.push({
-        name: 'fullName',
-        text: `Full name must have fewer than ${formatNumberWithCommas(
-          CharacterLimits.Input
-        )} characters`
-      })
-    }
+    _validateFullName(payload, errors)
   }
 
+  _validateHasEmailAddress(payload, errors)
+
+  if (payload.hasEmailAddress === Options.YES) {
+    _validateEmailAddress(payload, errors)
+  }
+
+  return errors
+}
+
+const _validateBusinessName = (payload, errors) => {
+  if (Validators.empty(payload.businessName)) {
+    errors.push({
+      name: 'businessName',
+      text: 'Enter the owner’s business name'
+    })
+  } else if (
+    Validators.maxLength(payload.businessName, CharacterLimits.Input)
+  ) {
+    errors.push({
+      name: 'businessName',
+      text: `Business name must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
+    })
+  }
+}
+
+const _validateFullName = (payload, errors) => {
+  if (Validators.empty(payload.fullName)) {
+    errors.push({
+      name: 'fullName',
+      text: 'Enter the owner’s full name'
+    })
+  } else if (Validators.maxLength(payload.fullName, CharacterLimits.Input)) {
+    errors.push({
+      name: 'fullName',
+      text: `Full name must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
+    })
+  }
+}
+
+const _validateHasEmailAddress = (payload, errors) => {
   if (Validators.empty(payload.hasEmailAddress)) {
     errors.push({
       name: 'hasEmailAddress',
       text: 'Enter the owner’s email address or select ‘no’'
     })
   }
+}
 
-  if (payload.hasEmailAddress === Options.YES) {
-    if (Validators.empty(payload.emailAddress)) {
-      errors.push({
-        name: 'emailAddress',
-        text: 'Enter the owner’s email address'
-      })
-    } else if (!Validators.email(payload.emailAddress)) {
-      errors.push({
-        name: 'emailAddress',
-        text:
-          'Enter an email address in the correct format, like name@example.com'
-      })
-    } else if (
-      Validators.maxLength(payload.emailAddress, CharacterLimits.Input)
-    ) {
-      errors.push({
-        name: 'emailAddress',
-        text: `Email address must have fewer than ${formatNumberWithCommas(
-          CharacterLimits.Input
-        )} characters`
-      })
-    }
+const _validateEmailAddress = (payload, errors) => {
+  if (Validators.empty(payload.emailAddress)) {
+    errors.push({
+      name: 'emailAddress',
+      text: 'Enter the owner’s email address'
+    })
+  } else if (!Validators.email(payload.emailAddress)) {
+    errors.push({
+      name: 'emailAddress',
+      text:
+        'Enter an email address in the correct format, like name@example.com'
+    })
+  } else if (
+    Validators.maxLength(payload.emailAddress, CharacterLimits.Input)
+  ) {
+    errors.push({
+      name: 'emailAddress',
+      text: `Email address must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
+    })
   }
-
-  return errors
 }
 
 module.exports = [

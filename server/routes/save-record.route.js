@@ -1,6 +1,6 @@
 'use strict'
 
-// TODO GA
+// TODO IVORY-557
 // const AnalyticsService = require('../services/analytics.service')
 const ODataService = require('../services/odata.service')
 const RedisService = require('../services/redis.service')

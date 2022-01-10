@@ -18,6 +18,12 @@ const {
 const { getIvoryVolumePercentage } = require('../utils/general')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
+const YOUR_EMAIL = 'Your email'
+const YOUR_ADDRESS = 'Your address'
+const WORK_FOR_A_BUSINESS = 'Work for a business'
+const SELLING_ON_BEHALF_OF = 'Selling on behalf of'
+const BUSINESS_NAME = 'Business name'
+
 const handlers = {
   get: async (request, h) => {
     const context = await _getContext(request)
@@ -142,9 +148,9 @@ const _getDocumentSummary = async request => {
     }
   }
 
-  const documentRows = uploadDocuments.files.map((file, index) => {
-    return `<p id="document${index}">${file}</p>`
-  })
+  const documentRows = uploadDocuments.files.map(
+    (file, index) => `<p id="document${index}">${file}</p>`
+  )
 
   return [
     _getSummaryListRow(
@@ -173,9 +179,9 @@ const _getExemptionReasonSummary = async (
 
   const ivoryAgeFormatted =
     ivoryAge && ivoryAge.ivoryAge
-      ? ivoryAge.ivoryAge.map((reason, index) => {
-          return `<li id="ivoryAgeReason${index}">${reason}</li>`
-        })
+      ? ivoryAge.ivoryAge.map(
+          (reason, index) => `<li id="ivoryAgeReason${index}">${reason}</li>`
+        )
       : []
 
   const ivoryAgeList = `<ul>${ivoryAgeFormatted.join('')}</ul>`
@@ -523,7 +529,7 @@ const _getOwnerSummaryOwnedByApplicant = async (
 
   ownerSummary.push(
     _getSummaryListRow(
-      'Your email',
+      YOUR_EMAIL,
       ownerContactDetails.emailAddress,
       _getChangeItems(
         Paths.APPLICANT_CONTACT_DETAILS,
@@ -534,7 +540,7 @@ const _getOwnerSummaryOwnedByApplicant = async (
 
   ownerSummary.push(
     _getSummaryListRow(
-      'Your address',
+      YOUR_ADDRESS,
       ownerAddress,
       _getChangeItems(
         Paths.APPLICANT_ADDRESS_FIND,
@@ -554,7 +560,7 @@ const _getOwnerSummaryApplicantBusiness = async (
 ) => {
   ownerSummary.push(
     _getSummaryListRow(
-      'Work for a business',
+      WORK_FOR_A_BUSINESS,
       workForABusiness,
       _getChangeItems(
         Paths.WORK_FOR_A_BUSINESS,
@@ -565,7 +571,7 @@ const _getOwnerSummaryApplicantBusiness = async (
 
   ownerSummary.push(
     _getSummaryListRow(
-      'Selling on behalf of',
+      SELLING_ON_BEHALF_OF,
       sellingOnBehalfOf,
       _getChangeItems(
         Paths.SELLING_ON_BEHALF_OF,
@@ -588,7 +594,7 @@ const _getOwnerSummaryApplicantBusiness = async (
   if (workForABusiness === Options.YES) {
     ownerSummary.push(
       _getSummaryListRow(
-        'Business name',
+        BUSINESS_NAME,
         applicantContactDetails.businessName || NOTHING_ENTERED,
         _getChangeItems(
           Paths.APPLICANT_CONTACT_DETAILS,
@@ -600,7 +606,7 @@ const _getOwnerSummaryApplicantBusiness = async (
 
   ownerSummary.push(
     _getSummaryListRow(
-      'Your email',
+      YOUR_EMAIL,
       applicantContactDetails.emailAddress,
       _getChangeItems(
         Paths.APPLICANT_CONTACT_DETAILS,
@@ -611,7 +617,7 @@ const _getOwnerSummaryApplicantBusiness = async (
 
   ownerSummary.push(
     _getSummaryListRow(
-      'Your address',
+      YOUR_ADDRESS,
       applicantAddress,
       _getChangeItems(
         Paths.APPLICANT_ADDRESS_FIND,
@@ -632,7 +638,7 @@ const _getOwnerSummaryApplicantOther = async (
 ) => {
   ownerSummary.push(
     _getSummaryListRow(
-      'Work for a business',
+      WORK_FOR_A_BUSINESS,
       workForABusiness,
       _getChangeItems(
         Paths.WORK_FOR_A_BUSINESS,
@@ -643,7 +649,7 @@ const _getOwnerSummaryApplicantOther = async (
 
   ownerSummary.push(
     _getSummaryListRow(
-      'Selling on behalf of',
+      SELLING_ON_BEHALF_OF,
       sellingOnBehalfOf,
       _getChangeItems(
         Paths.SELLING_ON_BEHALF_OF,
@@ -674,7 +680,7 @@ const _getOwnerSummaryApplicantOther = async (
   if (workForABusiness === Options.YES) {
     ownerSummary.push(
       _getSummaryListRow(
-        'Business name',
+        BUSINESS_NAME,
         applicantContactDetails.businessName || NOTHING_ENTERED,
         _getChangeItems(
           Paths.APPLICANT_CONTACT_DETAILS,
@@ -686,7 +692,7 @@ const _getOwnerSummaryApplicantOther = async (
 
   ownerSummary.push(
     _getSummaryListRow(
-      'Your email',
+      YOUR_EMAIL,
       applicantContactDetails.emailAddress,
       _getChangeItems(
         Paths.APPLICANT_CONTACT_DETAILS,
@@ -697,7 +703,7 @@ const _getOwnerSummaryApplicantOther = async (
 
   ownerSummary.push(
     _getSummaryListRow(
-      'Your address',
+      YOUR_ADDRESS,
       applicantAddress,
       _getChangeItems(
         Paths.APPLICANT_ADDRESS_FIND,
@@ -719,7 +725,7 @@ const _getOwnerSummaryApplicantDefault = async (
 ) => {
   ownerSummary.push(
     _getSummaryListRow(
-      'Work for a business',
+      WORK_FOR_A_BUSINESS,
       workForABusiness,
       _getChangeItems(
         Paths.WORK_FOR_A_BUSINESS,
@@ -730,7 +736,7 @@ const _getOwnerSummaryApplicantDefault = async (
 
   ownerSummary.push(
     _getSummaryListRow(
-      'Selling on behalf of',
+      SELLING_ON_BEHALF_OF,
       sellingOnBehalfOf,
       _getChangeItems(
         Paths.SELLING_ON_BEHALF_OF,
@@ -778,7 +784,7 @@ const _getOwnerSummaryApplicantDefault = async (
   if (workForABusiness === Options.YES) {
     ownerSummary.push(
       _getSummaryListRow(
-        'Business name',
+        BUSINESS_NAME,
         applicantContactDetails.businessName || NOTHING_ENTERED,
         _getChangeItems(
           Paths.APPLICANT_CONTACT_DETAILS,
@@ -790,7 +796,7 @@ const _getOwnerSummaryApplicantDefault = async (
 
   ownerSummary.push(
     _getSummaryListRow(
-      'Your email',
+      YOUR_EMAIL,
       applicantContactDetails.emailAddress,
       _getChangeItems(
         Paths.APPLICANT_CONTACT_DETAILS,
@@ -801,7 +807,7 @@ const _getOwnerSummaryApplicantDefault = async (
 
   ownerSummary.push(
     _getSummaryListRow(
-      'Your address',
+      YOUR_ADDRESS,
       applicantAddress,
       _getChangeItems(
         Paths.APPLICANT_ADDRESS_FIND,

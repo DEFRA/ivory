@@ -29,9 +29,8 @@ const convertToCommaSeparatedTitleCase = value => {
   }
 }
 
-const formatNumberWithCommas = num => {
-  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-}
+const formatNumberWithCommas = num =>
+  num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 
 const getIvoryVolumePercentage = itemType =>
   itemType === ItemType.MUSICAL ? MUSICAL_PERCENTAGE : NON_MUSICAL_PERCENTAGE

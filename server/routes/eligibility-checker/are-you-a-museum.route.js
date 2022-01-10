@@ -58,7 +58,7 @@ const handlers = {
     switch (payload.areYouAMuseum) {
       case Options.YES:
         return h.redirect(Paths.DO_NOT_NEED_SERVICE)
-      case Options.NO:
+      default:
         await RedisService.set(
           request,
           RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,

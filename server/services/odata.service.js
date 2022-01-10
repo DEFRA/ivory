@@ -118,7 +118,7 @@ module.exports = class ODataService {
     return responseDetail
   }
 
-  static async getRecord (id, isSection2 = true, key, downloadReason) {
+  static async getRecord (id, key, downloadReason, isSection2 = true) {
     const token = await ActiveDirectoryAuthService.getToken()
 
     const headers = {

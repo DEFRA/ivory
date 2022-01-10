@@ -83,9 +83,9 @@ const _getContext = async request => {
   const otherOption = options.pop()
 
   return {
+    otherOption,
     pageTitle: 'In what capacity are you making this declaration?',
     items: options,
-    otherOption,
     otherCapacity:
       payload && payload.whatCapacity === Capacities.OTHER
         ? payload.otherCapacity

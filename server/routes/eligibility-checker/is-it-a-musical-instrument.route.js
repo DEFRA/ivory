@@ -44,7 +44,7 @@ const handlers = {
     switch (payload.isItAMusicalInstrument) {
       case Options.YES:
         return h.redirect(Paths.MADE_BEFORE_1975)
-      case Options.NO:
+      default:
         return h.redirect(Paths.LESS_THAN_10_IVORY)
     }
   }

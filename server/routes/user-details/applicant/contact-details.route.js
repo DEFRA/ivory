@@ -94,6 +94,19 @@ const _getContext = async request => {
 const _validateForm = (payload, workForABusiness) => {
   const errors = []
 
+  _validateFullName(payload, errors)
+
+  if (workForABusiness) {
+    _validateBusinessName(payload, errors)
+  }
+
+  _validateEmailAddress(payload, errors)
+  _validateConfirmEmailAddress(payload, errors)
+
+  return errors
+}
+
+const _validateFullName = (payload, errors) => {
   if (Validators.empty(payload.fullName)) {
     errors.push({
       name: 'fullName',
@@ -107,25 +120,27 @@ const _validateForm = (payload, workForABusiness) => {
       )} characters`
     })
   }
+}
 
-  if (workForABusiness) {
-    if (Validators.empty(payload.businessName)) {
-      errors.push({
-        name: 'businessName',
-        text: 'Enter the business name'
-      })
-    } else if (
-      Validators.maxLength(payload.businessName, CharacterLimits.Input)
-    ) {
-      errors.push({
-        name: 'businessName',
-        text: `Business name must have fewer than ${formatNumberWithCommas(
-          CharacterLimits.Input
-        )} characters`
-      })
-    }
+const _validateBusinessName = (payload, errors) => {
+  if (Validators.empty(payload.businessName)) {
+    errors.push({
+      name: 'businessName',
+      text: 'Enter the business name'
+    })
+  } else if (
+    Validators.maxLength(payload.businessName, CharacterLimits.Input)
+  ) {
+    errors.push({
+      name: 'businessName',
+      text: `Business name must have fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters`
+    })
   }
+}
 
+const _validateEmailAddress = (payload, errors) => {
   if (Validators.empty(payload.emailAddress)) {
     errors.push({
       name: 'emailAddress',
@@ -147,7 +162,9 @@ const _validateForm = (payload, workForABusiness) => {
       )} characters`
     })
   }
+}
 
+const _validateConfirmEmailAddress = (payload, errors) => {
   if (Validators.empty(payload.confirmEmailAddress)) {
     errors.push({
       name: 'confirmEmailAddress',
@@ -159,8 +176,6 @@ const _validateForm = (payload, workForABusiness) => {
       text: 'This confirmation does not match your email address'
     })
   }
-
-  return errors
 }
 
 module.exports = [

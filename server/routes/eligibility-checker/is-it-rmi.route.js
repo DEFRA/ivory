@@ -57,7 +57,7 @@ const handlers = {
           ItemType.HIGH_VALUE
         )
         return h.redirect(Paths.IVORY_ADDED)
-      case Options.NO:
+      default:
         return h.redirect(Paths.CANNOT_TRADE)
     }
   }
