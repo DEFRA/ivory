@@ -107,7 +107,7 @@ describe('/eligibility-checker/less-than-20-ivory route', () => {
       const element = document.querySelector(`#${elementIds.helpTextList}`)
       expect(element).toBeTruthy()
     })
-    
+
     it('should have the correct summary text title', () => {
       const element = document.querySelector('.govuk-details__summary-text')
       expect(element).toBeTruthy()
