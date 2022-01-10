@@ -49,17 +49,17 @@ const handlers = {
       label: context.pageTitle
     })
 
-    switch (payload.isItRmi) {
-      case Options.YES:
-        await RedisService.set(
-          request,
-          RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
-          ItemType.HIGH_VALUE
-        )
-        return h.redirect(Paths.IVORY_ADDED)
-      default:
-        return h.redirect(Paths.CANNOT_TRADE)
+    if (payload.isItRmi === Options.YES) {
+      await RedisService.set(
+        request,
+        RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
+        ItemType.HIGH_VALUE
+      )
     }
+
+    return h.redirect(
+      payload.isItRmi === Options.YES ? Paths.IVORY_ADDED : Paths.CANNOT_TRADE
+    )
   }
 }
 

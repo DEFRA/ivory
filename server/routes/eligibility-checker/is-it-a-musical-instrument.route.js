@@ -41,12 +41,11 @@ const handlers = {
       label: context.pageTitle
     })
 
-    switch (payload.isItAMusicalInstrument) {
-      case Options.YES:
-        return h.redirect(Paths.MADE_BEFORE_1975)
-      default:
-        return h.redirect(Paths.LESS_THAN_10_IVORY)
-    }
+    return h.redirect(
+      payload.isItAMusicalInstrument === Options.YES
+        ? Paths.MADE_BEFORE_1975
+        : Paths.LESS_THAN_10_IVORY
+    )
   }
 }
 

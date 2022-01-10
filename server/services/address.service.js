@@ -185,6 +185,8 @@ const _getCertificate = () => {
     return config.addressLookupPfxCert.toUpperCase().endsWith('.PFX')
       ? readFileSync(config.addressLookupPfxCert)
       : Buffer.from(config.addressLookupPfxCert, 'base64')
+  } else {
+    return null
   }
 }
 

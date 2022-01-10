@@ -17,11 +17,11 @@ module.exports = class PaymentService {
     const url = `${config.paymentUrl}/${PAYMENT_ENDPOINT}`
 
     const body = {
-      amount: amountInPence,
       reference,
       description,
-      return_url: `${config.serviceHost}${Paths.SAVE_RECORD}`,
-      email
+      email,
+      amount: amountInPence,
+      return_url: `${config.serviceHost}${Paths.SAVE_RECORD}`
     }
 
     const response = await fetch(url, {

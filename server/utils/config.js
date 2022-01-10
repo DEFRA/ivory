@@ -6,7 +6,8 @@ require('dotenv').config()
 const joi = require('joi')
 const envs = ['development', 'test', 'production']
 
-const getBoolean = value => String(value).toLowerCase() === 'true'
+const getBoolean = booleanString =>
+  String(booleanString).toLowerCase() === 'true'
 
 const defaultUrl = 'http://some-url'
 

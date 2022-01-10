@@ -103,13 +103,11 @@ const handlers = {
       )
     }
 
-    if (resultSize > 1) {
-      return h.redirect(
-        addressType === AddressType.OWNER
-          ? Paths.OWNER_ADDRESS_CHOOSE
-          : Paths.APPLICANT_ADDRESS_CHOOSE
-      )
-    }
+    return h.redirect(
+      addressType === AddressType.OWNER
+        ? Paths.OWNER_ADDRESS_CHOOSE
+        : Paths.APPLICANT_ADDRESS_CHOOSE
+    )
   }
 }
 

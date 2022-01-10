@@ -7,7 +7,7 @@ const {
 describe('General utils', () => {
   describe('convertToCommaSeparatedTitleCase method', () => {
     it('should convert strings to title case', () => {
-      expect(convertToCommaSeparatedTitleCase('')).toBeUndefined()
+      expect(convertToCommaSeparatedTitleCase('')).toEqual('')
 
       expect(convertToCommaSeparatedTitleCase('the quick brown fox')).toEqual(
         'The Quick Brown Fox'
