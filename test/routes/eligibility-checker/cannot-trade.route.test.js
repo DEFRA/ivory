@@ -11,9 +11,11 @@ describe('/eligibility-checker/cannot-trade route', () => {
     pageTitle: 'pageTitle',
     helpText: 'helpText',
     helpText2: 'helpText2',
+    helpText2b: 'helpText2b',
     heading2: 'heading2',
     helpText3: 'helpText3',
     helpTextList: 'helpTextList',
+    helpTextList2: 'helpTextList2',
     heading22: 'heading2-2',
     helpText4: 'helpText4',
     continue: 'continue'
@@ -82,6 +84,14 @@ describe('/eligibility-checker/cannot-trade route', () => {
       )
     })
 
+    it('should have the correct help text 2b', () => {
+      const element = document.querySelector(`#${elementIds.helpText2b}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'Based on your answers, it is illegal to:'
+      )
+    })
+
     it('should have the correct heading2', () => {
       const element = document.querySelector(`#${elementIds.heading2}`)
       expect(element).toBeTruthy()
@@ -100,6 +110,11 @@ describe('/eligibility-checker/cannot-trade route', () => {
 
     it('should have a help text list', () => {
       const element = document.querySelector(`#${elementIds.helpTextList}`)
+      expect(element).toBeTruthy()
+    })
+
+    it('should have a help text list 2', () => {
+      const element = document.querySelector(`#${elementIds.helpTextList2}`)
       expect(element).toBeTruthy()
     })
 

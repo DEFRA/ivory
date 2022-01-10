@@ -14,6 +14,9 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
   const elementIds = {
     pageTitle: 'pageTitle',
     helpText: 'helpText',
+    helpText2: 'helpText2',
+    helpText3: 'helpText3',
+    helpTextList: 'helpTextList',
     containElephantIvory: 'containElephantIvory',
     containElephantIvory2: 'containElephantIvory-2',
     containElephantIvory3: 'containElephantIvory-3',
@@ -72,6 +75,27 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
       expect(TestHelper.getTextContent(element)).toEqual(
         'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state in some way.'
       )
+    })
+
+    it('should have the correct help text 2', () => {
+      const element = document.querySelector(`#${elementIds.helpText2}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'It can be extremely difficult to tell the difference between:'
+      )
+    })
+
+    it('should have the correct help text 3', () => {
+      const element = document.querySelector(`#${elementIds.helpText3}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'If you are not sure about the item you want to sell or buy, you should consult an expert first, such as an antiques dealer or auctioneer who specialises in ivory.'
+      )
+    })
+
+    it('should have a help text list', () => {
+      const element = document.querySelector(`#${elementIds.helpTextList}`)
+      expect(element).toBeTruthy()
     })
 
     it('should have the correct summary text title', () => {
