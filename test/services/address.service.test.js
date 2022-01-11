@@ -42,6 +42,8 @@ describe('Address service', () => {
 })
 
 const _createMocks = () => {
+  config.addressLookupEnabled = true
+
   nock(`${config.addressLookupUrl}`)
     .get(
       '/ws/rest/DEFRA/v1/address/postcodes?postcode=TQ12 5JE&offset=0&maxresults=100'
