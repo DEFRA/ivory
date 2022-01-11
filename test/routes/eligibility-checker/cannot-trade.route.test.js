@@ -118,22 +118,6 @@ describe('/eligibility-checker/cannot-trade route', () => {
       expect(element).toBeTruthy()
     })
 
-    it('should have the correct heading22', () => {
-      const element = document.querySelector(`#${elementIds.heading22}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'When it may become exempt'
-      )
-    })
-
-    it('should have the correct help text 4', () => {
-      const element = document.querySelector(`#${elementIds.helpText4}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'If a museum is interested in your item, you may be able to sell or hire it out to them. In this case, you should try and declare it again.'
-      )
-    })
-
     it('should have the correct Call to Action button', () => {
       const element = document.querySelector(`#${elementIds.continue}`)
       expect(element).toBeTruthy()
