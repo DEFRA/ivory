@@ -13,7 +13,9 @@ const POSTCODE_SEARCH_ENDPOINT = '/ws/rest/DEFRA/v1/address/postcodes'
 
 module.exports = class AddressService {
   static async addressSearch (nameOrNumber, postcode, pageSize = PAGE_SIZE) {
-    if (!config.addressLookupEnabled) return []
+    if (!config.addressLookupEnabled) {
+      return []
+    }
 
     let pageNumber = 0
     const json = await AddressService._queryAddressEndpoint(
