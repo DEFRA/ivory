@@ -1,0 +1,29 @@
+version: '0.1.0'
+
+services:
+
+  node:
+    container_name: ivory
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    networks:
+      - ivory-localdev-network
+
+  redis:
+    container_name: redis
+    image: redis
+    networks:
+      - ivory-localdev-network
+
+networks:
+  ivory-localdev-network:
+    driver: bridge
