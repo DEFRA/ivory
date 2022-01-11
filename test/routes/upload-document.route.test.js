@@ -8,6 +8,9 @@ const RedisService = require('../../server/services/redis.service')
 jest.mock('../../server/services/antimalware.service')
 const AntimalwareService = require('../../server/services/antimalware.service')
 
+jest.mock('pdf-lib')
+const { PDFDocument } = require('pdf-lib')
+
 describe('/upload-document route', () => {
   let server
   const url = '/upload-document'
@@ -51,7 +54,7 @@ describe('/upload-document route', () => {
       url
     }
 
-    describe('GET: No documents', () => {
+    describe('GET: No files', () => {
       beforeEach(async () => {
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -364,8 +367,31 @@ describe('/upload-document route', () => {
           server,
           postOptions,
           payloadFile,
-          'The file could not be uploaded - try a different one',
-          200
+          'The file could not be uploaded - try a different one'
+        )
+      })
+
+      // This test is failing as it has not yet been possible to successfully mock fs.promises.readFile without breaking the server
+      it.skip('should display a validation error message if the user tries to upload a password protected PDF file', async () => {
+        PDFDocument.load = jest.fn().mockImplementation(() => {
+          throw new Error('The file is encrypted')
+        })
+
+        const payloadFile = {
+          path: tempFolder,
+          bytes: 5000,
+          filename: 'file.png',
+          headers: {
+            'content-disposition':
+              'form-data; name="files"; filename="file.png"',
+            'content-type': 'image/png'
+          }
+        }
+        await _checkValidation(
+          server,
+          postOptions,
+          payloadFile,
+          'The file could not be uploaded - try a different one'
         )
       })
     })

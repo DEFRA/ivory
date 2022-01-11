@@ -12,7 +12,7 @@ const {
 } = require('../utils/constants')
 const { isPngImage } = require('../utils/general')
 
-const NOTHING_ENTERED = 'Nothing entered'
+const NONE = 'None'
 
 const formPdfBytes = fs.readFileSync(
   './server/public/static/ivory-certificate-template.pdf'
@@ -39,18 +39,10 @@ const handlers = {
   }
 }
 
-const _getRecord = (id, key) => {
-  return ODataService.getRecord(
-    id,
-    true,
-    key,
-    DownloadReason.GENERATE_CERTIFICATE
-  )
-}
+const _getRecord = (id, key) =>
+  ODataService.getRecord(id, key, DownloadReason.GENERATE_CERTIFICATE, true)
 
-const _getImage = (id, imageName) => {
-  return ODataService.getImage(id, imageName)
-}
+const _getImage = (id, imageName) => ODataService.getImage(id, imageName)
 
 const _getPdf = async entity => {
   const pdfDoc = await PDFDocument.load(formPdfBytes)
@@ -84,11 +76,13 @@ const _getPdf = async entity => {
   )
   ivoryLocationField.defaultUpdateAppearances(timesRomanFont)
 
-  const uniqueFeaturesField = form.getTextField('Unique features')
-  uniqueFeaturesField.setText(
-    _formatField(entity, DataVerseFieldName.UNIQUE_FEATURES, NOTHING_ENTERED)
+  const distinguishingFeaturesField = form.getTextField(
+    'Distinguishing features'
   )
-  uniqueFeaturesField.defaultUpdateAppearances(timesRomanFont)
+  distinguishingFeaturesField.setText(
+    _formatField(entity, DataVerseFieldName.DISTINGUISHING_FEATURES, NONE)
+  )
+  distinguishingFeaturesField.defaultUpdateAppearances(timesRomanFont)
 
   await _addImages(entity, pdfDoc, form)
 
@@ -102,14 +96,11 @@ const _getPdf = async entity => {
     _addWatermark(pdfDoc, certificateNumber)
   }
 
-  const pdfBytes = await pdfDoc.save()
-
-  return pdfBytes
+  return pdfDoc.save()
 }
 
-const _formatField = (entity, fieldName, blankValue = '') => {
-  return entity[fieldName] || blankValue
-}
+const _formatField = (entity, fieldName, blankValue = '') =>
+  entity[fieldName] || blankValue
 
 const _addImages = async (entity, pdfDoc, form) => {
   const NUMBER_OF_IMAGES = 6

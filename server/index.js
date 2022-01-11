@@ -67,7 +67,6 @@ const _registerPlugins = async server => {
   await server.register(require('./plugins/inert.plugin'))
   await server.register(require('./plugins/logging.plugin'))
   await server.register(require('./plugins/redis.plugin'))
-  await server.register(require('./plugins/robots.plugin'))
   await server.register(require('./plugins/router.plugin'))
   await server.register(require('./plugins/views.plugin'))
 }

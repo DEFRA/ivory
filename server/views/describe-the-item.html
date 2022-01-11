@@ -1,7 +1,8 @@
 {% extends 'form-layout.html' %}
 
-{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block formContent %}
@@ -47,18 +48,49 @@
           errorMessage: fieldErrors['whereIsIvory']
       }) }}
 
-      {{ govukInput({
+      {% set detailHtml %}
+        {{ govukInput({
+          id: "distinguishingFeatures",
+          name: "distinguishingFeatures",
+          type: "distinguishingFeatures",
           label: {
-            html: '<span class="govuk-!-font-weight-bold">Describe any unique, identifying features (optional)</span>'
+            text: "Give details"
+          },
+          value: distinguishingFeatures,
+          errorMessage: fieldErrors['distinguishingFeatures']
+        }) }}
+      {% endset -%}
+
+      {% set yesItem = {
+        text: yesOption.text,
+        value: yesOption.value,
+        checked: yesOption.checked,
+        conditional: {
+          html: detailHtml
+        }
+      }
+      %}
+
+      {% set items = (items.unshift(yesItem), items) %}
+      
+      <div id="hasDistinguishingFeaturesSection">
+        {{ govukRadios({
+          idPrefix: "hasDistinguishingFeatures",
+          name: "hasDistinguishingFeatures",
+          fieldset: {
+            legend: {
+              text: "Does the item have any distinguishing features?",
+              classes: "govuk-fieldset__legend--s"
+            }
           },
           hint: {
             text: "For example, 'handle has a carved image of a soldier', 'one of the feet is cracked'"
           },
-          id: "uniqueFeatures",
-          name: "uniqueFeatures",
-          value: uniqueFeatures,
-          errorMessage: fieldErrors['uniqueFeatures']
-      }) }}      
+          value: hasDistinguishingFeatures,
+          errorMessage: fieldErrors['hasDistinguishingFeatures'],
+          items: items
+        }) }}
+      </div>
 
       {% if isSection2 %}
 

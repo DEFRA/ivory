@@ -20,6 +20,7 @@ const {
   AlreadyCertifiedReverseLookup
 } = require('../../services/dataverse-choice-lookups')
 
+const NONE = 'None'
 const NOTHING_ENTERED = 'Nothing entered'
 const DOWNLOAD_LINK_TEXT = 'Download'
 const MAX_DOCUMENTS = 6
@@ -70,9 +71,8 @@ const _getContext = (entity, key) => {
   }
 }
 
-const _getRecord = (id, key) => {
-  return ODataService.getRecord(id, true, key, DownloadReason.SEND_DATA_TO_PI)
-}
+const _getRecord = (id, key) =>
+  ODataService.getRecord(id, key, DownloadReason.SEND_DATA_TO_PI, true)
 
 const _getDocumentSummary = (entity, key) => {
   const uploadDocuments = []
@@ -211,8 +211,8 @@ const _getItemDescriptionSummary = entity => {
     ),
 
     _getSummaryListRow(
-      'Unique, identifying features (optional)',
-      entity[DataVerseFieldName.UNIQUE_FEATURES] || NOTHING_ENTERED
+      'Distinguishing features',
+      entity[DataVerseFieldName.DISTINGUISHING_FEATURES] || NONE
     )
   ]
 

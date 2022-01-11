@@ -29,6 +29,7 @@ const FormFields = {
   APPLICANT_ADDRESS: 'Applicant address',
   APPLICANT_NAME: 'Applicant name',
   APPLIED_BEFORE: 'Applied before',
+  DISTINGUISHING_FEATURES: 'Distinguishing features',
   EXEMPTION_TYPE: 'Type of exemption',
   IVORY_APPLICATION: 'Ivory application',
   IVORY_LOCATION: 'Where is it',
@@ -37,7 +38,6 @@ const FormFields = {
   PREVIOUS_APPLICATION_NUMBER: 'Previous app number',
   PROOF_OF_AGE: 'Proof of age',
   REVOKED_CERTIFICATE_NUMBER: 'Revoked cert number',
-  UNIQUE_FEATURES: 'Unique features',
   WHAT_IS_IT: 'What is it',
   WHEN_MADE: 'When was it made',
   WHERE_IS_IT: 'Where is it',
@@ -45,6 +45,7 @@ const FormFields = {
   WHY_RMI: 'Why is it high value'
 }
 
+const NONE = 'None'
 const NOTHING_ENTERED = 'Nothing entered'
 
 const handlers = {
@@ -68,9 +69,8 @@ const handlers = {
   }
 }
 
-const _getRecord = (id, key) => {
-  return ODataService.getRecord(id, true, key, DownloadReason.SEND_DATA_TO_PI)
-}
+const _getRecord = (id, key) =>
+  ODataService.getRecord(id, key, DownloadReason.SEND_DATA_TO_PI, true)
 
 const _getPdf = async entity => {
   const pdfDoc = await PDFDocument.load(formPdfBytes)
@@ -137,9 +137,9 @@ const _getPdf = async entity => {
   field = form.getTextField(FormFields.IVORY_LOCATION)
   field.setText(_formatField(entity, DataVerseFieldName.WHERE_IS_THE_IVORY))
 
-  field = form.getTextField(FormFields.UNIQUE_FEATURES)
+  field = form.getTextField(FormFields.DISTINGUISHING_FEATURES)
   field.setText(
-    _formatField(entity, DataVerseFieldName.UNIQUE_FEATURES, NOTHING_ENTERED)
+    _formatField(entity, DataVerseFieldName.DISTINGUISHING_FEATURES, NONE)
   )
 
   field = form.getTextField(FormFields.WHERE_MADE)
@@ -172,18 +172,14 @@ const _getPdf = async entity => {
   // Prevents the form fields from being editable
   form.flatten()
 
-  const pdfBytes = await pdfDoc.save()
-
-  return pdfBytes
+  return pdfDoc.save()
 }
 
-const _formatField = (entity, fieldName, blankValue = '') => {
-  return entity[fieldName] || blankValue
-}
+const _formatField = (entity, fieldName, blankValue = '') =>
+  entity[fieldName] || blankValue
 
-const _formatAddress = (address, postcode) => {
-  return `${address}${postcode && postcode.length ? '\n' + postcode : ''}`
-}
+const _formatAddress = (address, postcode) =>
+  `${address}${postcode && postcode.length ? '\n' + postcode : ''}`
 
 const _getExemptionReasonSummary = entity => {
   const whyAgeExempt = entity[DataVerseFieldName.WHY_AGE_EXEMPT]
@@ -192,7 +188,7 @@ const _getExemptionReasonSummary = entity => {
 
   const whyAgeExemptReasons = whyAgeExempt.split(',')
 
-  const ivoryAgeFormatted = whyAgeExemptReasons.map((reason, index) => {
+  const ivoryAgeFormatted = whyAgeExemptReasons.map(reason => {
     const reasonText =
       reason === `${AgeExemptionReasonLookup[AgeExemptionReasons.OTHER_REASON]}`
         ? whyAgeExemptOtherReason
@@ -201,9 +197,7 @@ const _getExemptionReasonSummary = entity => {
     return `- ${reasonText}`
   })
 
-  const ivoryAgeList = `${ivoryAgeFormatted.join('\n')}`
-
-  return ivoryAgeList
+  return `${ivoryAgeFormatted.join('\n')}`
 }
 
 module.exports = [

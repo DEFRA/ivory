@@ -21,7 +21,7 @@ module.exports = [
   }
 ]
 
-const _getContext = request => {
+const _getContext = () => {
   return {
     pageTitle: `Privacy notice: ${config.serviceName}`
   }

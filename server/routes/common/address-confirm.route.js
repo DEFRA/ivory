@@ -130,7 +130,9 @@ const _convertSingleLineAddressToMultipleLines = (context, address) => {
     firstCommaReplacementToken,
     ', '
   )
-  context.addressLines = context.addressLines.map(address => address.trim())
+  context.addressLines = context.addressLines.map(addressLine =>
+    addressLine.trim()
+  )
 }
 
 module.exports = {

@@ -46,7 +46,7 @@ const handlers = {
         return h.redirect(Paths.LESS_THAN_20_IVORY)
       case Options.NO:
         return h.redirect(Paths.CANNOT_TRADE)
-      case Options.I_DONT_KNOW:
+      default:
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }

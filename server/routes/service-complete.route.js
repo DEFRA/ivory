@@ -39,20 +39,9 @@ const handlers = {
     const hasOwnerEmail =
       ownerContactDetails && ownerContactDetails.hasEmailAddress === Options.YES
 
-    const paymentId = await RedisService.get(request, RedisKeys.PAYMENT_ID)
-
-    const payment = await PaymentService.lookupPayment(paymentId)
-
-    if (_paymentCancelled(payment.state)) {
-      return h.redirect(Paths.CHECK_YOUR_ANSWERS)
-    }
-
-    if (_paymentFailed(payment.state)) {
-      return h.redirect(Paths.MAKE_PAYMENT)
-    }
-
-    if (_paymentError(payment.state)) {
-      return h.redirect(Paths.CHECK_YOUR_ANSWERS)
+    const paymentFailedRoute = await _checkPaymentState(request)
+    if (paymentFailedRoute) {
+      return h.redirect(paymentFailedRoute)
     }
 
     const context = await _getContext(request, isSection2, isOwnedByApplicant)
@@ -61,16 +50,15 @@ const handlers = {
       return h.redirect(Paths.SESSION_TIMED_OUT)
     }
 
-    const emailType =
-      isSection2 && isAlreadyCertified
-        ? EmailTypes.CONFIRMATION_EMAIL_RESELLING
-        : EmailTypes.CONFIRMATION_EMAIL
-
-    _sendEmail(request, context, emailType, itemType, isSection2)
-
-    if (!isOwnedByApplicant && !isSection2 && hasOwnerEmail) {
-      _sendEmail(request, context, EmailTypes.EMAIL_TO_OWNER, itemType)
-    }
+    _sendEmails(
+      request,
+      context,
+      itemType,
+      isSection2,
+      isOwnedByApplicant,
+      isAlreadyCertified,
+      hasOwnerEmail
+    )
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.SERVICE_COMPLETE,
@@ -83,6 +71,45 @@ const handlers = {
         ...context
       })
       .unstate(DEFRA_IVORY_SESSION_KEY)
+  }
+}
+
+const _checkPaymentState = async request => {
+  const paymentId = await RedisService.get(request, RedisKeys.PAYMENT_ID)
+
+  const payment = await PaymentService.lookupPayment(paymentId)
+
+  let paymentFailedRoute = null
+
+  if (_paymentCancelled(payment.state)) {
+    paymentFailedRoute = Paths.CHECK_YOUR_ANSWERS
+  } else if (_paymentFailed(payment.state)) {
+    paymentFailedRoute = Paths.MAKE_PAYMENT
+  } else if (_paymentError(payment.state)) {
+    paymentFailedRoute = Paths.CHECK_YOUR_ANSWERS
+  }
+
+  return paymentFailedRoute
+}
+
+const _sendEmails = (
+  request,
+  context,
+  itemType,
+  isSection2,
+  isOwnedByApplicant,
+  isAlreadyCertified,
+  hasOwnerEmail
+) => {
+  const emailType =
+    isSection2 && isAlreadyCertified
+      ? EmailTypes.CONFIRMATION_EMAIL_RESELLING
+      : EmailTypes.CONFIRMATION_EMAIL
+
+  _sendEmail(request, context, emailType, itemType, isSection2)
+
+  if (!isOwnedByApplicant && !isSection2 && hasOwnerEmail) {
+    _sendEmail(request, context, EmailTypes.EMAIL_TO_OWNER, itemType)
   }
 }
 

@@ -1,6 +1,6 @@
 'use strict'
 
-// TODO analytics
+// TODO IVORY-557
 // const AnalyticsService = require('../../services/analytics.service')
 
 const { Paths, Views } = require('../../utils/constants')
@@ -8,12 +8,6 @@ const { Paths, Views } = require('../../utils/constants')
 const handlers = {
   get: async (request, h) => {
     const context = _getContext()
-
-    // AnalyticsService.sendEvent(request, {
-    //   category: Analytics.Category.ERROR_PAGE,
-    //   action: `${Analytics.Action.REFERRED} ${request.headers.referer}`,
-    //   label: context.pageTitle
-    // })
 
     return h.view(Views.RECORD_NOT_FOUND, {
       ...context
@@ -23,7 +17,8 @@ const handlers = {
 
 const _getContext = () => {
   return {
-    pageTitle: 'Record not found'
+    pageTitle: 'Record not found',
+    hideBackLink: true
   }
 }
 

@@ -118,9 +118,9 @@ describe('OData service', () => {
     it('should get a Section 2 record if the key is correct', async () => {
       const result = await ODataService.getRecord(
         '___RECORD_ID_VALID_KEY___',
-        true,
         '___VALID_KEY___',
-        DownloadReason.SEND_DATA_TO_PI
+        DownloadReason.SEND_DATA_TO_PI,
+        true
       )
 
       expect(result).toEqual({
@@ -133,9 +133,9 @@ describe('OData service', () => {
     it('should NOT get a Section 2 record if the key is incorrect', async () => {
       const result = await ODataService.getRecord(
         '___RECORD_ID_INVALID_KEY___',
-        true,
         '___INVALID_KEY___',
-        DownloadReason.GENERATE_CERTIFICATE
+        DownloadReason.GENERATE_CERTIFICATE,
+        true
       )
 
       expect(result).toBeNull()

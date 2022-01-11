@@ -14,6 +14,7 @@ describe('/eligibility-checker/rmi-and-pre-1918 route', () => {
   const elementIds = {
     pageTitle: 'pageTitle',
     helpText: 'helpText',
+    insetText: 'insetText',
     bullet1: 'bullet1',
     bullet2: 'bullet2',
     bullet3: 'bullet3',
@@ -74,6 +75,14 @@ describe('/eligibility-checker/rmi-and-pre-1918 route', () => {
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'The item must have been made before 1 January 1918 and be:'
+      )
+    })
+
+    it('should have the correct inset text', () => {
+      const element = document.querySelector(`#${elementIds.insetText}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'An item that only has sentimental value would not qualify, regardless of how important it is to you personally.'
       )
     })
 

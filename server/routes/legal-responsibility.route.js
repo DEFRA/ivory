@@ -53,6 +53,9 @@ const _getContext = async request => {
   const certificateCancelledOrRevoked =
     "If we later find out that the information you’ve given is not accurate, the exemption certificate may be cancelled or 'revoked'."
 
+  const certificateCancelledOrRevokedAlredyCertified =
+    "If we later find out that the item has been damaged or altered, the exemption certificate is likely to be cancelled or 'revoked'. In this case a new application for an exemption certificate would have to be made before you can sell or hire out the item."
+
   if (!isSection2) {
     context.pageTitle =
       'Both the owner and applicant are jointly responsible for providing accurate information'
@@ -62,18 +65,16 @@ const _getContext = async request => {
       stopIfUnsure
     ]
   } else {
-    if (isAlreadyCertified) {
-      context.pageTitle =
-        'Both the owner and the person selling the certified item are jointly responsible for ensuring it remains exempt'
-    } else {
-      context.pageTitle =
-        'Both the owner and applicant are jointly responsible for providing accurate information'
-    }
+    context.pageTitle = isAlreadyCertified
+      ? 'Both the owner and the person selling the certified item are jointly responsible for ensuring it remains exempt'
+      : 'Both the owner and applicant are jointly responsible for providing accurate information'
 
     context.helpTextParas = [
       haveOwnerPermission,
       stopIfUnsure,
-      certificateCancelledOrRevoked
+      isAlreadyCertified
+        ? certificateCancelledOrRevokedAlredyCertified
+        : certificateCancelledOrRevoked
     ]
   }
 

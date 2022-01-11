@@ -53,7 +53,7 @@ const handlers = {
             : Paths.CAN_CONTINUE
         )
 
-      case Options.I_DONT_KNOW:
+      default:
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
   }

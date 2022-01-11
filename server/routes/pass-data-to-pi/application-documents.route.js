@@ -30,17 +30,14 @@ const handlers = {
   }
 }
 
-const _getRecord = (id, key) => {
-  return ODataService.getRecord(id, true, key, DownloadReason.SEND_DATA_TO_PI)
-}
+const _getRecord = (id, key) =>
+  ODataService.getRecord(id, key, DownloadReason.SEND_DATA_TO_PI, true)
 
-const _getDocument = async (id, dataverseFieldName) => {
-  return ODataService.getDocument(id, dataverseFieldName)
-}
+const _getDocument = async (id, dataverseFieldName) =>
+  ODataService.getDocument(id, dataverseFieldName)
 
-const _isPdf = filename => {
-  return filename.substring(filename.length - 4).toUpperCase() === '.PDF'
-}
+const _isPdf = filename =>
+  filename.substring(filename.length - 4).toUpperCase() === '.PDF'
 
 module.exports = [
   {

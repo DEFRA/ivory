@@ -55,17 +55,19 @@ const handlers = {
       label: context.pageTitle
     })
 
-    switch (payload.areYouAMuseum) {
-      case Options.YES:
-        return h.redirect(Paths.DO_NOT_NEED_SERVICE)
-      case Options.NO:
-        await RedisService.set(
-          request,
-          RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
-          ItemType.MUSEUM
-        )
-        return h.redirect(Paths.CAN_CONTINUE)
+    if (payload.areYouAMuseum !== Options.YES) {
+      await RedisService.set(
+        request,
+        RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT,
+        ItemType.MUSEUM
+      )
     }
+
+    return h.redirect(
+      payload.areYouAMuseum === Options.YES
+        ? Paths.DO_NOT_NEED_SERVICE
+        : Paths.CAN_CONTINUE
+    )
   }
 }
 

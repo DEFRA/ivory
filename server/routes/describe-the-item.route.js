@@ -7,6 +7,7 @@ const RedisHelper = require('../services/redis-helper.service')
 const {
   CharacterLimits,
   ItemType,
+  Options,
   Paths,
   RedisKeys,
   Views,
@@ -56,6 +57,10 @@ const handlers = {
         .code(400)
     }
 
+    if (payload && payload.hasDistinguishingFeatures !== Options.YES) {
+      delete payload.distinguishingFeatures
+    }
+
     await RedisService.set(
       request,
       RedisKeys.DESCRIBE_THE_ITEM,
@@ -82,17 +87,28 @@ const handlers = {
 }
 
 const _getContext = async (request, itemType) => {
+  let payload
+  if (request.payload) {
+    payload = request.payload
+  } else {
+    payload = await RedisService.get(request, RedisKeys.DESCRIBE_THE_ITEM)
+  }
+
+  const hasDistinguishingFeatures = payload
+    ? payload.hasDistinguishingFeatures
+    : null
+
+  const options = _getOptions(hasDistinguishingFeatures).slice(0, -1)
+  const yesOption = options.shift()
+
   const context = {
     pageTitle,
+    yesOption,
+    items: options,
     isSection2: itemType === ItemType.HIGH_VALUE
   }
 
-  const itemDescription = await RedisService.get(
-    request,
-    RedisKeys.DESCRIBE_THE_ITEM
-  )
-
-  _addRedisDataToContext(context, itemDescription)
+  _addRedisDataToContext(context, payload)
 
   addPayloadToContext(request, context)
 
@@ -102,6 +118,16 @@ const _getContext = async (request, itemType) => {
 const _validateForm = payload => {
   const errors = []
 
+  _validateWhatIsItem(payload, errors)
+  _validateWhereIsIvory(payload, errors)
+  _validateDistinguishingFeatures(payload, errors)
+  _validateWhereMade(payload, errors)
+  _validateWhenMade(payload, errors)
+
+  return errors
+}
+
+const _validateWhatIsItem = (payload, errors) => {
   if (Validators.empty(payload.whatIsItem)) {
     errors.push({
       name: 'whatIsItem',
@@ -115,7 +141,9 @@ const _validateForm = payload => {
       )} characters to tell us what the item is`
     })
   }
+}
 
+const _validateWhereIsIvory = (payload, errors) => {
   if (Validators.empty(payload.whereIsIvory)) {
     errors.push({
       name: 'whereIsIvory',
@@ -131,16 +159,37 @@ const _validateForm = payload => {
       )} characters to tell us where the ivory is`
     })
   }
+}
 
-  if (Validators.maxLength(payload.uniqueFeatures, CharacterLimits.Input)) {
+const _validateDistinguishingFeatures = (payload, errors) => {
+  if (Validators.empty(payload.hasDistinguishingFeatures)) {
     errors.push({
-      name: 'uniqueFeatures',
-      text: `You must use fewer than ${formatNumberWithCommas(
-        CharacterLimits.Input
-      )} characters to describe any unique, identifying features`
+      name: 'hasDistinguishingFeatures',
+      text: 'You must tell us if the item has any distinguishing features'
     })
   }
 
+  if (
+    payload.hasDistinguishingFeatures === Options.YES &&
+    Validators.empty(payload.distinguishingFeatures)
+  ) {
+    errors.push({
+      name: 'distinguishingFeatures',
+      text: 'You must give details about the item’s distinguishing features'
+    })
+  } else if (
+    Validators.maxLength(payload.distinguishingFeatures, CharacterLimits.Input)
+  ) {
+    errors.push({
+      name: 'distinguishingFeatures',
+      text: `You must use fewer than ${formatNumberWithCommas(
+        CharacterLimits.Input
+      )} characters to describe any distinguishing features`
+    })
+  }
+}
+
+const _validateWhereMade = (payload, errors) => {
   if (Validators.maxLength(payload.whereMade, CharacterLimits.Input)) {
     errors.push({
       name: 'whereMade',
@@ -149,7 +198,9 @@ const _validateForm = payload => {
       )} characters to tell us where the item was made`
     })
   }
+}
 
+const _validateWhenMade = (payload, errors) => {
   if (Validators.maxLength(payload.whenMade, CharacterLimits.Input)) {
     errors.push({
       name: 'whenMade',
@@ -158,8 +209,6 @@ const _validateForm = payload => {
       )} characters to tell us when the item was made`
     })
   }
-
-  return errors
 }
 
 const _addRedisDataToContext = (context, itemDescription) => {
@@ -168,6 +217,23 @@ const _addRedisDataToContext = (context, itemDescription) => {
       context[fieldName] = itemDescription[fieldName]
     }
   }
+}
+
+const _getOptions = hasDistinguishingFeatures => {
+  const options = Object.values(Options).map(option => {
+    return {
+      label: option,
+      checked: hasDistinguishingFeatures && hasDistinguishingFeatures === option
+    }
+  })
+
+  return options.map(option => {
+    return {
+      text: option.label,
+      value: option.label,
+      checked: option.checked
+    }
+  })
 }
 
 module.exports = [

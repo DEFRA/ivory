@@ -280,7 +280,7 @@ describe('/pass-data-to-pi/application-details route', () => {
       })
     })
 
-    describe('"Description of the item" section', () => {
+    describe('"Why item qualifies for exemption" section', () => {
       beforeEach(async () => {
         _createMocks()
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -290,7 +290,7 @@ describe('/pass-data-to-pi/application-details route', () => {
         _checkSubheading(
           document,
           elementIds.subHeadings.itemDescription,
-          'Description of the item'
+          'Why item qualifies for exemption'
         )
 
         _checkSummary(document, elementIds.summaries.itemDescription)
@@ -298,7 +298,7 @@ describe('/pass-data-to-pi/application-details route', () => {
         _checkSummaryKeys(document, elementIds.summaries.itemDescription, [
           'What is it?',
           'Where’s the ivory?',
-          'Unique, identifying features (optional)',
+          'Distinguishing features',
           'Where was it made? (optional)',
           'When was it made? (optional)'
         ])
@@ -306,7 +306,7 @@ describe('/pass-data-to-pi/application-details route', () => {
         _checkSummaryValues(document, elementIds.summaries.itemDescription, [
           mockEntity[DataVerseFieldName.ITEM_SUMMARY],
           mockEntity[DataVerseFieldName.WHERE_IS_THE_IVORY],
-          mockEntity[DataVerseFieldName.UNIQUE_FEATURES],
+          mockEntity[DataVerseFieldName.DISTINGUISHING_FEATURES],
           mockEntity[DataVerseFieldName.WHERE_IT_WAS_MADE],
           mockEntity[DataVerseFieldName.WHEN_IT_WAS_MADE]
         ])
@@ -422,7 +422,7 @@ describe('/pass-data-to-pi/application-details route', () => {
         _checkSubheading(
           document,
           elementIds.subHeadings.documents,
-          'Documents to support application'
+          'Supporting evidence'
         )
 
         _checkSummary(document, elementIds.summaries.documents)
