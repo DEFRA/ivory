@@ -11,7 +11,6 @@ describe('/eligibility-checker/cannot-trade route', () => {
     pageTitle: 'pageTitle',
     helpText: 'helpText',
     helpText2: 'helpText2',
-    helpText2b: 'helpText2b',
     heading2: 'heading2',
     helpText3: 'helpText3',
     helpTextList: 'helpTextList',
@@ -78,14 +77,6 @@ describe('/eligibility-checker/cannot-trade route', () => {
 
     it('should have the correct help text 2', () => {
       const element = document.querySelector(`#${elementIds.helpText2}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'Based on your answers, it is illegal to sell it, hire it out or exchange it for goods or services.'
-      )
-    })
-
-    it('should have the correct help text 2b', () => {
-      const element = document.querySelector(`#${elementIds.helpText2b}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'Based on your answers, it is illegal to:'
