@@ -16,6 +16,10 @@ describe('Address service', () => {
   })
 
   describe('addressSearch method', () => {
+    beforeEach(() => {
+      config.addressLookupEnabled = true
+    })
+
     it('should return muiltiple addresses if no name/number entered', async () => {
       const results = await AddressService.addressSearch('', 'TQ12 5JE')
       expect(results.length).toEqual(multipleAddresses.length)
@@ -39,11 +43,20 @@ describe('Address service', () => {
       expect(results.length).toEqual(11)
     })
   })
+
+  describe('addressSearch method disabled', () => {
+    beforeEach(() => {
+      config.addressLookupEnabled = false
+    })
+
+    it('should return no addresses if a name/number is entered', async () => {
+      const results = await AddressService.addressSearch('15', 'TQ12 5JE')
+      expect(results.length).toEqual(0)
+    })
+  })
 })
 
 const _createMocks = () => {
-  config.addressLookupEnabled = true
-
   nock(`${config.addressLookupUrl}`)
     .get(
       '/ws/rest/DEFRA/v1/address/postcodes?postcode=TQ12 5JE&offset=0&maxresults=100'
