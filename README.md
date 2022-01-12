@@ -49,7 +49,7 @@ First install the dependencies & build the application using:
 
 Currently this will just build the `govuk-frontend` sass and create a default .env file if one doesn't already exist. But may be extended to include other build tasks as needed (e.g. client-side js using browserify or webpack etc.)
 
-If installing on a Windows machine you may encounter an error when running `$ npm install` relating to your OS not being able to run the Bash scripts which are part of the installation. Should you have this problem first ensure that you have installed [Git for Windows](https://gitforwindows.org/). Then run the command `$ npm config set script-shell %userprofile%\cmder\vendor\git-for-windows\bin\bash` followed by `$ npm install`.
+If installing on a Windows machine you may encounter an error when running `$ npm install` relating to your OS not being able to run the Bash scripts which are part of the installation. Should you have this problem first ensure that you have installed [Git for Windows](https://gitforwindows.org). Then run the command `$ npm config set script-shell %userprofile%\cmder\vendor\git-for-windows\bin\bash` followed by `$ npm install`.
 
 Now the application is ready to run:
 
@@ -61,7 +61,11 @@ In some instances you may not be able to use a PFX certificate file with your en
 
 ### To run the application in Docker
 
-`$ npm run docker` or `$ npm run docker:build` followed by `$ npm run docker:run`
+With Docker installed locally run `$ docker-compose up` to initially build and run the service locally in containers. To remove the containers use `$ docker-compose down`.
+
+Use `docker-compose build` to rebuild the service if needed.
+
+Further information on using Docker can be found at [https://docs.docker.com](https://docs.docker.com).
 
 ## Project structure
 
@@ -156,9 +160,6 @@ The predefined tasks are:
 - `npm start` (Runs the application)
 - `npm run build` (Runs all build sub-tasks)
 - `npm run build:css` (Builds the client-side sass)
-- `npm run docker` (Runs all Docker sub-tasks)
-- `npm run docker:build` (Builds the application in a Docker container)
-- `npm run docker:run` (Runs the application in the Docker container)
 - `npm run lint` (Runs the lint task using standard.js)
 - `npm run unit-test` (Runs the `lab` tests in the `/test` folder)
 - `npm test` (Runs the `lint` task then the `unit-tests`)
