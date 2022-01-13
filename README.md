@@ -13,27 +13,48 @@ Digital service to support the Ivory Act.
 
 The default values will be used if the environment variables are missing or commented out.
 
-| name                       | description                | required | default         |               valid                | notes |
-| -------------------------- | -------------------------- | :------: | --------------- | :--------------------------------: | ----- |
-| NODE_ENV                   | Node environment           |    no    |                 |    development,test,production     |       |
-| PORT                       | Port number                |    no    | 3000            |                                    |       |
-| SERVICE_NAME               | Name of the service        |    no    |                 |             Any string             |       |
-| COOKIE_VALIDATION_PASSWORD | Cookie encoding password   |   yes    |                 |             Any string             |       |
-| REDIS_HOST                 | Redis server IP address    |    no    | localhost       |                                    |       |
-| REDIS_PORT                 | Redis port number          |    no    | 6379            |                                    |       |
-| REDIS_PASSWORD             | Redis password             |    no    |                 |                                    |       |
-| REDIS_USE_TLS              | Enable/disable SSL/TLS     |    no    |                 |             true,false             |       |
-| ADDRESS_LOOKUP_ENABLED     | Enable/disable address API |    no    | false           |             true,false             |       |
-| ADDRESS_LOOKUP_URL         | Address lookup URL         |    no    | http://some-url |                                    |       |
-| ADDRESS_LOOKUP_PASSPHRASE  | Address lookup passphrase  |    no    |                 |                                    |       |
-| ADDRESS_LOOKUP_PFX_CERT    | Address lookup certificate |    no    |                 | PFX file location or Base64 string |       |
-| GOOGLE_ANALYTICS_ID        | GA Tracking ID             |    no    | UA-YYYYYY-YY    |   A Google Analytics Tracking ID   |       |
-| AIRBRAKE_HOST              | Airbrake host              |    no    |                 |         https://some-url.com       |       |
-| AIRBRAKE_PROJECT_KEY       | Airbrake project key       |    no    |                 |             Any string             |       |
-| CLAMSCAN_BINARIES          | Location of the binary     |    no    | /usr/bin/       |                                    |       |
-| CLAMSCAN_PREFERENCE        | Prefered scanning method   |    no    | clamdscan       |         clamdscan, clamscan        |       |
-| CLAMSCAN_DEBUG             | log msgs to the console    |    no    | false           |             true,false             |       |
-| DISABLE_ANTIMALWARE        | Disables the anti-malware  |    no    | false           |             true,false             |       |
+| name                                               | description                 | required | default               |               valid                |
+| -------------------------------------------------- | --------------------------- | :------: | --------------------- | :--------------------------------: |
+| NODE_ENV                                           | Node environment            |    no    |                       | development,test,production        |
+| SERVICE_HOST                                       | Application's URL           |    yes   | http://localhost:3000 | development,test,production        |
+| SERVICE_PORT                                       | Port number                 |    no    | 3000                  |                                    |
+| SERVICE_NAME                                       | Name of the service         |    no    |                       | Any string                         |
+| LOG_LEVEL                                          | The level of logging        |    no    | warn                  | warn, debug                        |
+| REQUEST_TIMEOUT                                    | Timeout (in milliseconds)   |    no    |                       | Any integer                        |
+| REDIS_HOST                                         | Redis server IP address     |    no    | localhost             |                                    |
+| REDIS_PORT                                         | Redis port number           |    no    | 6379                  |                                    |
+| REDIS_PASSWORD                                     | Redis password              |    no    |                       |                                    |
+| REDIS_USE_TLS                                      | Enable/disable SSL/TLS      |    no    |                       | true,false                         |
+| COOKIE_TIMEOUT                                     | Session cookie life in ms   |   yes    | 86400000              | Any integer                        |
+| COOKIE_VALIDATION_PASSWORD                         | Cookie encoding password    |   yes    |                       | Any string                         |
+| DATAVERSE_AUTHORITY_HOST_URL                       | Back office Dataverse       |   yes    |                       |                                    |
+| DATAVERSE_TENANT                                   | Back office Dataverse       |   yes    |                       |                                    |
+| DATAVERSE_CLIENT_ID                                | Back office Dataverse       |   yes    |                       |                                    |
+| DATAVERSE_CLIENT_SECRET                            | Back office Dataverse       |   yes    |                       |                                    |
+| DATAVERSE_RESOURCE                                 | Back office Dataverse       |   yes    |                       |                                    |
+| DATAVERSE_API_ENDPOINT                             | Back office Dataverse       |   yes    |                       | For example: api/data/v9.1         |
+| ADDRESS_LOOKUP_ENABLED                             | Enable/disable address API  |    no    | false                 | true,false                         |
+| ADDRESS_LOOKUP_URL                                 | Address lookup URL          |    no    | http://some-url       |                                    |
+| ADDRESS_LOOKUP_PASSPHRASE                          | Address lookup passphrase   |    no    |                       |                                    |
+| ADDRESS_LOOKUP_PFX_CERT                            | Address lookup certificate  |    no    |                       | PFX file location or Base64 string |
+| GOV_NOTIFY_KEY                                     | Gov Notify config           |   yes    |                       |                                    |
+| GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_2           | Gov Notify config           |   yes    |                       |                                    |
+| GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_2_RESELLING | Gov Notify config           |   yes    |                       |                                    |
+| GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_10          | Gov Notify config           |   yes    |                       |                                    |
+| GOV_NOTIFY_TEMPLATE_ID_EMAIL_TO_OWNER_SECTION_10   | Gov Notify config           |   yes    |                       |                                    |
+| PAYMENT_ENABLED                                    | Gov Pay config              |   yes    | false                 | true,false (currently not used)    |
+| PAYMENT_URL                                        | Gov Pay config              |   yes    |                       |                                    |
+| PAYMENT_API_KEY                                    | Gov Pay config              |   yes    |                       |                                    |
+| PAYMENT_AMOUNT_BAND_A                              | Amount charged in pence     |   yes    |                       | Any integer                        |
+| PAYMENT_AMOUNT_BAND_B                              | Amount charged in pence     |   yes    |                       | Any integer                        |
+| GOOGLE_ANALYTICS_ID                                | GA Tracking ID              |    no    | UA-YYYYYY-YY          | A Google Analytics Tracking ID     |
+| AIRBRAKE_HOST                                      | Airbrake host               |    no    |                       | https://some-url.com               |
+| AIRBRAKE_PROJECT_KEY                               | Airbrake project key        |    no    |                       | Any string                         |
+| USE_BASIC_AUTH                                     | Enable basic authentication |    no    | false                 | true,false                         |
+| CLAMSCAN_BINARIES                                  | Location of the binary      |    no    | /usr/bin/             |                                    |
+| CLAMSCAN_PREFERENCE                                | Prefered scanning method    |    no    | clamdscan             | clamdscan, clamscan                |
+| CLAMSCAN_DEBUG                                     | log msgs to the console     |    no    | false                 | true,false                         |
+| DISABLE_ANTIMALWARE                                | Disables the anti-malware   |    no    | false                 | true,false                         |
 
 # Prerequisites
 
