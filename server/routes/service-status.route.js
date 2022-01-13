@@ -16,6 +16,7 @@ const handlers = {
         name: nodePackage.name,
         version: nodePackage.version,
         clamVersion: await AntimalwareService.version(),
+        addressLookupEnabled: process.env.ADDRESS_LOOKUP_ENABLED ? 'Yes' : 'No',
         rendered: moment(new Date()).format(DATE_FORMAT_DMY_WITH_HMS),
         uptime: moment(Date.now() - process.uptime() * 1000).format(
           DATE_FORMAT_DMY_WITH_HMS
