@@ -12,7 +12,15 @@
 
       <p id="helpText">{{ helpText }}</p>
 
-      <p id="helpText2">Based on your answers, it is illegal to sell it, hire it out or exchange it for goods or services.</p>
+      <p id="helpText2">Based on your answers, it is illegal to:</p>
+
+      <ul id="helpTextList2" class="govuk-list govuk-list--bullet">
+        <li>sell or hire it out</li>
+        <li>offer or arrange to sell or hire it out</li>
+        <li>keep it for sale or hire</li>
+        <li>import it into the United Kingdom for sale or hire</li>
+        <li>export it from the United Kingdom for sale or hire</li>
+      </ul>
 
       <h2 id="heading2" class="govuk-heading-m">What you can do with this item</h2>
 
@@ -23,10 +31,6 @@
         <li>giving it away as a gift</li>
         <li>leaving it to someone in your will</li>
       </ul>
-
-      <h2 id="heading2-2" class="govuk-heading-m">When it may become exempt</h2>
-
-      <p id="helpText4">If a museum is interested in your item, you may be able to sell or hire it out to them. In this case, you should try and declare it again.</p>
 
       {{ govukButton({
           attributes: {

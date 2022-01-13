@@ -14,6 +14,7 @@ describe('/eligibility-checker/cannot-trade route', () => {
     heading2: 'heading2',
     helpText3: 'helpText3',
     helpTextList: 'helpTextList',
+    helpTextList2: 'helpTextList2',
     heading22: 'heading2-2',
     helpText4: 'helpText4',
     continue: 'continue'
@@ -78,7 +79,7 @@ describe('/eligibility-checker/cannot-trade route', () => {
       const element = document.querySelector(`#${elementIds.helpText2}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Based on your answers, it is illegal to sell it, hire it out or exchange it for goods or services.'
+        'Based on your answers, it is illegal to:'
       )
     })
 
@@ -103,20 +104,9 @@ describe('/eligibility-checker/cannot-trade route', () => {
       expect(element).toBeTruthy()
     })
 
-    it('should have the correct heading22', () => {
-      const element = document.querySelector(`#${elementIds.heading22}`)
+    it('should have a help text list 2', () => {
+      const element = document.querySelector(`#${elementIds.helpTextList2}`)
       expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'When it may become exempt'
-      )
-    })
-
-    it('should have the correct help text 4', () => {
-      const element = document.querySelector(`#${elementIds.helpText4}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'If a museum is interested in your item, you may be able to sell or hire it out to them. In this case, you should try and declare it again.'
-      )
     })
 
     it('should have the correct Call to Action button', () => {

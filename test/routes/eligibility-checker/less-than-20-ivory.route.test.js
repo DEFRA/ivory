@@ -17,6 +17,8 @@ describe('/eligibility-checker/less-than-20-ivory route', () => {
     helpText: 'helpText',
     helpText2: 'helpText2',
     helpText3: 'helpText3',
+    helpText4: 'helpText4',
+    helpTextList: 'helpTextList',
     lessThan20Ivory: 'lessThan20Ivory',
     lessThan20Ivory2: 'lessThan20Ivory-2',
     lessThan20Ivory3: 'lessThan20Ivory-3',
@@ -91,6 +93,19 @@ describe('/eligibility-checker/less-than-20-ivory route', () => {
       expect(TestHelper.getTextContent(element)).toEqual(
         'Do not include any empty spaces, for instance the space within a violin or piano.'
       )
+    })
+
+    it('should have the correct help text 4', () => {
+      const element = document.querySelector(`#${elementIds.helpText4}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'Items likely to have less than 20% ivory include:'
+      )
+    })
+
+    it('should have a help text list', () => {
+      const element = document.querySelector(`#${elementIds.helpTextList}`)
+      expect(element).toBeTruthy()
     })
 
     it('should have the correct summary text title', () => {
