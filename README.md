@@ -21,8 +21,6 @@ First install the dependencies & build the application using:
 
 `$ npm install`
 
-Currently this will just build the `govuk-frontend` sass and create a default .env file if one doesn't already exist. But may be extended to include other build tasks as needed (e.g. client-side js using browserify or webpack etc.)
-
 If installing on a Windows machine you may encounter an error when running `$ npm install` relating to your OS not being able to run the Bash scripts which are part of the installation. Should you have this problem first ensure that you have installed [Git for Windows](https://gitforwindows.org). Then run the command `$ npm config set script-shell %userprofile%\cmder\vendor\git-for-windows\bin\bash` followed by `$ npm install`.
 
 Now the application is ready to run:
