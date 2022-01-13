@@ -14,6 +14,8 @@ describe('Enter Permit Number route', () => {
     version: 'version',
     clamVersionLabel: 'clam-version-label',
     clamVersion: 'clam-version',
+    addressLookupLabel: 'address-lookup-label',
+    addressLookup: 'address-lookup',
     serverStartedLabel: 'server-started-label',
     serverStarted: 'server-started',
     pageRenderedLabel: 'page-rendered-label',
@@ -84,6 +86,16 @@ describe('Enter Permit Number route', () => {
       expect(TestHelper.getTextContent(element)).toEqual('ClamAV version:')
 
       element = document.querySelector(`#${elementIds.clamVersion}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element).length > 0).toBeTruthy()
+    })
+
+    it('should display the status of the Address Lookup API', () => {
+      let element = document.querySelector(`#${elementIds.addressLookupLabel}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual('Address lookup enabled:')
+
+      element = document.querySelector(`#${elementIds.addressLookup}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element).length > 0).toBeTruthy()
     })
