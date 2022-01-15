@@ -75,7 +75,7 @@ const _getContext = () => {
   return {
     pageTitle: 'Are you selling or hiring the item out on behalf of a museum?',
     helpText:
-      'You must be acting on behalf of a museum that is a member of the International Council of Museums, or accredited by one of the following:',
+      'You must be acting on behalf of a museum that is a member of the International Council of Museums, or accredited by or on behalf of one of the following:',
     items: getStandardOptions(false)
   }
 }

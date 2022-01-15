@@ -70,7 +70,7 @@ describe('/eligibility-checker/are-you-a-museum route', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'You must be acting on behalf of a museum that is a member of the International Council of Museums, or accredited by one of the following:'
+        'You must be acting on behalf of a museum that is a member of the International Council of Museums, or accredited by or on behalf of one of the following:'
       )
     })
 
