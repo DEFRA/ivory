@@ -119,7 +119,7 @@ describe('/check-your-answers route', () => {
 
     describe('GET: Page sections', () => {
       beforeEach(async () => {
-        _createMocks(ItemType.HIGH_VALUE, false)
+        _createMocks(ItemType.HIGH_VALUE, true, false)
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
@@ -217,11 +217,59 @@ describe('/check-your-answers route', () => {
         )
       })
 
+      it('should have the correct "Description" summary section when none of the optional fields have been entered', async () => {
+        _createMocks(ItemType.HIGH_VALUE, false, false)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+
+        _checkSubheading(
+          document,
+          elementIds.subHeadings.itemDescription,
+          'Why item qualifies for exemption'
+        )
+
+        _checkSummary(document, elementIds.summaries.itemDescription)
+
+        _checkSummaryKeys(document, elementIds.summaries.itemDescription, [
+          'What is it?',
+          'Where’s the ivory?',
+          'Distinguishing features',
+          'Where was it made? (optional)',
+          'When was it made? (optional)'
+        ])
+
+        _checkSummaryValues(document, elementIds.summaries.itemDescription, [
+          mockItemDescriptionWithoutOptionalValues.whatIsItem,
+          mockItemDescriptionWithoutOptionalValues.whereIsIvory,
+          'None',
+          'Nothing entered',
+          'Nothing entered'
+        ])
+
+        _checkSummaryChangeLinks(
+          document,
+          elementIds.summaries.itemDescription,
+          [
+            'Change your description of the item',
+            'Change where the ivory is',
+            'Change any distinguishing features',
+            'Change where it was made',
+            'Change when it was made'
+          ],
+          [
+            Paths.DESCRIBE_THE_ITEM,
+            Paths.DESCRIBE_THE_ITEM,
+            Paths.DESCRIBE_THE_ITEM,
+            Paths.DESCRIBE_THE_ITEM,
+            Paths.DESCRIBE_THE_ITEM
+          ]
+        )
+      })
+
       it('should have the correct "Exemption Reason" summary section', () => {
         _checkSubheading(
           document,
           elementIds.subHeadings.exemptionReason,
-          'Reasons why item is exempt'
+          'Why item qualifies for exemption'
         )
 
         _checkSummary(document, elementIds.summaries.exemptionReason)
@@ -278,7 +326,7 @@ describe('/check-your-answers route', () => {
         _checkSummaryKeys(
           document,
           elementIds.summaries.documents,
-          'Your documents'
+          'Your files'
         )
 
         for (let i = 0; i < MAX_FILES; i++) {
@@ -328,7 +376,7 @@ describe('/check-your-answers route', () => {
 
     describe('GET: Page sections - non-RMI item type', () => {
       beforeEach(async () => {
-        _createMocks(ItemType.MUSICAL, false)
+        _createMocks(ItemType.MUSICAL, true, false)
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
@@ -349,7 +397,7 @@ describe('/check-your-answers route', () => {
 
     describe('GET: Page sections for ItemType = MUSEUM', () => {
       beforeEach(async () => {
-        _createMocks(ItemType.MUSEUM, false)
+        _createMocks(ItemType.MUSEUM, true, false)
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
@@ -370,7 +418,7 @@ describe('/check-your-answers route', () => {
 
     describe('GET: Page sections for ItemType = TEN_PERCENT', () => {
       beforeEach(async () => {
-        _createMocks(ItemType.TEN_PERCENT, false)
+        _createMocks(ItemType.TEN_PERCENT, true, false)
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
@@ -378,7 +426,7 @@ describe('/check-your-answers route', () => {
         _checkSubheading(
           document,
           elementIds.subHeadings.exemptionReason,
-          'Reasons why item is exempt'
+          'Why item qualifies for exemption'
         )
 
         _checkSummary(document, elementIds.summaries.exemptionReason)
@@ -456,6 +504,7 @@ describe('/check-your-answers route', () => {
       it('should have the correct "Owner’s details" summary section - answered selling on behalf of "the business I work for"', async () => {
         _createMocks(
           ItemType.TEN_PERCENT,
+          true,
           false,
           BehalfOfBusinessOptions.BUSINESS_I_WORK_FOR
         )
@@ -514,7 +563,12 @@ describe('/check-your-answers route', () => {
       })
 
       it('should have the correct "Owner’s details" summary section - answered selling on behalf of "other"', async () => {
-        _createMocks(ItemType.TEN_PERCENT, false, BehalfOfBusinessOptions.OTHER)
+        _createMocks(
+          ItemType.TEN_PERCENT,
+          true,
+          false,
+          BehalfOfBusinessOptions.OTHER
+        )
         document = await TestHelper.submitGetRequest(server, getOptions)
 
         _checkSubheading(
@@ -576,6 +630,7 @@ describe('/check-your-answers route', () => {
       it('should have the correct "Owner’s details" summary section - all other scenarios', async () => {
         _createMocks(
           ItemType.TEN_PERCENT,
+          true,
           false,
           BehalfOfBusinessOptions.AN_INDIVIDUAL
         )
@@ -675,7 +730,7 @@ describe('/check-your-answers route', () => {
         })
 
         it('should have the correct heading and summary paragraphs when item is owned by applicant', async () => {
-          _createMocks(ItemType.HIGH_VALUE, false)
+          _createMocks(ItemType.HIGH_VALUE, true, false)
           document = await TestHelper.submitGetRequest(server, getOptions)
 
           let element = document.querySelector(
@@ -855,6 +910,7 @@ describe('/check-your-answers route', () => {
         it('should have the correct legal declarations for ItemType = HIGH_VALUE, Already Certified', async () => {
           _createMocks(
             ItemType.HIGH_VALUE,
+            true,
             false,
             BehalfOfBusinessOptions.AN_INDIVIDUAL,
             true
@@ -889,6 +945,7 @@ describe('/check-your-answers route', () => {
         it('should have the correct summary text title, ItemType = HIGH_VALUE, Already Certified', async () => {
           _createMocks(
             ItemType.HIGH_VALUE,
+            true,
             false,
             BehalfOfBusinessOptions.AN_INDIVIDUAL,
             true
@@ -908,6 +965,7 @@ describe('/check-your-answers route', () => {
         it('should have the correct summary text details, ItemType = HIGH_VALUE, Already Certified', async () => {
           _createMocks(
             ItemType.HIGH_VALUE,
+            true,
             false,
             BehalfOfBusinessOptions.AN_INDIVIDUAL,
             true
@@ -986,6 +1044,11 @@ const mockItemDescription = {
   distinguishingFeatures: 'One of the feet is cracked',
   whereMade: 'Europe',
   whenMade: 'Georgian era'
+}
+
+const mockItemDescriptionWithoutOptionalValues = {
+  whatIsItem: 'Chest of drawers',
+  whereIsIvory: 'Chest has ivory knobs'
 }
 
 const mockPhotos = {
@@ -1077,6 +1140,7 @@ const saleIntention = 'Sell it'
 
 const _createMocks = (
   itemType,
+  includeOptionalItemDetails = true,
   ownedByApplicant = true,
   sellingOnBehalfOf = null,
   isAlreadyCertified = false
@@ -1086,7 +1150,9 @@ const _createMocks = (
   RedisService.get = jest.fn((request, redisKey) => {
     const mockDataMap = {
       [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: itemType,
-      [RedisKeys.DESCRIBE_THE_ITEM]: mockItemDescription,
+      [RedisKeys.DESCRIBE_THE_ITEM]: includeOptionalItemDetails
+        ? mockItemDescription
+        : mockItemDescriptionWithoutOptionalValues,
       [RedisKeys.UPLOAD_PHOTO]: mockPhotos,
       [RedisKeys.WHY_IS_ITEM_RMI]: whyRmi,
       [RedisKeys.IVORY_VOLUME]: mockIvoryVolume,
