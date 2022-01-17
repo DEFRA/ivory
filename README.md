@@ -9,32 +9,6 @@
 
 Digital service to support the Ivory Act.
 
-# Environment variables
-
-The default values will be used if the environment variables are missing or commented out.
-
-| name                       | description                | required | default         |               valid                | notes |
-| -------------------------- | -------------------------- | :------: | --------------- | :--------------------------------: | ----- |
-| NODE_ENV                   | Node environment           |    no    |                 |    development,test,production     |       |
-| PORT                       | Port number                |    no    | 3000            |                                    |       |
-| SERVICE_NAME               | Name of the service        |    no    |                 |             Any string             |       |
-| COOKIE_VALIDATION_PASSWORD | Cookie encoding password   |   yes    |                 |             Any string             |       |
-| REDIS_HOST                 | Redis server IP address    |    no    | localhost       |                                    |       |
-| REDIS_PORT                 | Redis port number          |    no    | 6379            |                                    |       |
-| REDIS_PASSWORD             | Redis password             |    no    |                 |                                    |       |
-| REDIS_USE_TLS              | Enable/disable SSL/TLS     |    no    |                 |             true,false             |       |
-| ADDRESS_LOOKUP_ENABLED     | Enable/disable address API |    no    | false           |             true,false             |       |
-| ADDRESS_LOOKUP_URL         | Address lookup URL         |    no    | http://some-url |                                    |       |
-| ADDRESS_LOOKUP_PASSPHRASE  | Address lookup passphrase  |    no    |                 |                                    |       |
-| ADDRESS_LOOKUP_PFX_CERT    | Address lookup certificate |    no    |                 | PFX file location or Base64 string |       |
-| GOOGLE_ANALYTICS_ID        | GA Tracking ID             |    no    | UA-YYYYYY-YY    |   A Google Analytics Tracking ID   |       |
-| AIRBRAKE_HOST              | Airbrake host              |    no    |                 |         https://some-url.com       |       |
-| AIRBRAKE_PROJECT_KEY       | Airbrake project key       |    no    |                 |             Any string             |       |
-| CLAMSCAN_BINARIES          | Location of the binary     |    no    | /usr/bin/       |                                    |       |
-| CLAMSCAN_PREFERENCE        | Prefered scanning method   |    no    | clamdscan       |         clamdscan, clamscan        |       |
-| CLAMSCAN_DEBUG             | log msgs to the console    |    no    | false           |             true,false             |       |
-| DISABLE_ANTIMALWARE        | Disables the anti-malware  |    no    | false           |             true,false             |       |
-
 # Prerequisites
 
 Node v16.x
@@ -47,9 +21,7 @@ First install the dependencies & build the application using:
 
 `$ npm install`
 
-Currently this will just build the `govuk-frontend` sass and create a default .env file if one doesn't already exist. But may be extended to include other build tasks as needed (e.g. client-side js using browserify or webpack etc.)
-
-If installing on a Windows machine you may encounter an error when running `$ npm install` relating to your OS not being able to run the Bash scripts which are part of the installation. Should you have this problem first ensure that you have installed [Git for Windows](https://gitforwindows.org/). Then run the command `$ npm config set script-shell %userprofile%\cmder\vendor\git-for-windows\bin\bash` followed by `$ npm install`.
+If installing on a Windows machine you may encounter an error when running `$ npm install` relating to your OS not being able to run the Bash scripts which are part of the installation. Should you have this problem first ensure that you have installed [Git for Windows](https://gitforwindows.org). Then run the command `$ npm config set script-shell %userprofile%\cmder\vendor\git-for-windows\bin\bash` followed by `$ npm install`.
 
 Now the application is ready to run:
 
@@ -61,7 +33,11 @@ In some instances you may not be able to use a PFX certificate file with your en
 
 ### To run the application in Docker
 
-`$ npm run docker` or `$ npm run docker:build` followed by `$ npm run docker:run`
+With Docker installed locally run `$ docker-compose up` to initially build and run the service locally in containers. To remove the containers use `$ docker-compose down`.
+
+Use `docker-compose build` to rebuild the service if needed.
+
+Further information on using Docker can be found at [https://docs.docker.com](https://docs.docker.com).
 
 ## Project structure
 
@@ -156,9 +132,6 @@ The predefined tasks are:
 - `npm start` (Runs the application)
 - `npm run build` (Runs all build sub-tasks)
 - `npm run build:css` (Builds the client-side sass)
-- `npm run docker` (Runs all Docker sub-tasks)
-- `npm run docker:build` (Builds the application in a Docker container)
-- `npm run docker:run` (Runs the application in the Docker container)
 - `npm run lint` (Runs the lint task using standard.js)
 - `npm run unit-test` (Runs the `lab` tests in the `/test` folder)
 - `npm test` (Runs the `lint` task then the `unit-tests`)
@@ -174,3 +147,50 @@ See the `/test` folder for more information.
 [standard.js](http://standardjs.com/) is used to lint both the server-side and client-side javascript code.
 
 It's defined as a build task and can be run using `npm run lint`.
+
+# Environment variables
+
+The default values will be used if the environment variables are missing or commented out.
+
+| name                                               | description                 | required | default               |               valid                |
+| -------------------------------------------------- | --------------------------- | :------: | --------------------- | :--------------------------------: |
+| NODE_ENV                                           | Node environment            |    no    |                       | development,test,production        |
+| SERVICE_HOST                                       | Application's URL           |    yes   | http://localhost:3000 | development,test,production        |
+| SERVICE_PORT                                       | Port number                 |    no    | 3000                  |                                    |
+| SERVICE_NAME                                       | Name of the service         |    no    |                       | Any string                         |
+| LOG_LEVEL                                          | The level of logging        |    no    | warn                  | warn, debug                        |
+| REQUEST_TIMEOUT                                    | Timeout (in milliseconds)   |    no    |                       | Any integer                        |
+| REDIS_HOST                                         | Redis server IP address     |    no    | localhost             |                                    |
+| REDIS_PORT                                         | Redis port number           |    no    | 6379                  |                                    |
+| REDIS_PASSWORD                                     | Redis password              |    no    |                       |                                    |
+| REDIS_USE_TLS                                      | Enable/disable SSL/TLS      |    no    |                       | true,false                         |
+| COOKIE_TIMEOUT                                     | Session cookie life in ms   |   yes    | 86400000              | Any integer                        |
+| COOKIE_VALIDATION_PASSWORD                         | Cookie encoding password    |   yes    |                       | Any string                         |
+| DATAVERSE_AUTHORITY_HOST_URL                       | Back office Dataverse       |   yes    |                       |                                    |
+| DATAVERSE_TENANT                                   | Back office Dataverse       |   yes    |                       |                                    |
+| DATAVERSE_CLIENT_ID                                | Back office Dataverse       |   yes    |                       |                                    |
+| DATAVERSE_CLIENT_SECRET                            | Back office Dataverse       |   yes    |                       |                                    |
+| DATAVERSE_RESOURCE                                 | Back office Dataverse       |   yes    |                       |                                    |
+| DATAVERSE_API_ENDPOINT                             | Back office Dataverse       |   yes    |                       | For example: api/data/v9.1         |
+| ADDRESS_LOOKUP_ENABLED                             | Enable/disable address API  |    no    | false                 | true,false                         |
+| ADDRESS_LOOKUP_URL                                 | Address lookup URL          |    no    | http://some-url       |                                    |
+| ADDRESS_LOOKUP_PASSPHRASE                          | Address lookup passphrase   |    no    |                       |                                    |
+| ADDRESS_LOOKUP_PFX_CERT                            | Address lookup certificate  |    no    |                       | PFX file location or Base64 string |
+| GOV_NOTIFY_KEY                                     | Gov Notify config           |   yes    |                       |                                    |
+| GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_2           | Gov Notify config           |   yes    |                       |                                    |
+| GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_2_RESELLING | Gov Notify config           |   yes    |                       |                                    |
+| GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_10          | Gov Notify config           |   yes    |                       |                                    |
+| GOV_NOTIFY_TEMPLATE_ID_EMAIL_TO_OWNER_SECTION_10   | Gov Notify config           |   yes    |                       |                                    |
+| PAYMENT_ENABLED                                    | Gov Pay config              |   yes    | false                 | true,false (currently not used)    |
+| PAYMENT_URL                                        | Gov Pay config              |   yes    |                       |                                    |
+| PAYMENT_API_KEY                                    | Gov Pay config              |   yes    |                       |                                    |
+| PAYMENT_AMOUNT_BAND_A                              | Amount charged in pence     |   yes    |                       | Any integer                        |
+| PAYMENT_AMOUNT_BAND_B                              | Amount charged in pence     |   yes    |                       | Any integer                        |
+| GOOGLE_ANALYTICS_ID                                | GA Tracking ID              |    no    | UA-YYYYYY-YY          | A Google Analytics Tracking ID     |
+| AIRBRAKE_HOST                                      | Airbrake host               |    no    |                       | https://some-url.com               |
+| AIRBRAKE_PROJECT_KEY                               | Airbrake project key        |    no    |                       | Any string                         |
+| USE_BASIC_AUTH                                     | Enable basic authentication |    no    | false                 | true,false                         |
+| CLAMSCAN_BINARIES                                  | Location of the binary      |    no    | /usr/bin/             |                                    |
+| CLAMSCAN_PREFERENCE                                | Prefered scanning method    |    no    | clamdscan             | clamdscan, clamscan                |
+| CLAMSCAN_DEBUG                                     | log msgs to the console     |    no    | false                 | true,false                         |
+| DISABLE_ANTIMALWARE                                | Disables the anti-malware   |    no    | false                 | true,false                         |
