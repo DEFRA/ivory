@@ -323,7 +323,7 @@ describe('/pass-data-to-pi/application-details route', () => {
         _checkSubheading(
           document,
           elementIds.subHeadings.exemptionReason,
-          'Reasons why item is exempt'
+          'Why item qualifies for exemption'
         )
 
         _checkSummary(document, elementIds.summaries.exemptionReason)

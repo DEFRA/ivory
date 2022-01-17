@@ -154,7 +154,7 @@ const _getDocumentSummary = async request => {
 
   return [
     _getSummaryListRow(
-      'Your documents',
+      'Your files',
       documentRows && documentRows.length
         ? documentRows.join('')
         : NO_DOCUMENTS_ADDED,
