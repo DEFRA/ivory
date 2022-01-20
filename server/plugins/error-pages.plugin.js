@@ -4,11 +4,11 @@
 
 'use strict'
 
-const { Paths, RedisKeys, StatusCodes } = require('../utils/constants')
-const RedisService = require('../services/redis.service')
+import { Paths, RedisKeys, StatusCodes } from '../utils/constants.js';
+import redisServicePkg from '../services/redis.service.js';
+export const { RedisService } = redisServicePkg;
 
-module.exports = {
-  plugin: {
+export const plugin = {
     name: 'error-pages',
     register: server => {
       server.ext('onPreResponse', (request, h) => {
@@ -28,8 +28,8 @@ module.exports = {
         return h.continue
       })
     }
-  }
-}
+  };
+export default plugin;
 
 /**
  * 404 errors can be ignored when favicon.ico can't be found

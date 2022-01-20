@@ -1,6 +1,6 @@
 'use strict'
-
-const TestHelper = require('../../utils/test-helper')
+import { jest } from '@jest/globals';
+import TestHelper from '../../utils/test-helper.js';
 
 describe('/errors/record-not-found (deep link) route', () => {
   let server

@@ -2,30 +2,14 @@
 
 // TODO IVORY-557
 // const AnalyticsService = require('../services/analytics.service')
-const ODataService = require('../services/odata.service')
-const RedisService = require('../services/redis.service')
-const PaymentService = require('../services/payment.service')
-const RedisHelper = require('../services/redis-helper.service')
+import ODataService from '../services/odata.service.js';
 
-const {
-  ItemType,
-  Options,
-  Paths,
-  PaymentResult,
-  RedisKeys
-} = require('../utils/constants')
-const { DataVerseFieldName } = require('../utils/constants')
-const {
-  AgeExemptionReasonLookup,
-  ExemptionTypeLookup,
-  IntentionLookup,
-  IvoryIntegralLookup,
-  IvoryVolumeLookup,
-  Status,
-  SellingOnBehalfOfLookup,
-  CapacityLookup,
-  AlreadyCertifiedLookup
-} = require('../services/dataverse-choice-lookups')
+import RedisService from '../services/redis.service.js';
+import PaymentService from '../services/payment.service.js';
+import RedisHelper from '../services/redis-helper.service.js';
+import { ItemType, Options, Paths, PaymentResult, RedisKeys } from '../utils/constants.js';
+import { DataVerseFieldName } from '../utils/constants.js';
+import { AgeExemptionReasonLookup, ExemptionTypeLookup, IntentionLookup, IvoryIntegralLookup, IvoryVolumeLookup, Status, SellingOnBehalfOfLookup, CapacityLookup, AlreadyCertifiedLookup } from '../services/dataverse-choice-lookups.js';
 
 const handlers = {
   get: async (request, h) => {
@@ -103,13 +87,13 @@ const _resellRecord = async request => {
   )
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.SAVE_RECORD}`,
     handler: handlers.get
   }
-]
+];
 
 const _createSection2Body = async (request, itemType, itemDescription) => {
   const [targetCompletionDate, submissionReference, whyRmi] = await Promise.all(

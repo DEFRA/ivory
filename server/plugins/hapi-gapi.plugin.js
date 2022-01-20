@@ -1,12 +1,13 @@
 'use strict'
 
-const { DEFRA_IVORY_SESSION_KEY } = require('../utils/constants')
-const config = require('../utils/config')
+import { DEFRA_IVORY_SESSION_KEY } from '../utils/constants.js'
+import config from '../utils/config.js'
+import hapiGapi from '@defra/hapi-gapi/lib/index.js'
 
 // Google analytics platform integration for hapi
-module.exports = {
-  plugin: require('@defra/hapi-gapi'),
-  options: {
+export const { plugin } = hapiGapi
+
+export const options = {
     propertySettings: [
       {
         id: config.googleAnalyticsId,
@@ -15,5 +16,6 @@ module.exports = {
     ],
     // Would normally use the request object to retrieve the proper session identifier
     sessionIdProducer: async request => request.state[DEFRA_IVORY_SESSION_KEY]
-  }
-}
+};
+
+export default { plugin, options }

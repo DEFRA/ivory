@@ -1,13 +1,11 @@
 'use strict'
+import { jest } from '@jest/globals';
+import fs from 'fs';
 
-const fs = require('fs')
-
-jest.mock('../../../server/services/odata.service')
-const ODataService = require('../../../server/services/odata.service')
-
-const TestHelper = require('../../utils/test-helper')
-
-const mockEntity = require('../../mock-data/section-2-entity')
+jest.mock('./server/services/odata.service.js')
+import ODataService from '../../../server/services/odata.service.js';
+import TestHelper from '../../utils/test-helper.js';
+import mockEntity from '../../mock-data/section-2-entity';
 
 const KEY = '___THE_KEY___'
 

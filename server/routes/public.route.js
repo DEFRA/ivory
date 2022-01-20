@@ -1,8 +1,8 @@
 'use strict'
 
-const os = require('os')
+import os from 'os';
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: '/assets/all.js',
@@ -24,4 +24,4 @@ module.exports = [
       }
     }
   }
-]
+];

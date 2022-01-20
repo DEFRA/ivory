@@ -1,8 +1,8 @@
 'use strict'
-
-const TestHelper = require('../../utils/test-helper')
-jest.mock('../../../server/services/redis.service')
-const RedisService = require('../../../server/services/redis.service')
+import { jest } from '@jest/globals';
+import TestHelper from '../../utils/test-helper.js';
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../../server/services/redis.service.js';
 
 describe('/eligibility-checker/are-you-a-museum route', () => {
   let server

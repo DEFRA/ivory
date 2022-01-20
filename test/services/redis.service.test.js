@@ -1,6 +1,6 @@
 'use strict'
-
-const RedisService = require('../../server/services/redis.service')
+import { jest } from '@jest/globals';
+import RedisService from '../../server/services/redis.service.js';
 
 let mockRequest
 const sessionId = 'the-session-id'

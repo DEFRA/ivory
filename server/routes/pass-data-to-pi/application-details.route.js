@@ -1,24 +1,8 @@
 'use strict'
 
-const ODataService = require('../../services/odata.service')
-
-const {
-  AgeExemptionReasons,
-  AlreadyCertifiedOptions,
-  DataVerseFieldName,
-  DownloadReason,
-  ItemType,
-  Options,
-  Paths,
-  Views
-} = require('../../utils/constants')
-
-const {
-  AgeExemptionReasonLookup,
-  AgeExemptionReasonReverseLookup,
-  AlreadyCertifiedLookup,
-  AlreadyCertifiedReverseLookup
-} = require('../../services/dataverse-choice-lookups')
+import ODataService from '../../services/odata.service.js';
+import { AgeExemptionReasons, AlreadyCertifiedOptions, DataVerseFieldName, DownloadReason, ItemType, Options, Paths, Views } from '../../utils/constants.js';
+import { AgeExemptionReasonLookup, AgeExemptionReasonReverseLookup, AlreadyCertifiedLookup, AlreadyCertifiedReverseLookup } from '../../services/dataverse-choice-lookups.js';
 
 const NONE = 'None'
 const NOTHING_ENTERED = 'Nothing entered'
@@ -360,10 +344,10 @@ const _getChangeItems = (href, visuallyHiddenText) => [
   }
 ]
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.PASS_DATA_TO_PI}`,
     handler: handlers.get
   }
-]
+];

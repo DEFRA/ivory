@@ -1,12 +1,11 @@
 'use strict'
+import { jest } from '@jest/globals';
+import TestHelper from '../utils/test-helper.js';
+import { ItemType } from '../../server/utils/constants.js';
 
-const TestHelper = require('../utils/test-helper')
-const { ItemType } = require('../../server/utils/constants')
-
-jest.mock('../../server/services/redis.service')
-const RedisService = require('../../server/services/redis.service')
-
-const CharacterLimits = require('../mock-data/character-limits')
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../server/services/redis.service.js';
+import CharacterLimits from '../mock-data/character-limits.js';
 
 const other = 'Other reason'
 

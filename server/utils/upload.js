@@ -1,7 +1,7 @@
 'use strict'
 
-const RedisService = require('../services/redis.service')
-const config = require('./config')
+import RedisService from '../services/redis.service.js';
+import config from './config.js';
 
 const checkForDuplicates = (payload, uploadData) => {
   let duplicateFound
@@ -36,7 +36,12 @@ const checkForFileSizeError = async (request, redisKey) => {
   return errors
 }
 
-module.exports = {
+export {
   checkForDuplicates,
   checkForFileSizeError
-}
+};
+
+export default {
+  checkForDuplicates,
+  checkForFileSizeError
+};

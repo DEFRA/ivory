@@ -1,7 +1,7 @@
 'use strict'
 
-const config = require('../utils/config')
-const { Paths, Views } = require('../utils/constants')
+import config from '../utils/config.js';
+import { Paths, Views } from '../utils/constants.js';
 
 const handlers = {
   get: (request, h) => {
@@ -13,13 +13,13 @@ const handlers = {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.ACCESSIBILITY_STATEMENT}`,
     handler: handlers.get
   }
-]
+];
 
 const _getContext = () => {
   return {

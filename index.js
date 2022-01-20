@@ -1,7 +1,6 @@
-'use strict'
-
-require('dotenv').config()
-const createServer = require('./server')
+import dotenv from 'dotenv'
+import { createServer } from './server/index.js'
+dotenv.config()
 
 createServer()
   .then(server => server.start())

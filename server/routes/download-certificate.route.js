@@ -1,16 +1,11 @@
 'use strict'
 
-const fs = require('fs')
-const { degrees, PDFDocument, rgb, StandardFonts } = require('pdf-lib')
-const moment = require('moment')
-
-const ODataService = require('../services/odata.service')
-const {
-  DataVerseFieldName,
-  DownloadReason,
-  Paths
-} = require('../utils/constants')
-const { isPngImage } = require('../utils/general')
+import fs from 'fs';
+import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import moment from 'moment';
+import ODataService from '../services/odata.service.js';
+import { DataVerseFieldName, DownloadReason, Paths } from '../utils/constants.js';
+import { isPngImage } from '../utils/general.js';
 
 const NONE = 'None'
 
@@ -155,10 +150,10 @@ const _addWatermark = async (pdfDoc, certificateNumber) => {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.DOWNLOAD_CERTIFICATE}/{id}`,
     handler: handlers.get
   }
-]
+];

@@ -1,10 +1,9 @@
 'use strict'
-
-const TestHelper = require('../../utils/test-helper')
-jest.mock('../../../server/services/redis.service')
-const RedisService = require('../../../server/services/redis.service')
-
-const CharacterLimits = require('../../mock-data/character-limits')
+import { jest } from '@jest/globals';
+import TestHelper from '../../utils/test-helper.js';
+import RedisService from '../../../server/services/redis.service.js';
+import CharacterLimits from '../../mock-data/character-limits.js';
+jest.mock('./server/services/redis.service.js')
 
 describe('user-details/applicant/contact-details route', () => {
   let server

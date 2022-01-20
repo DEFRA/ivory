@@ -1,9 +1,10 @@
 'use strict'
 
 // (see https://www.npmjs.com/package/dotenv)
-require('dotenv').config()
+import dotenv from 'dotenv'
+import joi from 'joi'
+dotenv.config()
 
-const joi = require('joi')
 const envs = ['development', 'test', 'production']
 
 const getBoolean = booleanString =>
@@ -124,4 +125,4 @@ if (error) {
 // Add some helper props
 value.isDev = value.env === 'development'
 
-module.exports = value
+export default value;

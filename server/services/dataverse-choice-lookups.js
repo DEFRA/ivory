@@ -1,14 +1,4 @@
-const {
-  AgeExemptionReasons,
-  AlreadyCertifiedOptions,
-  BehalfOfBusinessOptions,
-  BehalfOfNotBusinessOptions,
-  Capacities,
-  ItemType,
-  Intention,
-  IvoryIntegralReasons,
-  IvoryVolumeReasons
-} = require('../utils/constants')
+import { AgeExemptionReasons, AlreadyCertifiedOptions, BehalfOfBusinessOptions, BehalfOfNotBusinessOptions, Capacities, ItemType, Intention, IvoryIntegralReasons, IvoryVolumeReasons } from '../utils/constants.js';
 
 const AgeExemptionReasonLookup = {
   [AgeExemptionReasons.STAMP_OR_SERIAL]: 881990000,
@@ -111,7 +101,7 @@ const WhyIvoryIntegral = {
   Both: 881990003
 }
 
-module.exports = {
+export {
   AgeExemptionReasonLookup,
   AgeExemptionReasonReverseLookup,
   AlreadyCertifiedLookup,
@@ -125,4 +115,20 @@ module.exports = {
   SellingOnBehalfOfReverseLookup,
   Status,
   WhyIvoryIntegral
-}
+};
+
+export default {
+  AgeExemptionReasonLookup,
+  AgeExemptionReasonReverseLookup,
+  AlreadyCertifiedLookup,
+  AlreadyCertifiedReverseLookup,
+  CapacityLookup,
+  ExemptionTypeLookup,
+  IntentionLookup,
+  IvoryIntegralLookup,
+  IvoryVolumeLookup,
+  SellingOnBehalfOfLookup,
+  SellingOnBehalfOfReverseLookup,
+  Status,
+  WhyIvoryIntegral
+};

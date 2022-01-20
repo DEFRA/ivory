@@ -1,12 +1,7 @@
 'use strict'
 
-const { v4: uuidv4 } = require('uuid')
-
-const {
-  HOME_URL,
-  DEFRA_IVORY_SESSION_KEY,
-  Paths
-} = require('../utils/constants')
+import { v4 as uuidv4 } from 'uuid';
+import { HOME_URL, DEFRA_IVORY_SESSION_KEY, Paths } from '../utils/constants.js';
 
 const handlers = {
   get: (request, h) => {
@@ -20,10 +15,10 @@ const _setCookieSessionId = h => {
   h.state(DEFRA_IVORY_SESSION_KEY, uuidv4())
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: HOME_URL,
     handler: handlers.get
   }
-]
+];

@@ -1,14 +1,14 @@
 'use strict'
 
-const RandomString = require('randomstring')
+import RandomString from 'randomstring';
 
 // TODO IVORY-557
 // const AnalyticsService = require('../services/analytics.service')
-const PaymentService = require('../services/payment.service')
-const RedisHelper = require('../services/redis-helper.service')
-const RedisService = require('../services/redis.service')
+import PaymentService from '../services/payment.service.js';
 
-const { Paths, RedisKeys } = require('../utils/constants')
+import RedisHelper from '../services/redis-helper.service.js';
+import RedisService from '../services/redis.service.js';
+import { Paths, RedisKeys } from '../utils/constants.js';
 
 const TARGET_COMPLETION_DATE_PERIOD_DAYS = 30
 
@@ -97,10 +97,10 @@ const _generateSubmissionReference = () => {
   })
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.MAKE_PAYMENT}`,
     handler: handlers.get
   }
-]
+];

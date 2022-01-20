@@ -1,14 +1,34 @@
 'use strict'
 
-const { Paths } = require('../utils/constants')
+import * as constants from '../utils/constants.js'
+const { Paths } = constants
+import homeRoute from '../routes/home.route.js'
+import publicRoute from '../routes/public.route.js'
 
+import { awaitMapAllEntries, FORCE_SEQUENTIAL_MODULE_IMPORT } from '@stilt/util'
+// `sequential` option is a workaround due to a bug when using Jest with native ES Modules
+// See https://github.com/facebook/jest/issues/11434
+
+const getPath = (path) => `../routes${path}.route.js`
+
+// let processAll = await Promise.all(Object.values(Paths).map(async path => {
+// Fix for Jest: Issue described on 
+// https://github.com/facebook/jest/issues/11434
+let processAll = awaitMapAllEntries(Object.values(Paths), async path => {
+  let obj = await import(getPath(path))
+  let webLocation = obj.default
+  return webLocation
+},FORCE_SEQUENTIAL_MODULE_IMPORT)
+
+
+const allRoutes = await processAll
 const routes = [].concat(
-  require('../routes/home.route'),
-  require('../routes/public.route'),
-  ...Object.values(Paths).map(path => require(`../routes${path}.route`))
+  homeRoute,
+  publicRoute,
+  ...allRoutes
 )
 
-module.exports = {
+export const plugin = {
   plugin: {
     name: 'router',
     register: server => {
@@ -16,3 +36,5 @@ module.exports = {
     }
   }
 }
+
+export default plugin

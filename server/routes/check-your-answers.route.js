@@ -1,22 +1,12 @@
 'use strict'
 
-const path = require('path')
-
-const AnalyticsService = require('../services/analytics.service')
-const RedisHelper = require('../services/redis-helper.service')
-const RedisService = require('../services/redis.service')
-
-const {
-  Analytics,
-  ItemType,
-  Options,
-  Paths,
-  RedisKeys,
-  Views,
-  AlreadyCertifiedOptions
-} = require('../utils/constants')
-const { getIvoryVolumePercentage } = require('../utils/general')
-const { buildErrorSummary, Validators } = require('../utils/validation')
+import path from 'path';
+import AnalyticsService from '../services/analytics.service.js';
+import RedisHelper from '../services/redis-helper.service.js';
+import RedisService from '../services/redis.service.js';
+import { Analytics, ItemType, Options, Paths, RedisKeys, Views, AlreadyCertifiedOptions } from '../utils/constants.js';
+import { getIvoryVolumePercentage } from '../utils/general.js';
+import { buildErrorSummary, Validators } from '../utils/validation.js';
 
 const YOUR_EMAIL = 'Your email'
 const YOUR_ADDRESS = 'Your address'
@@ -121,7 +111,7 @@ const _validateForm = payload => {
   return errors
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.CHECK_YOUR_ANSWERS}`,
@@ -132,7 +122,7 @@ module.exports = [
     path: `${Paths.CHECK_YOUR_ANSWERS}`,
     handler: handlers.post
   }
-]
+];
 
 const _getDocumentSummary = async request => {
   let uploadDocuments = await RedisService.get(

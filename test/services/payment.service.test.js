@@ -1,9 +1,8 @@
 'use strict'
-
-const nock = require('nock')
-const config = require('../../server/utils/config')
-
-const PaymentService = require('../../server/services/payment.service')
+import { jest } from '@jest/globals';
+import nock from 'nock';
+import config from '../../server/utils/config.js';
+import PaymentService from '../../server/services/payment.service.js';
 
 const amount = 2000
 const reference = 'THE_REFERENCE'

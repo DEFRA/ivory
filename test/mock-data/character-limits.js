@@ -16,4 +16,5 @@ const CharacterLimits = {
   oneHundredThousandCharacters
 }
 
-module.exports = CharacterLimits
+export { CharacterLimits }; // New ES6
+export default CharacterLimits;

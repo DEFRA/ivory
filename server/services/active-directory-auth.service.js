@@ -1,10 +1,9 @@
 'use strict'
 
-const AdalNode = require('adal-node')
+import AdalNode from 'adal-node';
+import config from '../utils/config.js';
 
-const config = require('../utils/config')
-
-module.exports = class ActiveDirectoryAuthService {
+export default class ActiveDirectoryAuthService {
   static async getToken () {
     return new Promise((resolve, reject) => {
       const authorityHostUrl = config.dataverseAuthorityHostUrl
@@ -50,4 +49,4 @@ module.exports = class ActiveDirectoryAuthService {
       )
     })
   }
-}
+};

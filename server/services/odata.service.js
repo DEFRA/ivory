@@ -1,15 +1,10 @@
 'use strict'
 
-const fetch = require('node-fetch')
+import fetch from 'node-fetch'
+import config from '../utils/config.js';
 
-const config = require('../utils/config')
-const {
-  DataVerseFieldName,
-  DownloadReason,
-  StatusCodes
-} = require('../utils/constants')
-
-const ActiveDirectoryAuthService = require('../services/active-directory-auth.service')
+import { DataVerseFieldName, DownloadReason, StatusCodes } from '../utils/constants.js';
+import ActiveDirectoryAuthService from '../services/active-directory-auth.service.js';
 
 const SECTION_2_ENDPOINT = 'cre2c_ivorysection2cases'
 const SECTION_10_ENDPOINT = 'cre2c_ivorysection10cases'
@@ -28,7 +23,7 @@ const PREFER = 'Prefer'
 const ODATA_VERSION_NUMBER = '4.0'
 const PREFER_REPRESENTATION = 'return=representation'
 
-module.exports = class ODataService {
+export default class ODataService {
   /**
    * Validates a certificate number.
    * @param {*} certificateNumber
@@ -261,7 +256,7 @@ module.exports = class ODataService {
       })
     }
   }
-}
+};
 
 const _linkIsExpired = (entity, downloadReason) => {
   const linkExpiryDate =

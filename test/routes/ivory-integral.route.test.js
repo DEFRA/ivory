@@ -1,8 +1,8 @@
 'use strict'
-
-jest.mock('../../server/services/redis.service')
-const RedisService = require('../../server/services/redis.service')
-const TestHelper = require('../utils/test-helper')
+import { jest } from '@jest/globals';
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../server/services/redis.service.js';
+import TestHelper from '../utils/test-helper.js';
 
 describe('/ivory-integral route', () => {
   let server

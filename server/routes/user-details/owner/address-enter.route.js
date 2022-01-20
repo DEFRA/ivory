@@ -1,9 +1,9 @@
 'use strict'
 
-const { Paths } = require('../../../utils/constants')
-const { get, post } = require('../../common/address-enter.route')
+import { Paths } from '../../../utils/constants.js';
+import { get, post } from '../../common/address-enter.route.js';
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.OWNER_ADDRESS_ENTER}`,
@@ -14,4 +14,4 @@ module.exports = [
     path: `${Paths.OWNER_ADDRESS_ENTER}`,
     handler: post
   }
-]
+];

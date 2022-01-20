@@ -221,7 +221,12 @@ const multipleAddresses = [
   }
 ]
 
-module.exports = {
+export {
   singleAddress,
   multipleAddresses
-}
+};
+
+export default {
+  singleAddress,
+  multipleAddresses
+};

@@ -1,11 +1,10 @@
 'use strict'
+import { jest } from '@jest/globals';
+import TestHelper from '../utils/test-helper.js';
 
-const TestHelper = require('../utils/test-helper')
-
-jest.mock('../../server/services/redis.service')
-const RedisService = require('../../server/services/redis.service')
-
-const { ItemType, RedisKeys, Options } = require('../../server/utils/constants')
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../server/services/redis.service.js';
+import { ItemType, RedisKeys, Options } from '../../server/utils/constants.js';
 
 describe('/selling-on-behalf-of route', () => {
   let server

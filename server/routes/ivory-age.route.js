@@ -1,20 +1,11 @@
 'use strict'
 
-const AnalyticsService = require('../services/analytics.service')
-const RedisHelper = require('../services/redis-helper.service')
-const RedisService = require('../services/redis.service')
-
-const {
-  AgeExemptionReasons,
-  CharacterLimits,
-  ItemType,
-  Paths,
-  RedisKeys,
-  Views,
-  Analytics
-} = require('../utils/constants')
-const { formatNumberWithCommas } = require('../utils/general')
-const { buildErrorSummary, Validators } = require('../utils/validation')
+import AnalyticsService from '../services/analytics.service.js';
+import RedisHelper from '../services/redis-helper.service.js';
+import RedisService from '../services/redis.service.js';
+import { AgeExemptionReasons, CharacterLimits, ItemType, Paths, RedisKeys, Views, Analytics } from '../utils/constants.js';
+import { formatNumberWithCommas } from '../utils/general.js';
+import { buildErrorSummary, Validators } from '../utils/validation.js';
 
 const handlers = {
   get: async (request, h) => {
@@ -197,7 +188,7 @@ const _validateForm = payload => {
   return errors
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.IVORY_AGE}`,
@@ -208,4 +199,4 @@ module.exports = [
     path: `${Paths.IVORY_AGE}`,
     handler: handlers.post
   }
-]
+];

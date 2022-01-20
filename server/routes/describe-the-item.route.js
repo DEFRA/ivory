@@ -1,23 +1,11 @@
 'use strict'
 
-const AnalyticsService = require('../services/analytics.service')
-const RedisService = require('../services/redis.service')
-const RedisHelper = require('../services/redis-helper.service')
-
-const {
-  CharacterLimits,
-  ItemType,
-  Options,
-  Paths,
-  RedisKeys,
-  Views,
-  Analytics
-} = require('../utils/constants')
-const {
-  addPayloadToContext,
-  formatNumberWithCommas
-} = require('../utils/general')
-const { buildErrorSummary, Validators } = require('../utils/validation')
+import AnalyticsService from '../services/analytics.service.js';
+import RedisService from '../services/redis.service.js';
+import RedisHelper from '../services/redis-helper.service.js';
+import { CharacterLimits, ItemType, Options, Paths, RedisKeys, Views, Analytics } from '../utils/constants.js';
+import { addPayloadToContext, formatNumberWithCommas } from '../utils/general.js';
+import { buildErrorSummary, Validators } from '../utils/validation.js';
 
 const pageTitle = 'Tell us about the item'
 
@@ -236,7 +224,7 @@ const _getOptions = hasDistinguishingFeatures => {
   })
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.DESCRIBE_THE_ITEM}`,
@@ -247,4 +235,4 @@ module.exports = [
     path: `${Paths.DESCRIBE_THE_ITEM}`,
     handler: handlers.post
   }
-]
+];

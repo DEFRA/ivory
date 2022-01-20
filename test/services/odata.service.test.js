@@ -1,13 +1,13 @@
 'use strict'
+import { jest } from '@jest/globals';
+import nock from 'nock';
+import config from '../../server/utils/config.js';
 
-const nock = require('nock')
-const config = require('../../server/utils/config')
+jest.mock('./server/services/active-directory-auth.service.js')
 
-jest.mock('../../server/services/active-directory-auth.service')
-const ActiveDirectoryAuthService = require('../../server/services/active-directory-auth.service')
-
-const ODataService = require('../../server/services/odata.service')
-const { DownloadReason } = require('../../server/utils/constants')
+import ActiveDirectoryAuthService from '../../server/services/active-directory-auth.service.js';
+import ODataService from '../../server/services/odata.service.js';
+import { DownloadReason } from '../../server/utils/constants.js';
 
 describe('OData service', () => {
   beforeEach(() => {

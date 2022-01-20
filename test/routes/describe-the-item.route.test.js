@@ -1,12 +1,11 @@
 'use strict'
+import { jest } from '@jest/globals';
+import TestHelper from '../utils/test-helper.js';
 
-const TestHelper = require('../utils/test-helper')
-
-jest.mock('../../server/services/redis.service')
-const RedisService = require('../../server/services/redis.service')
-
-const CharacterLimits = require('../mock-data/character-limits')
-const { Options } = require('../../server/utils/constants')
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../server/services/redis.service.js';
+import CharacterLimits from '../mock-data/character-limits.js';
+import { Options } from '../../server/utils/constants.js';
 
 const ItemTypes = {
   MUSICAL: 'Musical instrument made before 1975 with less than 20% ivory',

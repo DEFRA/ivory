@@ -1,13 +1,11 @@
 'use strict'
-
-const jsdom = require('jsdom')
+import { jest } from '@jest/globals';
+import jsdom from 'jsdom';
+import CookieService from '../../server/services/cookie.service.js';
+import RedisService from '../../server/services/redis.service.js';
+import AnalyticsService from '../../server/services/analytics.service.js';
+import { createServer } from '../../server/index.js'
 const { JSDOM } = jsdom
-
-const CookieService = require('../../server/services/cookie.service')
-const RedisService = require('../../server/services/redis.service')
-const AnalyticsService = require('../../server/services/analytics.service')
-
-const createServer = require('../../server')
 
 const elementIds = {
   backLink: 'back-link'
@@ -15,14 +13,14 @@ const elementIds = {
 
 const DEFAULT_VALIDATION_SUMMARY_HEADING = 'There is a problem'
 
-module.exports = class TestHelper {
+export default class TestHelper {
   static createMocks () {
-    jest.mock('../../server/services/address.service')
+    jest.mock('./server/services/address.service.js')
 
-    jest.mock('../../server/services/analytics.service')
+    jest.mock('./server/services/analytics.service.js')
     AnalyticsService.sendEvent = jest.fn()
 
-    jest.mock('../../server/services/cookie.service')
+    jest.mock('./server/services/cookie.service.js')
     CookieService.checkSessionCookie = jest
       .fn()
       .mockReturnValue('THE_SESSION_COOKIE')
@@ -299,4 +297,4 @@ module.exports = class TestHelper {
   static getFormFieldValue (element) {
     return element && element.value ? element.value.trim() : null
   }
-}
+};

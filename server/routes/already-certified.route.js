@@ -1,19 +1,11 @@
 'use strict'
 
-const AnalyticsService = require('../services/analytics.service')
-const RedisService = require('../services/redis.service')
-const ODataService = require('../services/odata.service')
-
-const {
-  AlreadyCertifiedOptions,
-  Paths,
-  RedisKeys,
-  Views,
-  Analytics
-} = require('../utils/constants')
-
-const { formatNumberWithCommas } = require('../utils/general')
-const { buildErrorSummary, Validators } = require('../utils/validation')
+import AnalyticsService from '../services/analytics.service.js';
+import RedisService from '../services/redis.service.js';
+import ODataService from '../services/odata.service.js';
+import { AlreadyCertifiedOptions, Paths, RedisKeys, Views, Analytics } from '../utils/constants.js';
+import { formatNumberWithCommas } from '../utils/general.js';
+import { buildErrorSummary, Validators } from '../utils/validation.js';
 
 const CERTIFICATE_NUMBER_MAX_LENGTH = 10
 
@@ -205,7 +197,7 @@ const _getRecordForCertificateNumber = async certificateNumber => {
   return hasSingleMatch ? matchingRecords[0] : null
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.ALREADY_CERTIFIED}`,
@@ -216,4 +208,4 @@ module.exports = [
     path: `${Paths.ALREADY_CERTIFIED}`,
     handler: handlers.post
   }
-]
+];

@@ -1,18 +1,10 @@
 'use strict'
 
-const AnalyticsService = require('../services/analytics.service')
-const RedisService = require('../services/redis.service')
-
-const {
-  Capacities,
-  CharacterLimits,
-  Paths,
-  RedisKeys,
-  Views,
-  Analytics
-} = require('../utils/constants')
-const { formatNumberWithCommas } = require('../utils/general')
-const { buildErrorSummary, Validators } = require('../utils/validation')
+import AnalyticsService from '../services/analytics.service.js';
+import RedisService from '../services/redis.service.js';
+import { Capacities, CharacterLimits, Paths, RedisKeys, Views, Analytics } from '../utils/constants.js';
+import { formatNumberWithCommas } from '../utils/general.js';
+import { buildErrorSummary, Validators } from '../utils/validation.js';
 
 const otherCapacity = 'Other'
 
@@ -149,7 +141,7 @@ const _validateForm = payload => {
   return errors
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.WHAT_CAPACITY}`,
@@ -160,4 +152,4 @@ module.exports = [
     path: `${Paths.WHAT_CAPACITY}`,
     handler: handlers.post
   }
-]
+];

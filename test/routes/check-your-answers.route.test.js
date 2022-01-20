@@ -1,17 +1,10 @@
 'use strict'
+import { jest } from '@jest/globals';
+import TestHelper from '../utils/test-helper.js';
+import { AlreadyCertifiedOptions, BehalfOfBusinessOptions, ItemType, Options, Paths, RedisKeys } from '../../server/utils/constants.js';
 
-const TestHelper = require('../utils/test-helper')
-const {
-  AlreadyCertifiedOptions,
-  BehalfOfBusinessOptions,
-  ItemType,
-  Options,
-  Paths,
-  RedisKeys
-} = require('../../server/utils/constants')
-
-jest.mock('../../server/services/redis.service')
-const RedisService = require('../../server/services/redis.service')
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../server/services/redis.service.js';
 
 const MAX_FILES = 6
 

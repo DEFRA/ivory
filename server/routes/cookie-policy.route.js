@@ -1,6 +1,6 @@
 'use strict'
 
-const { Paths, Views } = require('../utils/constants')
+import { Paths, Views } from '../utils/constants.js';
 
 const handlers = {
   get: async (request, h) => {
@@ -12,13 +12,13 @@ const handlers = {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.COOKIE_POLICY}`,
     handler: handlers.get
   }
-]
+];
 
 const _getContext = () => {
   return {

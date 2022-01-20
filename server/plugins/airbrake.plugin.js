@@ -1,6 +1,9 @@
-const { Notifier } = require('@airbrake/node')
-const config = require('../utils/config')
-const { formatWithOptions, inspect } = require('util')
+import notifierPkg from '@airbrake/node/dist/index.js'
+import config from '../utils/config.js'
+import nodeUtilPkg from 'node:util'
+const { formatWithOptions, inspect } = nodeUtilPkg
+const { Notifier } = notifierPkg
+
 const INSPECT_OPTS = {
   depth: null,
   maxStringLength: null,
@@ -12,8 +15,7 @@ const INSPECT_OPTS = {
 
 let airbrake = null
 
-module.exports = {
-  plugin: {
+export const plugin = {
     name: 'airbrake',
     register: () => {
       if (!airbrake && config.airbrakeProjectKey && config.airbrakeHost) {
@@ -63,4 +65,5 @@ module.exports = {
       }
     }
   }
-}
+
+export default plugin

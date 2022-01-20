@@ -1,9 +1,9 @@
 'use strict'
 
-const { DEFRA_IVORY_SESSION_KEY } = require('../utils/constants')
+import { DEFRA_IVORY_SESSION_KEY } from '../utils/constants.js';
 const REDIS_TTL_IN_SECONDS = 86400
 
-module.exports = class RedisService {
+export class RedisService {
   static async get (request, key) {
     const client = request.redis.client
     const redisValue = await client.get(
@@ -35,4 +35,6 @@ module.exports = class RedisService {
     const keyWithSessionId = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${key}`
     client.del(keyWithSessionId)
   }
-}
+};
+
+export default RedisService;

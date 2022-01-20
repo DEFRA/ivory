@@ -1,12 +1,12 @@
 'use strict'
+import { jest } from '@jest/globals';
+import TestHelper from '../utils/test-helper.js';
 
-const TestHelper = require('../utils/test-helper')
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../server/services/redis.service.js';
 
-jest.mock('../../server/services/redis.service')
-const RedisService = require('../../server/services/redis.service')
-
-jest.mock('../../server/services/antimalware.service')
-const AntimalwareService = require('../../server/services/antimalware.service')
+jest.mock('./server/services/antimalware.service')
+import AntimalwareService from '../../server/services/antimalware.service';
 
 describe('/upload-photo route', () => {
   let server

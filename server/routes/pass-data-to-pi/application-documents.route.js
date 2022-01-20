@@ -1,8 +1,7 @@
 'use strict'
 
-const ODataService = require('../../services/odata.service')
-
-const { DownloadReason, Paths } = require('../../utils/constants')
+import ODataService from '../../services/odata.service.js';
+import { DownloadReason, Paths } from '../../utils/constants.js';
 
 const handlers = {
   get: async (request, h) => {
@@ -39,10 +38,10 @@ const _getDocument = async (id, dataverseFieldName) =>
 const _isPdf = filename =>
   filename.substring(filename.length - 4).toUpperCase() === '.PDF'
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.PASS_DATA_TO_PI_DOCUMENTS}`,
     handler: handlers.get
   }
-]
+];

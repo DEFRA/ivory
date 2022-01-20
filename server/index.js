@@ -1,13 +1,22 @@
-'use strict'
+import hapi from '@hapi/hapi'
+import Bcrypt from 'bcrypt'
+import config from './utils/config.js'
+import * as cookieConfig from './utils/cookie-config.js'
+import { DEFRA_IVORY_SESSION_KEY, Paths } from './utils/constants.js'
+import CookieService from './services/cookie.service.js'
+import * as hapiBasic from '@hapi/basic/lib/index.js'
+import * as airbrakePlugin from './plugins/airbrake.plugin.js'
+import * as blippPlugin from './plugins/blipp.plugin.js'
+import * as disinfectPlugin from './plugins/disinfect.plugin.js'
+import * as errorPagesPlugin from './plugins/error-pages.plugin.js'
+import * as hapiGapiPlugin from './plugins/hapi-gapi.plugin.js'
+import * as inertPlugin from './plugins/inert.plugin.js'
+import * as loggingPlugin from './plugins/logging.plugin.js'
+import * as redisPlugin from './plugins/redis.plugin.js'
+import * as routerPlugin from './plugins/router.plugin.js'
+import * as viewsPlugin from './plugins/views.plugin.js'
 
-const hapi = require('@hapi/hapi')
-const Bcrypt = require('bcrypt')
-
-const config = require('./utils/config')
-const { options } = require('./utils/cookie-config')
-const { DEFRA_IVORY_SESSION_KEY, Paths } = require('./utils/constants')
-
-const CookieService = require('./services/cookie.service')
+const { options } = cookieConfig
 
 const users = {
   defra: {
@@ -54,21 +63,21 @@ const validate = async (request, username, password) => {
 
 const _registerPlugins = async server => {
   if (config.useBasicAuth) {
-    await server.register(require('@hapi/basic'))
+    await server.register(hapiBasic)
     server.auth.strategy('simple', 'basic', { validate })
     server.auth.default('simple')
   }
 
-  await server.register(require('./plugins/airbrake.plugin'))
-  await server.register(require('./plugins/blipp.plugin'))
-  await server.register(require('./plugins/disinfect.plugin'))
-  await server.register(require('./plugins/error-pages.plugin'))
-  await server.register(require('./plugins/hapi-gapi.plugin'))
-  await server.register(require('./plugins/inert.plugin'))
-  await server.register(require('./plugins/logging.plugin'))
-  await server.register(require('./plugins/redis.plugin'))
-  await server.register(require('./plugins/router.plugin'))
-  await server.register(require('./plugins/views.plugin'))
+  await server.register(airbrakePlugin)
+  await server.register(blippPlugin)
+  await server.register(disinfectPlugin)
+  await server.register(errorPagesPlugin)
+  await server.register(hapiGapiPlugin)
+  await server.register(inertPlugin)
+  await server.register(loggingPlugin)
+  await server.register(redisPlugin)
+  await server.register(routerPlugin)
+  await server.register(viewsPlugin)
 }
 
 const _checkSessionCookie = (request, h) => {
@@ -102,4 +111,6 @@ const _createSessionCookie = server => {
 
 const _isUnknownRoute = pathname => !Object.values(Paths).includes(pathname)
 
-module.exports = createServer
+export { createServer }
+
+export default createServer

@@ -1,15 +1,10 @@
 'use strict'
-
-jest.mock('../../../server/services/redis.service')
-const RedisService = require('../../../server/services/redis.service')
-const TestHelper = require('../../utils/test-helper')
-
-const CharacterLimits = require('../../mock-data/character-limits')
-
-const {
-  singleAddress,
-  multipleAddresses
-} = require('../../mock-data/addresses')
+import { jest } from '@jest/globals';
+import RedisService from '../../../server/services/redis.service.js';
+import TestHelper from '../../utils/test-helper.js';
+import CharacterLimits from '../../mock-data/character-limits.js';
+import { singleAddress, multipleAddresses } from '../../mock-data/addresses';
+jest.mock('./server/services/redis.service.js')
 
 const elementIds = {
   pageTitle: 'pageTitle',

@@ -1,11 +1,9 @@
 'use strict'
 
-const ODataService = require('../../services/odata.service')
-
-const { DataVerseFieldName } = require('../../utils/constants')
-const { isPngImage } = require('../../utils/general')
-
-const { DownloadReason, Paths } = require('../../utils/constants')
+import ODataService from '../../services/odata.service.js';
+import { DataVerseFieldName } from '../../utils/constants.js';
+import { isPngImage } from '../../utils/general.js';
+import { DownloadReason, Paths } from '../../utils/constants.js';
 
 const handlers = {
   get: async (request, h) => {
@@ -46,10 +44,10 @@ const _getImage = async (entity, index) => {
   )
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.PASS_DATA_TO_PI_PHOTOS}`,
     handler: handlers.get
   }
-]
+];

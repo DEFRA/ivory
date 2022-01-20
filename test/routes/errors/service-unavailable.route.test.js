@@ -1,6 +1,6 @@
 'use strict'
-
-const TestHelper = require('../../utils/test-helper')
+import { jest } from '@jest/globals';
+import TestHelper from '../../utils/test-helper.js';
 
 describe('/errors/service-unavailable (503) route', () => {
   let server

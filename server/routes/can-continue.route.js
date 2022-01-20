@@ -1,17 +1,10 @@
 'use strict'
 
-const AnalyticsService = require('../services/analytics.service')
-const RedisHelper = require('../services/redis-helper.service')
-const RedisService = require('../services/redis.service')
-
-const config = require('../utils/config')
-const {
-  Analytics,
-  Paths,
-  RedisKeys,
-  Urls,
-  Views
-} = require('../utils/constants')
+import AnalyticsService from '../services/analytics.service.js';
+import RedisHelper from '../services/redis-helper.service.js';
+import RedisService from '../services/redis.service.js';
+import config from '../utils/config.js';
+import { Analytics, Paths, RedisKeys, Urls, Views } from '../utils/constants.js';
 
 const SLA = 35
 
@@ -144,7 +137,7 @@ const _getCost = context => {
     : config.paymentAmountBandA
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.CAN_CONTINUE}`,
@@ -155,4 +148,4 @@ module.exports = [
     path: `${Paths.CAN_CONTINUE}`,
     handler: handlers.post
   }
-]
+];

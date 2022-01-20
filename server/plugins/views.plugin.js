@@ -1,14 +1,21 @@
 'use strict'
 
-const path = require('path')
-const nunjucks = require('nunjucks')
-const config = require('../utils/config')
-const pkg = require('../../package.json')
+import path from 'path'
+import nunjucks from 'nunjucks'
+import config from '../utils/config.js'
+import pkg from '../../package.json'
 const analyticsAccount = config.analyticsAccount
 
-module.exports = {
-  plugin: require('@hapi/vision'),
-  options: {
+import hapiVision from '@hapi/vision/lib/index.js'
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export const { plugin } = hapiVision;
+
+export const options = {
     engines: {
       html: {
         compile: (src, options) => {
@@ -43,4 +50,5 @@ module.exports = {
       analyticsAccount: analyticsAccount
     }
   }
-}
+
+export default { plugin, options }

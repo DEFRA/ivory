@@ -1,18 +1,10 @@
 'use strict'
 
-const AnalyticsService = require('../../services/analytics.service')
-const RedisService = require('../../services/redis.service')
-
-const {
-  ItemType,
-  Paths,
-  RedisKeys,
-  Views,
-  Options,
-  Analytics
-} = require('../../utils/constants')
-const { buildErrorSummary, Validators } = require('../../utils/validation')
-const { getStandardOptions } = require('../../utils/general')
+import AnalyticsService from '../../services/analytics.service.js';
+import RedisService from '../../services/redis.service.js';
+import { ItemType, Paths, RedisKeys, Views, Options, Analytics } from '../../utils/constants.js';
+import { buildErrorSummary, Validators } from '../../utils/validation.js';
+import { getStandardOptions } from '../../utils/general.js';
 
 const handlers = {
   get: (request, h) => {
@@ -85,7 +77,7 @@ const _validateForm = payload => {
   return errors
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.RMI_AND_PRE_1918}`,
@@ -96,4 +88,4 @@ module.exports = [
     path: `${Paths.RMI_AND_PRE_1918}`,
     handler: handlers.post
   }
-]
+];

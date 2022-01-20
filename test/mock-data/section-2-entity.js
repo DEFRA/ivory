@@ -131,4 +131,4 @@ const entity = {
   cre2c_photo2: null
 }
 
-module.exports = entity
+export default entity;

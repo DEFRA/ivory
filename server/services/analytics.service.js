@@ -1,7 +1,7 @@
 'use strict'
 
-module.exports = class AnalyticsService {
+export default class AnalyticsService {
   static sendEvent (request, event) {
     request.ga.event(event)
   }
-}
+};

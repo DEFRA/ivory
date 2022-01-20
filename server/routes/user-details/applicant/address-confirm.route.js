@@ -1,9 +1,9 @@
 'use strict'
 
-const { Paths } = require('../../../utils/constants')
-const { get, post } = require('../../common/address-confirm.route')
+import { Paths } from '../../../utils/constants.js';
+import { get, post } from '../../common/address-confirm.route.js';
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.APPLICANT_ADDRESS_CONFIRM}`,
@@ -14,4 +14,4 @@ module.exports = [
     path: `${Paths.APPLICANT_ADDRESS_CONFIRM}`,
     handler: post
   }
-]
+];

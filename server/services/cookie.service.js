@@ -1,8 +1,8 @@
 'use strict'
 
-const { DEFRA_IVORY_SESSION_KEY } = require('../utils/constants')
+import { DEFRA_IVORY_SESSION_KEY } from '../utils/constants.js';
 
-module.exports = class CookieService {
+export default class CookieService {
   static checkSessionCookie (request) {
     const sessionCookie = request.state[DEFRA_IVORY_SESSION_KEY]
     if (!sessionCookie) {
@@ -10,4 +10,4 @@ module.exports = class CookieService {
     }
     return sessionCookie
   }
-}
+};

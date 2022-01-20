@@ -421,7 +421,17 @@ const StatusCodes = {
   SERVICE_UNAVAILABLE: 503
 }
 
-module.exports = Object.freeze({
+/*
+Old format:
+export default Object.freeze({
+  AddressType,
+  ...
+  DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession'
+});
+*/
+
+const DEFRA_IVORY_SESSION_KEY = 'DefraIvorySession';
+export {
   AddressType,
   AgeExemptionReasons,
   AlreadyCertifiedOptions,
@@ -445,5 +455,32 @@ module.exports = Object.freeze({
   StatusCodes,
   Urls,
   Views,
-  DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession'
-})
+  DEFRA_IVORY_SESSION_KEY
+};
+
+export default {
+  AddressType,
+  AgeExemptionReasons,
+  AlreadyCertifiedOptions,
+  Analytics,
+  BehalfOfBusinessOptions,
+  BehalfOfNotBusinessOptions,
+  Capacities,
+  CharacterLimits,
+  DataVerseFieldName,
+  DownloadReason,
+  EmailTypes,
+  HOME_URL,
+  Intention,
+  ItemType,
+  IvoryIntegralReasons,
+  IvoryVolumeReasons,
+  Options,
+  Paths,
+  PaymentResult,
+  RedisKeys,
+  StatusCodes,
+  Urls,
+  Views,
+  DEFRA_IVORY_SESSION_KEY
+};

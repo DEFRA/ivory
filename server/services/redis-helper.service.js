@@ -1,15 +1,9 @@
 'use strict'
 
-const RedisService = require('./redis.service')
+import RedisService from './redis.service.js';
+import { ItemType, Options, RedisKeys, AlreadyCertifiedOptions } from '../utils/constants.js';
 
-const {
-  ItemType,
-  Options,
-  RedisKeys,
-  AlreadyCertifiedOptions
-} = require('../utils/constants')
-
-module.exports = class RedisHelper {
+export default class RedisHelper {
   static async getItemType (request) {
     return RedisService.get(request, RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT)
   }
@@ -87,4 +81,4 @@ module.exports = class RedisHelper {
 
     return revokedCertificateNumber !== null
   }
-}
+};

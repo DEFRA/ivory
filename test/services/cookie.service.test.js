@@ -1,6 +1,5 @@
 'use strict'
-
-const CookieService = require('../../server/services/cookie.service')
+import CookieService from '../../server/services/cookie.service.js';
 
 describe('Cookie service', () => {
   describe('checkSessionCookie method', () => {

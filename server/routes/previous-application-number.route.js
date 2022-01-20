@@ -1,11 +1,10 @@
 'use strict'
 
-const AnalyticsService = require('../services/analytics.service')
-const RedisService = require('../services/redis.service')
-
-const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
-const { formatNumberWithCommas } = require('../utils/general')
-const { buildErrorSummary, Validators } = require('../utils/validation')
+import AnalyticsService from '../services/analytics.service.js';
+import RedisService from '../services/redis.service.js';
+import { Paths, RedisKeys, Views, Analytics } from '../utils/constants.js';
+import { formatNumberWithCommas } from '../utils/general.js';
+import { buildErrorSummary, Validators } from '../utils/validation.js';
 
 const MAX_LENGTH = 10
 
@@ -94,7 +93,7 @@ const _validateForm = payload => {
   return errors
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.PREVIOUS_APPLICATION_NUMBER}`,
@@ -105,4 +104,4 @@ module.exports = [
     path: `${Paths.PREVIOUS_APPLICATION_NUMBER}`,
     handler: handlers.post
   }
-]
+];

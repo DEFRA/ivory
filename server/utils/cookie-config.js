@@ -1,5 +1,5 @@
 /* eslint-disable no-multi-spaces */
-const config = require('./config')
+import config from './config.js';
 
 const cookieOptions = {
   ttl: config.cookieTimeout, // Timeout after number of milliseconds specified in the config
@@ -16,4 +16,6 @@ const cookieOptions = {
   ignoreErrors: true // Errors are ignored and treated as missing cookies
 }
 
-module.exports = { options: cookieOptions }
+export { cookieOptions as options };
+
+export default cookieOptions;

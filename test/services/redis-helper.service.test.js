@@ -1,10 +1,10 @@
 'use strict'
+import { jest } from '@jest/globals';
+import RedisService from '../../server/services/redis.service.js';
+import RedisHelper from '../../server/services/redis-helper.service';
+import { ItemType, Options } from '../../server/utils/constants.js';
 
-jest.mock('../../server/services/redis.service')
-const RedisService = require('../../server/services/redis.service')
-const RedisHelper = require('../../server/services/redis-helper.service')
-
-const { ItemType, Options } = require('../../server/utils/constants')
+jest.mock('./server/services/redis.service.js')
 
 describe('RedisHelper service', () => {
   afterEach(() => {

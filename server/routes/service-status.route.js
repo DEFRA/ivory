@@ -1,10 +1,9 @@
 'use strict'
 
-const moment = require('moment')
-const nodePackage = require('../../package.json')
-const AntimalwareService = require('../services/antimalware.service')
-
-const { Paths, Views } = require('../utils/constants')
+import moment from 'moment';
+import nodePackage from '../../package.json';
+import AntimalwareService from '../services/antimalware.service.js';
+import { Paths, Views } from '../utils/constants.js';
 
 const DATE_FORMAT_DMY_WITH_HMS = 'DD/MM/YYYY HH:mm:ss'
 
@@ -26,10 +25,10 @@ const handlers = {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.SERVICE_STATUS}`,
     handler: handlers.get
   }
-]
+];

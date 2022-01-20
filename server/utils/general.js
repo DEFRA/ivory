@@ -1,6 +1,7 @@
 'use strict'
 
-const { ItemType, Options } = require('./constants')
+import * as constants from './constants.js';
+const { ItemType, Options } = constants;
 
 const MUSICAL_PERCENTAGE = 20
 const NON_MUSICAL_PERCENTAGE = 10
@@ -65,11 +66,20 @@ const PNG_IMAGE_REGEXP = /^iVBORw0KGgo/g
 // if it is PNG or JPEG.
 const isPngImage = imageBase64 => imageBase64.match(PNG_IMAGE_REGEXP) !== null
 
-module.exports = {
+export {
   addPayloadToContext,
   convertToCommaSeparatedTitleCase,
   formatNumberWithCommas,
   getIvoryVolumePercentage,
   getStandardOptions,
   isPngImage
-}
+};
+
+export default {
+  addPayloadToContext,
+  convertToCommaSeparatedTitleCase,
+  formatNumberWithCommas,
+  getIvoryVolumePercentage,
+  getStandardOptions,
+  isPngImage
+};

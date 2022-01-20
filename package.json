@@ -3,8 +3,70 @@
   "version": "0.24.32",
   "description": "Digital service to support the Ivory Act",
   "main": "index.js",
+  "module": "index.js",
+  "type": "module",
+  "jest": {
+    "transform": {},
+    "testEnvironment": "jest-environment-node",
+    "moduleFileExtensions": [
+    "js"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!index.js",
+      "!**/*.test.js",
+      "!**/*.config.js",
+      "!gulpfile.js"
+    ],
+    "coverageDirectory": "test-output",
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/back-office/",
+      "<rootDir>/bin/",
+      "<rootDir>/node_modules/",
+      "<rootDir>/test-output/",
+      "<rootDir>/test/",
+      ".*/__mocks__/.*"
+    ],
+    "transformIgnorePatterns": [
+      "<rootDir>/back-office/",
+      "<rootDir>/bin/",
+      "<rootDir>/node_modules/",
+      "<rootDir>/test-output/",
+      "<rootDir>/test/",
+      ".*/__mocks__/.*",
+      "<rootDir>/server/"
+    ],
+    "coverageReporters": [
+      "text-summary",
+      "cobertura",
+      "lcov"
+    ],
+    "modulePathIgnorePatterns": [
+      "node_modules"
+    ],
+    "maxWorkers": 2,
+    "reporters": [
+      "default",
+      [
+        "jest-junit",
+        {
+          "suiteName": "jest tests",
+          "outputDirectory": "test-output",
+          "outputName": "junit.xml"
+        }
+      ]
+    ],
+    "setupFilesAfterEnv": [
+      "./jest.setup.js"
+    ],
+    "testPathIgnorePatterns": [
+      "test/integration/local",
+      "test/contract/"
+    ]
+  },
   "scripts": {
-    "start": "node index.js",
+    "start": "node --experimental-json-modules index.js",
     "build:css": "bin/build-css",
     "build": "bin/build",
     "debug": "nodemon --inspect index.js",
@@ -12,7 +74,8 @@
     "docker:build": "docker build --no-cache -t ivory/ivory .",
     "docker:run": "docker run -p \"3000:3000\" ivory/ivory",
     "lint": "standard",
-    "unit-test": "npx jest --detectOpenHandles --forceExit --verbose",
+    "unit-test": "NODE_OPTIONS='--experimental-vm-modules --max-old-space-size=8192' npx jest --w 2 --verbose --logHeapUsage",
+    "unit-test-es5": "npx jest --detectOpenHandles --forceExit --verbose",
     "test": "npm run lint && npm run unit-test",
     "postinstall": "npm run build"
   },
@@ -37,6 +100,7 @@
     "@hapi/hapi": "^20.2.1",
     "@hapi/inert": "^6.0.4",
     "@hapi/vision": "^6.1.0",
+    "@stilt/util": "^0.21.0-alpha.16",
     "adal-node": "^0.2.3",
     "bcrypt": "^5.0.1",
     "blipp": "^4.0.2",
@@ -48,7 +112,7 @@
     "hapi-redis2": "^3.0.1",
     "joi": "^17.5.0",
     "moment": "^2.29.1",
-    "node-fetch": "^2.6.6",
+    "node-fetch": "^3.1.0",
     "node-sass": "^7.0.1",
     "notifications-node-client": "^5.1.0",
     "nunjucks": "3.2.3",
@@ -59,7 +123,9 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "jest": "^27.4.5",
+    "jest": "^27.4.7",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "jest-environment-node": "^27.4.5",
     "jest-junit": "^13.0.0",
     "jsdom": "^19.0.0",
     "nock": "^13.2.1",

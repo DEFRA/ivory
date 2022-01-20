@@ -1,16 +1,8 @@
 'use strict'
 
-const AnalyticsService = require('../../services/analytics.service')
-const RedisService = require('../../services/redis.service')
-
-const {
-  Analytics,
-  Options,
-  Paths,
-  RedisKeys,
-  Urls,
-  Views
-} = require('../../utils/constants')
+import AnalyticsService from '../../services/analytics.service.js';
+import RedisService from '../../services/redis.service.js';
+import { Analytics, Options, Paths, RedisKeys, Urls, Views } from '../../utils/constants.js';
 
 const handlers = {
   get: async (request, h) => {
@@ -54,7 +46,7 @@ const _getContext = async request => {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.DO_NOT_NEED_SERVICE}`,
@@ -65,4 +57,4 @@ module.exports = [
     path: `${Paths.DO_NOT_NEED_SERVICE}`,
     handler: handlers.post
   }
-]
+];

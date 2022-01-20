@@ -1,20 +1,13 @@
 'use strict'
+import { jest } from '@jest/globals';
 
-jest.mock('../../../server/services/odata.service')
-const ODataService = require('../../../server/services/odata.service')
+jest.mock('./server/services/odata.service.js')
+import ODataService from '../../../server/services/odata.service.js';
 
-const TestHelper = require('../../utils/test-helper')
-
-const mockEntity = require('../../mock-data/section-2-entity')
-const {
-  AlreadyCertifiedOptions,
-  DataVerseFieldName
-} = require('../../../server/utils/constants')
-
-const {
-  AgeExemptionReasonReverseLookup,
-  AlreadyCertifiedLookup
-} = require('../../../server/services/dataverse-choice-lookups')
+import TestHelper from '../../utils/test-helper.js';
+import mockEntity from '../../mock-data/section-2-entity';
+import { AlreadyCertifiedOptions, DataVerseFieldName } from '../../../server/utils/constants.js';
+import { AgeExemptionReasonReverseLookup, AlreadyCertifiedLookup } from '../../../server/services/dataverse-choice-lookups';
 
 const KEY = '___THE_KEY___'
 

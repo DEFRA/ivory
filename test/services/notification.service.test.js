@@ -1,12 +1,10 @@
 'use strict'
-
-jest.mock('notifications-node-client')
-const NotifyClient = require('notifications-node-client').NotifyClient
-
-const NotificationService = require('../../server/services/notification.service')
-
-const config = require('../../server/utils/config')
-const { ItemType, EmailTypes } = require('../../server/utils/constants')
+import { jest } from '@jest/globals';
+import { NotifyClient } from 'notifications-node-client/index.js';
+import NotificationService from '../../server/services/notification.service.js';
+import config from '../../server/utils/config.js';
+import { ItemType, EmailTypes } from '../../server/utils/constants.js';
+jest.mock('notifications-node-client/index.js')
 
 describe('Address service', () => {
   beforeEach(() => {

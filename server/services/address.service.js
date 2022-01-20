@@ -1,17 +1,16 @@
 'use strict'
 
-const https = require('https')
-const fetch = require('node-fetch')
-const { readFileSync } = require('fs')
+import https from 'https';
+import fetch from 'node-fetch';
+import { readFileSync } from 'fs';
 
-const { convertToCommaSeparatedTitleCase } = require('../utils/general')
-
-const config = require('../utils/config')
+import { convertToCommaSeparatedTitleCase } from '../utils/general.js';
+import config from '../utils/config.js';
 
 const PAGE_SIZE = 100
 const POSTCODE_SEARCH_ENDPOINT = '/ws/rest/DEFRA/v1/address/postcodes'
 
-module.exports = class AddressService {
+export default class AddressService {
   static async addressSearch (nameOrNumber, postcode, pageSize = PAGE_SIZE) {
     let pageNumber = 0
     const json = await AddressService._queryAddressEndpoint(
@@ -66,7 +65,7 @@ module.exports = class AddressService {
 
     return response.status === 200 ? response.json() : []
   }
-}
+};
 
 /**
  * Filters search API search results.

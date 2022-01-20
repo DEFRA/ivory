@@ -1,22 +1,12 @@
 'use strict'
 
-const AnalyticsService = require('../../../services/analytics.service')
-const RedisService = require('../../../services/redis.service')
-const {
-  BehalfOfBusinessOptions,
-  BehalfOfNotBusinessOptions
-} = require('../../../utils/constants')
-const {
-  CharacterLimits,
-  Options,
-  Paths,
-  RedisKeys,
-  Views,
-  Analytics
-} = require('../../../utils/constants')
-const { formatNumberWithCommas } = require('../../../utils/general')
-const { buildErrorSummary, Validators } = require('../../../utils/validation')
-const { addPayloadToContext } = require('../../../utils/general')
+import AnalyticsService from '../../../services/analytics.service.js';
+import RedisService from '../../../services/redis.service.js';
+import { BehalfOfBusinessOptions, BehalfOfNotBusinessOptions } from '../../../utils/constants.js';
+import { CharacterLimits, Options, Paths, RedisKeys, Views, Analytics } from '../../../utils/constants.js';
+import { formatNumberWithCommas } from '../../../utils/general.js';
+import { buildErrorSummary, Validators } from '../../../utils/validation.js';
+import { addPayloadToContext } from '../../../utils/general.js';
 
 const handlers = {
   get: async (request, h) => {
@@ -210,7 +200,7 @@ const _validateEmailAddress = (payload, errors) => {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.OWNER_CONTACT_DETAILS}`,
@@ -221,4 +211,4 @@ module.exports = [
     path: `${Paths.OWNER_CONTACT_DETAILS}`,
     handler: handlers.post
   }
-]
+];

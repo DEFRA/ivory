@@ -1,17 +1,16 @@
 'use strict'
-
-const TestHelper = require('../utils/test-helper')
+import { jest } from '@jest/globals';
+import TestHelper from '../utils/test-helper.js';
 
 jest.mock('randomstring')
-const RandomString = require('randomstring')
+import RandomString from 'randomstring';
 
-jest.mock('../../server/services/redis.service')
-const RedisService = require('../../server/services/redis.service')
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../server/services/redis.service.js';
 
-jest.mock('../../server/services/payment.service')
-const PaymentService = require('../../server/services/payment.service')
-
-const { ItemType, RedisKeys } = require('../../server/utils/constants')
+jest.mock('./server/services/payment.service.js')
+import PaymentService from '../../server/services/payment.service.js';
+import { ItemType, RedisKeys } from '../../server/utils/constants.js';
 
 const paymentReference = 'ABCDEF'
 const paymentId = 'THE_PAYMENT_ID'

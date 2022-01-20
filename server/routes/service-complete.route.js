@@ -1,23 +1,12 @@
 'use strict'
 
-const AnalyticsService = require('../services/analytics.service')
-const NotificationService = require('../services/notification.service')
-const PaymentService = require('../services/payment.service')
-const RedisHelper = require('../services/redis-helper.service')
-const RedisService = require('../services/redis.service')
-const {
-  EmailTypes,
-  DEFRA_IVORY_SESSION_KEY,
-  Options
-} = require('../utils/constants')
-
-const {
-  Analytics,
-  Paths,
-  PaymentResult,
-  RedisKeys,
-  Views
-} = require('../utils/constants')
+import AnalyticsService from '../services/analytics.service.js';
+import NotificationService from '../services/notification.service.js';
+import PaymentService from '../services/payment.service.js';
+import RedisHelper from '../services/redis-helper.service.js';
+import RedisService from '../services/redis.service.js';
+import { EmailTypes, DEFRA_IVORY_SESSION_KEY, Options } from '../utils/constants.js';
+import { Analytics, Paths, PaymentResult, RedisKeys, Views } from '../utils/constants.js';
 
 const APHA_EMAIL = 'ivory@apha.gov.uk'
 const SLA = 35
@@ -285,10 +274,10 @@ const _sendEmail = async (
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.SERVICE_COMPLETE}`,
     handler: handlers.get
   }
-]
+];

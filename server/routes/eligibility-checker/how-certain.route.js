@@ -1,10 +1,9 @@
 'use strict'
 
-const AnalyticsService = require('../../services/analytics.service')
-const RedisService = require('../../services/redis.service')
-
-const { Analytics, Paths, Views, RedisKeys } = require('../../utils/constants')
-const { buildErrorSummary, Validators } = require('../../utils/validation')
+import AnalyticsService from '../../services/analytics.service.js';
+import RedisService from '../../services/redis.service.js';
+import { Analytics, Paths, Views, RedisKeys } from '../../utils/constants.js';
+import { buildErrorSummary, Validators } from '../../utils/validation.js';
 
 const completelyCertain = 'Completely'
 
@@ -89,7 +88,7 @@ const _validateForm = payload => {
   return errors
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.HOW_CERTAIN}`,
@@ -100,4 +99,4 @@ module.exports = [
     path: `${Paths.HOW_CERTAIN}`,
     handler: handlers.post
   }
-]
+];

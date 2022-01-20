@@ -1,19 +1,11 @@
 'use strict'
 
-const AnalyticsService = require('../../../services/analytics.service')
-const RedisService = require('../../../services/redis.service')
-
-const {
-  Analytics,
-  CharacterLimits,
-  Options,
-  Paths,
-  RedisKeys,
-  Views
-} = require('../../../utils/constants')
-const { formatNumberWithCommas } = require('../../../utils/general')
-const { buildErrorSummary, Validators } = require('../../../utils/validation')
-const { addPayloadToContext } = require('../../../utils/general')
+import AnalyticsService from '../../../services/analytics.service.js';
+import RedisService from '../../../services/redis.service.js';
+import { Analytics, CharacterLimits, Options, Paths, RedisKeys, Views } from '../../../utils/constants.js';
+import { formatNumberWithCommas } from '../../../utils/general.js';
+import { buildErrorSummary, Validators } from '../../../utils/validation.js';
+import { addPayloadToContext } from '../../../utils/general.js';
 
 const pageTitle = 'Your contact details'
 
@@ -178,7 +170,7 @@ const _validateConfirmEmailAddress = (payload, errors) => {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.APPLICANT_CONTACT_DETAILS}`,
@@ -189,4 +181,4 @@ module.exports = [
     path: `${Paths.APPLICANT_CONTACT_DETAILS}`,
     handler: handlers.post
   }
-]
+];

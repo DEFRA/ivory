@@ -1,9 +1,8 @@
 'use strict'
 
-const AnalyticsService = require('../services/analytics.service')
-const RedisService = require('../services/redis.service')
-
-const { Paths, Views, RedisKeys, Analytics } = require('../utils/constants')
+import AnalyticsService from '../services/analytics.service.js';
+import RedisService from '../services/redis.service.js';
+import { Paths, Views, RedisKeys, Analytics } from '../utils/constants.js';
 
 const MAX_PHOTOS = 6
 
@@ -75,7 +74,7 @@ const _getContext = async request => {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.YOUR_DOCUMENTS}`,
@@ -86,4 +85,4 @@ module.exports = [
     path: `${Paths.YOUR_DOCUMENTS}`,
     handler: handlers.post
   }
-]
+];

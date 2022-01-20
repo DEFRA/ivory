@@ -1,10 +1,9 @@
 'use strict'
-
-const nock = require('nock')
-const config = require('../../server/utils/config')
-
-const { multipleAddresses } = require('../mock-data/addresses')
-const AddressService = require('../../server/services/address.service')
+import { jest } from '@jest/globals';
+import nock from 'nock';
+import config from '../../server/utils/config.js';
+import { multipleAddresses } from '../mock-data/addresses.js';
+import AddressService from '../../server/services/address.service.js';
 
 describe('Address service', () => {
   beforeEach(() => {

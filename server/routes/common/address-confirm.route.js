@@ -1,16 +1,9 @@
 'use strict'
 
-const AnalyticsService = require('../../services/analytics.service')
-const RedisService = require('../../services/redis.service')
-const RedisHelper = require('../../services/redis-helper.service')
-
-const {
-  AddressType,
-  Analytics,
-  Paths,
-  RedisKeys,
-  Views
-} = require('../../utils/constants')
+import AnalyticsService from '../../services/analytics.service.js'
+import RedisService from '../../services/redis.service.js'
+import RedisHelper from '../../services/redis-helper.service.js'
+import { AddressType, Analytics, Paths, RedisKeys, Views } from '../../utils/constants.js'
 
 const getAddressType = request =>
   request.route.path === Paths.OWNER_ADDRESS_CONFIRM
@@ -135,7 +128,14 @@ const _convertSingleLineAddressToMultipleLines = (context, address) => {
   )
 }
 
-module.exports = {
-  get: handlers.get,
-  post: handlers.post
+const get = handlers.get
+const post = handlers.post
+export {
+  get,
+  post
+}
+
+export default {
+  get,
+  post
 }

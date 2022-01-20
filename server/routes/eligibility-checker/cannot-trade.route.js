@@ -1,8 +1,7 @@
 'use strict'
 
-const AnalyticsService = require('../../services/analytics.service')
-
-const { Paths, Views, Urls, Analytics } = require('../../utils/constants')
+import AnalyticsService from '../../services/analytics.service.js';
+import { Paths, Views, Urls, Analytics } from '../../utils/constants.js';
 
 const handlers = {
   get: async (request, h) => {
@@ -55,7 +54,7 @@ const _getContext = request => {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.CANNOT_TRADE}`,
@@ -66,4 +65,4 @@ module.exports = [
     path: `${Paths.CANNOT_TRADE}`,
     handler: handlers.post
   }
-]
+];

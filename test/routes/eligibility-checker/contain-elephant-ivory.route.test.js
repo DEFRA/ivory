@@ -1,9 +1,9 @@
 'use strict'
-
-jest.mock('../../../server/services/redis.service')
-const RedisService = require('../../../server/services/redis.service')
-const TestHelper = require('../../utils/test-helper')
-const { Options, RedisKeys } = require('../../../server/utils/constants')
+import { jest } from '@jest/globals';
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../../server/services/redis.service.js';
+import TestHelper from '../../utils/test-helper.js';
+import { Options, RedisKeys } from '../../../server/utils/constants.js';
 
 describe('/eligibility-checker/contain-elephant-ivory route', () => {
   let server

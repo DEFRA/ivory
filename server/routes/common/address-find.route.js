@@ -1,22 +1,11 @@
 'use strict'
 
-const AnalyticsService = require('../../services/analytics.service')
-const AddressService = require('../../services/address.service')
-const RedisService = require('../../services/redis.service')
-
-const {
-  AddressType,
-  BehalfOfBusinessOptions,
-  BehalfOfNotBusinessOptions,
-  CharacterLimits,
-  Paths,
-  RedisKeys,
-  Views,
-  Options,
-  Analytics
-} = require('../../utils/constants')
-const { buildErrorSummary, Validators } = require('../../utils/validation')
-const { formatNumberWithCommas } = require('../../utils/general')
+import AnalyticsService from '../../services/analytics.service.js'
+import AddressService from '../../services/address.service.js'
+import RedisService from '../../services/redis.service.js'
+import { AddressType, BehalfOfBusinessOptions, BehalfOfNotBusinessOptions, CharacterLimits, Paths, RedisKeys, Views, Options, Analytics } from '../../utils/constants.js'
+import { buildErrorSummary, Validators } from '../../utils/validation.js'
+import { formatNumberWithCommas } from '../../utils/general.js'
 
 const getAddressType = request =>
   request.route.path === Paths.OWNER_ADDRESS_FIND
@@ -172,7 +161,14 @@ const _validateForm = payload => {
   return errors
 }
 
-module.exports = {
-  get: handlers.get,
-  post: handlers.post
+const get = handlers.get;
+const post = handlers.post;
+export {
+  get,
+  post
+}
+
+export default {
+  get,
+  post
 }

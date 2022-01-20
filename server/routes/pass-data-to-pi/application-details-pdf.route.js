@@ -1,24 +1,10 @@
 'use strict'
 
-const fs = require('fs')
-
-const { PDFDocument, StandardFonts } = require('pdf-lib')
-
-const ODataService = require('../../services/odata.service')
-
-const {
-  AgeExemptionReasons,
-  DataVerseFieldName,
-  DownloadReason,
-  Paths,
-  ItemType,
-  Options
-} = require('../../utils/constants')
-
-const {
-  AgeExemptionReasonLookup,
-  AgeExemptionReasonReverseLookup
-} = require('../../services/dataverse-choice-lookups')
+import fs from 'fs';
+import { PDFDocument, StandardFonts } from 'pdf-lib';
+import ODataService from '../../services/odata.service.js';
+import { AgeExemptionReasons, DataVerseFieldName, DownloadReason, Paths, ItemType, Options } from '../../utils/constants.js';
+import { AgeExemptionReasonLookup, AgeExemptionReasonReverseLookup } from '../../services/dataverse-choice-lookups.js';
 
 const formPdfBytes = fs.readFileSync(
   './server/public/static/ivory-application-download-template.pdf'
@@ -200,10 +186,10 @@ const _getExemptionReasonSummary = entity => {
   return `${ivoryAgeFormatted.join('\n')}`
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.PASS_DATA_TO_PI_APPLICATION_PDF}`,
     handler: handlers.get
   }
-]
+];

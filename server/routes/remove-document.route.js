@@ -1,12 +1,12 @@
 'use strict'
 
-const Hoek = require('@hapi/hoek')
+import Hoek from '@hapi/hoek';
 
 // TODO IVORY-557
 // const AnalyticsService = require('../services/analytics.service')
-const RedisService = require('../services/redis.service')
+import RedisService from '../services/redis.service.js';
 
-const { Paths, RedisKeys } = require('../utils/constants')
+import { Paths, RedisKeys } from '../utils/constants.js';
 
 const handlers = {
   get: async (request, h) => {
@@ -34,10 +34,10 @@ const handlers = {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.REMOVE_DOCUMENT}/{index}`,
     handler: handlers.get
   }
-]
+];

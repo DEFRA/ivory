@@ -1,9 +1,8 @@
 'use strict'
 
-const fetch = require('node-fetch')
-
-const config = require('../utils/config')
-const { Paths } = require('../utils/constants')
+import fetch from 'node-fetch';
+import config from '../utils/config.js';
+import { Paths } from '../utils/constants.js';
 
 const PAYMENT_ENDPOINT = 'v1/payments'
 
@@ -12,7 +11,7 @@ const headers = {
   Authorization: `Bearer ${config.paymentApiKey}`
 }
 
-module.exports = class PaymentService {
+export default class PaymentService {
   static async makePayment (amountInPence, reference, description, email) {
     const url = `${config.paymentUrl}/${PAYMENT_ENDPOINT}`
 
@@ -43,4 +42,4 @@ module.exports = class PaymentService {
 
     return response.json()
   }
-}
+};

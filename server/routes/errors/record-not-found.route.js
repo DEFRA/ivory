@@ -3,7 +3,7 @@
 // TODO IVORY-557
 // const AnalyticsService = require('../../services/analytics.service')
 
-const { Paths, Views } = require('../../utils/constants')
+import { Paths, Views } from '../../utils/constants.js';
 
 const handlers = {
   get: async (request, h) => {
@@ -22,10 +22,10 @@ const _getContext = () => {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.RECORD_NOT_FOUND}`,
     handler: handlers.get
   }
-]
+];

@@ -1,6 +1,6 @@
 'use strict'
 
-const { postcodeValidator } = require('postcode-validator')
+import { postcodeValidator } from 'postcode-validator';
 
 const VALIDATION_SUMMARY_HEADING = 'There is a problem'
 
@@ -87,7 +87,8 @@ const _getFieldErrors = errors => {
   return fieldErrors
 }
 
-module.exports = {
+//
+export {
   buildErrorSummary,
   Validators
-}
+};

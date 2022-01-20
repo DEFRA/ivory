@@ -1,22 +1,16 @@
 'use strict'
+import { jest } from '@jest/globals';
+import { ItemType, Options, RedisKeys, EmailTypes } from '../../server/utils/constants.js';
+import TestHelper from '../utils/test-helper.js';
 
-const {
-  ItemType,
-  Options,
-  RedisKeys,
-  EmailTypes
-} = require('../../server/utils/constants')
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../server/services/redis.service.js';
 
-const TestHelper = require('../utils/test-helper')
+jest.mock('./server/services/payment.service.js')
+import PaymentService from '../../server/services/payment.service.js';
 
-jest.mock('../../server/services/redis.service')
-const RedisService = require('../../server/services/redis.service')
-
-jest.mock('../../server/services/payment.service')
-const PaymentService = require('../../server/services/payment.service')
-
-jest.mock('../../server/services/notification.service')
-const NotificationService = require('../../server/services/notification.service')
+jest.mock('./server/services/notification.service.js')
+import NotificationService from '../../server/services/notification.service.js';
 
 describe('/service-complete route', () => {
   let server

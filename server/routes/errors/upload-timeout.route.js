@@ -1,8 +1,7 @@
 'use strict'
 
-const AnalyticsService = require('../../services/analytics.service')
-
-const { Paths, Views, Analytics } = require('../../utils/constants')
+import AnalyticsService from '../../services/analytics.service.js';
+import { Paths, Views, Analytics } from '../../utils/constants.js';
 
 const handlers = {
   get: async (request, h) => {
@@ -38,7 +37,7 @@ const _getContext = () => {
   }
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.UPLOAD_TIMEOUT}`,
@@ -49,4 +48,4 @@ module.exports = [
     path: `${Paths.UPLOAD_TIMEOUT}`,
     handler: handlers.post
   }
-]
+];

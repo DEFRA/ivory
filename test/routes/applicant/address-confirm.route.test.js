@@ -1,13 +1,11 @@
 'use strict'
-
-const TestHelper = require('../../utils/test-helper')
-const AddressService = require('../../../server/services/address.service')
-jest.mock('../../../server/services/redis.service')
-const RedisService = require('../../../server/services/redis.service')
-
-const { Options, RedisKeys } = require('../../../server/utils/constants')
-
-const { singleAddress } = require('../../mock-data/addresses')
+import { jest } from '@jest/globals';
+import TestHelper from '../../utils/test-helper.js';
+import AddressService from '../../../server/services/address.service.js';
+import RedisService from '../../../server/services/redis.service.js';
+import { Options, RedisKeys } from '../../../server/utils/constants.js';
+import { singleAddress } from '../../mock-data/addresses';
+jest.mock('./server/services/redis.service.js')
 
 describe('/user-details/applicant/address-confirm route', () => {
   let server

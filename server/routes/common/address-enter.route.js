@@ -1,24 +1,11 @@
 'use strict'
 
-const AnalyticsService = require('../../services/analytics.service')
-const RedisService = require('../../services/redis.service')
-
-const {
-  AddressType,
-  CharacterLimits,
-  Options,
-  Paths,
-  RedisKeys,
-  Views,
-  Analytics
-} = require('../../utils/constants')
-const { buildErrorSummary, Validators } = require('../../utils/validation')
-const { formatNumberWithCommas } = require('../../utils/general')
-
-const {
-  addPayloadToContext,
-  convertToCommaSeparatedTitleCase
-} = require('../../utils/general')
+import AnalyticsService from '../../services/analytics.service.js'
+import RedisService from '../../services/redis.service.js'
+import { AddressType, CharacterLimits, Options, Paths, RedisKeys, Views, Analytics } from '../../utils/constants.js'
+import { buildErrorSummary, Validators } from '../../utils/validation.js'
+import { formatNumberWithCommas } from '../../utils/general.js'
+import { addPayloadToContext, convertToCommaSeparatedTitleCase } from '../../utils/general.js'
 
 const getAddressType = request =>
   request.route.path === Paths.OWNER_ADDRESS_ENTER
@@ -259,7 +246,14 @@ const _getBuildingNameOrNumber = address => {
   return nameOrNumber
 }
 
-module.exports = {
-  get: handlers.get,
-  post: handlers.post
+const get = handlers.get
+const post = handlers.post
+export {
+  get,
+  post
+}
+
+export default {
+  get,
+  post
 }

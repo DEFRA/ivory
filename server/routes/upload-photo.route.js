@@ -1,19 +1,16 @@
 'use strict'
 
-const fs = require('fs')
-
-const path = require('path')
-const sharp = require('sharp')
-const { v4: uuidv4 } = require('uuid')
-
-const AnalyticsService = require('../services/analytics.service')
-const RedisService = require('../services/redis.service')
-const AntimalwareService = require('../services/antimalware.service')
-
-const config = require('../utils/config')
-const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
-const { buildErrorSummary } = require('../utils/validation')
-const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
+import fs from 'fs';
+import path from 'path';
+import sharp from 'sharp';
+import { v4 as uuidv4 } from 'uuid';
+import AnalyticsService from '../services/analytics.service.js';
+import RedisService from '../services/redis.service.js';
+import AntimalwareService from '../services/antimalware.service.js';
+import config from '../utils/config.js';
+import { Paths, RedisKeys, Views, Analytics } from '../utils/constants.js';
+import { buildErrorSummary } from '../utils/validation.js';
+import { checkForDuplicates, checkForFileSizeError } from '../utils/upload.js';
 
 const MAX_PHOTOS = 6
 const MAX_FILES_IN_REQUEST_PAYLOAD = 1
@@ -225,7 +222,7 @@ const _validateForm = (payload, uploadData) => {
   return errors
 }
 
-module.exports = [
+export default [
   {
     method: 'GET',
     path: `${Paths.UPLOAD_PHOTO}`,
@@ -251,4 +248,4 @@ module.exports = [
       }
     }
   }
-]
+];

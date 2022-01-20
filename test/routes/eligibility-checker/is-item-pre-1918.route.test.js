@@ -1,9 +1,9 @@
 'use strict'
-
-const TestHelper = require('../../utils/test-helper')
-jest.mock('../../../server/services/redis.service')
-const RedisService = require('../../../server/services/redis.service')
-const { ItemType } = require('../../../server/utils/constants')
+import { jest } from '@jest/globals';
+import TestHelper from '../../utils/test-helper.js';
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../../server/services/redis.service.js';
+import { ItemType } from '../../../server/utils/constants.js';
 
 describe('/eligibility-checker/is-item-pre-1918 route', () => {
   let server

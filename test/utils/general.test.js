@@ -1,8 +1,6 @@
 'use strict'
 
-const {
-  convertToCommaSeparatedTitleCase
-} = require('../../server/utils/general')
+import { convertToCommaSeparatedTitleCase } from '../../server/utils/general';
 
 describe('General utils', () => {
   describe('convertToCommaSeparatedTitleCase method', () => {

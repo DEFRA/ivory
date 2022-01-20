@@ -1,11 +1,9 @@
 'use strict'
 
-const { v4: uuidv4 } = require('uuid')
-
-const config = require('../utils/config')
-const { EmailTypes } = require('../utils/constants')
-
-const NotifyClient = require('notifications-node-client').NotifyClient
+import { v4 as uuidv4 } from 'uuid';
+import config from '../utils/config.js';
+import { EmailTypes } from '../utils/constants.js';
+import { NotifyClient } from 'notifications-node-client';
 
 class NotificationService {
   static async sendEmail (emailType, isSection2, recipientEmail, data) {
@@ -58,4 +56,4 @@ const _getTemplateId = (emailType, isSection2) => {
   return templateId
 }
 
-module.exports = NotificationService
+export default NotificationService;

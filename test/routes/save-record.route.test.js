@@ -1,23 +1,16 @@
 'use strict'
+import { jest } from '@jest/globals';
+import TestHelper from '../utils/test-helper.js';
+import { DataVerseFieldName, ItemType, IvoryVolumeReasons, Options, RedisKeys } from '../../server/utils/constants.js';
 
-const TestHelper = require('../utils/test-helper')
+jest.mock('./server/services/redis.service.js')
+import RedisService from '../../server/services/redis.service.js';
 
-const {
-  DataVerseFieldName,
-  ItemType,
-  IvoryVolumeReasons,
-  Options,
-  RedisKeys
-} = require('../../server/utils/constants')
+jest.mock('./server/services/odata.service.js')
+import ODataService from '../../server/services/odata.service.js';
 
-jest.mock('../../server/services/redis.service')
-const RedisService = require('../../server/services/redis.service')
-
-jest.mock('../../server/services/odata.service')
-const ODataService = require('../../server/services/odata.service')
-
-jest.mock('../../server/services/payment.service')
-const PaymentService = require('../../server/services/payment.service')
+jest.mock('./server/services/payment.service.js')
+import PaymentService from '../../server/services/payment.service.js';
 
 describe('/save-record route', () => {
   let server
