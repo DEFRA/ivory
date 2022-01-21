@@ -178,7 +178,7 @@ describe('/check-your-answers route', () => {
         _checkSubheading(
           document,
           elementIds.subHeadings.itemDescription,
-          'Why item qualifies for exemption'
+          'Description of the item'
         )
 
         _checkSummary(document, elementIds.summaries.itemDescription)
@@ -224,7 +224,7 @@ describe('/check-your-answers route', () => {
         _checkSubheading(
           document,
           elementIds.subHeadings.itemDescription,
-          'Why item qualifies for exemption'
+          'Description of the item'
         )
 
         _checkSummary(document, elementIds.summaries.itemDescription)
