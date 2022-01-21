@@ -2,11 +2,10 @@
 
 const Hoek = require('@hapi/hoek')
 
-// TODO IVORY-557
-// const AnalyticsService = require('../services/analytics.service')
+const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
 
-const { Paths, RedisKeys } = require('../utils/constants')
+const { Paths, RedisKeys, Analytics } = require('../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
@@ -27,6 +26,11 @@ const handlers = {
       RedisKeys.UPLOAD_DOCUMENT,
       JSON.stringify(uploadData)
     )
+
+    AnalyticsService.sendEvent(request, {
+      category: Analytics.Category.MAIN_QUESTIONS,
+      action: Analytics.Action.DOCUMENT_REMOVED
+    })
 
     return uploadData.files.length
       ? h.redirect(Paths.YOUR_DOCUMENTS)

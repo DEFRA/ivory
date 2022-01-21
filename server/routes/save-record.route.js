@@ -1,7 +1,6 @@
 'use strict'
 
-// TODO IVORY-557
-// const AnalyticsService = require('../services/analytics.service')
+const AnalyticsService = require('../services/analytics.service')
 const ODataService = require('../services/odata.service')
 const RedisService = require('../services/redis.service')
 const PaymentService = require('../services/payment.service')
@@ -12,7 +11,8 @@ const {
   Options,
   Paths,
   PaymentResult,
-  RedisKeys
+  RedisKeys,
+  Analytics
 } = require('../utils/constants')
 const { DataVerseFieldName } = require('../utils/constants')
 const {
@@ -39,6 +39,11 @@ const handlers = {
     const isAlreadyCertified = await RedisHelper.isAlreadyCertified(request)
 
     if (payment.state.status === PaymentResult.SUCCESS) {
+      AnalyticsService.sendEvent(request, {
+        category: Analytics.Category.PAYMENT,
+        action: 'Payment successful, data saved'
+      })
+
       if (isAlreadyCertified) {
         _resellRecord(request)
       } else {
@@ -50,6 +55,11 @@ const handlers = {
           await _updateRecordAttachments(request, entity)
         }
       }
+    } else {
+      AnalyticsService.sendEvent(request, {
+        category: Analytics.Category.PAYMENT,
+        action: 'PAYMENT FAILED'
+      })
     }
 
     return h.redirect(Paths.SERVICE_COMPLETE)

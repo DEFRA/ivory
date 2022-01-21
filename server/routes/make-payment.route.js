@@ -2,13 +2,12 @@
 
 const RandomString = require('randomstring')
 
-// TODO IVORY-557
-// const AnalyticsService = require('../services/analytics.service')
+const AnalyticsService = require('../services/analytics.service')
 const PaymentService = require('../services/payment.service')
 const RedisHelper = require('../services/redis-helper.service')
 const RedisService = require('../services/redis.service')
 
-const { Paths, RedisKeys } = require('../utils/constants')
+const { Paths, RedisKeys, Analytics } = require('../utils/constants')
 
 const TARGET_COMPLETION_DATE_PERIOD_DAYS = 30
 
@@ -65,6 +64,12 @@ const handlers = {
     await RedisService.set(request, RedisKeys.PAYMENT_ID, response.payment_id)
 
     console.log(response)
+
+    AnalyticsService.sendEvent(request, {
+      category: Analytics.Category.PAYMENT,
+      action: `Submitted ${description}`,
+      label: `Payment Amount: £${amount}`
+    })
 
     return h.redirect(response._links.next_url.href)
   }
