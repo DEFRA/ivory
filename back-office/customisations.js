@@ -2,6 +2,7 @@ const NOTIFICATION_TIMEOUT = 5000;
 const TARGET_COMPLETION_DATE_DAYS = 49;
 const CERTIFICATE_LINK_EXPIRY_DATE_DAYS = 0;
 const PI_LINK_EXPIRY_DATE_DAYS = 35;
+const IVORY_SUPERUSER_ROLE = 'Ivory Superuser';
 
 const DataVerseFieldName = {
   ALREADY_HAS_CERTIFICATE: 'cre2c_alreadyhascertificate',
@@ -10,36 +11,47 @@ const DataVerseFieldName = {
   APPLICANT_NAME: 'cre2c_applicantname',
   APPLICANT_POSTCODE: 'cre2c_applicantpostcode',
   APPLIED_BEFORE: 'cre2c_appliedbefore',
+  ASSESSMENT_SUMMARY: 'cre2c_assessmentsummary',
+  ASSESSMENT_SUPPORTING_EVIDENCE: 'cre2c_assessmentsupportingevidence',
   CAPACITY_OTHER: 'cre2c_capacityother',
   CAPACITY: 'cre2c_capacity',
   CERTIFICATE_ISSUE_DATE: 'cre2c_certificateissuedate',
   CERTIFICATE_KEY: 'cre2c_certificatekey',
-  CERTIFICATE_LINK: 'cre2c_certificatelink',
   CERTIFICATE_LINK_EXPIRY: 'cre2c_certificatelinkexpiry',
+  CERTIFICATE_LINK: 'cre2c_certificatelink',
   CERTIFICATE_NUMBER: 'cre2c_certificatenumber',
-  DATE_STATUS_APPLIED: 'cre2c_datestatusapplied',
+  CERTIFICATE: 'cre2c_certificate',
+  DATE_COI_SENT_TO_PI: 'cre2c_datecoisenttopi',
+  DATE_DETAILS_SENT_TO_PI: 'cre2c_datedetailsdenttopi',
+  DATE_OF_PI_RESPONSE: 'cre2c_dateofpiresponse',
+  DATE_RECOMMENDATION_RECEIVED: 'cre2c_daterecommendationreceived',
   DATE_SENT_TO_PI: 'cre2c_datedetailssenttopi',
+  DATE_STATUS_APPLIED: 'cre2c_datestatusapplied',
   DISTINGUISHING_FEATURES: 'cre2c_uniquefeatures',
   EXEMPTION_CATEGORY: 'cre2c_exemptioncategory',
   EXEMPTION_TYPE: 'cre2c_exemptiontype',
   HAS_DISTINGUISHING_FEATURES: 'cre2c_hasuniquefeatures',
   INTENTION: 'cre2c_intention',
   ITEM_SUMMARY: 'cre2c_itemsummary',
+  MANUALLY_CREATED: 'cre2c_manuallycreated',
   NAME: 'cre2c_name',
   OWNED_BY_APPLICANT: 'cre2c_ownedbyapplicant',
   OWNER_ADDRESS: 'cre2c_owneraddress',
   OWNER_EMAIL: 'cre2c_owneremail',
   OWNER_NAME: 'cre2c_ownername',
   OWNER_POSTCODE: 'cre2c_ownerpostcode',
+  OWNER: 'ownerid',
   PAYMENT_REFERENCE: 'cre2c_paymentreference',
-  PI_LINK: 'cre2c_pilink',
-  PI_LINK_EXPIRY: 'cre2c_pilinkexpiry',
   PHOTO_1: 'cre2c_photo1',
   PHOTO_2: 'cre2c_photo2',
   PHOTO_3: 'cre2c_photo3',
   PHOTO_4: 'cre2c_photo4',
   PHOTO_5: 'cre2c_photo5',
   PHOTO_6: 'cre2c_photo6',
+  PI_ASSIGNMENT_NOTES: 'cre2c_piassignmentnotes',
+  PI_LINK_EXPIRY: 'cre2c_pilinkexpiry',
+  PI_LINK: 'cre2c_pilink',
+  PRESCRIBED_INSTITUTE: 'cre2c_ivoryprescribedinsitute',
   PREVIOUS_APPLICANT_ADDRESS: 'cre2c_previousapplicantaddress',
   PREVIOUS_APPLICANT_EMAIL: 'cre2c_previousapplicantemail',
   PREVIOUS_APPLICANT_NAME: 'cre2c_previousapplicantname',
@@ -58,6 +70,7 @@ const DataVerseFieldName = {
   SECTION_10_CASE_ID: 'cre2c_ivorysection10caseid',
   SECTION_2_CASE_ID: 'cre2c_ivorysection2caseid',
   SELLING_ON_BEHALF_OF: 'cre2c_sellingonbehalfof',
+  STATE_CODE: 'statecode',
   STATUS: 'cre2c_status',
   SUBMISSION_DATE: 'cre2c_submissiondate',
   SUBMISSION_REFERENCE: 'cre2c_submissionreference',
@@ -201,6 +214,21 @@ this.formOnLoad = async (executionContext, section) => {
     this.certificateDetailsOnChange(executionContext);
     this.alreadyHasCertificateOnChange(executionContext);
   }
+
+  this._setFieldVisibilityBasedOnCurrentUserRoles(formContext);
+}
+
+this.prescribedInstituteFormOnLoad = executionContext => { 
+  const formContext = executionContext.getFormContext();
+
+  const currentUserRoles = Xrm.Utility.getGlobalContext().userSettings.roles
+    .getAll()
+    .map(role => role.name);
+
+  const currentUserIsSuperuser = currentUserRoles.includes(IVORY_SUPERUSER_ROLE);
+  if (!currentUserIsSuperuser) {
+    this._setAllPiFieldsToReadOnly(formContext);
+  }
 }
 
 this.formOnSave = executionContext => {
@@ -242,8 +270,6 @@ this.initialiseRecord = (executionContext, isSection2) => {
     isSection2 ? 
       this.submissionStatusSection2OnChange(executionContext) :
       this.submissionStatusSection10OnChange(executionContext);
-
-    formContext.getControl(DataVerseFieldName.PAYMENT_REFERENCE).setDisabled(false);
 
     if (isSection2) {
       const targetCompletionDate = new Date(currentDate.getTime());
@@ -620,6 +646,88 @@ this.setAgeExemptionReasons = (formContext, isSection2) => {
   }
 }
 
+this.getEnvironmentVariableValue = async schemaName => {
+  'use strict';
+
+  const response = await Xrm.WebApi.retrieveMultipleRecords(
+      'environmentvariabledefinition',
+      [
+          "?$select=defaultvalue",
+          "&$filter=schemaname eq '", schemaName, "'",
+          "&$expand=environmentvariabledefinition_environmentvariablevalue($select=value)"
+      ].join('')
+  );
+
+  let value = null;
+
+  if (response.entities.length === 1) {
+      if (response.entities[0].environmentvariabledefinition_environmentvariablevalue.length === 1) {
+          value = response.entities[0].environmentvariabledefinition_environmentvariablevalue[0].value;
+      }
+      else {
+          value = response.entities[0].defaultvalue;
+      }
+  }
+
+  return value;
+}
+
+this._setFieldVisibilityBasedOnCurrentUserRoles = async (formContext) => {
+  const currentUserRoles = Xrm.Utility.getGlobalContext().userSettings.roles
+    .getAll()
+    .map(role => role.name);
+
+  const isManuallyCreated = formContext.getAttribute(DataVerseFieldName.MANUALLY_CREATED).getValue();
+
+  const currentUserIsSuperuser = currentUserRoles.includes(IVORY_SUPERUSER_ROLE);
+  if (!isManuallyCreated && !currentUserIsSuperuser) {
+    this._setAllFieldsToReadOnly(formContext);
+  }
+
+  const paymentReferenceControl = formContext.getControl(DataVerseFieldName.PAYMENT_REFERENCE);
+  paymentReferenceControl.setDisabled(!isManuallyCreated);
+}
+
+this._setAllFieldsToReadOnly = async (formContext) => {
+  const formControls = formContext.getControl();
+
+  const alwaysEditableControls = [
+    DataVerseFieldName.ASSESSMENT_SUMMARY,
+    DataVerseFieldName.ASSESSMENT_SUPPORTING_EVIDENCE,
+    DataVerseFieldName.CERTIFICATE_ISSUE_DATE,
+    DataVerseFieldName.CERTIFICATE_LINK_EXPIRY,
+    DataVerseFieldName.CERTIFICATE_NUMBER,
+    DataVerseFieldName.CERTIFICATE,
+    DataVerseFieldName.DATE_COI_SENT_TO_PI,
+    DataVerseFieldName.DATE_DETAILS_SENT_TO_PI,
+    DataVerseFieldName.DATE_OF_PI_RESPONSE,
+    DataVerseFieldName.DATE_RECOMMENDATION_RECEIVED,
+    DataVerseFieldName.DATE_SENT_TO_PI,
+    DataVerseFieldName.MANUALLY_CREATED,
+    DataVerseFieldName.OWNER,
+    DataVerseFieldName.PI_ASSIGNMENT_NOTES,
+    DataVerseFieldName.PI_LINK_EXPIRY,
+    DataVerseFieldName.PRESCRIBED_INSTITUTE,
+    DataVerseFieldName.STATE_CODE,
+    DataVerseFieldName.STATUS,
+    DataVerseFieldName.TARGET_COMPLETION_DATE
+  ];
+
+  formControls.forEach(control => {
+    if (!alwaysEditableControls.includes(control.name)) {
+      control.setDisabled(true);
+    }
+  });
+}
+
+this._setAllPiFieldsToReadOnly = formContext => {
+  const formControls = formContext.getControl();
+
+  formControls.forEach(control => {
+    control.setDisabled(true);
+  });
+}
+
 // Generates a random submission reference in the same format as that which is generated by the front end.
 // Used when manually adding new records.
 this.generateSubmissionReference = () => {
@@ -654,30 +762,4 @@ this.showAlert = message => {
 //  Xrm.Navigation.openAlertDialog({ text: message});
 
   Xrm.Navigation.openAlertDialog({ text: message });
-}
-
-this.getEnvironmentVariableValue = async schemaName => {
-  'use strict';
-
-  const response = await Xrm.WebApi.retrieveMultipleRecords(
-      'environmentvariabledefinition',
-      [
-          "?$select=defaultvalue",
-          "&$filter=schemaname eq '", schemaName, "'",
-          "&$expand=environmentvariabledefinition_environmentvariablevalue($select=value)"
-      ].join('')
-  );
-
-  let value = null;
-
-  if (response.entities.length === 1) {
-      if (response.entities[0].environmentvariabledefinition_environmentvariablevalue.length === 1) {
-          value = response.entities[0].environmentvariabledefinition_environmentvariablevalue[0].value;
-      }
-      else {
-          value = response.entities[0].defaultvalue;
-      }
-  }
-
-  return value;
 }
