@@ -197,7 +197,7 @@ const _validateForm = (payload, uploadData) => {
   ) {
     errors.push({
       name: 'files',
-      text: 'You must choose a file to upload'
+      text: 'You must choose a photo to upload'
     })
   } else if (payload.files.bytes === 0) {
     errors.push({
