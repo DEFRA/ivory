@@ -73,7 +73,7 @@ $govuk-global-styles: true;
     }
 
     &:hover {
-      background-color: darken(govuk-colour('white'), 5%);
+      background-color: #dbdad9;
       color: $govuk-text-colour;
 
       &[disabled] {
