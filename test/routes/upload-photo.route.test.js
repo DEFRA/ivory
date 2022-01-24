@@ -272,7 +272,7 @@ describe('/upload-photo route', () => {
           server,
           postOptions,
           payloadFile,
-          'You must choose a file to upload'
+          'You must choose a photo to upload'
         )
       })
 
