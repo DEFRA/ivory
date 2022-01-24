@@ -234,14 +234,12 @@ const _getOwnerAndApplicantDetails = async request => {
     [DataVerseFieldName.OWNER_EMAIL]: ownerContactDetails
       ? ownerContactDetails.emailAddress
       : null,
-    [DataVerseFieldName.OWNER_ADDRESS]: _formatAddress(
-      ownerAddress,
-      ownerAddressInternational
-    ),
-    [DataVerseFieldName.OWNER_POSTCODE]: _getPostcode(
-      ownerAddress,
-      ownerAddressInternational
-    ),
+    [DataVerseFieldName.OWNER_ADDRESS]: ownerAddress
+      ? _formatAddress(ownerAddress, ownerAddressInternational)
+      : null,
+    [DataVerseFieldName.OWNER_POSTCODE]: ownerAddress
+      ? _getPostcode(ownerAddress, ownerAddressInternational)
+      : null,
     [DataVerseFieldName.APPLICANT_NAME]: applicantContactDetails.fullName,
     [DataVerseFieldName.APPLICANT_EMAIL]: applicantContactDetails.emailAddress,
     [DataVerseFieldName.APPLICANT_ADDRESS]: _formatAddress(
