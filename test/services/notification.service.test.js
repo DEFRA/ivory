@@ -5,8 +5,7 @@ const NotifyClient = require('notifications-node-client').NotifyClient
 
 const NotificationService = require('../../server/services/notification.service')
 
-const config = require('../../server/utils/config')
-const { ItemType, EmailTypes } = require('../../server/utils/constants')
+const { ItemType } = require('../../server/utils/constants')
 
 describe('Address service', () => {
   beforeEach(() => {
@@ -18,32 +17,32 @@ describe('Address service', () => {
   })
 
   describe('makePayment method', () => {
-    const RECIPIENT_EMAIL = 'RECIPIENT_EMAIL'
-    const SUBMISSION_REFERENCE = 'SUBMISSION_REFERENCE'
-    const RECIPIENT_NAME = 'RECIPIENT_NAME'
+    const templateId = 'TEMPLATE_ID'
+    const recipientEmail = 'RECIPIENT_EMAIL'
+    const submissionReference = 'SUBMISSION_REFERENCE'
+    const recipientName = 'RECIPIENT_NAME'
 
     it('should make payments using the payment service', async () => {
       const result = await NotificationService.sendEmail(
-        EmailTypes.CONFIRMATION_EMAIL,
-        false,
-        RECIPIENT_EMAIL,
+        templateId,
+        recipientEmail,
         {
-          fullName: RECIPIENT_NAME,
+          fullName: recipientName,
           exemptionType: ItemType.MUSICAL,
-          submissionReference: SUBMISSION_REFERENCE
+          submissionReference: submissionReference
         }
       )
 
       expect(result).toBeTruthy()
       expect(NotifyClient.prototype.sendEmail).toBeCalledTimes(1)
       expect(NotifyClient.prototype.sendEmail).toBeCalledWith(
-        config.govNotifyTemplateIdConfirmSection10,
-        RECIPIENT_EMAIL,
+        templateId,
+        recipientEmail,
         {
           personalisation: {
             exemptionType: ItemType.MUSICAL,
-            fullName: RECIPIENT_NAME,
-            submissionReference: SUBMISSION_REFERENCE
+            fullName: recipientName,
+            submissionReference: submissionReference
           },
           reference: expect.any(String),
           emailReplyToId: null

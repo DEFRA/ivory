@@ -1,11 +1,7 @@
 'use strict'
 
-const {
-  ItemType,
-  Options,
-  RedisKeys,
-  EmailTypes
-} = require('../../server/utils/constants')
+const { ItemType, Options, RedisKeys } = require('../../server/utils/constants')
+const config = require('../../server/utils/config')
 
 const TestHelper = require('../utils/test-helper')
 
@@ -67,7 +63,7 @@ describe('/service-complete route', () => {
 
     describe('Section 10', () => {
       beforeEach(() => {
-        _createSection10RedisMock(Options.YES)
+        _createSection10RedisMock(true)
       })
 
       describe('GET: Success', () => {
@@ -175,7 +171,7 @@ describe('/service-complete route', () => {
     describe('Section 2 ', () => {
       describe('Success: Not already certified', () => {
         beforeEach(() => {
-          _createSection2RedisMock(Options.NO, false)
+          _createSection2RedisMock(false, true, false)
         })
 
         beforeEach(async () => {
@@ -279,7 +275,7 @@ describe('/service-complete route', () => {
 
       describe('Success: Already certified', () => {
         beforeEach(() => {
-          _createSection2RedisMock(Options.NO, true)
+          _createSection2RedisMock(false, true, true)
         })
 
         beforeEach(async () => {
@@ -380,93 +376,232 @@ describe('/service-complete route', () => {
         PaymentService.lookupPayment = jest.fn().mockReturnValue(payment)
       })
 
-      describe('Section 10, applicant is the owner', () => {
-        beforeEach(() => {
-          _createSection10RedisMock(Options.YES)
+      describe('Section 10', () => {
+        describe('Section 10: applicant is the owner', () => {
+          beforeEach(() => {
+            _createSection10RedisMock(true)
+          })
+
+          it('should send 1 confirmation email', async () => {
+            expect(NotificationService.sendEmail).toBeCalledTimes(0)
+            document = await TestHelper.submitGetRequest(server, getOptions)
+            expect(NotificationService.sendEmail).toBeCalledTimes(1)
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection10ApplicantConfirmation,
+              mockOwnerContactDetails.emailAddress,
+              {
+                exemptionType: ItemType.MUSICAL,
+                fullName: mockOwnerContactDetails.fullName,
+                isMuseum: false,
+                submissionReference
+              }
+            )
+          })
         })
 
-        it('should send 1 confirmation email', async () => {
-          expect(NotificationService.sendEmail).toBeCalledTimes(0)
-          document = await TestHelper.submitGetRequest(server, getOptions)
-          expect(NotificationService.sendEmail).toBeCalledTimes(1)
-          expect(NotificationService.sendEmail).toBeCalledWith(
-            EmailTypes.CONFIRMATION_EMAIL,
-            false,
-            mockOwnerContactDetails.emailAddress,
-            {
-              exemptionType: ItemType.MUSICAL,
-              fullName: mockOwnerContactDetails.fullName,
-              submissionReference
-            }
-          )
+        describe('Section 10: applicant is NOT the owner, owner email address available', () => {
+          beforeEach(() => {
+            _createSection10RedisMock(false, true, ItemType.MUSEUM)
+          })
+
+          it('should send 1 confirmation email', async () => {
+            expect(NotificationService.sendEmail).toBeCalledTimes(0)
+            document = await TestHelper.submitGetRequest(server, getOptions)
+            expect(NotificationService.sendEmail).toBeCalledTimes(2)
+
+            // Section 10 - Applicant confirmation
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection10ApplicantConfirmation,
+              mockApplicantContactDetails.emailAddress,
+              {
+                exemptionType: ItemType.MUSEUM,
+                fullName: mockApplicantContactDetails.fullName,
+                isMuseum: true,
+                submissionReference
+              }
+            )
+
+            // Section 10 - Owner confirmation
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection10OwnerConfirmation,
+              mockOwnerContactDetails.emailAddress,
+              {
+                exemptionType: ItemType.MUSEUM,
+                fullName: mockOwnerContactDetails.fullName,
+                submissionReference
+              }
+            )
+          })
+        })
+
+        describe('Section 10: applicant is NOT the owner, no owner email address available', () => {
+          beforeEach(() => {
+            _createSection10RedisMock(false, false, ItemType.MUSEUM)
+          })
+
+          it('should send 1 confirmation email', async () => {
+            expect(NotificationService.sendEmail).toBeCalledTimes(0)
+            document = await TestHelper.submitGetRequest(server, getOptions)
+            expect(NotificationService.sendEmail).toBeCalledTimes(1)
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection10ApplicantConfirmation,
+              mockApplicantContactDetails.emailAddress,
+              {
+                exemptionType: ItemType.MUSEUM,
+                fullName: mockApplicantContactDetails.fullName,
+                isMuseum: true,
+                submissionReference
+              }
+            )
+          })
         })
       })
 
-      describe('Section 10, applicant is NOT the owner, no owner email address available', () => {
-        beforeEach(() => {
-          _createSection10RedisMock(Options.NO)
+      describe('Section 2', () => {
+        describe('Already certified, applicant is the owner', () => {
+          beforeEach(() => {
+            _createSection2RedisMock(true, false, true)
+          })
+
+          it('should send 1 confirmation email', async () => {
+            expect(NotificationService.sendEmail).toBeCalledTimes(0)
+            document = await TestHelper.submitGetRequest(server, getOptions)
+            expect(NotificationService.sendEmail).toBeCalledTimes(1)
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection2ResaleApplicantConfirmation,
+              mockOwnerContactDetails.emailAddress,
+              {
+                fullName: mockOwnerContactDetails.fullName,
+                certificateNumber
+              }
+            )
+          })
         })
 
-        it('should send 2 confirmation emails', async () => {
-          expect(NotificationService.sendEmail).toBeCalledTimes(0)
-          document = await TestHelper.submitGetRequest(server, getOptions)
-          expect(NotificationService.sendEmail).toBeCalledTimes(1)
+        describe('Already certified, applicant is NOT the owner', () => {
+          beforeEach(() => {
+            _createSection2RedisMock(false, true, true)
+          })
 
-          expect(NotificationService.sendEmail).toBeCalledWith(
-            EmailTypes.CONFIRMATION_EMAIL,
-            false,
-            mockApplicantContactDetails.emailAddress,
-            {
-              exemptionType: ItemType.MUSICAL,
-              fullName: mockApplicantContactDetails.fullName,
-              submissionReference
-            }
-          )
-        })
-      })
+          it('should send 2 confirmation emails', async () => {
+            expect(NotificationService.sendEmail).toBeCalledTimes(0)
+            document = await TestHelper.submitGetRequest(server, getOptions)
+            expect(NotificationService.sendEmail).toBeCalledTimes(2)
 
-      describe('Section 2, applicant is the owner', () => {
-        beforeEach(() => {
-          _createSection2RedisMock(Options.YES, false)
-        })
+            // Section 2 Resale - Applicant confirmation
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection2ResaleApplicantConfirmation,
+              mockApplicantContactDetails.emailAddress,
+              {
+                fullName: mockApplicantContactDetails.fullName,
+                certificateNumber
+              }
+            )
 
-        it('should send 1 confirmation email', async () => {
-          expect(NotificationService.sendEmail).toBeCalledTimes(0)
-          document = await TestHelper.submitGetRequest(server, getOptions)
-          expect(NotificationService.sendEmail).toBeCalledTimes(1)
-
-          expect(NotificationService.sendEmail).toBeCalledWith(
-            EmailTypes.CONFIRMATION_EMAIL,
-            true,
-            mockOwnerContactDetails.emailAddress,
-            {
-              exemptionType: ItemType.HIGH_VALUE,
-              fullName: mockOwnerContactDetails.fullName,
-              submissionReference
-            }
-          )
-        })
-      })
-
-      describe('Section 2, applicant is NOT the owner', () => {
-        beforeEach(() => {
-          _createSection2RedisMock(Options.NO, false)
+            // Section 2 Resale - Owner confirmation
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection2OwnerEmailThirdPartyResale,
+              mockOwnerContactDetails.emailAddress,
+              {
+                fullName: mockOwnerContactDetails.fullName,
+                certificateNumber
+              }
+            )
+          })
         })
 
-        it('should send 1 confirmation email', async () => {
-          expect(NotificationService.sendEmail).toBeCalledTimes(0)
-          document = await TestHelper.submitGetRequest(server, getOptions)
-          expect(NotificationService.sendEmail).toBeCalledTimes(1)
-          expect(NotificationService.sendEmail).toBeCalledWith(
-            EmailTypes.CONFIRMATION_EMAIL,
-            true,
-            mockApplicantContactDetails.emailAddress,
-            {
-              exemptionType: ItemType.HIGH_VALUE,
-              fullName: mockApplicantContactDetails.fullName,
-              submissionReference
-            }
-          )
+        describe('Already certified, applicant is NOT the owner, no owner email address available', () => {
+          beforeEach(() => {
+            _createSection2RedisMock(false, false, true)
+          })
+
+          it('should send 1 confirmation email', async () => {
+            expect(NotificationService.sendEmail).toBeCalledTimes(0)
+            document = await TestHelper.submitGetRequest(server, getOptions)
+            expect(NotificationService.sendEmail).toBeCalledTimes(1)
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection2ResaleApplicantConfirmation,
+              mockApplicantContactDetails.emailAddress,
+              {
+                fullName: mockApplicantContactDetails.fullName,
+                certificateNumber: 'CERTIFICATE_NUMBER'
+              }
+            )
+          })
+        })
+
+        describe('NOT already certified, applicant is the owner', () => {
+          beforeEach(() => {
+            _createSection2RedisMock(true, true, false)
+          })
+
+          it('should send 1 confirmation email', async () => {
+            expect(NotificationService.sendEmail).toBeCalledTimes(0)
+            document = await TestHelper.submitGetRequest(server, getOptions)
+            expect(NotificationService.sendEmail).toBeCalledTimes(1)
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection2ApplicantConfirmation,
+              mockOwnerContactDetails.emailAddress,
+              {
+                fullName: mockOwnerContactDetails.fullName,
+                submissionReference
+              }
+            )
+          })
+        })
+
+        describe('NOT already certified, applicant is NOT the owner', () => {
+          beforeEach(() => {
+            _createSection2RedisMock(false, true, false)
+          })
+
+          it('should send 2 confirmation emails', async () => {
+            expect(NotificationService.sendEmail).toBeCalledTimes(0)
+            document = await TestHelper.submitGetRequest(server, getOptions)
+            expect(NotificationService.sendEmail).toBeCalledTimes(2)
+
+            // Section 2 - Applicant confirmation
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection2ApplicantConfirmation,
+              mockApplicantContactDetails.emailAddress,
+              {
+                fullName: mockApplicantContactDetails.fullName,
+                submissionReference
+              }
+            )
+
+            // Section 2 - Owner confirmation
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection2OwnerEmailThirdParty,
+              mockOwnerContactDetails.emailAddress,
+              {
+                fullName: mockOwnerContactDetails.fullName,
+                submissionReference
+              }
+            )
+          })
+        })
+
+        describe('NOT already certified, applicant is NOT the owner, no owner email address available', () => {
+          beforeEach(() => {
+            _createSection2RedisMock(false, false, false)
+          })
+
+          it('should send 1 confirmation email', async () => {
+            expect(NotificationService.sendEmail).toBeCalledTimes(0)
+            document = await TestHelper.submitGetRequest(server, getOptions)
+            expect(NotificationService.sendEmail).toBeCalledTimes(1)
+
+            // Section 2 - Applicant confirmation
+            expect(NotificationService.sendEmail).toBeCalledWith(
+              config.govNotifyTemplateSection2ApplicantConfirmation,
+              mockApplicantContactDetails.emailAddress,
+              {
+                fullName: mockApplicantContactDetails.fullName,
+                submissionReference
+              }
+            )
+          })
         })
       })
     })
@@ -532,6 +667,7 @@ describe('/service-complete route', () => {
 
 const paymentReference = 'PAYMENT_REFERENCE'
 const submissionReference = '1234ABCD'
+const certificateNumber = 'CERTIFICATE_NUMBER'
 
 const mockOwnerContactDetails = {
   fullName: 'OWNER_NAME',
@@ -557,29 +693,56 @@ const _createMocks = () => {
   NotificationService.sendEmail = jest.fn()
 }
 
-const _createSection2RedisMock = (ownedByApplicant, isAlreadyCertified) => {
+const _createSection2RedisMock = (
+  isOwnedByApplicant,
+  hasOwnerEmail = true,
+  isAlreadyCertified = false
+) => {
   redisMockDataMap[RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT] = ItemType.HIGH_VALUE
   redisMockDataMap[RedisKeys.ALREADY_CERTIFIED] = {
-    alreadyCertified: isAlreadyCertified ? Options.YES : Options.NO
+    alreadyCertified: isAlreadyCertified ? Options.YES : Options.NO,
+    certificateNumber: isAlreadyCertified ? certificateNumber : null
   }
-  redisMockDataMap[RedisKeys.OWNED_BY_APPLICANT] = ownedByApplicant
-  redisMockDataMap[RedisKeys.APPLICANT_CONTACT_DETAILS] =
-    ownedByApplicant === Options.YES
+  redisMockDataMap[RedisKeys.OWNED_BY_APPLICANT] = isOwnedByApplicant
+    ? Options.YES
+    : Options.NO
+  redisMockDataMap[RedisKeys.APPLICANT_CONTACT_DETAILS] = isOwnedByApplicant
+    ? mockOwnerContactDetails
+    : mockApplicantContactDetails
+
+  mockOwnerContactDetails.hasEmailAddress = hasOwnerEmail
+    ? Options.YES
+    : Options.NO
+
+  if (!isOwnedByApplicant) {
+    redisMockDataMap[RedisKeys.OWNER_CONTACT_DETAILS] = hasOwnerEmail
       ? mockOwnerContactDetails
-      : mockApplicantContactDetails
+      : null
+  }
 
   RedisService.get = jest.fn((request, redisKey) => {
     return redisMockDataMap[redisKey]
   })
 }
 
-const _createSection10RedisMock = ownedByApplicant => {
-  redisMockDataMap[RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT] = ItemType.MUSICAL
-  redisMockDataMap[RedisKeys.OWNED_BY_APPLICANT] = ownedByApplicant
-  redisMockDataMap[RedisKeys.APPLICANT_CONTACT_DETAILS] =
-    ownedByApplicant === Options.YES
+const _createSection10RedisMock = (
+  isOwnedByApplicant,
+  hasOwnerEmail = true,
+  itemType = ItemType.MUSICAL
+) => {
+  redisMockDataMap[RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT] = itemType
+  redisMockDataMap[RedisKeys.OWNED_BY_APPLICANT] = isOwnedByApplicant
+    ? Options.YES
+    : Options.NO
+  redisMockDataMap[RedisKeys.APPLICANT_CONTACT_DETAILS] = isOwnedByApplicant
+    ? mockOwnerContactDetails
+    : mockApplicantContactDetails
+
+  if (!isOwnedByApplicant) {
+    redisMockDataMap[RedisKeys.OWNER_CONTACT_DETAILS] = hasOwnerEmail
       ? mockOwnerContactDetails
-      : mockApplicantContactDetails
+      : null
+  }
 
   RedisService.get = jest.fn((request, redisKey) => {
     return redisMockDataMap[redisKey]
