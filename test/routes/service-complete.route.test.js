@@ -503,7 +503,8 @@ describe('/service-complete route', () => {
               config.govNotifyTemplateSection2OwnerEmailThirdPartyResale,
               mockOwnerContactDetails.emailAddress,
               {
-                fullName: mockOwnerContactDetails.fullName
+                fullName: mockOwnerContactDetails.fullName,
+                certificateNumber
               }
             )
           })
