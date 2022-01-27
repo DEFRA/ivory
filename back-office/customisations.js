@@ -17,6 +17,7 @@ const DataVerseFieldName = {
   CERTIFICATE_LINK: 'cre2c_certificatelink',
   CERTIFICATE_LINK_EXPIRY: 'cre2c_certificatelinkexpiry',
   CERTIFICATE_NUMBER: 'cre2c_certificatenumber',
+  CONSENT_TO_SHARE_INFORMATION: 'cre2c_consenttoshareinformation',
   DATE_STATUS_APPLIED: 'cre2c_datestatusapplied',
   DATE_SENT_TO_PI: 'cre2c_datedetailssenttopi',
   DISTINGUISHING_FEATURES: 'cre2c_uniquefeatures',
