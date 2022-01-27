@@ -1,6 +1,5 @@
 'use strict'
 
-const config = require('../utils/config')
 const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
@@ -23,6 +22,6 @@ module.exports = [
 
 const _getContext = () => {
   return {
-    pageTitle: `Privacy Notice – Defra and APHA`
+    pageTitle: 'Privacy Notice – Defra and APHA'
   }
 }
