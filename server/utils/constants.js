@@ -198,7 +198,6 @@ const IvoryIntegralReasons = {
 const IvoryVolumeReasons = {
   CLEAR_FROM_LOOKING_AT_IT: 'It’s clear from looking at it',
   MEASURED_IT: 'I measured it',
-  WRITTEN_VERIFICATION: 'I have written verification from a relevant expert',
   OTHER_REASON: 'Other reason'
 }
 
