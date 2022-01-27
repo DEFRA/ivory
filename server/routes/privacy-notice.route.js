@@ -23,6 +23,6 @@ module.exports = [
 
 const _getContext = () => {
   return {
-    pageTitle: `Privacy notice: ${config.serviceName}`
+    pageTitle: `Privacy Notice – Defra and APHA`
   }
 }
