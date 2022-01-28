@@ -17,7 +17,8 @@ describe('/previous-application-number route', () => {
     helpText: 'helpText',
     para1: 'para1',
     para2: 'para2',
-    continue: 'continue'
+    continue: 'continue',
+    callOutText: 'callOutText'
   }
 
   let document
@@ -63,6 +64,14 @@ describe('/previous-application-number route', () => {
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'Enter the submission reference for the previous application'
+      )
+    })
+
+    it('should have the correct callOutText', () => {
+      const element = document.querySelector(`#${elementIds.callOutText}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        "Where we've refused a previous application for an exemption certificate, it may be less likely that a new application is successful. For example, if you were to resubmit an application with no new information or evidence, it's unlikely it will be successful."
       )
     })
 
