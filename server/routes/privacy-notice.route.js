@@ -22,6 +22,6 @@ module.exports = [
 
 const _getContext = () => {
   return {
-    pageTitle: 'Dealing in exempted ivory items'
+    pageTitle: 'Dealing in exempted Ivory items privacy notice'
   }
 }
