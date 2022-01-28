@@ -17,7 +17,8 @@ describe('/previous-application-number route', () => {
     helpText: 'helpText',
     para1: 'para1',
     para2: 'para2',
-    continue: 'continue'
+    continue: 'continue',
+    callOutText: "callOutText"
   }
 
   let document
@@ -64,6 +65,11 @@ describe('/previous-application-number route', () => {
       expect(TestHelper.getTextContent(element)).toEqual(
         'Enter the submission reference for the previous application'
       )
+    })
+
+    it('should have callOutText', () => {
+      const element = document.querySelector(`#${elementIds.callOutText}`)
+      expect(element).toBeTruthy()
     })
 
     it('should have the correct form field', () => {

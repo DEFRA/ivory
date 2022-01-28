@@ -16,7 +16,8 @@ describe('/revoked-certificate route', () => {
     dontHaveCertificateNumber: 'dontHaveCertificateNumber',
     para1: 'para1',
     para2: 'para2',
-    continue: 'continue'
+    continue: 'continue',
+    callOutText: "callOutText"
   }
 
   let document
@@ -57,6 +58,11 @@ describe('/revoked-certificate route', () => {
       TestHelper.checkBackLink(document)
     })
 
+    it('should have callOutText', () => {
+      const element = document.querySelector(`#${elementIds.callOutText}`)
+      expect(element).toBeTruthy()
+    })
+    
     it('should have the correct page heading', () => {
       const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
