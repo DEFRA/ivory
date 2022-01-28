@@ -67,9 +67,12 @@ describe('/previous-application-number route', () => {
       )
     })
 
-    it('should have callOutText', () => {
+    it('should have the correct callOutText', () => {
       const element = document.querySelector(`#${elementIds.callOutText}`)
       expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        "Where we've refused a previous application for an exemption certificate, it may be less likely that a new application is successful. For example, if you were to resubmit an application with no new information or evidence, it's unlikely it will be successful."
+      )
     })
 
     it('should have the correct form field', () => {
