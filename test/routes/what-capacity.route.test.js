@@ -136,30 +136,20 @@ describe('/what-capacity route', () => {
 
     describe('Success', () => {
       it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'It’s clear from looking at it',
-          nextUrl
-        )
+        await _checkSelectedRadioAction(postOptions, server, 'Agent', nextUrl)
       })
 
       it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          'I measured it',
+          'Executor or administrator',
           nextUrl
         )
       })
 
       it('should store the value in Redis and progress to the next route when the third option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'I have written verification from a relevant expert',
-          nextUrl
-        )
+        await _checkSelectedRadioAction(postOptions, server, 'Trustee', nextUrl)
       })
 
       it('should store the value in Redis and progress to the next route when the fourth option has been selected & Other text added', async () => {

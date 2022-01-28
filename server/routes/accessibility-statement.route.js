@@ -23,7 +23,7 @@ module.exports = [
 
 const _getContext = () => {
   return {
-    pageTitle: `Accessibility statement for ‘${config.serviceName}’`,
+    pageTitle: `Accessibility statement for the Ivory Act 2018, ‘${config.serviceName}’`,
     serviceName: config.serviceName
   }
 }
