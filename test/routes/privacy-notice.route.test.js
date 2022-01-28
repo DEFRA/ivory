@@ -11,7 +11,6 @@ describe('/privacy-notice', () => {
   }
 
   const pageContentIds = [
-    'pageSubTitle',
     'h2-1',
     'h2-2',
     'h2-3',
@@ -110,7 +109,7 @@ describe('/privacy-notice', () => {
       const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Privacy Notice – Defra and APHA'
+        'Dealing in exempted ivory items'
       )
     })
 

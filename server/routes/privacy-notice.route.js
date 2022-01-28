@@ -22,6 +22,6 @@ module.exports = [
 
 const _getContext = () => {
   return {
-    pageTitle: 'Privacy Notice – Defra and APHA'
+    pageTitle: 'Dealing in exempted ivory items'
   }
 }
