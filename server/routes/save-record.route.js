@@ -200,7 +200,8 @@ const _getCommonFields = async (request, itemDescription) => {
       itemDescription.distinguishingFeatures,
     [DataVerseFieldName.INTENTION]: _getIntentionCategoryCode(intentionForItem),
     ...(await _getInitialPhoto(request)),
-    ...(await _getOwnerAndApplicantDetails(request))
+    ...(await _getOwnerAndApplicantDetails(request)),
+    [DataVerseFieldName.MANUALLY_CREATED]: false
   }
 }
 

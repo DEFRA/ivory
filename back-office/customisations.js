@@ -221,7 +221,7 @@ this.formOnLoad = async (executionContext, section) => {
 
 this.prescribedInstituteFormOnLoad = executionContext => {
   'use strict';
-   
+
   const formContext = executionContext.getFormContext();
 
   const currentUserRoles = Xrm.Utility.getGlobalContext().userSettings.roles
@@ -710,14 +710,18 @@ this._setAllFieldsToReadOnly = async (formContext) => {
     DataVerseFieldName.DATE_OF_PI_RESPONSE,
     DataVerseFieldName.DATE_RECOMMENDATION_RECEIVED,
     DataVerseFieldName.DATE_SENT_TO_PI,
-    DataVerseFieldName.MANUALLY_CREATED,
     DataVerseFieldName.OWNER,
     DataVerseFieldName.PI_ASSIGNMENT_NOTES,
     DataVerseFieldName.PI_LINK_EXPIRY,
     DataVerseFieldName.PRESCRIBED_INSTITUTE,
     DataVerseFieldName.STATE_CODE,
     DataVerseFieldName.STATUS,
-    DataVerseFieldName.TARGET_COMPLETION_DATE
+    DataVerseFieldName.TARGET_COMPLETION_DATE,
+
+    // In future these two fields will be made read-only if the record
+    // was not manually created i.e. removed from this list
+    DataVerseFieldName.CONSENT_TO_SHARE_INFORMATION,
+    DataVerseFieldName.MANUALLY_CREATED
   ];
 
   formControls.forEach(control => {

@@ -100,6 +100,7 @@ const DataVerseFieldName = {
   INTENTION: 'cre2c_intention',
   HAS_DISTINGUISHING_FEATURES: 'cre2c_hasuniquefeatures',
   ITEM_SUMMARY: 'cre2c_itemsummary',
+  MANUALLY_CREATED: 'cre2c_manuallycreated',
   NAME: 'cre2c_name',
   OWNED_BY_APPLICANT: 'cre2c_ownedbyapplicant',
   OWNER_ADDRESS: 'cre2c_owneraddress',
