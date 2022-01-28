@@ -112,13 +112,17 @@ module.exports = [
 ]
 
 const _createSection2Body = async (request, itemType, itemDescription) => {
-  const [targetCompletionDate, submissionReference, whyRmi] = await Promise.all(
-    [
-      RedisService.get(request, RedisKeys.TARGET_COMPLETION_DATE),
-      RedisService.get(request, RedisKeys.SUBMISSION_REFERENCE),
-      RedisService.get(request, RedisKeys.WHY_IS_ITEM_RMI)
-    ]
-  )
+  const [
+    targetCompletionDate,
+    submissionReference,
+    whyRmi,
+    consentToShareInformation
+  ] = await Promise.all([
+    RedisService.get(request, RedisKeys.TARGET_COMPLETION_DATE),
+    RedisService.get(request, RedisKeys.SUBMISSION_REFERENCE),
+    RedisService.get(request, RedisKeys.WHY_IS_ITEM_RMI),
+    RedisService.get(request, RedisKeys.SHARE_DETAILS_OF_ITEM)
+  ])
 
   return {
     ...(await _getCommonFields(request, itemDescription)),
@@ -130,6 +134,8 @@ const _createSection2Body = async (request, itemType, itemDescription) => {
     [DataVerseFieldName.WHERE_IT_WAS_MADE]: itemDescription.whereMade,
     [DataVerseFieldName.WHEN_IT_WAS_MADE]: itemDescription.whenMade,
     [DataVerseFieldName.WHY_OUTSTANDINLY_VALUABLE]: whyRmi,
+    [DataVerseFieldName.CONSENT_TO_SHARE_INFORMATION]:
+      consentToShareInformation === Options.YES,
     ...(await _getPreviousSubmission(request))
   }
 }
@@ -234,14 +240,12 @@ const _getOwnerAndApplicantDetails = async request => {
     [DataVerseFieldName.OWNER_EMAIL]: ownerContactDetails
       ? ownerContactDetails.emailAddress
       : null,
-    [DataVerseFieldName.OWNER_ADDRESS]: _formatAddress(
-      ownerAddress,
-      ownerAddressInternational
-    ),
-    [DataVerseFieldName.OWNER_POSTCODE]: _getPostcode(
-      ownerAddress,
-      ownerAddressInternational
-    ),
+    [DataVerseFieldName.OWNER_ADDRESS]: ownerAddress
+      ? _formatAddress(ownerAddress, ownerAddressInternational)
+      : null,
+    [DataVerseFieldName.OWNER_POSTCODE]: ownerAddress
+      ? _getPostcode(ownerAddress, ownerAddressInternational)
+      : null,
     [DataVerseFieldName.APPLICANT_NAME]: applicantContactDetails.fullName,
     [DataVerseFieldName.APPLICANT_EMAIL]: applicantContactDetails.emailAddress,
     [DataVerseFieldName.APPLICANT_ADDRESS]: _formatAddress(

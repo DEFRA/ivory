@@ -47,7 +47,7 @@
       }) %}
 
         {% if helpText %}
-          <p id="helpText" class="govuk-body">{{ helpText }}</p>
+          <p id="helpText" class="govuk-body" aria-describedby="pageTitle">{{ helpText }}</p>
         {% endif %}
 
         {{ govukCheckboxes({
@@ -56,6 +56,7 @@
           hint: {
             text: "Select all that apply"
           },
+          describedBy: "pageTitle",
           errorMessage: fieldErrors['ivoryAge'],
           items: items
         }) }}

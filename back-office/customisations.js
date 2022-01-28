@@ -15,16 +15,18 @@ const DataVerseFieldName = {
   ASSESSMENT_SUPPORTING_EVIDENCE: 'cre2c_assessmentsupportingevidence',
   CAPACITY_OTHER: 'cre2c_capacityother',
   CAPACITY: 'cre2c_capacity',
+  CERTIFICATE: 'cre2c_certificate',
   CERTIFICATE_ISSUE_DATE: 'cre2c_certificateissuedate',
   CERTIFICATE_KEY: 'cre2c_certificatekey',
   CERTIFICATE_LINK_EXPIRY: 'cre2c_certificatelinkexpiry',
   CERTIFICATE_LINK: 'cre2c_certificatelink',
   CERTIFICATE_NUMBER: 'cre2c_certificatenumber',
-  CERTIFICATE: 'cre2c_certificate',
+  CONSENT_TO_SHARE_INFORMATION: 'cre2c_consenttoshareinformation',
   DATE_COI_SENT_TO_PI: 'cre2c_datecoisenttopi',
   DATE_DETAILS_SENT_TO_PI: 'cre2c_datedetailsdenttopi',
   DATE_OF_PI_RESPONSE: 'cre2c_dateofpiresponse',
   DATE_RECOMMENDATION_RECEIVED: 'cre2c_daterecommendationreceived',
+  DATE_STATUS_APPLIED: 'cre2c_datestatusapplied',
   DATE_SENT_TO_PI: 'cre2c_datedetailssenttopi',
   DATE_STATUS_APPLIED: 'cre2c_datestatusapplied',
   DISTINGUISHING_FEATURES: 'cre2c_uniquefeatures',
@@ -100,7 +102,6 @@ const ExemptionTypeLookup = {
 const IvoryVolumeLookup = {
   CLEAR_FROM_LOOKING_AT_IT: 881990000,
   MEASURED_IT: 881990001,
-  WRITTEN_VERIFICATION: 881990002,
   OTHER_REASON: 881990003
 };
 

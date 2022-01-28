@@ -47,10 +47,12 @@ const schema = joi.object().keys({
     .string()
     .default('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
   govNotifyKey: joi.string(),
-  govNotifyTemplateIdConfirmSection2: joi.string(),
-  govNotifyTemplateIdConfirmSection2Reselling: joi.string(),
-  govNotifyTemplateIdConfirmSection10: joi.string(),
-  govNotifyTemplateIdEmailToOwnerSection10: joi.string(),
+  govNotifyTemplateSection10ApplicantConfirmation: joi.string(),
+  govNotifyTemplateSection10OwnerConfirmation: joi.string(),
+  govNotifyTemplateSection2ApplicantConfirmation: joi.string(),
+  govNotifyTemplateSection2OwnerEmailThirdParty: joi.string(),
+  govNotifyTemplateSection2OwnerEmailThirdPartyResale: joi.string(),
+  govNotifyTemplateSection2ResaleApplicantConfirmation: joi.string(),
   paymentUrl: joi.string().default(defaultUrl),
   paymentApiKey: joi.string(),
   paymentAmountBandA: joi.number().default(2000),
@@ -91,14 +93,18 @@ const config = {
   cookieTimeout: process.env.COOKIE_TIMEOUT,
   cookieValidationPassword: process.env.COOKIE_VALIDATION_PASSWORD,
   govNotifyKey: process.env.GOV_NOTIFY_KEY,
-  govNotifyTemplateIdConfirmSection2:
-    process.env.GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_2,
-  govNotifyTemplateIdConfirmSection2Reselling:
-    process.env.GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_2_RESELLING,
-  govNotifyTemplateIdConfirmSection10:
-    process.env.GOV_NOTIFY_TEMPLATE_ID_CONFIRM_SECTION_10,
-  govNotifyTemplateIdEmailToOwnerSection10:
-    process.env.GOV_NOTIFY_TEMPLATE_ID_EMAIL_TO_OWNER_SECTION_10,
+  govNotifyTemplateSection10ApplicantConfirmation:
+    process.env.GOV_NOTIFY_TEMPLATE_SECTION_10_APPLICANT_CONFIRMATION,
+  govNotifyTemplateSection10OwnerConfirmation:
+    process.env.GOV_NOTIFY_TEMPLATE_SECTION_10_OWNER_CONFIRMATION,
+  govNotifyTemplateSection2ApplicantConfirmation:
+    process.env.GOV_NOTIFY_TEMPLATE_SECTION_2_APPLICANT_CONFIRMATION,
+  govNotifyTemplateSection2OwnerEmailThirdParty:
+    process.env.GOV_NOTIFY_TEMPLATE_SECTION_2_OWNER_EMAIL_THIRD_PARTY,
+  govNotifyTemplateSection2OwnerEmailThirdPartyResale:
+    process.env.GOV_NOTIFY_TEMPLATE_SECTION_2_OWNER_EMAIL_THIRD_PARTY_RESALE,
+  govNotifyTemplateSection2ResaleApplicantConfirmation:
+    process.env.GOV_NOTIFY_TEMPLATE_SECTION_2_RESALE_APPLICANT_CONFIRMATION,
   paymentUrl: process.env.PAYMENT_URL,
   paymentApiKey: process.env.PAYMENT_API_KEY,
   paymentAmountBandA: process.env.PAYMENT_AMOUNT_BAND_A,
