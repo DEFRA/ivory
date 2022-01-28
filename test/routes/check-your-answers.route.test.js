@@ -62,13 +62,14 @@ const elementIds = {
   legalAssertionsAdditional1: 'legalAssertionsAdditional1',
   somethingWrongWithCertificate: 'somethingWrongWithCertificate',
   agree: 'agree',
-  agreeAndSubmit: 'agreeAndSubmit'
+  callToAction: 'callToAction'
 }
 
 describe('/check-your-answers route', () => {
   let server
   const url = '/check-your-answers'
-  const nextUrl = '/make-payment'
+  const nextUrlMakePayment = '/make-payment'
+  const nextUrlShareDetailsOfItem = '/share-details-of-item'
 
   let document
 
@@ -108,12 +109,6 @@ describe('/check-your-answers route', () => {
         const element = document.querySelector(`#${elementIds.pageTitle}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual('Check your answers')
-      })
-
-      it('should have the correct Call to Action button', () => {
-        const element = document.querySelector(`#${elementIds.agreeAndSubmit}`)
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('Agree and submit')
       })
     })
 
@@ -991,6 +986,26 @@ describe('/check-your-answers route', () => {
         })
       })
     })
+
+    describe('GET: Call to action button', () => {
+      it('should have the correct Call to Action button for Section 2 application', async () => {
+        _createMocks(ItemType.HIGH_VALUE)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+
+        const element = document.querySelector(`#${elementIds.callToAction}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Agree and continue')
+      })
+
+      it('should have the correct Call to Action button for Section 10 registration', async () => {
+        _createMocks(ItemType.MUSICAL)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+
+        const element = document.querySelector(`#${elementIds.callToAction}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual('Agree and submit')
+      })
+    })
   })
 
   describe('POST', () => {
@@ -1009,10 +1024,18 @@ describe('/check-your-answers route', () => {
         postOptions.payload.agree = 'agree'
       })
 
-      it('should progress to the next route', async () => {
+      it('should progress to the correct route - Section 2', async () => {
+        _createMocks(ItemType.HIGH_VALUE)
         const response = await TestHelper.submitPostRequest(server, postOptions)
 
-        expect(response.headers.location).toEqual(nextUrl)
+        expect(response.headers.location).toEqual(nextUrlShareDetailsOfItem)
+      })
+
+      it('should progress to the correct route - Section 10', async () => {
+        _createMocks(ItemType.MUSICAL)
+        const response = await TestHelper.submitPostRequest(server, postOptions)
+
+        expect(response.headers.location).toEqual(nextUrlMakePayment)
       })
     })
 

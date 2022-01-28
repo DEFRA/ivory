@@ -128,7 +128,8 @@ const entity = {
   cre2c_photo2id: null,
   cre2c_dateofpiresponse: null,
   cre2c_assessmentsupportingevidence: null,
-  cre2c_photo2: null
+  cre2c_photo2: null,
+  cre2c_consenttoshareinformation: true
 }
 
 module.exports = entity

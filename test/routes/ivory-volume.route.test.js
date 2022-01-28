@@ -21,7 +21,6 @@ describe('/ivory-volume route', () => {
     ivoryVolume: 'ivoryVolume',
     ivoryVolume2: 'ivoryVolume-2',
     ivoryVolume3: 'ivoryVolume-3',
-    ivoryVolume4: 'ivoryVolume-4',
     otherReason: 'otherReason',
     continue: 'continue'
   }
@@ -110,13 +109,6 @@ describe('/ivory-volume route', () => {
         TestHelper.checkRadioOption(
           document,
           elementIds.ivoryVolume3,
-          'I have written verification from a relevant expert',
-          'I have written verification from a relevant expert'
-        )
-
-        TestHelper.checkRadioOption(
-          document,
-          elementIds.ivoryVolume4,
           other,
           other
         )
@@ -190,16 +182,7 @@ describe('/ivory-volume route', () => {
         )
       })
 
-      it('should store the value in Redis and progress to the next route when the third option has been selected', async () => {
-        await _checkSelectedRadioAction(
-          postOptions,
-          server,
-          'I have written verification from a relevant expert',
-          nextUrl
-        )
-      })
-
-      it('should store the value in Redis and progress to the next route when the fourth option has been selected & Other text added', async () => {
+      it('should store the value in Redis and progress to the next route when the third option has been selected & Other text added', async () => {
         postOptions.payload.otherReason = 'some text'
         await _checkSelectedRadioAction(
           postOptions,

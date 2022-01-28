@@ -78,7 +78,6 @@ const IvoryIntegralLookup = {
 const IvoryVolumeLookup = {
   [IvoryVolumeReasons.CLEAR_FROM_LOOKING_AT_IT]: 881990000,
   [IvoryVolumeReasons.MEASURED_IT]: 881990001,
-  [IvoryVolumeReasons.WRITTEN_VERIFICATION]: 881990002,
   [IvoryVolumeReasons.OTHER_REASON]: 881990003
 }
 
