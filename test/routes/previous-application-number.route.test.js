@@ -18,7 +18,7 @@ describe('/previous-application-number route', () => {
     para1: 'para1',
     para2: 'para2',
     continue: 'continue',
-    callOutText: "callOutText"
+    callOutText: 'callOutText'
   }
 
   let document
