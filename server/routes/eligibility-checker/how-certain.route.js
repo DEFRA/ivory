@@ -1,5 +1,7 @@
 'use strict'
 
+const RandomString = require('randomstring')
+
 const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
 
@@ -48,6 +50,14 @@ const handlers = {
         .code(400)
     }
 
+    const submissionReference = _generateSubmissionReference()
+
+    await RedisService.set(
+      request,
+      RedisKeys.SUBMISSION_REFERENCE,
+      submissionReference
+    )
+
     await RedisService.set(
       request,
       RedisKeys.USED_CHECKER,
@@ -87,6 +97,19 @@ const _validateForm = payload => {
     })
   }
   return errors
+}
+
+/**
+ * Generates a random 8 character uppercase alphanumeric reference
+ * @returns Reference
+ */
+const _generateSubmissionReference = () => {
+  return RandomString.generate({
+    length: 8,
+    readable: true,
+    charset: 'alphanumeric',
+    capitalization: 'uppercase'
+  })
 }
 
 module.exports = [
