@@ -192,6 +192,33 @@ describe('OData service', () => {
       expect(result.length).toEqual(0)
       expect(result).toEqual([])
     })
+
+    it('should replace unsafe character +', async () => {
+      const certificateNumber = 'ABC-+'
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)
+
+      const result = await ODataService.getRecordsWithCertificateNumber(
+        certificateNumber
+      )
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
+      expect(result.length).toEqual(1)
+      expect(result[0]).toEqual({ cre2c_certificatenumber: 'ABC-%2B' })
+    })
+    it('should replace unsafe character #', async () => {
+      const certificateNumber = 'ABC-#'
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)
+
+      const result = await ODataService.getRecordsWithCertificateNumber(
+        certificateNumber
+      )
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
+      expect(result.length).toEqual(1)
+      expect(result[0]).toEqual({ cre2c_certificatenumber: 'ABC-%23' })
+    })
   })
 })
 
@@ -243,6 +270,14 @@ const _createMocks = () => {
       `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases?$filter=cre2c_certificatenumber eq 'ABC-123'`
     )
     .reply(200, { value: [{ cre2c_certificatenumber: 'ABC-123' }] })
+    .get(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases?$filter=cre2c_certificatenumber eq 'ABC-%2B'`
+    )
+    .reply(200, { value: [{ cre2c_certificatenumber: 'ABC-%2B' }] })
+    .get(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases?$filter=cre2c_certificatenumber eq 'ABC-%23'`
+    )
+    .reply(200, { value: [{ cre2c_certificatenumber: 'ABC-%23' }] })
     .get(
       `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases?$filter=cre2c_certificatenumber eq 'ABC-XXX'`
     )

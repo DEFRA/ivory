@@ -28,12 +28,33 @@ const PREFER = 'Prefer'
 const ODATA_VERSION_NUMBER = '4.0'
 const PREFER_REPRESENTATION = 'return=representation'
 
+const _replaceUnsafeCharacters = certificateNumber => {
+  return certificateNumber
+    ? certificateNumber
+        .replaceAll('%', '%25')
+        .replaceAll('+', '%2B')
+        .replaceAll('&', '%26')
+        .replaceAll('#', '%23')
+        .replaceAll('|', '')
+        .replaceAll('<', '')
+        .replaceAll('>', '')
+        .replaceAll('^', '')
+        .replaceAll('\\', '')
+        .replaceAll('{', '')
+        .replaceAll('}', '')
+        .replaceAll('[', '')
+        .replaceAll(']', '')
+        .replaceAll('\'', '\'\'')
+    : ''
+}
+
 module.exports = class ODataService {
   /**
    * Validates a certificate number.
    * @param {*} certificateNumber
    * @returns Section 2 records which have the certificate number
    */
+
   static async getRecordsWithCertificateNumber (certificateNumber) {
     const token = await ActiveDirectoryAuthService.getToken()
     const headers = {
@@ -45,8 +66,7 @@ module.exports = class ODataService {
     }
 
     const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
-    const url = `${apiEndpoint}/${SECTION_2_ENDPOINT}?$filter=cre2c_certificatenumber eq '${certificateNumber}'`
-
+    const url = `${apiEndpoint}/${SECTION_2_ENDPOINT}?$filter=cre2c_certificatenumber eq '${_replaceUnsafeCharacters(certificateNumber)}'`
     console.log(`Fetching URL: [${url}]`)
 
     const response = await fetch(url, {
