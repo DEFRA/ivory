@@ -77,7 +77,7 @@ describe('/make-payment route', () => {
         false
       )
 
-      expect(RedisService.get).toBeCalledTimes(3)
+      expect(RedisService.get).toBeCalledTimes(4)
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
@@ -94,19 +94,13 @@ describe('/make-payment route', () => {
         RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
       )
 
-      expect(RedisService.set).toBeCalledTimes(3)
+      expect(RedisService.set).toBeCalledTimes(2)
 
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
         RedisKeys.SUBMISSION_DATE,
         // TODO - mock current time
         expect.any(String)
-      )
-
-      expect(RedisService.set).toBeCalledWith(
-        expect.any(Object),
-        RedisKeys.SUBMISSION_REFERENCE,
-        paymentReference
       )
 
       expect(RedisService.set).toBeCalledWith(
@@ -140,7 +134,7 @@ describe('/make-payment route', () => {
         false
       )
 
-      expect(RedisService.get).toBeCalledTimes(4)
+      expect(RedisService.get).toBeCalledTimes(5)
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
@@ -159,10 +153,15 @@ describe('/make-payment route', () => {
 
       expect(RedisService.get).toBeCalledWith(
         expect.any(Object),
+        RedisKeys.SUBMISSION_REFERENCE
+      )
+
+      expect(RedisService.get).toBeCalledWith(
+        expect.any(Object),
         RedisKeys.APPLICANT_CONTACT_DETAILS
       )
 
-      expect(RedisService.set).toBeCalledTimes(4)
+      expect(RedisService.set).toBeCalledTimes(3)
 
       expect(RedisService.set).toBeCalledWith(
         expect.any(Object),
@@ -176,12 +175,6 @@ describe('/make-payment route', () => {
         RedisKeys.TARGET_COMPLETION_DATE,
         // TODO - mock current time
         expect.any(String)
-      )
-
-      expect(RedisService.set).toBeCalledWith(
-        expect.any(Object),
-        RedisKeys.SUBMISSION_REFERENCE,
-        paymentReference
       )
 
       expect(RedisService.set).toBeCalledWith(

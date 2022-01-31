@@ -1,7 +1,5 @@
 'use strict'
 
-const RandomString = require('randomstring')
-
 // TODO IVORY-557
 // const AnalyticsService = require('../services/analytics.service')
 const PaymentService = require('../services/payment.service')
@@ -16,21 +14,20 @@ const handlers = {
   get: async (request, h) => {
     const isSection2 = await RedisHelper.isSection2(request)
 
-    const amount = parseInt(
-      await RedisService.get(request, RedisKeys.PAYMENT_AMOUNT)
-    )
-
-    const submissionReference = _generateSubmissionReference()
-
-    const description = await _getPaymentDescription(request, isSection2)
-
-    const applicantContactDetails = await RedisService.get(
-      request,
-      RedisKeys.APPLICANT_CONTACT_DETAILS
-    )
+    const [
+      amount,
+      submissionReference,
+      description,
+      applicantContactDetails
+    ] = await Promise.all([
+      RedisService.get(request, RedisKeys.PAYMENT_AMOUNT),
+      RedisService.get(request, RedisKeys.SUBMISSION_REFERENCE),
+      _getPaymentDescription(request, isSection2),
+      RedisService.get(request, RedisKeys.APPLICANT_CONTACT_DETAILS)
+    ])
 
     const response = await PaymentService.makePayment(
-      amount,
+      parseInt(amount),
       submissionReference,
       description,
       applicantContactDetails.emailAddress
@@ -56,12 +53,6 @@ const handlers = {
       )
     }
 
-    await RedisService.set(
-      request,
-      RedisKeys.SUBMISSION_REFERENCE,
-      submissionReference
-    )
-
     await RedisService.set(request, RedisKeys.PAYMENT_ID, response.payment_id)
 
     console.log(response)
@@ -84,19 +75,6 @@ const _getPaymentDescription = async (request, isSection2) => {
   }
 
   return paymentDescription
-}
-
-/**
- * Generates a random 8 character uppercase alphanumeric reference
- * @returns Reference
- */
-const _generateSubmissionReference = () => {
-  return RandomString.generate({
-    length: 8,
-    readable: true,
-    charset: 'alphanumeric',
-    capitalization: 'uppercase'
-  })
 }
 
 module.exports = [
