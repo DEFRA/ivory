@@ -101,7 +101,7 @@ describe('/who-owns-the-item route', () => {
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'photographs of the item'
+        'photographs of the item declared in your application'
       )
 
       element = document.querySelector(
