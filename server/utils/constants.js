@@ -33,12 +33,6 @@ const CharacterLimits = {
   Textarea: 100000
 }
 
-const EmailTypes = {
-  CONFIRMATION_EMAIL: 'confirmation-email',
-  CONFIRMATION_EMAIL_RESELLING: 'confirmation-email-reselling',
-  EMAIL_TO_OWNER: 'email-to-owner'
-}
-
 const Options = {
   YES: 'Yes',
   NO: 'No',
@@ -101,6 +95,7 @@ const DataVerseFieldName = {
   CERTIFICATE_LINK: 'cre2c_certificatelink',
   CERTIFICATE_LINK_EXPIRY: 'cre2c_certificatelinkexpiry',
   CERTIFICATE_NUMBER: 'cre2c_certificatenumber',
+  CONSENT_TO_SHARE_INFORMATION: 'cre2c_consenttoshareinformation',
   DATE_STATUS_APPLIED: 'cre2c_datestatusapplied',
   DISTINGUISHING_FEATURES: 'cre2c_uniquefeatures',
   EXEMPTION_CATEGORY: 'cre2c_exemptioncategory',
@@ -108,6 +103,7 @@ const DataVerseFieldName = {
   INTENTION: 'cre2c_intention',
   HAS_DISTINGUISHING_FEATURES: 'cre2c_hasuniquefeatures',
   ITEM_SUMMARY: 'cre2c_itemsummary',
+  MANUALLY_CREATED: 'cre2c_manuallycreated',
   NAME: 'cre2c_name',
   OWNED_BY_APPLICANT: 'cre2c_ownedbyapplicant',
   OWNER_ADDRESS: 'cre2c_owneraddress',
@@ -207,7 +203,6 @@ const IvoryIntegralReasons = {
 const IvoryVolumeReasons = {
   CLEAR_FROM_LOOKING_AT_IT: 'It’s clear from looking at it',
   MEASURED_IT: 'I measured it',
-  WRITTEN_VERIFICATION: 'I have written verification from a relevant expert',
   OTHER_REASON: 'Other reason'
 }
 
@@ -290,6 +285,7 @@ const Paths = {
   SERVICE_STATUS: '/service-status',
   SERVICE_UNAVAILABLE: '/errors/service-unavailable',
   SESSION_TIMED_OUT: '/errors/session-timed-out',
+  SHARE_DETAILS_OF_ITEM: '/share-details-of-item',
   TAKEN_FROM_ELEPHANT: '/eligibility-checker/taken-from-elephant',
   UPLOAD_DOCUMENT: '/upload-document',
   UPLOAD_PHOTO: '/upload-photo',
@@ -354,6 +350,7 @@ const Views = {
   SERVICE_STATUS: 'service-status',
   SERVICE_UNAVAILABLE: 'errors/service-unavailable',
   SESSION_TIMED_OUT: 'errors/session-timed-out',
+  SHARE_DETAILS_OF_ITEM: 'share-details-of-item',
   TAKEN_FROM_ELEPHANT: 'eligibility-checker/taken-from-elephant',
   UPLOAD_DOCUMENT: 'upload-document',
   UPLOAD_PHOTO: 'upload-photo',
@@ -381,8 +378,6 @@ const RedisKeys = {
   ARE_YOU_A_MUSEUM: 'eligibility-checker.are-you-a-museum',
   CONTAIN_ELEPHANT_IVORY: 'eligibility-checker.contain-elephant-ivory',
   DESCRIBE_THE_ITEM: 'describe-the-item',
-  EMAIL_CONFIRMATION_SENT: 'email-confirmation-sent',
-  EMAIL_TO_OWNER_SENT: 'email-to-owner-sent',
   INTENTION_FOR_ITEM: 'intention-for-item',
   IVORY_AGE: 'ivory-age',
   IVORY_INTEGRAL: 'ivory-integral',
@@ -396,6 +391,7 @@ const RedisKeys = {
   PREVIOUS_APPLICATION_NUMBER: 'previous-application-number',
   REVOKED_CERTIFICATE: 'revoked-certificate',
   SELLING_ON_BEHALF_OF: 'selling-on-behalf-of',
+  SHARE_DETAILS_OF_ITEM: 'share-details-of-item',
   SUBMISSION_DATE: 'submission-date',
   SUBMISSION_REFERENCE: 'submission-reference',
   TARGET_COMPLETION_DATE: 'target-completion-date',
@@ -435,7 +431,6 @@ module.exports = Object.freeze({
   CharacterLimits,
   DataVerseFieldName,
   DownloadReason,
-  EmailTypes,
   HOME_URL,
   Intention,
   ItemType,

@@ -6,11 +6,11 @@ const PaymentService = require('../services/payment.service')
 const RedisHelper = require('../services/redis-helper.service')
 const RedisService = require('../services/redis.service')
 const {
-  EmailTypes,
   DEFRA_IVORY_SESSION_KEY,
-  Options
+  Options,
+  ItemType
 } = require('../utils/constants')
-
+const config = require('../utils/config')
 const {
   Analytics,
   Paths,
@@ -25,40 +25,23 @@ const SLA = 35
 const handlers = {
   get: async (request, h) => {
     const itemType = await RedisHelper.getItemType(request)
-    const isSection2 = await RedisHelper.isSection2(request, itemType)
 
     const isAlreadyCertified = await RedisHelper.isAlreadyCertified(request)
 
     const isOwnedByApplicant = await RedisHelper.isOwnedByApplicant(request)
-
-    const ownerContactDetails = await RedisService.get(
-      request,
-      RedisKeys.OWNER_CONTACT_DETAILS
-    )
-
-    const hasOwnerEmail =
-      ownerContactDetails && ownerContactDetails.hasEmailAddress === Options.YES
 
     const paymentFailedRoute = await _checkPaymentState(request)
     if (paymentFailedRoute) {
       return h.redirect(paymentFailedRoute)
     }
 
-    const context = await _getContext(request, isSection2, isOwnedByApplicant)
+    const context = await _getContext(request, itemType, isOwnedByApplicant)
 
     if (!context.applicantContactDetails) {
       return h.redirect(Paths.SESSION_TIMED_OUT)
     }
 
-    _sendEmails(
-      request,
-      context,
-      itemType,
-      isSection2,
-      isOwnedByApplicant,
-      isAlreadyCertified,
-      hasOwnerEmail
-    )
+    _sendEmails(context, isOwnedByApplicant, isAlreadyCertified)
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.SERVICE_COMPLETE,
@@ -74,46 +57,9 @@ const handlers = {
   }
 }
 
-const _checkPaymentState = async request => {
-  const paymentId = await RedisService.get(request, RedisKeys.PAYMENT_ID)
+const _getContext = async (request, itemType, ownedByApplicant) => {
+  const isSection2 = itemType === ItemType.HIGH_VALUE
 
-  const payment = await PaymentService.lookupPayment(paymentId)
-
-  let paymentFailedRoute = null
-
-  if (_paymentCancelled(payment.state)) {
-    paymentFailedRoute = Paths.CHECK_YOUR_ANSWERS
-  } else if (_paymentFailed(payment.state)) {
-    paymentFailedRoute = Paths.MAKE_PAYMENT
-  } else if (_paymentError(payment.state)) {
-    paymentFailedRoute = Paths.CHECK_YOUR_ANSWERS
-  }
-
-  return paymentFailedRoute
-}
-
-const _sendEmails = (
-  request,
-  context,
-  itemType,
-  isSection2,
-  isOwnedByApplicant,
-  isAlreadyCertified,
-  hasOwnerEmail
-) => {
-  const emailType =
-    isSection2 && isAlreadyCertified
-      ? EmailTypes.CONFIRMATION_EMAIL_RESELLING
-      : EmailTypes.CONFIRMATION_EMAIL
-
-  _sendEmail(request, context, emailType, itemType, isSection2)
-
-  if (!isOwnedByApplicant && !isSection2 && hasOwnerEmail) {
-    _sendEmail(request, context, EmailTypes.EMAIL_TO_OWNER, itemType)
-  }
-}
-
-const _getContext = async (request, isSection2, ownedByApplicant) => {
   const submissionReference = await RedisService.get(
     request,
     RedisKeys.SUBMISSION_REFERENCE
@@ -139,6 +85,7 @@ const _getContext = async (request, isSection2, ownedByApplicant) => {
     isSection2 && isAlreadyCertified ? alreadyCertified.certificateNumber : null
 
   return {
+    itemType,
     isAlreadyCertified,
     ownerContactDetails,
     applicantContactDetails,
@@ -222,6 +169,143 @@ const _getNextSteps = (isSection2, isAlreadyCertified) => {
   return helpText
 }
 
+const _checkPaymentState = async request => {
+  const paymentId = await RedisService.get(request, RedisKeys.PAYMENT_ID)
+
+  const payment = await PaymentService.lookupPayment(paymentId)
+
+  let paymentFailedRoute = null
+
+  if (_paymentCancelled(payment.state)) {
+    paymentFailedRoute = Paths.CHECK_YOUR_ANSWERS
+  } else if (_paymentFailed(payment.state)) {
+    paymentFailedRoute = Paths.MAKE_PAYMENT
+  } else if (_paymentError(payment.state)) {
+    paymentFailedRoute = Paths.CHECK_YOUR_ANSWERS
+  }
+
+  return paymentFailedRoute
+}
+
+const _sendEmails = (context, isOwnedByApplicant, isAlreadyCertified) => {
+  const isSection2 = context.itemType === ItemType.HIGH_VALUE
+
+  isSection2
+    ? _sendSection2Emails(context, isOwnedByApplicant, isAlreadyCertified)
+    : _sendSection10Emails(context, isOwnedByApplicant)
+}
+
+const _sendSection2Emails = (
+  context,
+  isOwnedByApplicant,
+  isAlreadyCertified
+) => {
+  if (isAlreadyCertified) {
+    _sendSection2ResaleApplicantEmail(context)
+  } else {
+    _sendSection2ApplicantEmail(context)
+  }
+
+  const hasOwnerEmail =
+    context.ownerContactDetails &&
+    context.ownerContactDetails.hasEmailAddress === Options.YES
+
+  if (!isOwnedByApplicant && hasOwnerEmail) {
+    if (isAlreadyCertified) {
+      _sendSection2OwnerEmailThirdPartyResale(context)
+    } else {
+      _sendSection2OwnerEmailThirdParty(context)
+    }
+  }
+}
+
+const _sendSection10Emails = (context, isOwnedByApplicant) => {
+  _sendSection10ApplicantEmail(context)
+
+  if (!isOwnedByApplicant) {
+    const hasOwnerEmail =
+      context.ownerContactDetails &&
+      context.ownerContactDetails.hasEmailAddress === Options.YES
+
+    if (hasOwnerEmail) {
+      _sendSection10OwnerEmail(context)
+    }
+  }
+}
+
+const _sendSection2ApplicantEmail = context => {
+  const templateId = config.govNotifyTemplateSection2ApplicantConfirmation
+  const recipientEmail = context.applicantContactDetails.emailAddress
+  const payload = {
+    submissionReference: context.submissionReference,
+    fullName: context.applicantContactDetails.fullName
+  }
+
+  _sendEmail(templateId, recipientEmail, payload)
+}
+
+const _sendSection2ResaleApplicantEmail = context => {
+  const templateId = config.govNotifyTemplateSection2ResaleApplicantConfirmation
+  const recipientEmail = context.applicantContactDetails.emailAddress
+  const payload = {
+    fullName: context.applicantContactDetails.fullName,
+    certificateNumber: context.certificateNumber
+  }
+
+  _sendEmail(templateId, recipientEmail, payload)
+}
+
+const _sendSection2OwnerEmailThirdParty = context => {
+  const templateId = config.govNotifyTemplateSection2OwnerEmailThirdParty
+  const recipientEmail = context.ownerContactDetails.emailAddress
+  const payload = {
+    submissionReference: context.submissionReference,
+    fullName: context.ownerContactDetails.fullName
+  }
+
+  _sendEmail(templateId, recipientEmail, payload)
+}
+
+const _sendSection2OwnerEmailThirdPartyResale = context => {
+  const templateId = config.govNotifyTemplateSection2OwnerEmailThirdPartyResale
+  const recipientEmail = context.ownerContactDetails.emailAddress
+  const payload = {
+    fullName: context.ownerContactDetails.fullName,
+    certificateNumber: context.certificateNumber
+  }
+
+  _sendEmail(templateId, recipientEmail, payload)
+}
+
+const _sendSection10ApplicantEmail = context => {
+  const templateId = config.govNotifyTemplateSection10ApplicantConfirmation
+  const recipientEmail = context.applicantContactDetails.emailAddress
+  const payload = {
+    submissionReference: context.submissionReference,
+    fullName: context.applicantContactDetails.fullName,
+    exemptionType: context.itemType,
+    isMuseum: context.itemType === ItemType.MUSEUM
+  }
+
+  _sendEmail(templateId, recipientEmail, payload)
+}
+
+const _sendSection10OwnerEmail = context => {
+  const templateId = config.govNotifyTemplateSection10OwnerConfirmation
+  const recipientEmail = context.ownerContactDetails.emailAddress
+  const payload = {
+    submissionReference: context.submissionReference,
+    fullName: context.ownerContactDetails.fullName,
+    exemptionType: context.itemType
+  }
+
+  _sendEmail(templateId, recipientEmail, payload)
+}
+
+const _sendEmail = async (templateId, recipientEmail, payload) => {
+  await NotificationService.sendEmail(templateId, recipientEmail, payload)
+}
+
 const _paymentCancelled = state =>
   state &&
   state.status &&
@@ -233,57 +317,6 @@ const _paymentFailed = state =>
 
 const _paymentError = state =>
   state && state.status && state.status === PaymentResult.ERROR
-
-const _sendEmail = async (
-  request,
-  context,
-  emailType,
-  itemType,
-  isSection2
-) => {
-  let redisSentEmailKey
-  let fullName
-  let email
-  let certificateNumber
-
-  if (emailType === EmailTypes.CONFIRMATION_EMAIL) {
-    redisSentEmailKey = RedisKeys.EMAIL_CONFIRMATION_SENT
-    fullName = context.applicantContactDetails.fullName
-    email = context.applicantEmail
-  } else if (emailType === EmailTypes.CONFIRMATION_EMAIL_RESELLING) {
-    redisSentEmailKey = RedisKeys.EMAIL_CONFIRMATION_SENT
-    fullName = context.applicantContactDetails.fullName
-    email = context.applicantEmail
-    certificateNumber = context.certificateNumber
-  } else if (emailType === EmailTypes.EMAIL_TO_OWNER) {
-    redisSentEmailKey = RedisKeys.EMAIL_TO_OWNER_SENT
-    fullName = context.ownerContactDetails.fullName
-    email = context.ownerEmail
-  }
-
-  let messageSent = await RedisService.get(
-    request,
-    RedisKeys[redisSentEmailKey]
-  )
-
-  if (!messageSent) {
-    const data = {
-      fullName,
-      certificateNumber,
-      exemptionType: itemType,
-      submissionReference: context.submissionReference
-    }
-
-    messageSent = await NotificationService.sendEmail(
-      emailType,
-      isSection2,
-      email,
-      data
-    )
-
-    await RedisService.set(request, RedisKeys[redisSentEmailKey], messageSent)
-  }
-}
 
 module.exports = [
   {

@@ -59,7 +59,9 @@ const handlers = {
       label: context.pageTitle
     })
 
-    return h.redirect(Paths.MAKE_PAYMENT)
+    return h.redirect(
+      context.isSection2 ? Paths.SHARE_DETAILS_OF_ITEM : Paths.MAKE_PAYMENT
+    )
   }
 }
 
@@ -89,6 +91,10 @@ const _getContext = async request => {
   ])
 
   return {
+    isSection2,
+    isOwnedByApplicant,
+    isMesuem,
+    isAlreadyCertified,
     itemSummary,
     photoSummary,
     itemDescriptionSummary,
@@ -96,11 +102,10 @@ const _getContext = async request => {
     documentSummary,
     saleIntentionSummary,
     ownerSummary,
-    isSection2,
-    isOwnedByApplicant,
-    isMesuem,
-    isAlreadyCertified,
     pageTitle: 'Check your answers',
+    callToActionButtonLabel: isSection2
+      ? 'Agree and continue'
+      : 'Agree and submit',
     legalAssertions: isAlreadyCertified
       ? LEGAL_ASSERTIONS.Section2AlreadyCertified
       : LEGAL_ASSERTIONS[itemType],

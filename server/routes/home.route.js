@@ -9,7 +9,7 @@ const {
 } = require('../utils/constants')
 
 const handlers = {
-  get: (request, h) => {
+  get: async (request, h) => {
     _setCookieSessionId(h)
 
     return h.redirect(Paths.HOW_CERTAIN)

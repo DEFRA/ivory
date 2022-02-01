@@ -31,6 +31,7 @@ describe('/ route', () => {
         getOptions,
         302
       )
+
       expect(response.headers.location).toEqual(nextUrl)
     })
   })

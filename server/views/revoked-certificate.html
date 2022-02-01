@@ -3,6 +3,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% block formContent %}
   <div class="govuk-grid-row">
@@ -10,6 +11,11 @@
     <div class="govuk-grid-column-two-thirds">
 
       <h1 class="govuk-label-wrapper"><label id="pageTitle" class="govuk-label govuk-label--l" for="revokedCertificateNumber">{{ pageTitle }}</label></h1>
+
+      {{ govukInsetText({
+        id: "callOutText",
+        text: "Where we've previously revoked an exemption certificate, it may be less likely that a new application is successful. For example, if you were to resubmit an application with no new information or evidence, it's unlikely it will be successful."
+      }) }}
 
       {{ govukInput({
           hint: {

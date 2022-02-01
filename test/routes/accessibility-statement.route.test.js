@@ -30,9 +30,12 @@ describe('/accessibility-statement', () => {
     'listItem2-2',
     'h3-2a',
     'para1-2a',
-    'h3-2b',
-    'para1-2b',
+    'h3-3b',
+    'para1-3b',
+    'h3-3c',
     'h2-3',
+    'listItem1-3b',
+    'para2-3b',
     'para1-3',
     'h3-3a',
     'para1-3a',
@@ -81,7 +84,7 @@ describe('/accessibility-statement', () => {
       const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Accessibility statement for ‘Declare elephant ivory you intend to sell or hire out’'
+        'Accessibility statement for the Ivory Act 2018, ‘Declare elephant ivory you intend to sell or hire out’'
       )
     })
 
