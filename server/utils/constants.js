@@ -21,6 +21,8 @@ const Analytics = {
     DOCUMENT_REMOVED: 'Document Removed',
     DROPOUT: 'Dropout',
     ENTERED: 'Details entered',
+    PAYMENT_FAILED: 'PAYMENT FAILED',
+    PAYMENT_SUCCESS: 'Payment successful, data saved',
     PHOTO_REMOVED: 'Photo Removed',
     REDIRECT: 'Redirected to:',
     REFERRED: 'Referred by:',

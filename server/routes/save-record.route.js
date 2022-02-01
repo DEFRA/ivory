@@ -41,7 +41,7 @@ const handlers = {
     if (payment.state.status === PaymentResult.SUCCESS) {
       AnalyticsService.sendEvent(request, {
         category: Analytics.Category.PAYMENT,
-        action: 'Payment successful, data saved'
+        action: Analytics.Action.PAYMENT_SUCCESS
       })
 
       if (isAlreadyCertified) {
@@ -58,7 +58,7 @@ const handlers = {
     } else {
       AnalyticsService.sendEvent(request, {
         category: Analytics.Category.PAYMENT,
-        action: 'PAYMENT FAILED'
+        action: Analytics.Action.PAYMENT_FAILED
       })
     }
 
