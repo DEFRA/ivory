@@ -232,6 +232,19 @@ describe('OData service', () => {
       expect(result.length).toEqual(1)
       expect(result[0]).toEqual({ cre2c_certificatenumber: 'ABC-%7C' })
     })
+    it('should replace null', async () => {
+      const certificateNumber = null
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)
+
+      const result = await ODataService.getRecordsWithCertificateNumber(
+        certificateNumber
+      )
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
+      expect(result.length).toEqual(1)
+      expect(result[0]).toEqual({ cre2c_certificatenumber: '' })
+    })
   })
 })
 
@@ -295,6 +308,10 @@ const _createMocks = () => {
       `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases?$filter=cre2c_certificatenumber eq 'ABC-%7C'`
     )
     .reply(200, { value: [{ cre2c_certificatenumber: 'ABC-%7C' }] })
+    .get(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases?$filter=cre2c_certificatenumber eq ''`
+    )
+    .reply(200, { value: [{ cre2c_certificatenumber: '' }] })
     .get(
       `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases?$filter=cre2c_certificatenumber eq 'ABC-XXX'`
     )
