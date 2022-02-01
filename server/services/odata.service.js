@@ -28,26 +28,6 @@ const PREFER = 'Prefer'
 const ODATA_VERSION_NUMBER = '4.0'
 const PREFER_REPRESENTATION = 'return=representation'
 
-const _replaceUnsafeCharacters = certificateNumber => {
-  return certificateNumber
-    ? certificateNumber
-        .replaceAll('%', '%25')
-        .replaceAll('+', '%2B')
-        .replaceAll('&', '%26')
-        .replaceAll('#', '%23')
-        .replaceAll('|', '')
-        .replaceAll('<', '')
-        .replaceAll('>', '')
-        .replaceAll('^', '')
-        .replaceAll('\\', '')
-        .replaceAll('{', '')
-        .replaceAll('}', '')
-        .replaceAll('[', '')
-        .replaceAll(']', '')
-        .replaceAll('\'', '\'\'')
-    : ''
-}
-
 module.exports = class ODataService {
   /**
    * Validates a certificate number.
@@ -299,4 +279,24 @@ const _linkIsExpired = (entity, downloadReason) => {
 
 const _setContentLength = (headers, body) => {
   headers['Content-Length'] = JSON.stringify(body).length
+}
+
+const _replaceUnsafeCharacters = certificateNumber => {
+  return certificateNumber
+    ? certificateNumber
+        .replaceAll('%', '%25')
+        .replaceAll('+', '%2B')
+        .replaceAll('&', '%26')
+        .replaceAll('#', '%23')
+        .replaceAll('|', '%7C')
+        .replaceAll('<', '%3C')
+        .replaceAll('>', '%3E')
+        .replaceAll('^', '%5E')
+        .replaceAll('\\', '%5C')
+        .replaceAll('{', '%7B')
+        .replaceAll('}', '%7D')
+        .replaceAll('[', '%5B')
+        .replaceAll(']', '%5D')
+        .replaceAll("'", "''")
+    : ''
 }
