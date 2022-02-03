@@ -21,6 +21,7 @@ describe('/accessibility-statement', () => {
     'listItem4',
     'listItem5',
     'h2-1',
+    'para1-0',
     'para1-1',
     'listItem1-1',
     'h2-2',
