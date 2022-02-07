@@ -8,6 +8,10 @@ const RedisService = require('../../../server/services/redis.service')
 
 const TestHelper = require('../../utils/test-helper')
 const { RedisKeys } = require('../../../server/utils/constants')
+const config = require('../../../server/utils/config')
+
+const itCitesOnly = () => config.citesEnabled ? it : it.skip
+const itIvoryOnly = () => config.citesEnabled === false ? it : it.skip
 
 describe('/eligibility-checker/how-certain route', () => {
   let server
@@ -22,6 +26,10 @@ describe('/eligibility-checker/how-certain route', () => {
     howCertain: 'howCertain',
     howCertain2: 'howCertain-2',
     continue: 'continue'
+  }
+
+  const elementIdsCites = {
+    help1Cites: 'help1Cites'
   }
   const serviceName = 'Declare elephant ivory you intend to sell or hire out'
 
@@ -53,7 +61,15 @@ describe('/eligibility-checker/how-certain route', () => {
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
 
-    it('should have the Beta banner', () => {
+    itCitesOnly()('should have paragraph help1Cites', () => {
+      const element = document.querySelector(`#${elementIdsCites.help1Cites}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'This text only appears for cites version of service'
+      )
+    })
+
+    itIvoryOnly()('ivory should have the Beta banner', () => {
       TestHelper.checkBetaBanner(document)
     })
 

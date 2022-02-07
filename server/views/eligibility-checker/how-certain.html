@@ -39,6 +39,10 @@
 
   <div class="govuk-grid-row">
 
+  {% if citesEnabled %}
+    <p id="help1Cites" class="govuk-body">This text only appears for cites version of service</p>
+  {% endif %}
+
     <div class="govuk-grid-column-two-thirds">
 
         {{ govukRadios({

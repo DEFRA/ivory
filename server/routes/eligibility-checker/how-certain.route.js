@@ -9,6 +9,7 @@ const { Analytics, Paths, Views, RedisKeys } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const completelyCertain = 'Completely'
+const config = require('../../utils/config')
 
 const handlers = {
   get: (request, h) => {
@@ -83,7 +84,8 @@ const _getContext = request => {
   return {
     pageTitle:
       'How certain are you that your item will qualify for exemption from the ban on dealing in ivory?',
-    hideBanner
+    hideBanner,
+    citesEnabled: config.citesEnabled
   }
 }
 
