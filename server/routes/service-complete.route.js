@@ -49,6 +49,8 @@ const handlers = {
       label: context.pageTitle
     })
 
+    RedisService.deleteSessionData(request)
+
     return h
       .view(Views.SERVICE_COMPLETE, {
         ...context

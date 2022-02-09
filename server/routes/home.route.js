@@ -1,6 +1,7 @@
 'use strict'
 
 const { v4: uuidv4 } = require('uuid')
+const RedisService = require('../services/redis.service')
 
 const {
   HOME_URL,
@@ -10,6 +11,10 @@ const {
 
 const handlers = {
   get: async (request, h) => {
+    const sessionKey = (request.state[DEFRA_IVORY_SESSION_KEY])
+    if (sessionKey) {
+      RedisService.deleteSessionData(request)
+    }
     _setCookieSessionId(h)
 
     return h.redirect(Paths.HOW_CERTAIN)

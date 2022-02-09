@@ -35,4 +35,18 @@ module.exports = class RedisService {
     const keyWithSessionId = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${key}`
     client.del(keyWithSessionId)
   }
+
+  static deleteSessionData (request) {
+    const client = request.redis.client
+    const sessionKey = request.state[DEFRA_IVORY_SESSION_KEY]
+    client.keys(`${sessionKey}*`, function (err, keys) {
+      if (err) {
+        console.error(err)
+      } else {
+        for (let i = 0; i < keys.length; i++) {
+          client.del(keys[i])
+        }
+      }
+    })
+  }
 }
