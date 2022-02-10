@@ -259,7 +259,7 @@ describe('/service-complete route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            `If you have not heard from us within ${SLA} working days, you can contact us at ivory@apha.gov.uk. Make sure you have your submission reference number, so we can find your details.`
+            `If you have not heard from us within ${SLA} working days, you can contact us at IvoryAct@apha.gov.uk. Make sure you have your submission reference number, so we can find your details.`
           )
         })
 
