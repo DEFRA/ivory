@@ -19,7 +19,7 @@ const {
   Views
 } = require('../utils/constants')
 
-const APHA_EMAIL = 'ivory@apha.gov.uk'
+const APHA_EMAIL = 'IvoryAct@apha.gov.uk'
 const SLA = 35
 
 const handlers = {
