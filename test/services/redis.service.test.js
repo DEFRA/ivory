@@ -85,7 +85,7 @@ describe('Redis service', () => {
       _createMocks(mockRedisValue)
     })
 
-    it('should delete a value from Redis', async () => {
+    it('should not delete a value from Redis', async () => {
       expect(mockRequest.redis.client.keys).toBeCalledTimes(0)
       expect(mockRequest.redis.client.del).toBeCalledTimes(0)
 
