@@ -104,7 +104,7 @@ const entity = {
   cre2c_revokedcertificatenumber: null,
   cre2c_photo6id: null,
   cre2c_photo6_timestamp: null,
-  cre2c_previousapplicationnumber: 'PREV-123',
+  cre2c_previousapplicationnumber: '1234567890',
   cre2c_previouscapacityother: null,
   _modifiedonbehalfby_value: null,
   cre2c_daterecommendationreceived: null,
