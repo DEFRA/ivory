@@ -422,6 +422,27 @@ const StatusCodes = {
   SERVICE_UNAVAILABLE: 503
 }
 
+const uploadPhoto = {
+  MAX_PHOTOS: 6,
+  MAX_FILES_IN_REQUEST_PAYLOAD: 1,
+  THUMBNAIL_WIDTH: 300,
+  ALLOWED_EXTENSIONS: ['.JPG', '.JPEG', '.PNG']
+}
+
+const uploadDocument = {
+  MAX_DOCUMENTS: 6,
+  MAX_FILES_IN_REQUEST_PAYLOAD: 1,
+  PDF_EXTENSION: '.PDF',
+  ALLOWED_EXTENSIONS: [
+    '.DOC',
+    '.DOCX',
+    '.PDF',
+    '.JPG',
+    '.JPEG',
+    '.PNG'
+  ]
+}
+
 module.exports = Object.freeze({
   AddressType,
   AgeExemptionReasons,
@@ -443,6 +464,8 @@ module.exports = Object.freeze({
   PaymentResult,
   RedisKeys,
   StatusCodes,
+  uploadDocument,
+  uploadPhoto,
   Urls,
   Views,
   DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession'

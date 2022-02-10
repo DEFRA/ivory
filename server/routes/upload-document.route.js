@@ -9,21 +9,9 @@ const RedisService = require('../services/redis.service')
 const AntimalwareService = require('../services/antimalware.service')
 
 const config = require('../utils/config')
-const { Paths, RedisKeys, Views, Analytics } = require('../utils/constants')
+const { Paths, RedisKeys, Views, Analytics, uploadDocument } = require('../utils/constants')
 const { buildErrorSummary } = require('../utils/validation')
 const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
-
-const MAX_DOCUMENTS = 6
-const MAX_FILES_IN_REQUEST_PAYLOAD = 1
-const PDF_EXTENSION = '.PDF'
-const ALLOWED_EXTENSIONS = [
-  '.DOC',
-  '.DOCX',
-  PDF_EXTENSION,
-  '.JPG',
-  '.JPEG',
-  '.PNG'
-]
 
 const handlers = {
   get: async (request, h) => {
@@ -37,7 +25,7 @@ const handlers = {
     if (
       uploadData &&
       uploadData.files &&
-      uploadData.files.length >= MAX_DOCUMENTS
+      uploadData.files.length >= uploadDocument.MAX_DOCUMENTS
     ) {
       return h.redirect(Paths.YOUR_DOCUMENTS)
     }
@@ -74,7 +62,7 @@ const handlers = {
     }
 
     if (!errors.length) {
-      if (filename.toUpperCase().endsWith(PDF_EXTENSION)) {
+      if (filename.toUpperCase().endsWith(uploadDocument.PDF_EXTENSION)) {
         await _checkPdfEncryption(buffer, errors)
       }
     }
@@ -132,7 +120,7 @@ const _getContext = async request => {
     pageTitle: !hideHelpText
       ? 'Add evidence to support your case'
       : 'Add another file',
-    accept: ALLOWED_EXTENSIONS.join(','),
+    accept: uploadDocument.ALLOWED_EXTENSIONS.join(','),
     fileListUrl: Paths.YOUR_DOCUMENTS,
     maximumFileSize: config.maximumFileSize
   }
@@ -144,7 +132,7 @@ const _validateForm = (payload, uploadData) => {
   if (
     payload.files &&
     Array.isArray(payload.files) &&
-    payload.files.length > MAX_FILES_IN_REQUEST_PAYLOAD
+    payload.files.length > uploadDocument.MAX_FILES_IN_REQUEST_PAYLOAD
   ) {
     // Note that this error should never happen because in the HTML we have not specified the attributes of:
     // - multiple: true
@@ -165,7 +153,7 @@ const _validateForm = (payload, uploadData) => {
       text: 'The file cannot be empty'
     })
   } else if (
-    !ALLOWED_EXTENSIONS.includes(
+    !uploadDocument.ALLOWED_EXTENSIONS.includes(
       path.extname(payload.files.filename).toUpperCase()
     )
   ) {
