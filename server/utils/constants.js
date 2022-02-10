@@ -422,14 +422,14 @@ const StatusCodes = {
   SERVICE_UNAVAILABLE: 503
 }
 
-const uploadPhoto = {
+const UploadPhoto = {
   MAX_PHOTOS: 6,
   MAX_FILES_IN_REQUEST_PAYLOAD: 1,
   THUMBNAIL_WIDTH: 300,
   ALLOWED_EXTENSIONS: ['.JPG', '.JPEG', '.PNG']
 }
 
-const uploadDocument = {
+const UploadDocument = {
   MAX_DOCUMENTS: 6,
   MAX_FILES_IN_REQUEST_PAYLOAD: 1,
   PDF_EXTENSION: '.PDF',
@@ -464,8 +464,8 @@ module.exports = Object.freeze({
   PaymentResult,
   RedisKeys,
   StatusCodes,
-  uploadDocument,
-  uploadPhoto,
+  UploadDocument,
+  UploadPhoto,
   Urls,
   Views,
   DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession'

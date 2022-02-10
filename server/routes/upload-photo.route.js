@@ -11,7 +11,7 @@ const RedisService = require('../services/redis.service')
 const AntimalwareService = require('../services/antimalware.service')
 
 const config = require('../utils/config')
-const { Paths, RedisKeys, Views, Analytics, uploadPhoto } = require('../utils/constants')
+const { Paths, RedisKeys, Views, Analytics, UploadPhoto } = require('../utils/constants')
 const { buildErrorSummary } = require('../utils/validation')
 const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
 
@@ -24,7 +24,7 @@ const handlers = {
     if (
       uploadData &&
       uploadData.files &&
-      uploadData.files.length >= uploadPhoto.MAX_PHOTOS
+      uploadData.files.length >= UploadPhoto.MAX_PHOTOS
     ) {
       return h.redirect(Paths.YOUR_PHOTOS)
     }
@@ -87,7 +87,7 @@ const handlers = {
         uploadData.fileData.push(base64)
 
         const thumbnailBuffer = await sharp(buffer)
-          .resize(uploadPhoto.THUMBNAIL_WIDTH, null, {
+          .resize(UploadPhoto.THUMBNAIL_WIDTH, null, {
             withoutEnlargement: true
           })
           .toBuffer()
@@ -167,7 +167,7 @@ const _getContext = async request => {
     hideHelpText,
     uploadData,
     pageTitle: !hideHelpText ? 'Add a photo of your item' : 'Add another photo',
-    accept: uploadPhoto.ALLOWED_EXTENSIONS.join(','),
+    accept: UploadPhoto.ALLOWED_EXTENSIONS.join(','),
     fileListUrl: Paths.YOUR_PHOTOS,
     maximumFileSize: config.maximumFileSize
   }
@@ -179,7 +179,7 @@ const _validateForm = (payload, uploadData) => {
   if (
     payload.files &&
     Array.isArray(payload.files) &&
-    payload.files.length > uploadPhoto.MAX_FILES_IN_REQUEST_PAYLOAD
+    payload.files.length > UploadPhoto.MAX_FILES_IN_REQUEST_PAYLOAD
   ) {
     // Note that this error should never happen because in the HTML we have not specified the attributes of:
     // - multiple: true
@@ -200,7 +200,7 @@ const _validateForm = (payload, uploadData) => {
       text: 'The file cannot be empty'
     })
   } else if (
-    !uploadPhoto.ALLOWED_EXTENSIONS.includes(
+    !UploadPhoto.ALLOWED_EXTENSIONS.includes(
       path.extname(payload.files.filename).toUpperCase()
     )
   ) {
