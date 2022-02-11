@@ -296,13 +296,11 @@ const _getPreviousSubmission = async request => {
     ? _getAlreadyCertifiedCode(alreadyCertified.alreadyCertified)
     : null
 
-  const previousApplicationNumberFormatted = previousApplicationNumber ? '' + previousApplicationNumber : previousApplicationNumber
-
   return {
     [DataVerseFieldName.ALREADY_HAS_CERTIFICATE]: alreadyCertifiedCode,
-    [DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER]: revokedCertificateNumber,
+    [DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER]: revokedCertificateNumber ? `${revokedCertificateNumber}` : revokedCertificateNumber,
     [DataVerseFieldName.APPLIED_BEFORE]: appliedBefore === Options.YES,
-    [DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER]: previousApplicationNumberFormatted
+    [DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER]: previousApplicationNumber ? `${previousApplicationNumber}` : previousApplicationNumber
   }
 }
 
