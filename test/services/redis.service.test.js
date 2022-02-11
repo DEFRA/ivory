@@ -12,13 +12,65 @@ describe('Redis service', () => {
   })
 
   describe('get method', () => {
-    it('should get a value from Redis', async () => {
-      _createMocks(mockRedisValue)
+    it('should get a string value from Redis', async () => {
+      const mockValue = 'THIS IS A STRING VALUE'
+      _createMocks(mockValue)
 
       expect(mockRequest.redis.client.get).toBeCalledTimes(0)
 
       const redisValue = await RedisService.get(mockRequest, redisKey)
-      expect(redisValue).toEqual(mockRedisValue)
+      expect(redisValue).toEqual(mockValue)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(1)
+      expect(mockRequest.redis.client.get).toBeCalledWith(
+        `${sessionId}.${redisKey}`
+      )
+    })
+
+    it('should get a numeric value from Redis', async () => {
+      const mockValue = 12345
+      _createMocks(mockValue)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(0)
+
+      const redisValue = await RedisService.get(mockRequest, redisKey)
+      expect(redisValue).toEqual(mockValue)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(1)
+      expect(mockRequest.redis.client.get).toBeCalledWith(
+        `${sessionId}.${redisKey}`
+      )
+    })
+
+    it('should get a numeral-only string value from Redis', async () => {
+      const mockValue = '12345'
+      _createMocks(mockValue)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(0)
+
+      const redisValue = await RedisService.get(mockRequest, redisKey)
+      expect(redisValue).toEqual(mockValue)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(1)
+      expect(mockRequest.redis.client.get).toBeCalledWith(
+        `${sessionId}.${redisKey}`
+      )
+    })
+
+    it('should get a JSON-encoded object from Redis', async () => {
+      const mockValue = {
+        key1: 'VALUE 1',
+        key2: 'VALUE 2'
+      }
+
+      _createMocks(JSON.stringify(mockValue))
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(0)
+
+      const redisValue = await RedisService.get(mockRequest, redisKey)
+      console.log(redisValue)
+
+      expect(redisValue).toEqual(mockValue)
 
       expect(mockRequest.redis.client.get).toBeCalledTimes(1)
       expect(mockRequest.redis.client.get).toBeCalledWith(
