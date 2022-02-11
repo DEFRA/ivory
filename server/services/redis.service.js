@@ -15,15 +15,13 @@ module.exports = class RedisService {
       `${request.state[DEFRA_IVORY_SESSION_KEY]}.${key}`
     )
 
-    let parsedValue
-    if (redisValue !== null) {
+    let parsedValue = redisValue
+    if (_isJsonString(redisValue)) {
       try {
         parsedValue = JSON.parse(redisValue)
       } catch (e) {
         parsedValue = redisValue
       }
-    } else {
-      parsedValue = null
     }
 
     return parsedValue
@@ -58,3 +56,6 @@ module.exports = class RedisService {
     })
   }
 }
+
+const _isJsonString = value =>
+  value && value.length && value.startsWith('{') && value.endsWith('}')
