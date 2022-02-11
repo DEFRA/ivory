@@ -136,14 +136,14 @@ describe('Redis service', () => {
       _createMocks(mockRedisValue)
     })
 
-    it('should not delete a value from Redis', async () => {
-      expect(mockRequest.redis.client.keys).toBeCalledTimes(0)
+    it('should delete values from Redis', async () => {
+      expect(mockRequest.redis.client.scan).toBeCalledTimes(0)
       expect(mockRequest.redis.client.del).toBeCalledTimes(0)
 
       await RedisService.deleteSessionData(mockRequest)
 
-      expect(mockRequest.redis.client.keys).toBeCalledTimes(1)
-      expect(mockRequest.redis.client.del).toBeCalledTimes(0)
+      expect(mockRequest.redis.client.scan).toBeCalledTimes(1)
+      expect(mockRequest.redis.client.del).toBeCalledTimes(3)
     })
   })
 })
@@ -160,7 +160,7 @@ const _createMocks = mockValue => {
       del: jest.fn(),
       get: jest.fn(() => mockValue),
       setex: jest.fn(),
-      keys: jest.fn()
+      scan: jest.fn(() => ['0', ['redis_key_1', 'redis_key_2', 'redis_key_n']])
     }
   }
 }
