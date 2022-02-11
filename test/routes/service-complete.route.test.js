@@ -151,12 +151,6 @@ describe('/service-complete route', () => {
           )
         })
 
-        it('should have the correct Call to Action button', () => {
-          const element = document.querySelector(`#${elementIds.finish}`)
-          expect(element).toBeTruthy()
-          expect(TestHelper.getTextContent(element)).toEqual('Finish')
-        })
-
         it('should have the correct feedback link', () => {
           const element = document.querySelector(`#${elementIds.feedbackLink}`)
           TestHelper.checkLink(
