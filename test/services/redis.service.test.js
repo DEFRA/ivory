@@ -68,7 +68,6 @@ describe('Redis service', () => {
       expect(mockRequest.redis.client.get).toBeCalledTimes(0)
 
       const redisValue = await RedisService.get(mockRequest, redisKey)
-      console.log(redisValue)
 
       expect(redisValue).toEqual(mockValue)
 

@@ -11,7 +11,7 @@ const {
 
 const handlers = {
   get: async (request, h) => {
-    const sessionKey = (request.state[DEFRA_IVORY_SESSION_KEY])
+    const sessionKey = request.state[DEFRA_IVORY_SESSION_KEY]
     if (sessionKey) {
       RedisService.deleteSessionData(request)
     }

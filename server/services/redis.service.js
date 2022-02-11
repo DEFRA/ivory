@@ -39,21 +39,37 @@ module.exports = class RedisService {
     client.del(keyWithSessionId)
   }
 
-  static deleteSessionData (request) {
+  static async deleteSessionData (request) {
     const client = request.redis.client
     const sessionKey = request.state[DEFRA_IVORY_SESSION_KEY]
-    const totalPossibleKeys = Object.keys(RedisKeys).length + UploadPhoto.MAX_PHOTOS + UploadDocument.MAX_DOCUMENTS
-    client.keys(`${sessionKey}*`, function (err, keys) {
-      if (err) {
-        console.error(err)
-      } else if (keys.length > totalPossibleKeys) { // Mitigates against a malicious attack using this wildcard search to remove all Redis keys
-        console.error(`Request to clear ${keys.length} Redis keys failed as exceeded the max allowed of ${totalPossibleKeys}`)
-      } else {
-        for (let i = 0; i < keys.length; i++) {
-          client.del(keys[i])
-        }
+    const totalPossibleKeys =
+      Object.keys(RedisKeys).length +
+      UploadPhoto.MAX_PHOTOS +
+      UploadDocument.MAX_DOCUMENTS
+
+    const keys = []
+
+    let scanResult = await client.scan('0', 'MATCH', `${sessionKey}.*`)
+    let cursor = scanResult[0]
+
+    keys.push(...scanResult[1])
+
+    while (cursor !== '0') {
+      scanResult = await client.scan(cursor, 'MATCH', `${sessionKey}.*`)
+      cursor = scanResult[0]
+      keys.push(...scanResult[1])
+    }
+
+    if (keys.length > totalPossibleKeys) {
+      // Mitigates against a malicious attack using this wildcard search to remove all Redis keys
+      console.error(
+        `Request to clear ${keys.length} Redis keys failed as exceeded the max allowed of ${totalPossibleKeys}`
+      )
+    } else {
+      for (const key of keys) {
+        client.del(key)
       }
-    })
+    }
   }
 }
 
