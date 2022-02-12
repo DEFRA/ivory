@@ -26,10 +26,11 @@ describe('/ route', () => {
     }
 
     it('should redirect to the "How certain" route', async () => {
-      const response = await TestHelper.submitPostRequest(
+      const response = await TestHelper.submitGetRequest(
         server,
         getOptions,
-        302
+        302,
+        false
       )
 
       expect(response.headers.location).toEqual(nextUrl)

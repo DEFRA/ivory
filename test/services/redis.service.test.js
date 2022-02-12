@@ -77,6 +77,23 @@ describe('Redis service', () => {
       )
     })
 
+    it('should get a string from Redis when it looks like a JSON object but it cannot be parsed', async () => {
+      const mockValue = '{"partial-json-object'
+
+      _createMocks(mockValue)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(0)
+
+      const redisValue = await RedisService.get(mockRequest, redisKey)
+
+      expect(redisValue).toEqual(mockValue)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(1)
+      expect(mockRequest.redis.client.get).toBeCalledWith(
+        `${sessionId}.${redisKey}`
+      )
+    })
+
     it('should return null if the key is not found in Redis', async () => {
       _createMocks(null)
 
