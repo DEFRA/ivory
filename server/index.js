@@ -88,7 +88,7 @@ const _checkSessionCookie = (request, h) => {
   ) {
     return h.continue
   } else {
-    if (!CookieService.checkSessionCookie(request)) {
+    if (!CookieService.getSessionCookie(request)) {
       return h.redirect(Paths.SESSION_TIMED_OUT).takeover()
     } else {
       return h.continue

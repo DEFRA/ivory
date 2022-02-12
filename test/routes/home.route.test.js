@@ -43,7 +43,7 @@ describe('/ route', () => {
     })
 
     it('should delete previous session data if there is any', async () => {
-      CookieService.checkForSessionKey = jest
+      CookieService.getSessionCookie = jest
         .fn()
         .mockReturnValue('THE SESSION KEY')
 
@@ -55,7 +55,7 @@ describe('/ route', () => {
     })
 
     it("should NOT delete previous session data if there isn't any", async () => {
-      CookieService.checkForSessionKey = jest.fn().mockReturnValue(null)
+      CookieService.getSessionCookie = jest.fn().mockReturnValue(null)
 
       expect(RedisService.deleteSessionData).toBeCalledTimes(0)
 

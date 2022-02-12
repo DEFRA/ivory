@@ -12,9 +12,9 @@ const {
 
 const handlers = {
   get: async (request, h) => {
-    const hasSessionKey = CookieService.checkForSessionKey(request)
+    const sessionCookie = CookieService.getSessionCookie(request, false)
 
-    if (hasSessionKey) {
+    if (sessionCookie) {
       RedisService.deleteSessionData(request)
     }
     _setCookieSessionId(h)

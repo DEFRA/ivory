@@ -3,7 +3,7 @@
 const CookieService = require('../../server/services/cookie.service')
 
 describe('Cookie service', () => {
-  describe('checkSessionCookie method', () => {
+  describe('getSessionCookie method', () => {
     let mockRequest
 
     beforeEach(() => {
@@ -18,14 +18,14 @@ describe('Cookie service', () => {
     })
 
     it('should check and return the session cookie if it exists', async () => {
-      const cookie = CookieService.checkSessionCookie(mockRequest)
+      const cookie = CookieService.getSessionCookie(mockRequest)
 
       expect(cookie).toEqual(mockRequest.state.DefraIvorySession)
     })
 
     it("should check and return a null session cookie if it doesn't exist", async () => {
       mockRequest.state.DefraIvorySession = null
-      const cookie = CookieService.checkSessionCookie(mockRequest)
+      const cookie = CookieService.getSessionCookie(mockRequest)
 
       expect(cookie).toBeNull()
     })

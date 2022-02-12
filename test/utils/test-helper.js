@@ -23,7 +23,7 @@ module.exports = class TestHelper {
     AnalyticsService.sendEvent = jest.fn()
 
     jest.mock('../../server/services/cookie.service')
-    CookieService.checkSessionCookie = jest
+    CookieService.getSessionCookie = jest
       .fn()
       .mockReturnValue('THE_SESSION_COOKIE')
 
