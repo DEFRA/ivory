@@ -47,7 +47,7 @@ module.exports = class RedisService {
       UploadPhoto.MAX_PHOTOS +
       UploadDocument.MAX_DOCUMENTS
 
-    const keys = await _getMatchingKeys()
+    const keys = await _getMatchingRedisKeys(request)
 
     if (keys.length > totalPossibleKeys) {
       // Mitigates against a malicious attack using this wildcard search to remove all Redis keys
@@ -77,7 +77,7 @@ const _isJsonString = value =>
  * @param {*} request The request containing the Redis cache
  * @returns An array of Redis keys that are prefixed with the session key
  */
-const _getMatchingKeys = async request => {
+const _getMatchingRedisKeys = async request => {
   const client = request.redis.client
   const sessionKey = request.state[DEFRA_IVORY_SESSION_KEY]
 
