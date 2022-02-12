@@ -272,9 +272,7 @@ const _sendSection2OwnerEmailThirdPartyResale = context => {
   const templateId = config.govNotifyTemplateSection2OwnerEmailThirdPartyResale
   const recipientEmail = context.ownerContactDetails.emailAddress
   const payload = {
-    fullName:
-      context.ownerContactDetails.fullName ||
-      context.ownerContactDetails.businessName,
+    fullName: context.ownerContactDetails.fullName,
     certificateNumber: context.certificateNumber
   }
 
@@ -299,7 +297,10 @@ const _sendSection10OwnerEmail = context => {
   const recipientEmail = context.ownerContactDetails.emailAddress
   const payload = {
     submissionReference: context.submissionReference,
-    fullName: context.ownerContactDetails.fullName,
+    fullName:
+      context.ownerContactDetails.fullName ||
+      context.ownerContactDetails.businessName,
+
     exemptionType: context.itemType
   }
 
