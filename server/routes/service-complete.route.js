@@ -260,7 +260,9 @@ const _sendSection2OwnerEmailThirdParty = context => {
   const recipientEmail = context.ownerContactDetails.emailAddress
   const payload = {
     submissionReference: context.submissionReference,
-    fullName: context.ownerContactDetails.fullName
+    fullName:
+      context.ownerContactDetails.fullName ||
+      context.ownerContactDetails.businessName
   }
 
   _sendEmail(templateId, recipientEmail, payload)
