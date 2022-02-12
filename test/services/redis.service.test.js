@@ -142,8 +142,8 @@ describe('Redis service', () => {
 
       await RedisService.deleteSessionData(mockRequest)
 
-      expect(mockRequest.redis.client.scan).toBeCalledTimes(1)
-      expect(mockRequest.redis.client.del).toBeCalledTimes(3)
+      expect(mockRequest.redis.client.scan).toBeCalledTimes(2)
+      expect(mockRequest.redis.client.del).toBeCalledTimes(6)
     })
   })
 })
@@ -160,7 +160,16 @@ const _createMocks = mockValue => {
       del: jest.fn(),
       get: jest.fn(() => mockValue),
       setex: jest.fn(),
-      scan: jest.fn(() => ['0', ['redis_key_1', 'redis_key_2', 'redis_key_n']])
+      scan: jest
+        .fn()
+        .mockReturnValueOnce([
+          '33',
+          ['redis_key_1', 'redis_key_2', 'redis_key_3']
+        ])
+        .mockReturnValueOnce([
+          '0',
+          ['redis_key_4', 'redis_key_5', 'redis_key_n']
+        ])
     }
   }
 }
