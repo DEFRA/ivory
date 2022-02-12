@@ -78,7 +78,7 @@ describe('Redis service', () => {
     })
 
     it('should get a string from Redis when it looks like a JSON object but it cannot be parsed', async () => {
-      const mockValue = '{"partial-json-object'
+      const mockValue = '{invalid-json-object}'
 
       _createMocks(mockValue)
 
