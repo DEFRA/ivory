@@ -12,6 +12,7 @@ describe('/ route', () => {
   let server
   const url = '/'
   const nextUrl = '/eligibility-checker/how-certain'
+  const nextUrlUseChecker = '/eligibility-checker/contain-elephant-ivory'
 
   beforeAll(async () => {
     server = await TestHelper.createServer()
@@ -40,6 +41,21 @@ describe('/ route', () => {
       )
 
       expect(response.headers.location).toEqual(nextUrl)
+    })
+
+    it('should redirect to the "Contain ivory" route when the useChecker querystring parameter is set', async () => {
+      const getOptionsUseChecker = {
+        method: 'GET',
+        url: '/?useChecker=true'
+      }
+      const response = await TestHelper.submitGetRequest(
+        server,
+        getOptionsUseChecker,
+        302,
+        false
+      )
+
+      expect(response.headers.location).toEqual(nextUrlUseChecker)
     })
 
     it('should delete previous session data if there is any', async () => {

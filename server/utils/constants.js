@@ -292,6 +292,7 @@ const Paths = {
   UPLOAD_DOCUMENT: '/upload-document',
   UPLOAD_PHOTO: '/upload-photo',
   UPLOAD_TIMEOUT: '/errors/upload-timeout',
+  USE_CHECKER: '/use-checker',
   WHAT_CAPACITY: '/what-capacity',
   WANT_TO_ADD_DOCUMENTS: '/want-to-add-documents',
   WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',
@@ -433,14 +434,7 @@ const UploadDocument = {
   MAX_DOCUMENTS: 6,
   MAX_FILES_IN_REQUEST_PAYLOAD: 1,
   PDF_EXTENSION: '.PDF',
-  ALLOWED_EXTENSIONS: [
-    '.DOC',
-    '.DOCX',
-    '.PDF',
-    '.JPG',
-    '.JPEG',
-    '.PNG'
-  ]
+  ALLOWED_EXTENSIONS: ['.DOC', '.DOCX', '.PDF', '.JPG', '.JPEG', '.PNG']
 }
 
 module.exports = Object.freeze({
