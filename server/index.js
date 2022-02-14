@@ -5,7 +5,11 @@ const Bcrypt = require('bcrypt')
 
 const config = require('./utils/config')
 const { options } = require('./utils/cookie-config')
-const { DEFRA_IVORY_SESSION_KEY, Paths } = require('./utils/constants')
+const {
+  DEFRA_IVORY_SESSION_KEY,
+  HOME_URL,
+  Paths
+} = require('./utils/constants')
 
 const CookieService = require('./services/cookie.service')
 
@@ -74,7 +78,8 @@ const _registerPlugins = async server => {
 const _checkSessionCookie = (request, h) => {
   const pathname = request.url.pathname
   const excludeCookieCheckUrls = [
-    '/',
+    HOME_URL,
+    Paths.USE_CHECKER,
     Paths.SERVICE_STATUS,
     Paths.SESSION_TIMED_OUT
   ]
