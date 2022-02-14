@@ -64,7 +64,9 @@ const schema = joi.object().keys({
   clamscanPreference: joi.string().default('clamdscan'),
   clamscanDebug: joi.bool(),
   disableAntimalware: joi.bool(),
-  useBasicAuth: joi.bool().valid(true, false)
+  useBasicAuth: joi.bool().valid(true, false),
+  defraUsername: joi.string(),
+  defraPassword: joi.string()
 })
 
 // Build config
@@ -116,7 +118,9 @@ const config = {
   clamscanPreference: process.env.CLAMSCAN_PREFERENCE,
   clamscanDebug: process.env.CLAMSCAN_DEBUG,
   disableAntimalware: process.env.DISABLE_ANTIMALWARE,
-  useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH || false)
+  useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH || false),
+  defraUsername: process.env.DEFRA_USERNAME,
+  defraPassword: process.env.DEFRA_PASSWORD
 }
 
 // Validate config

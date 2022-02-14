@@ -11,8 +11,8 @@ const CookieService = require('./services/cookie.service')
 
 const users = {
   defra: {
-    username: 'defra',
-    password: '$2a$04$R/Iqfgw5oXbBd.ozznzZ9OThrl2E12B8zcPWsOKy/7s35D5cS.V/S'
+    username: config.defraUsername,
+    password: config.defraPassword
   }
 }
 
