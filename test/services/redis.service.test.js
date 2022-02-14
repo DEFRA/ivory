@@ -78,6 +78,32 @@ describe('Redis service', () => {
       )
     })
 
+    it('should get a JSON-encoded array object from Redis', async () => {
+      const mockValue = [
+        {
+          key1: 'VALUE 1',
+          key2: 'VALUE 2'
+        },
+        {
+          key1: 'VALUE 3',
+          key2: 'VALUE 4'
+        }
+      ]
+
+      _createMocks(JSON.stringify(mockValue))
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(0)
+
+      const redisValue = await RedisService.get(mockRequest, redisKey)
+
+      expect(redisValue).toEqual(mockValue)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(1)
+      expect(mockRequest.redis.client.get).toBeCalledWith(
+        `${sessionId}.${redisKey}`
+      )
+    })
+
     it('should return null if the key is not found in Redis', async () => {
       _createMocks(null)
 

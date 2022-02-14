@@ -36,4 +36,7 @@ module.exports = class RedisService {
 }
 
 const _isJsonString = value =>
-  value && value.length && value.startsWith('{') && value.endsWith('}')
+  value &&
+  value.length &&
+  ((value.startsWith('{') && value.endsWith('}')) ||
+    (value.startsWith('[') && value.endsWith(']')))
