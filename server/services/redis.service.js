@@ -68,7 +68,10 @@ module.exports = class RedisService {
  * @returns True if the string looks like a Json object, otherwise false
  */
 const _isJsonString = value =>
-  value && value.length && value.startsWith('{') && value.endsWith('}')
+  value &&
+  value.length &&
+  ((value.startsWith('{') && value.endsWith('}')) ||
+    (value.startsWith('[') && value.endsWith(']')))
 
 /**
  * Scans the Redis cache for all keys matching the session key held in the session.
