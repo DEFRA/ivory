@@ -220,7 +220,10 @@ const PaymentResult = {
 }
 
 const Urls = {
-  GOV_UK_HOME: 'https://www.gov.uk/'
+  GOV_UK_TOP_OF_MAIN:
+    'https://www.gov.uk/guidance/dealing-in-items-containing-ivory-or-made-of-ivory',
+  GOV_UK_PRESCRIBED_INSTITUTIONS:
+    'https://www.gov.uk/guidance/ivory-apply-for-an-exemption-certificate-to-deal-in-pre-1918-outstandingly-high-artistic-cultural-or-historical-value-items#prescribed-institutions'
 }
 
 const Paths = {

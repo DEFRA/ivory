@@ -36,7 +36,7 @@ const handlers = {
       label: context.pageTitle
     })
 
-    return h.redirect(Urls.GOV_UK_HOME)
+    return h.redirect(Urls.GOV_UK_TOP_OF_MAIN)
   }
 }
 

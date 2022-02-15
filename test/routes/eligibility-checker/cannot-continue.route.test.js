@@ -9,7 +9,8 @@ const { Options } = require('../../../server/utils/constants')
 describe('/eligibility-checker/cannot-continue route', () => {
   let server
   const url = '/eligibility-checker/cannot-continue'
-  const nextUrl = 'https://www.gov.uk/'
+  const nextUrl =
+    'https://www.gov.uk/guidance/dealing-in-items-containing-ivory-or-made-of-ivory'
 
   const elementIds = {
     pageTitle: 'pageTitle',

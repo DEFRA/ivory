@@ -5,7 +5,8 @@ const TestHelper = require('../../utils/test-helper')
 describe('/eligibility-checker/cannot-trade route', () => {
   let server
   const url = '/eligibility-checker/cannot-trade'
-  const nextUrl = 'https://www.gov.uk/'
+  const nextUrl =
+    'https://www.gov.uk/guidance/dealing-in-items-containing-ivory-or-made-of-ivory'
 
   const elementIds = {
     pageTitle: 'pageTitle',

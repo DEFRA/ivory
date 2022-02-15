@@ -192,7 +192,7 @@ describe('/can-continue route', () => {
           TestHelper.checkLink(
             element,
             'Cancel and return to GOV.UK',
-            'https://www.gov.uk/'
+            'https://www.gov.uk/guidance/dealing-in-items-containing-ivory-or-made-of-ivory'
           )
         })
       })
@@ -794,7 +794,7 @@ describe('/can-continue route', () => {
           TestHelper.checkLink(
             element,
             'Cancel and return to GOV.UK',
-            'https://www.gov.uk/'
+            'https://www.gov.uk/guidance/dealing-in-items-containing-ivory-or-made-of-ivory'
           )
         })
       })

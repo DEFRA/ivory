@@ -77,7 +77,7 @@ describe('/who-owns-the-item route', () => {
       TestHelper.checkLink(
         element,
         'Prescribed Institutions (opens in a new window or tab)',
-        'about:blank'
+        'https://www.gov.uk/guidance/ivory-apply-for-an-exemption-certificate-to-deal-in-pre-1918-outstandingly-high-artistic-cultural-or-historical-value-items#prescribed-institutions'
       )
     })
 

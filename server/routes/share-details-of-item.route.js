@@ -4,11 +4,12 @@ const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
 
 const {
+  Analytics,
   Options,
   Paths,
-  Views,
   RedisKeys,
-  Analytics
+  Urls,
+  Views
 } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
@@ -65,6 +66,7 @@ const _getContext = async request => {
 
   return {
     pageTitle: 'Help our experts by allowing us to share details of your item',
+    piLink: Urls.GOV_UK_PRESCRIBED_INSTITUTIONS,
     items: [
       {
         value: Options.YES,

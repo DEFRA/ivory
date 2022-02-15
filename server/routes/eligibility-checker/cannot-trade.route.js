@@ -26,7 +26,7 @@ const handlers = {
       label: 'Cannot Trade'
     })
 
-    return h.redirect(Urls.GOV_UK_HOME)
+    return h.redirect(Urls.GOV_UK_TOP_OF_MAIN)
   }
 }
 
