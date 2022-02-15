@@ -7,6 +7,8 @@ const TestHelper = require('../utils/test-helper')
 describe('Eligibility checker - do not need service route', () => {
   let server
   const url = '/eligibility-checker/do-not-need-service'
+  const nextUrl =
+    'https://www.gov.uk/guidance/dealing-in-items-containing-ivory-or-made-of-ivory'
 
   const elementIds = {
     pageTitle: 'pageTitle',
@@ -96,6 +98,30 @@ describe('Eligibility checker - do not need service route', () => {
         expect(TestHelper.getTextContent(element)).toEqual(
           'Qualifying museums do not need to tell us when they sell or hire out ivory items to each other.'
         )
+      })
+    })
+  })
+
+  describe('POST', () => {
+    let postOptions
+
+    beforeEach(() => {
+      postOptions = {
+        method: 'POST',
+        url,
+        payload: {}
+      }
+    })
+
+    describe('Success', () => {
+      beforeEach(async () => {
+        RedisService.get = jest.fn().mockResolvedValueOnce(null)
+      })
+
+      it('should progress to the next route', async () => {
+        const response = await TestHelper.submitPostRequest(server, postOptions)
+
+        expect(response.headers.location).toEqual(nextUrl)
       })
     })
   })
