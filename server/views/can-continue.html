@@ -37,7 +37,7 @@
         </ol>
 
         <div class="govuk-inset-text">
-          <p class="govuk-body" id="timeoutParagraph">You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.</p>
+          <p class="govuk-body" id="timeoutParagraph">You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than {{ sessionTimeoutInHours }} hours to complete the service.</p>
         </div>
         
         {% if isSection2 and not isAlreadyCertified %}
