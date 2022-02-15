@@ -66,7 +66,8 @@ const schema = joi.object().keys({
   disableAntimalware: joi.bool(),
   useBasicAuth: joi.bool().valid(true, false),
   defraUsername: joi.string(),
-  defraPassword: joi.string()
+  defraPassword: joi.string(),
+  performanceTestMode: joi.bool()
 })
 
 // Build config
@@ -120,7 +121,8 @@ const config = {
   disableAntimalware: process.env.DISABLE_ANTIMALWARE,
   useBasicAuth: getBoolean(process.env.USE_BASIC_AUTH || false),
   defraUsername: process.env.DEFRA_USERNAME,
-  defraPassword: process.env.DEFRA_PASSWORD
+  defraPassword: process.env.DEFRA_PASSWORD,
+  performanceTestMode: process.env.PERFORMANCE_TEST_MODE
 }
 
 // Validate config

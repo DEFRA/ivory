@@ -6,11 +6,16 @@ const RedisHelper = require('../services/redis-helper.service')
 const RedisService = require('../services/redis.service')
 
 const { Paths, RedisKeys, Analytics } = require('../utils/constants')
+const config = require('../utils/config')
 
 const TARGET_COMPLETION_DATE_PERIOD_DAYS = 30
 
 const handlers = {
   get: async (request, h) => {
+    if (config.performanceTestMode) {
+      return h.redirect(Paths.SERVICE_COMPLETE)
+    }
+
     const isSection2 = await RedisHelper.isSection2(request)
 
     const [
