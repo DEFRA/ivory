@@ -13,6 +13,8 @@ const PaymentService = require('../../server/services/payment.service')
 
 const { ItemType, RedisKeys } = require('../../server/utils/constants')
 
+const config = require('../../server/utils/config')
+
 const paymentReference = 'ABCDEF'
 const paymentId = 'THE_PAYMENT_ID'
 
@@ -184,6 +186,21 @@ describe('/make-payment route', () => {
       )
 
       expect(response.headers.location).toEqual(nextUrl)
+    })
+
+    it('should go straight tothe "Service complete" page when in performace test mode', async () => {
+      config.performanceTestMode = true
+
+      const response = await TestHelper.submitGetRequest(
+        server,
+        getOptions,
+        302,
+        false
+      )
+
+      expect(response.headers.location).toEqual('/service-complete')
+
+      config.performanceTestMode = false
     })
   })
 })
