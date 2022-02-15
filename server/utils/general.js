@@ -1,5 +1,7 @@
 'use strict'
 
+const RandomString = require('randomstring')
+
 const { ItemType, Options } = require('./constants')
 
 const MUSICAL_PERCENTAGE = 20
@@ -65,10 +67,24 @@ const PNG_IMAGE_REGEXP = /^iVBORw0KGgo/g
 // if it is PNG or JPEG.
 const isPngImage = imageBase64 => imageBase64.match(PNG_IMAGE_REGEXP) !== null
 
+/**
+ * Generates a random 8 character uppercase alphanumeric reference
+ * @returns Reference
+ */
+const generateSubmissionReference = () => {
+  return RandomString.generate({
+    length: 8,
+    readable: true,
+    charset: 'alphanumeric',
+    capitalization: 'uppercase'
+  })
+}
+
 module.exports = {
   addPayloadToContext,
   convertToCommaSeparatedTitleCase,
   formatNumberWithCommas,
+  generateSubmissionReference,
   getIvoryVolumePercentage,
   getStandardOptions,
   isPngImage

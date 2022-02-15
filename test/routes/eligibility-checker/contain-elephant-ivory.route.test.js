@@ -1,7 +1,11 @@
 'use strict'
 
+jest.mock('randomstring')
+const RandomString = require('randomstring')
+
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
+
 const TestHelper = require('../../utils/test-helper')
 const { Options, RedisKeys } = require('../../../server/utils/constants')
 
@@ -214,7 +218,7 @@ const _checkSelectedRadioAction = async (
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
   expect(RedisService.set).toBeCalledTimes(
-    selectedOption === Options.NO ? 2 : 1
+    selectedOption === Options.NO ? 4 : 3
   )
 
   expect(RedisService.set).toBeCalledWith(
@@ -231,9 +235,26 @@ const _checkSelectedRadioAction = async (
     )
   }
 
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    RedisKeys.SUBMISSION_REFERENCE,
+    submissionReference
+  )
+
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    RedisKeys.USED_CHECKER,
+    true
+  )
+
   expect(response.headers.location).toEqual(nextUrl)
 }
 
+const submissionReference = 'ABCDEF'
+
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  RedisService.get = jest.fn().mockResolvedValue(null)
+  RandomString.generate = jest.fn().mockReturnValue(submissionReference)
 }

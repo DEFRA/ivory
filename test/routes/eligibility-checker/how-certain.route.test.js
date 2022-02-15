@@ -168,12 +168,12 @@ describe('/eligibility-checker/how-certain route', () => {
   })
 })
 
-const paymentReference = 'ABCDEF'
+const submissionReference = 'ABCDEF'
 
 const _createMocks = () => {
   TestHelper.createMocks()
 
-  RandomString.generate = jest.fn().mockReturnValue(paymentReference)
+  RandomString.generate = jest.fn().mockReturnValue(submissionReference)
   RedisService.get = jest.fn()
 }
 
@@ -195,7 +195,7 @@ const _checkSelectedRadioAction = async (
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
     RedisKeys.SUBMISSION_REFERENCE,
-    paymentReference
+    submissionReference
   )
 
   expect(RedisService.set).toBeCalledWith(

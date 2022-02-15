@@ -1,7 +1,11 @@
 'use strict'
 
+jest.mock('randomstring')
+const RandomString = require('randomstring')
+
 const {
-  convertToCommaSeparatedTitleCase
+  convertToCommaSeparatedTitleCase,
+  generateSubmissionReference
 } = require('../../server/utils/general')
 
 describe('General utils', () => {
@@ -24,6 +28,15 @@ describe('General utils', () => {
       expect(
         convertToCommaSeparatedTitleCase('THE\r\nQUICK\r\nBROWN\r\nFOX')
       ).toEqual('The, Quick, Brown, Fox')
+    })
+  })
+
+  describe('generateSubmissionReference method', () => {
+    it('should generate a random submission reference', () => {
+      const submissionReference = 'ABCDEF'
+      RandomString.generate = jest.fn().mockReturnValue(submissionReference)
+
+      expect(generateSubmissionReference()).toEqual(submissionReference)
     })
   })
 })

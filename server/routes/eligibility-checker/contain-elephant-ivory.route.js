@@ -11,7 +11,10 @@ const {
   Analytics
 } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
-const { getStandardOptions } = require('../../utils/general')
+const {
+  getStandardOptions,
+  generateSubmissionReference
+} = require('../../utils/general')
 
 const handlers = {
   get: (request, h) => {
@@ -51,6 +54,23 @@ const handlers = {
     if (payload.containElephantIvory === Options.NO) {
       await RedisService.set(request, RedisKeys.ARE_YOU_A_MUSEUM, false)
     }
+
+    let submissionReference = await RedisService.get(
+      request,
+      RedisKeys.SUBMISSION_REFERENCE
+    )
+
+    if (!submissionReference) {
+      submissionReference = generateSubmissionReference()
+
+      await RedisService.set(
+        request,
+        RedisKeys.SUBMISSION_REFERENCE,
+        submissionReference
+      )
+    }
+
+    await RedisService.set(request, RedisKeys.USED_CHECKER, true)
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
