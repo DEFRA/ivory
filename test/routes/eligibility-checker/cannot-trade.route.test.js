@@ -175,7 +175,7 @@ describe('/eligibility-checker/cannot-trade route', () => {
     })
 
     describe('Success', () => {
-      it('should redirect', async () => {
+      it('should progress to the next route', async () => {
         await _checkPostAction(postOptions, server, nextUrl)
       })
     })

@@ -119,9 +119,7 @@ describe('Eligibility checker - do not need service route', () => {
       })
 
       it('should progress to the next route', async () => {
-        const response = await TestHelper.submitPostRequest(server, postOptions)
-
-        expect(response.headers.location).toEqual(nextUrl)
+        await _checkPostAction(postOptions, server, nextUrl)
       })
     })
   })
@@ -129,4 +127,10 @@ describe('Eligibility checker - do not need service route', () => {
 
 const _createMocks = () => {
   TestHelper.createMocks()
+}
+
+const _checkPostAction = async (postOptions, server, nextUrl) => {
+  const response = await TestHelper.submitPostRequest(server, postOptions)
+
+  expect(response.headers.location).toEqual(nextUrl)
 }
