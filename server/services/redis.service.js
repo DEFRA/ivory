@@ -1,12 +1,16 @@
 'use strict'
 
-const REDIS_TTL_IN_SECONDS = 86400
 const {
   DEFRA_IVORY_SESSION_KEY,
+
   RedisKeys,
   UploadPhoto,
   UploadDocument
 } = require('../utils/constants')
+
+const config = require('../utils/config')
+
+const REDIS_TTL_IN_SECONDS = config.cookieTimeout / 1000
 
 module.exports = class RedisService {
   static async get (request, key) {
