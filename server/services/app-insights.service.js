@@ -3,7 +3,7 @@
 const applicationinsights = require('applicationinsights')
 const config = require('../utils/config')
 
-class AppInsightsService {
+module.exports = class AppInsightsService {
   static initialise () {
     if (config.appInsightsConnectionString) {
       applicationinsights.setup(config.appInsightsConnectionString).start()
@@ -12,5 +12,3 @@ class AppInsightsService {
     }
   }
 }
-
-module.exports = AppInsightsService
