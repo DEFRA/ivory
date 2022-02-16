@@ -15,6 +15,8 @@ const {
 
 const SLA = 35
 
+const sessionTimeoutInHours = config.cookieTimeout / 1000 / 3600
+
 const handlers = {
   get: async (request, h) => {
     const context = await _getContext(request)
@@ -52,6 +54,7 @@ const _getContext = async request => {
   )
 
   const context = {
+    sessionTimeoutInHours,
     itemType,
     isSection2: await RedisHelper.isSection2(request),
     hasUsedChecker: await RedisHelper.hasUsedChecker(request),
