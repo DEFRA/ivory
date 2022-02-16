@@ -2,6 +2,7 @@
 
 const hapi = require('@hapi/hapi')
 const Bcrypt = require('bcrypt')
+const applicationinsights = require('applicationinsights')
 
 const config = require('./utils/config')
 const { options } = require('./utils/cookie-config')
@@ -11,7 +12,6 @@ const {
   Paths
 } = require('./utils/constants')
 
-const AppInsightsService = require('./services/app-insights.service')
 const CookieService = require('./services/cookie.service')
 
 const users = {
@@ -34,7 +34,7 @@ const createServer = async () => {
     state: options
   })
 
-  AppInsightsService.initialise()
+  _initialiseAppInsights()
 
   _registerPlugins(server)
 
@@ -57,6 +57,14 @@ const validate = async (request, username, password) => {
   const credentials = { id: user.id, name: user.name }
 
   return { isValid, credentials }
+}
+
+const _initialiseAppInsights = () => {
+  if (config.appInsightsConnectionString) {
+    applicationinsights.setup(config.appInsightsConnectionString).start()
+  } else {
+    console.error('Application Insights is disabled')
+  }
 }
 
 const _registerPlugins = async server => {
