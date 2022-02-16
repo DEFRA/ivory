@@ -3,13 +3,14 @@
 const applicationinsights = require('applicationinsights')
 const config = require('../utils/config')
 
-module.exports = class AppInsightsService {
-  initialise () {
+class AppInsightsService {
+  static initialise () {
     if (config.appInsightsConnectionString) {
       applicationinsights.setup(config.appInsightsConnectionString).start()
-      console.log('Application Insights started')
     } else {
-      console.log('Application Insights disabled')
+      console.error('Application Insights is disabled')
     }
   }
 }
+
+module.exports = AppInsightsService
