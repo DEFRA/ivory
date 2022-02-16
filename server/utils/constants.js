@@ -220,6 +220,9 @@ const PaymentResult = {
 }
 
 const Urls = {
+  GOV_UK_HOME: 'https://www.gov.uk',
+  GOV_UK_SERVICE_HOME:
+    'https://www.gov.uk/guidance/declare-ivory-you-intend-to-sell-or-hire-out',
   GOV_UK_TOP_OF_MAIN:
     'https://www.gov.uk/guidance/dealing-in-items-containing-ivory-or-made-of-ivory',
   GOV_UK_PRESCRIBED_INSTITUTIONS:

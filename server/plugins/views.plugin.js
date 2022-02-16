@@ -3,6 +3,7 @@
 const path = require('path')
 const nunjucks = require('nunjucks')
 const config = require('../utils/config')
+const constants = require('../utils/constants')
 const pkg = require('../../package.json')
 const analyticsAccount = config.analyticsAccount
 
@@ -38,6 +39,8 @@ module.exports = {
     context: {
       appVersion: pkg.version,
       assetPath: '/assets',
+      govUkHome: constants.Urls.GOV_UK_HOME,
+      serviceNameUrl: constants.Urls.GOV_UK_SERVICE_HOME,
       serviceName: config.serviceName,
       pageTitle: `${config.serviceName} - GOV.UK`,
       analyticsAccount: analyticsAccount
