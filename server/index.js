@@ -11,6 +11,7 @@ const {
   Paths
 } = require('./utils/constants')
 
+const AppInsightsService = require('./services/app-insights.service')
 const CookieService = require('./services/cookie.service')
 
 const users = {
@@ -32,6 +33,8 @@ const createServer = async () => {
     },
     state: options
   })
+
+  AppInsightsService.initialise()
 
   _registerPlugins(server)
 
