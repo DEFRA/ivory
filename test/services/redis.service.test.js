@@ -57,6 +57,36 @@ describe('Redis service', () => {
       )
     })
 
+    it('should get a bolean true value from Redis', async () => {
+      const mockValue = 'true'
+      _createMocks(mockValue)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(0)
+
+      const redisValue = await RedisService.get(mockRequest, redisKey)
+      expect(redisValue).toEqual(true)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(1)
+      expect(mockRequest.redis.client.get).toBeCalledWith(
+        `${sessionId}.${redisKey}`
+      )
+    })
+
+    it('should get a bolean false value from Redis', async () => {
+      const mockValue = 'false'
+      _createMocks(mockValue)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(0)
+
+      const redisValue = await RedisService.get(mockRequest, redisKey)
+      expect(redisValue).toEqual(false)
+
+      expect(mockRequest.redis.client.get).toBeCalledTimes(1)
+      expect(mockRequest.redis.client.get).toBeCalledWith(
+        `${sessionId}.${redisKey}`
+      )
+    })
+
     it('should get a JSON-encoded object from Redis', async () => {
       const mockValue = {
         key1: 'VALUE 1',

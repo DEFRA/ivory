@@ -20,7 +20,10 @@ module.exports = class RedisService {
     )
 
     let parsedValue = redisValue
-    if (_isJsonString(redisValue)) {
+
+    if (_isBooleanString(redisValue)) {
+      parsedValue = redisValue.toLowerCase() === 'true'
+    } else if (_isJsonString(redisValue)) {
       try {
         parsedValue = JSON.parse(redisValue)
       } catch (e) {
@@ -76,6 +79,17 @@ const _isJsonString = value =>
   value.length &&
   ((value.startsWith('{') && value.endsWith('}')) ||
     (value.startsWith('[') && value.endsWith(']')))
+
+/**
+ * Checks a string value to see if it contains a bolean i.e. 'true' or 'false'
+ * @param {*} value The string value to be chekced
+ * @returns True if the string contains a bolean, otherwise false
+ */
+
+const _isBooleanString = value =>
+  value &&
+  value.length &&
+  (value.toLowerCase() === 'true' || value.toLowerCase() === 'false')
 
 /**
  * Scans the Redis cache for all keys matching the session key held in the session.
