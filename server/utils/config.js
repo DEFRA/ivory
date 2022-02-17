@@ -61,7 +61,7 @@ const schema = joi.object().keys({
   airbrakeHost: joi.string(),
   airbrakeProjectKey: joi.string(),
   appInsightsConnectionString: joi.string(),
-  appInsightsCloudRole: joi.string(),
+  appInsightsCloudRole: joi.string().default('IvoryFrontEnd'),
   clamscanBinaries: joi.string().default('/usr/bin/'),
   clamscanPreference: joi.string().default('clamdscan'),
   clamscanDebug: joi.bool(),

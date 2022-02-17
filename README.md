@@ -192,6 +192,7 @@ The default values will be used if the environment variables are missing or comm
 | AIRBRAKE_HOST                                                | Airbrake host                                       |    no    |                       |                  https://some-url.com                   |
 | AIRBRAKE_PROJECT_KEY                                         | Airbrake project key                                |    no    |                       |                       Any string                        |
 | APPLICATIONINSIGHTS_CONNECTION_STRING                        | Application Insights connection string              |    no    |                       |                                                         |
+| APPLICATIONINSIGHTS_CLOUDROLE                                | The name of the app in App Insights                 |    no    | IvoryFrontEnd         |                                                         |
 | USE_BASIC_AUTH                                               | Enable basic authentication                         |    no    | false                 |                       true,false                        |
 | CLAMSCAN_BINARIES                                            | Location of the binary                              |    no    | /usr/bin/             |                                                         |
 | CLAMSCAN_PREFERENCE                                          | Prefered scanning method                            |    no    | clamdscan             |                   clamdscan, clamscan                   |
