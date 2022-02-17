@@ -1,8 +1,8 @@
 'use strict'
 
+const applicationinsights = require('applicationinsights')
 const hapi = require('@hapi/hapi')
 const Bcrypt = require('bcrypt')
-const applicationinsights = require('applicationinsights')
 
 const config = require('./utils/config')
 const { options } = require('./utils/cookie-config')
@@ -22,6 +22,8 @@ const users = {
 }
 
 const createServer = async () => {
+  _initialiseAppInsights()
+
   const server = hapi.server({
     port: config.servicePort,
     routes: {
@@ -33,8 +35,6 @@ const createServer = async () => {
     },
     state: options
   })
-
-  _initialiseAppInsights()
 
   _registerPlugins(server)
 
