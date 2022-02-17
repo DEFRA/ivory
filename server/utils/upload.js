@@ -24,9 +24,7 @@ const checkForDuplicates = (payload, uploadData) => {
 const checkForFileSizeError = async (request, redisKey) => {
   const errors = []
 
-  const isError = await RedisService.get(request, redisKey)
-
-  if (isError) {
+  if (await RedisService.get(request, redisKey)) {
     errors.push({
       name: 'files',
       text: `The file must be smaller than ${config.maximumFileSize}MB`
