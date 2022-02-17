@@ -448,6 +448,7 @@ module.exports = Object.freeze({
   AgeExemptionReasons,
   AlreadyCertifiedOptions,
   Analytics,
+  APPINSIGHTS_CLOUDROLE: 'IvoryFrontEnd',
   BehalfOfBusinessOptions,
   BehalfOfNotBusinessOptions,
   Capacities,
