@@ -72,7 +72,7 @@ describe('Redis service', () => {
       )
     })
 
-    it('should get a bolean true value from Redis', async () => {
+    it('should get a bolean false value from Redis', async () => {
       const mockValue = 'false'
       _createMocks(mockValue)
 
