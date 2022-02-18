@@ -47,7 +47,6 @@ const _getContext = async request => {
   if (!uploadData) {
     uploadData = {
       files: [],
-      fileData: [],
       fileSizes: [],
       thumbnails: [],
       thumbnailData: []
@@ -55,7 +54,7 @@ const _getContext = async request => {
   }
 
   const rows = uploadData.thumbnailData.map((imageThumbnailFile, index) => {
-    const extension = (path.extname(uploadData.thumbnails[index])).substring(1)
+    const extension = path.extname(uploadData.thumbnails[index]).substring(1)
     const imageFile = `data:image/${extension};base64,${imageThumbnailFile}`
 
     return {

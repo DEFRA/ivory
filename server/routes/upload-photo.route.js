@@ -7,11 +7,21 @@ const sharp = require('sharp')
 const { v4: uuidv4 } = require('uuid')
 
 const AnalyticsService = require('../services/analytics.service')
-const RedisService = require('../services/redis.service')
 const AntimalwareService = require('../services/antimalware.service')
+const AzureBlobService = require('../services/azure-blob.service')
+const RedisService = require('../services/redis.service')
 
 const config = require('../utils/config')
-const { Paths, RedisKeys, Views, Analytics, UploadPhoto } = require('../utils/constants')
+const {
+  Analytics,
+  AzureContainer,
+  DEFRA_IVORY_SESSION_KEY,
+  Paths,
+  RedisKeys,
+  UploadPhoto,
+  Views
+} = require('../utils/constants')
+
 const { buildErrorSummary } = require('../utils/validation')
 const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
 
@@ -83,8 +93,6 @@ const handlers = {
         uploadData.thumbnails.push(thumbnailFilename)
 
         const buffer = Buffer.from(file)
-        const base64 = buffer.toString('base64')
-        uploadData.fileData.push(base64)
 
         const thumbnailBuffer = await sharp(buffer)
           .resize(UploadPhoto.THUMBNAIL_WIDTH, null, {
@@ -93,6 +101,14 @@ const handlers = {
           .toBuffer()
 
         uploadData.thumbnailData.push(thumbnailBuffer.toString('base64'))
+
+        const keyWithSessionId = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${RedisKeys.UPLOAD_PHOTO}.orig-${thumbnailFilename}`
+
+        await AzureBlobService.set(
+          AzureContainer.Images,
+          keyWithSessionId,
+          file
+        )
 
         await RedisService.set(
           request,
@@ -154,7 +170,6 @@ const _getContext = async request => {
   if (!uploadData) {
     uploadData = {
       files: [],
-      fileData: [],
       fileSizes: [],
       thumbnails: [],
       thumbnailData: []

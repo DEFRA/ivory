@@ -199,3 +199,4 @@ The default values will be used if the environment variables are missing or comm
 | DISABLE_ANTIMALWARE                                          | Disables the anti-malware                           |    no    | false                 |                       true,false                        |
 | DEFRA_USERNAME                                               | The basic authentication username                   |   yes    |                       |                       Any string                        |
 | DEFRA_PASSWORD                                               | The basic authentication password encoded (hashed)  |   yes    |                       |       Only the first 72 bytes of string are used        |
+| PERFORMANCE_TEST_MODE                                        | Flag to put the service into performance test mode  |   yes    | false                 |                                                         |

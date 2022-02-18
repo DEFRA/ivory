@@ -62,7 +62,6 @@ describe('/remove-photo route', () => {
           redisKey,
           JSON.stringify({
             files: [],
-            fileData: [],
             fileSizes: [],
             thumbnails: [],
             thumbnailData: []
@@ -102,7 +101,6 @@ describe('/remove-photo route', () => {
           redisKey,
           JSON.stringify({
             files: mockDataSixPhotos.files.slice(0),
-            fileData: mockDataSixPhotos.fileData.slice(0),
             fileSizes: mockDataSixPhotos.fileSizes.slice(0),
             thumbnails: mockDataSixPhotos.thumbnails.slice(0),
             thumbnailData: mockDataSixPhotos.thumbnailData.slice(0)
@@ -117,7 +115,6 @@ describe('/remove-photo route', () => {
 
 const mockData = {
   files: ['1.png'],
-  fileData: ['file-data'],
   fileSizes: [100],
   thumbnails: ['1-thumbnail.png'],
   thumbnailData: ['thumbnail-data']
@@ -125,14 +122,6 @@ const mockData = {
 
 const mockDataSixPhotos = {
   files: ['1.png', '2.jpeg', '3.png', '4.jpeg', '5.png', '6.png'],
-  fileData: [
-    'file-data-1',
-    'file-data-2',
-    'file-data-3',
-    'file-data-4',
-    'file-data-5',
-    'file-data-6'
-  ],
   fileSizes: [100, 200, 300, 400, 500, 600],
   thumbnails: [
     '1-thumbnail.png',

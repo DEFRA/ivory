@@ -102,7 +102,6 @@ describe('OData service', () => {
 
       const supportingInformation = {
         files: ['document1.pdf', 'document2.pdf'],
-        fileData: ['document1', 'document12'],
         fileSizes: [100, 200]
       }
 

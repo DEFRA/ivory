@@ -28,5 +28,12 @@
         <label id="page-rendered-label">Page rendered:</label>
         <strong id="page-rendered">{{ data.rendered }}</strong>
       </li>
+
+      {% if data.performanceTestMode %}
+        <li>
+          <label id="page-rendered-label">Performance testing mode enabled:</label>
+          <strong id="page-rendered">Yes</strong>
+        </li>
+      {% endif %}
     </ul>
 {% endblock %}

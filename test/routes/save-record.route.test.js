@@ -295,13 +295,11 @@ const mockApplicantData = {
 
 const mockFileAttachmentData = {
   files: ['document1.pdf', 'document2.pdf'],
-  fileData: ['document1', 'document12'],
   fileSizes: [100, 200]
 }
 
 const mockImageUploadData = {
   files: ['lamp1.png', 'lamp2.png'],
-  fileData: ['lamp-data1', 'lamp-data2'],
   fileSizes: [100, 200],
   thumbnails: ['lamp1-thumbnail.png', 'lamp2-thumbnail.png'],
   thumbnailData: ['lamp-thumbnail-data1', 'lamp-thumbnail-data2']

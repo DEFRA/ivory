@@ -292,7 +292,6 @@ describe('/legal-responsibility route', () => {
 
 const mockPhotos = {
   files: ['1.png'],
-  fileData: ['file-data'],
   fileSizes: [100],
   thumbnails: ['1-thumbnail.png'],
   thumbnailData: ['thumbnail-data']

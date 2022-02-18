@@ -148,7 +148,6 @@ const _getDocumentSummary = async request => {
   if (!uploadDocuments) {
     uploadDocuments = {
       files: [],
-      fileData: [],
       fileSizes: []
     }
   }
@@ -829,7 +828,6 @@ const _getPhotoSummary = async request => {
   if (!uploadPhotos) {
     uploadPhotos = {
       files: [],
-      fileData: [],
       fileSizes: [],
       thumbnails: [],
       thumbnailData: []

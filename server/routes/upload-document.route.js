@@ -5,11 +5,20 @@ const path = require('path')
 const { PDFDocument } = require('pdf-lib')
 
 const AnalyticsService = require('../services/analytics.service')
-const RedisService = require('../services/redis.service')
 const AntimalwareService = require('../services/antimalware.service')
+const AzureBlobService = require('../services/azure-blob.service')
+const RedisService = require('../services/redis.service')
 
 const config = require('../utils/config')
-const { Paths, RedisKeys, Views, Analytics, UploadDocument } = require('../utils/constants')
+const {
+  Analytics,
+  AzureContainer,
+  DEFRA_IVORY_SESSION_KEY,
+  Paths,
+  RedisKeys,
+  UploadDocument,
+  Views
+} = require('../utils/constants')
 const { buildErrorSummary } = require('../utils/validation')
 const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
 
@@ -107,7 +116,6 @@ const _getContext = async request => {
   if (!uploadData) {
     uploadData = {
       files: [],
-      fileData: [],
       fileSizes: []
     }
   }
@@ -194,8 +202,10 @@ const _checkForVirus = async (
     uploadData.fileSizes.push(payload.files.bytes)
 
     const buffer = Buffer.from(file)
-    const base64 = buffer.toString('base64')
-    uploadData.fileData.push(base64)
+
+    const keyWithSessionId = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${RedisKeys.UPLOAD_PHOTO}.orig-${filename}`
+
+    await AzureBlobService.set(AzureContainer.Images, keyWithSessionId, file)
 
     return buffer
   } else {

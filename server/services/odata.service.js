@@ -46,7 +46,9 @@ module.exports = class ODataService {
     }
 
     const apiEndpoint = `${config.dataverseResource}/${config.dataverseApiEndpoint}`
-    const url = `${apiEndpoint}/${SECTION_2_ENDPOINT}?$filter=cre2c_certificatenumber eq '${_replaceUnsafeCharacters(certificateNumber)}'`
+    const url = `${apiEndpoint}/${SECTION_2_ENDPOINT}?$filter=cre2c_certificatenumber eq '${_replaceUnsafeCharacters(
+      certificateNumber
+    )}'`
     console.log(`Fetching URL: [${url}]`)
 
     const response = await fetch(url, {
@@ -250,6 +252,7 @@ module.exports = class ODataService {
         'x-ms-file-name': supportingInformation.files[i]
       }
 
+      // TODO Blob storage
       const body = Buffer.from(supportingInformation.fileData[i], 'base64')
 
       console.log(`Patching URL: [${url}]`)

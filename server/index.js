@@ -63,10 +63,13 @@ const validate = async (request, username, password) => {
 const _initialiseAppInsights = () => {
   if (config.appInsightsInstrumentationKey) {
     applicationinsights.setup(config.appInsightsInstrumentationKey).start()
-    const cloudRoleTag = applicationinsights.defaultClient.context.keys.cloudRole
-    applicationinsights.defaultClient.context.tags[cloudRoleTag] = APPINSIGHTS_CLOUDROLE
+    const cloudRoleTag =
+      applicationinsights.defaultClient.context.keys.cloudRole
+    applicationinsights.defaultClient.context.tags[
+      cloudRoleTag
+    ] = APPINSIGHTS_CLOUDROLE
   } else {
-    console.error('Application Insights is disabled')
+    console.log('Application Insights is disabled')
   }
 }
 

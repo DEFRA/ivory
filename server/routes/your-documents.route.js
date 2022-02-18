@@ -39,7 +39,6 @@ const _getContext = async request => {
   if (!uploadData) {
     uploadData = {
       files: [],
-      fileData: [],
       fileSizes: []
     }
   }

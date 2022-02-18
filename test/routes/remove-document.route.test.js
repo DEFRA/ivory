@@ -62,7 +62,6 @@ describe('/remove-document route', () => {
           redisKey,
           JSON.stringify({
             files: [],
-            fileData: [],
             fileSizes: []
           })
         )
@@ -100,7 +99,6 @@ describe('/remove-document route', () => {
           redisKey,
           JSON.stringify({
             files: mockDataSixPhotos.files.slice(0),
-            fileData: mockDataSixPhotos.fileData.slice(0),
             fileSizes: mockDataSixPhotos.fileSizes.slice(0)
           })
         )
@@ -113,20 +111,11 @@ describe('/remove-document route', () => {
 
 const mockData = {
   files: ['1.pdf'],
-  fileData: ['file-data'],
   fileSizes: [100]
 }
 
 const mockDataSixPhotos = {
   files: ['1.pdf', '2.pdf', '3.pdf', '4.pdf', '5.pdf', '6.pdf'],
-  fileData: [
-    'file-data-1',
-    'file-data-2',
-    'file-data-3',
-    'file-data-4',
-    'file-data-5',
-    'file-data-6'
-  ],
   fileSizes: [100, 200, 300, 400, 500, 600]
 }
 

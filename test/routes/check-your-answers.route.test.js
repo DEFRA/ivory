@@ -1076,14 +1076,6 @@ const mockItemDescriptionWithoutOptionalValues = {
 
 const mockPhotos = {
   files: ['1.png', '2.jpeg', '3.png', '4.jpeg', '5.png', '6.png'],
-  fileData: [
-    'file-data',
-    'file-data',
-    'file-data',
-    'file-data',
-    'file-data',
-    'file-data'
-  ],
   fileSizes: [100, 200, 300, 400, 500, 600],
   thumbnails: [
     '1-thumbnail.png',
@@ -1131,14 +1123,6 @@ const mockDocuments = {
     'document4.pdf',
     'document5.pdf',
     'document6.pdf'
-  ],
-  fileData: [
-    'document1',
-    'document2',
-    'document3',
-    'document4',
-    'document5',
-    'document6'
   ],
   fileSizes: [100, 200, 300, 400, 500, 600]
 }

@@ -153,7 +153,6 @@ describe('/upload-photo route', () => {
       beforeEach(async () => {
         const mockData = {
           files: ['lamp.png', 'chair.jpeg'],
-          fileData: [],
           fileSizes: [100, 200],
           thumbnails: ['lamp-thumbnail.png', 'chair-thumbnail.jpeg'],
           thumbnailData: []
@@ -408,7 +407,6 @@ describe('/upload-photo route', () => {
 
       const mockData = {
         files: ['lamp.png'],
-        fileData: [],
         fileSizes: [100],
         thumbnails: ['lamp-thumbnail.png'],
         thumbnailData: []
@@ -445,7 +443,6 @@ const _createMocks = () => {
 
   const mockData = {
     files: [],
-    fileData: [],
     fileSizes: [100, 200],
     thumbnails: [],
     thumbnailData: []
