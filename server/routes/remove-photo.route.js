@@ -3,19 +3,26 @@
 const Hoek = require('@hapi/hoek')
 
 const AnalyticsService = require('../services/analytics.service')
+const AzureBlobService = require('../services/azure-blob.service')
 const RedisService = require('../services/redis.service')
 
-const { Paths, RedisKeys, Analytics } = require('../utils/constants')
+const {
+  Analytics,
+  AzureContainer,
+  Paths,
+  RedisKeys
+} = require('../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
+    const index = parseInt(Hoek.escapeHtml(request.params.index)) - 1
+
     const uploadData = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
 
+    await _removeImageBlob(request, uploadData, index)
+
     for (const array in uploadData) {
-      uploadData[array].splice(
-        parseInt(Hoek.escapeHtml(request.params.index)) - 1,
-        1
-      )
+      uploadData[array].splice(index, 1)
     }
 
     await RedisService.set(
@@ -33,6 +40,19 @@ const handlers = {
       ? h.redirect(Paths.YOUR_PHOTOS)
       : h.redirect(Paths.UPLOAD_PHOTO)
   }
+}
+
+/**
+ * Removes photo from blob storage
+ */
+const _removeImageBlob = (request, uploadData, index) => {
+  const blobName = AzureBlobService.getBlobName(
+    request,
+    RedisKeys.UPLOAD_PHOTO,
+    uploadData.thumbnails[index]
+  )
+
+  return AzureBlobService.delete(AzureContainer.Images, blobName)
 }
 
 module.exports = [

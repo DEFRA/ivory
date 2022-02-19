@@ -102,7 +102,8 @@ describe('OData service', () => {
 
       const supportingInformation = {
         files: ['document1.pdf', 'document2.pdf'],
-        fileSizes: [100, 200]
+        fileSizes: [100, 200],
+        fileData: [Buffer.from([]), Buffer.from([])]
       }
 
       expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)

@@ -93,15 +93,29 @@ const _updateRecord = async (request, entity, isSection2) => {
 }
 
 const _updateRecordAttachments = async (request, entity) => {
-  const supportingInformation = await RedisService.get(
+  const supportingEvidence = await RedisService.get(
     request,
     RedisKeys.UPLOAD_DOCUMENT
   )
 
-  if (supportingInformation) {
+  if (
+    supportingEvidence &&
+    supportingEvidence.files &&
+    supportingEvidence.files.length
+  ) {
+    supportingEvidence.fileData = []
+
+    for (let index = 0; index < supportingEvidence.files.length; index++) {
+      supportingEvidence.fileData[index] = await _getSupportingEvidenceBlob(
+        request,
+        supportingEvidence,
+        index
+      )
+    }
+
     ODataService.updateRecordAttachments(
       entity[DataVerseFieldName.SECTION_2_CASE_ID],
-      supportingInformation
+      supportingEvidence
     )
   }
 }
@@ -440,9 +454,31 @@ const _getAdditionalPhotos = async request => {
  * @returns
  */
 const _getPhotoBlob = async (request, photos, index) => {
-  const blobName = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${RedisKeys.UPLOAD_PHOTO}.orig-${photos.thumbnails[index]}`
+  const blobName = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${RedisKeys.UPLOAD_PHOTO}.${photos.thumbnails[index]}`
 
   const blob = await AzureBlobService.get(AzureContainer.Images, blobName)
+
+  return blob.toString('base64')
+}
+
+/**
+ * Gets a file from blob storage and converts it into a base64 string
+ * @param {*} request
+ * @param {*} supportingEvidence
+ * @param {*} index
+ * @returns
+ */
+const _getSupportingEvidenceBlob = async (
+  request,
+  supportingEvidence,
+  index
+) => {
+  const blobName = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${RedisKeys.UPLOAD_DOCUMENT}.${supportingEvidence.files[index]}`
+
+  const blob = await AzureBlobService.get(
+    AzureContainer.SupportingEvidence,
+    blobName
+  )
 
   return blob.toString('base64')
 }

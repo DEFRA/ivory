@@ -13,7 +13,6 @@ const config = require('../utils/config')
 const {
   Analytics,
   AzureContainer,
-  DEFRA_IVORY_SESSION_KEY,
   Paths,
   RedisKeys,
   UploadDocument,
@@ -57,20 +56,22 @@ const handlers = {
 
     const uploadData = context.uploadData
     let buffer
+    let file
 
     const errors = _validateForm(payload, uploadData)
 
     if (!errors.length) {
-      buffer = await _checkForVirus(
-        request,
-        payload,
-        filename,
-        uploadData,
-        errors
-      )
+      await _checkForVirus(request, payload, filename, uploadData, errors)
     }
 
     if (!errors.length) {
+      file = await fs.promises.readFile(payload.files.path)
+
+      uploadData.files.push(filename)
+      uploadData.fileSizes.push(payload.files.bytes)
+
+      buffer = Buffer.from(file)
+
       if (filename.toUpperCase().endsWith(UploadDocument.PDF_EXTENSION)) {
         await _checkPdfEncryption(buffer, errors)
       }
@@ -94,6 +95,18 @@ const handlers = {
         request,
         RedisKeys.UPLOAD_DOCUMENT,
         JSON.stringify(uploadData)
+      )
+
+      const blobName = AzureBlobService.getBlobName(
+        request,
+        RedisKeys.UPLOAD_DOCUMENT,
+        filename
+      )
+
+      await AzureBlobService.set(
+        AzureContainer.SupportingEvidence,
+        blobName,
+        file
       )
     }
 
@@ -195,20 +208,7 @@ const _checkForVirus = async (
     filename
   )
 
-  if (!isInfected) {
-    const file = await fs.promises.readFile(payload.files.path)
-
-    uploadData.files.push(filename)
-    uploadData.fileSizes.push(payload.files.bytes)
-
-    const buffer = Buffer.from(file)
-
-    const keyWithSessionId = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${RedisKeys.UPLOAD_PHOTO}.orig-${filename}`
-
-    await AzureBlobService.set(AzureContainer.Images, keyWithSessionId, file)
-
-    return buffer
-  } else {
+  if (isInfected) {
     errors.push({
       name: 'files',
       text: 'The file could not be uploaded - try a different one'

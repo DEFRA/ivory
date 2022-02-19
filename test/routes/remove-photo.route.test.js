@@ -2,6 +2,11 @@
 
 const TestHelper = require('../utils/test-helper')
 
+const { AzureContainer } = require('../../server/utils/constants')
+
+jest.mock('../../server/services/azure-blob.service')
+const AzureBlobService = require('../../server/services/azure-blob.service')
+
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
@@ -44,6 +49,8 @@ describe('/remove-photo route', () => {
         expect(RedisService.get).toBeCalledTimes(0)
         expect(RedisService.set).toBeCalledTimes(0)
 
+        expect(AzureBlobService.delete).toBeCalledTimes(0)
+
         const response = await TestHelper.submitGetRequest(
           server,
           getOptions,
@@ -52,11 +59,15 @@ describe('/remove-photo route', () => {
         )
 
         expect(RedisService.get).toBeCalledTimes(1)
-
         expect(RedisService.get).toBeCalledWith(expect.any(Object), redisKey)
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledWith(
+          AzureContainer.Images,
+          mockBlobName
+        )
 
+        expect(RedisService.set).toBeCalledTimes(1)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKey,
@@ -91,11 +102,15 @@ describe('/remove-photo route', () => {
         )
 
         expect(RedisService.get).toBeCalledTimes(1)
-
         expect(RedisService.get).toBeCalledWith(expect.any(Object), redisKey)
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledWith(
+          AzureContainer.Images,
+          mockBlobName
+        )
 
+        expect(RedisService.set).toBeCalledTimes(1)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKey,
@@ -141,6 +156,11 @@ const mockDataSixPhotos = {
   ]
 }
 
+const mockBlobName = 'MOCK_BLOB_NAME'
+
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  AzureBlobService.getBlobName = jest.fn().mockReturnValue(mockBlobName)
+  AzureBlobService.delete = jest.fn()
 }

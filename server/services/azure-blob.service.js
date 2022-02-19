@@ -5,6 +5,8 @@ const {
   StorageSharedKeyCredential
 } = require('@azure/storage-blob')
 
+const { DEFRA_IVORY_SESSION_KEY } = require('../utils/constants')
+
 const config = require('../utils/config')
 
 const sharedKeyCredential = new StorageSharedKeyCredential(
@@ -18,6 +20,18 @@ const blobServiceClient = new BlobServiceClient(
 )
 
 module.exports = class AzureBlobService {
+  /**
+   * Returns a blob name based on the incoming request session ID, the type of blob (image or document) and the filename
+   *
+   * @param {*} request
+   * @param {*} type
+   * @param {*} filename
+   * @returns
+   */
+  static getBlobName (request, type, filename) {
+    return `${request.state[DEFRA_IVORY_SESSION_KEY]}.${type}.${filename}`
+  }
+
   /**
    * Gets a blob from Azure storage
    * @param {*} containerName The name of the container in which the blob resides
@@ -49,6 +63,18 @@ module.exports = class AzureBlobService {
     const blockBlobClient = containerClient.getBlockBlobClient(blobName)
 
     return blockBlobClient.upload(value, value.length)
+  }
+
+  /**
+   * Gets a blob from Azure storage
+   * @param {*} containerName The name of the container in which the blob resides
+   * @param {*} blobName The name of the blob to get
+   * @returns The blob file
+   */
+  static async delete (containerName, blobName) {
+    const containerClient = blobServiceClient.getContainerClient(containerName)
+    const blobClient = containerClient.getBlobClient(blobName)
+    return blobClient.deleteIfExists()
   }
 }
 

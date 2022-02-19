@@ -10,6 +10,9 @@ const {
   RedisKeys
 } = require('../../server/utils/constants')
 
+jest.mock('../../server/services/azure-blob.service')
+const AzureBlobService = require('../../server/services/azure-blob.service')
+
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
@@ -246,6 +249,8 @@ describe('/save-record route', () => {
 
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  AzureBlobService.get = jest.fn().mockReturnValue(Buffer.from([]))
 
   ODataService.updateRecord = jest.fn()
   ODataService.updateRecordAttachments = jest.fn()

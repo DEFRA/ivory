@@ -252,7 +252,6 @@ module.exports = class ODataService {
         'x-ms-file-name': supportingInformation.files[i]
       }
 
-      // TODO Blob storage
       const body = Buffer.from(supportingInformation.fileData[i], 'base64')
 
       console.log(`Patching URL: [${url}]`)

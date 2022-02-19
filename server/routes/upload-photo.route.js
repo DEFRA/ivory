@@ -15,7 +15,6 @@ const config = require('../utils/config')
 const {
   Analytics,
   AzureContainer,
-  DEFRA_IVORY_SESSION_KEY,
   Paths,
   RedisKeys,
   UploadPhoto,
@@ -102,13 +101,13 @@ const handlers = {
 
         uploadData.thumbnailData.push(thumbnailBuffer.toString('base64'))
 
-        const keyWithSessionId = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${RedisKeys.UPLOAD_PHOTO}.orig-${thumbnailFilename}`
-
-        await AzureBlobService.set(
-          AzureContainer.Images,
-          keyWithSessionId,
-          file
+        const blobName = AzureBlobService.getBlobName(
+          request,
+          RedisKeys.UPLOAD_PHOTO,
+          thumbnailFilename
         )
+
+        await AzureBlobService.set(AzureContainer.Images, blobName, file)
 
         await RedisService.set(
           request,
