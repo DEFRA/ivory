@@ -13,20 +13,6 @@ let sharedKeyCredential
 let blobServiceClient
 
 module.exports = class AzureBlobService {
-  initialise () {
-    sharedKeyCredential = new StorageSharedKeyCredential(
-      config.azureStorageAccount,
-      config.azureStorageAccountKey
-    )
-
-    blobServiceClient = new BlobServiceClient(
-      `https://${config.azureStorageAccount}.blob.core.windows.net`,
-      sharedKeyCredential
-    )
-
-    this.isInitialised = true
-  }
-
   /**
    * Returns a blob name based on the incoming request session ID, the type of blob (image or document) and the filename
    *
@@ -47,18 +33,14 @@ module.exports = class AzureBlobService {
    */
   static async get (containerName, blobName) {
     if (!this.isInitialised) {
-      this.initialise()
+      this._initialise()
     }
 
     const containerClient = blobServiceClient.getContainerClient(containerName)
     const blobClient = containerClient.getBlobClient(blobName)
     const downloadBlockBlobResponse = await blobClient.download()
 
-    const blob = await _streamToBuffer(
-      downloadBlockBlobResponse.readableStreamBody
-    )
-
-    return blob
+    return _streamToBuffer(downloadBlockBlobResponse.readableStreamBody)
   }
 
   /**
@@ -70,7 +52,7 @@ module.exports = class AzureBlobService {
    */
   static async set (containerName, blobName, value) {
     if (!this.isInitialised) {
-      this.initialise()
+      this._initialise()
     }
 
     const containerClient = blobServiceClient.getContainerClient(containerName)
@@ -88,12 +70,29 @@ module.exports = class AzureBlobService {
    */
   static async delete (containerName, blobName) {
     if (!this.isInitialised) {
-      this.initialise()
+      this._initialise()
     }
 
     const containerClient = blobServiceClient.getContainerClient(containerName)
     const blobClient = containerClient.getBlobClient(blobName)
     return blobClient.deleteIfExists()
+  }
+
+  /**
+   * Private method to initialise the connection to Azure blob storage
+   */
+  static _initialise () {
+    sharedKeyCredential = new StorageSharedKeyCredential(
+      config.azureStorageAccount,
+      config.azureStorageAccountKey
+    )
+
+    blobServiceClient = new BlobServiceClient(
+      `https://${config.azureStorageAccount}.blob.core.windows.net`,
+      sharedKeyCredential
+    )
+
+    this.isInitialised = true
   }
 }
 
