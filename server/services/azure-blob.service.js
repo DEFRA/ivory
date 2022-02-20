@@ -9,17 +9,24 @@ const { DEFRA_IVORY_SESSION_KEY } = require('../utils/constants')
 
 const config = require('../utils/config')
 
-const sharedKeyCredential = new StorageSharedKeyCredential(
-  config.azureStorageAccount,
-  config.azureStorageAccountKey
-)
-
-const blobServiceClient = new BlobServiceClient(
-  `https://${config.azureStorageAccount}.blob.core.windows.net`,
-  sharedKeyCredential
-)
+let sharedKeyCredential
+let blobServiceClient
 
 module.exports = class AzureBlobService {
+  initialise () {
+    sharedKeyCredential = new StorageSharedKeyCredential(
+      config.azureStorageAccount,
+      config.azureStorageAccountKey
+    )
+
+    blobServiceClient = new BlobServiceClient(
+      `https://${config.azureStorageAccount}.blob.core.windows.net`,
+      sharedKeyCredential
+    )
+
+    this.isInitialised = true
+  }
+
   /**
    * Returns a blob name based on the incoming request session ID, the type of blob (image or document) and the filename
    *
@@ -39,6 +46,10 @@ module.exports = class AzureBlobService {
    * @returns The blob file
    */
   static async get (containerName, blobName) {
+    if (!this.isInitialised) {
+      this.initialise()
+    }
+
     const containerClient = blobServiceClient.getContainerClient(containerName)
     const blobClient = containerClient.getBlobClient(blobName)
     const downloadBlockBlobResponse = await blobClient.download()
@@ -58,6 +69,10 @@ module.exports = class AzureBlobService {
    * @returns
    */
   static async set (containerName, blobName, value) {
+    if (!this.isInitialised) {
+      this.initialise()
+    }
+
     const containerClient = blobServiceClient.getContainerClient(containerName)
 
     const blockBlobClient = containerClient.getBlockBlobClient(blobName)
@@ -72,6 +87,10 @@ module.exports = class AzureBlobService {
    * @returns The blob file
    */
   static async delete (containerName, blobName) {
+    if (!this.isInitialised) {
+      this.initialise()
+    }
+
     const containerClient = blobServiceClient.getContainerClient(containerName)
     const blobClient = containerClient.getBlobClient(blobName)
     return blobClient.deleteIfExists()
