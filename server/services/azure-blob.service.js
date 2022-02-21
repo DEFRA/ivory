@@ -63,7 +63,7 @@ module.exports = class AzureBlobService {
   }
 
   /**
-   * Gets a blob from Azure storage
+   * Removes a blob from Azure storage
    * @param {*} containerName The name of the container in which the blob resides
    * @param {*} blobName The name of the blob to get
    * @returns The blob file
