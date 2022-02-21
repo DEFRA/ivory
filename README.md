@@ -200,3 +200,5 @@ The default values will be used if the environment variables are missing or comm
 | DEFRA_USERNAME                                               | The basic authentication username                   |   yes    |                       |                       Any string                        |
 | DEFRA_PASSWORD                                               | The basic authentication password encoded (hashed)  |   yes    |                       |       Only the first 72 bytes of string are used        |
 | PERFORMANCE_TEST_MODE                                        | Flag to put the service into performance test mode  |   yes    | false                 |                                                         |
+| AZURE_STORAGE_ACCOUNT                                        | The name of the blob storage account to use         |   yes    |                       |                                                         |
+| AZURE_STORAGE_ACCOUNT_KEY                                    | The key to use to access the blob storage account   |   yes    |                       |                                                         |
