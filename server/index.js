@@ -22,7 +22,7 @@ if (config.appInsightsInstrumentationKey) {
 
   applicationinsights.start()
 } else {
-  console.error('Application Insights is disabled')
+  console.log('Application Insights is disabled')
 }
 
 const hapi = require('@hapi/hapi')
