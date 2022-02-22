@@ -10,8 +10,7 @@
     "debug": "nodemon --inspect index.js",
     "lint": "standard",
     "unit-test": "npx jest --detectOpenHandles --forceExit --verbose",
-    "test": "npm run lint && npm run unit-test",
-    "postinstall": "npm run build"
+    "test": "npm run lint && npm run unit-test"
   },
   "author": "Department for Environment, Food & Rural Affairs",
   "license": "SEE LICENSE IN LICENSE",
@@ -53,7 +52,7 @@
     "pdf-lib": "^1.17.1",
     "postcode-validator": "^3.5.3",
     "randomstring": "^1.2.2",
-    "sharp": "^0.29.3",
+    "sharp": "^0.30.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
