@@ -21,7 +21,11 @@ First install the dependencies & build the application using:
 
 `$ npm install`
 
-If installing on a Windows machine you may encounter an error when running `$ npm install` relating to your OS not being able to run the Bash scripts which are part of the installation. Should you have this problem first ensure that you have installed [Git for Windows](https://gitforwindows.org). Then run the command `$ npm config set script-shell %userprofile%\cmder\vendor\git-for-windows\bin\bash` followed by `$ npm install`.
+followed by:
+
+`$ npm run build` - This runs the build tasks, which currently are just building the CSS. This needs to be run on the initial install, if updates are made to the Sass, or if the "govuk-frontend" is updated.
+
+If installing on a Windows machine you may encounter an error when running `$ npm run build` relating to your OS not being able to run the Bash scripts which are part of the installation. Should you have this problem first ensure that you have installed [Git for Windows](https://gitforwindows.org). Then run the command `$ npm config set script-shell %userprofile%\cmder\vendor\git-for-windows\bin\bash` followed by `$ npm run build`.
 
 Now the application is ready to run:
 
