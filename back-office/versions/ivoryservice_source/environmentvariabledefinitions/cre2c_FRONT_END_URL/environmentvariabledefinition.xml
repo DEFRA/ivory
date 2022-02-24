@@ -1,0 +1,9 @@
+<environmentvariabledefinition schemaname="cre2c_FRONT_END_URL">
+  <displayname default="FRONT_END_URL">
+    <label description="FRONT_END_URL" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.37</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <type>100000000</type>
+</environmentvariabledefinition>
