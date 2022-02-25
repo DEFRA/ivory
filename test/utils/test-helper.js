@@ -33,7 +33,6 @@ module.exports = class TestHelper {
 
   static createServer () {
     jest.mock('@defra/hapi-gapi')
-    jest.mock('@airbrake/node')
 
     return createServer()
   }
