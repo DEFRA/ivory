@@ -82,7 +82,6 @@ const _registerPlugins = async server => {
     server.auth.default('simple')
   }
 
-  await server.register(require('./plugins/airbrake.plugin'))
   await server.register(require('./plugins/blipp.plugin'))
   await server.register(require('./plugins/disinfect.plugin'))
   await server.register(require('./plugins/error-pages.plugin'))
