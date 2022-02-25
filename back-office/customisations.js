@@ -32,11 +32,13 @@ const DataVerseFieldName = {
   DISTINGUISHING_FEATURES: 'cre2c_uniquefeatures',
   EXEMPTION_CATEGORY: 'cre2c_exemptioncategory',
   EXEMPTION_TYPE: 'cre2c_exemptiontype',
+  GROUP_REGISTRATION: 'cre2c_groupregistration',
   HAS_DISTINGUISHING_FEATURES: 'cre2c_hasuniquefeatures',
   INTENTION: 'cre2c_intention',
   ITEM_SUMMARY: 'cre2c_itemsummary',
   MANUALLY_CREATED: 'cre2c_manuallycreated',
   NAME: 'cre2c_name',
+  NUMBER_OF_ITEMS:'cre2c_numberofitems',
   OWNED_BY_APPLICANT: 'cre2c_ownedbyapplicant',
   OWNER_ADDRESS: 'cre2c_owneraddress',
   OWNER_EMAIL: 'cre2c_owneremail',
@@ -710,18 +712,15 @@ this._setAllFieldsToReadOnly = async (formContext) => {
     DataVerseFieldName.DATE_OF_PI_RESPONSE,
     DataVerseFieldName.DATE_RECOMMENDATION_RECEIVED,
     DataVerseFieldName.DATE_SENT_TO_PI,
+    DataVerseFieldName.GROUP_REGISTRATION,
+    DataVerseFieldName.NUMBER_OF_ITEMS,
     DataVerseFieldName.OWNER,
     DataVerseFieldName.PI_ASSIGNMENT_NOTES,
     DataVerseFieldName.PI_LINK_EXPIRY,
     DataVerseFieldName.PRESCRIBED_INSTITUTE,
     DataVerseFieldName.STATE_CODE,
     DataVerseFieldName.STATUS,
-    DataVerseFieldName.TARGET_COMPLETION_DATE,
-
-    // In future these two fields will be made read-only if the record
-    // was not manually created i.e. removed from this list
-    DataVerseFieldName.CONSENT_TO_SHARE_INFORMATION,
-    DataVerseFieldName.MANUALLY_CREATED
+    DataVerseFieldName.TARGET_COMPLETION_DATE
   ];
 
   formControls.forEach(control => {
