@@ -9,8 +9,9 @@ const {
 } = require('./utils/constants')
 
 // This AI config has to be at the top of the file for it to negate a loss in telemetry
-const applicationinsights = require('applicationinsights')
-if (config.appInsightsInstrumentationKey) {
+if (config.appInsightsInstrumentationKey && !process.env.UNIT_TEST) {
+  const applicationinsights = require('applicationinsights')
+
   applicationinsights
     .setup(config.appInsightsInstrumentationKey)
     .setAutoCollectPerformance(true, true)
@@ -21,7 +22,7 @@ if (config.appInsightsInstrumentationKey) {
   applicationinsights.defaultClient.context.tags[applicationinsights.defaultClient.context.keys.cloudRole] = APPINSIGHTS_CLOUDROLE
 
   applicationinsights.start()
-} else {
+} else if (!process.env.UNIT_TEST) {
   console.log('Application Insights is disabled')
 }
 

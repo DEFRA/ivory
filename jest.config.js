@@ -29,6 +29,7 @@ module.exports = {
       }
     ]
   ],
+  setupFiles: ['./jest.setEnvVars.js'],
   setupFilesAfterEnv: ['./jest.setup.js'],
   testEnvironment: 'node',
   testPathIgnorePatterns: ['test/integration/local', 'test/contract/']
