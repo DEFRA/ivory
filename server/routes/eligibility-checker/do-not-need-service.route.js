@@ -48,9 +48,7 @@ const _getContext = async request => {
 
   const isMuseum = await RedisService.get(request, RedisKeys.ARE_YOU_A_MUSEUM)
 
-  const speciesList = Object.values(Species).map(species =>
-    species.toLowerCase()
-  )
+  const speciesList = Object.values(Species).map(item => item.toLowerCase())
 
   return {
     pageTitle: 'You don’t need to tell us about this item',
