@@ -12,7 +12,7 @@ const { RedisKeys } = require('../../../server/utils/constants')
 describe('/eligibility-checker/how-certain route', () => {
   let server
   const url = '/eligibility-checker/how-certain'
-  const nextUrlTypeOfItem = '/what-type-of-item-is-it'
+  const nextUrlWhatSpeciesExpert = '/what-species-expert'
   const nextUrlContainElephantIvory =
     '/eligibility-checker/contain-elephant-ivory'
 
@@ -133,7 +133,7 @@ describe('/eligibility-checker/how-certain route', () => {
           postOptions,
           server,
           'Completely',
-          nextUrlTypeOfItem,
+          nextUrlWhatSpeciesExpert,
           false
         )
       })

@@ -44,7 +44,7 @@ const handlers = {
 
     switch (payload.ivoryAdded) {
       case Options.YES:
-        return h.redirect(Paths.TAKEN_FROM_ELEPHANT)
+        return h.redirect(Paths.TAKEN_FROM_SPECIES)
 
       case Options.NO:
         return h.redirect(

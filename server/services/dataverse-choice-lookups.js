@@ -7,7 +7,8 @@ const {
   ItemType,
   Intention,
   IvoryIntegralReasons,
-  IvoryVolumeReasons
+  IvoryVolumeReasons,
+  Species
 } = require('../utils/constants')
 
 const AgeExemptionReasonLookup = {
@@ -99,6 +100,24 @@ const SellingOnBehalfOfReverseLookup = {
   881990005: BehalfOfBusinessOptions.OTHER
 }
 
+const SpeciesLookup = {
+  [Species.ELEPHANT]: 881990000,
+  [Species.HIPPOPOTAMUS]: 881990001,
+  [Species.KILLER_WHALE]: 881990002,
+  [Species.NARWHAL]: 881990003,
+  [Species.SPERM_WHALE]: 881990004,
+  [Species.WALRUS]: 881990005
+}
+
+const SpeciesReverseLookup = {
+  881990000: Species.ELEPHANT,
+  881990001: Species.HIPPOPOTAMUS,
+  881990002: Species.KILLER_WHALE,
+  881990003: Species.NARWHAL,
+  881990004: Species.SPERM_WHALE,
+  881990005: Species.WALRUS
+}
+
 const Status = {
   Logged: 881990000
 }
@@ -122,6 +141,8 @@ module.exports = {
   IvoryVolumeLookup,
   SellingOnBehalfOfLookup,
   SellingOnBehalfOfReverseLookup,
+  SpeciesLookup,
+  SpeciesReverseLookup,
   Status,
   WhyIvoryIntegral
 }

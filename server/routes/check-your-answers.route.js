@@ -264,7 +264,14 @@ const _getExemptionReasonSummary = async (
 }
 
 const _getItemSummary = async (request, itemType) => {
+  const whatSpecies = await RedisService.get(request, RedisKeys.WHAT_SPECIES)
+
   const itemSummary = [
+    _getSummaryListRow(
+      'Ivory type',
+      whatSpecies,
+      _getChangeItems(Paths.WHAT_SPECIES_EXPERT, CHANGE_LINK_HINT.IvoryType)
+    ),
     _getSummaryListRow(
       'Type of exemption',
       itemType,
@@ -313,7 +320,10 @@ const _getItemSummary = async (request, itemType) => {
       _getSummaryListRow(
         'Already has a certificate',
         alreadyCertified.alreadyCertified,
-        _getChangeItems(Paths.ALREADY_CERTIFIED, CHANGE_LINK_HINT.WhereMade)
+        _getChangeItems(
+          Paths.ALREADY_CERTIFIED,
+          CHANGE_LINK_HINT.AleadyCertified
+        )
       )
     )
 
@@ -322,7 +332,10 @@ const _getItemSummary = async (request, itemType) => {
         _getSummaryListRow(
           'Certificate number',
           alreadyCertified.certificateNumber,
-          _getChangeItems(Paths.ALREADY_CERTIFIED, CHANGE_LINK_HINT.WhereMade)
+          _getChangeItems(
+            Paths.ALREADY_CERTIFIED,
+            CHANGE_LINK_HINT.AleadyCertified
+          )
         )
       )
     }
@@ -332,7 +345,10 @@ const _getItemSummary = async (request, itemType) => {
         _getSummaryListRow(
           'Revoked certificate number',
           revokedCertificateNumber,
-          _getChangeItems(Paths.REVOKED_CERTIFICATE, CHANGE_LINK_HINT.WhereMade)
+          _getChangeItems(
+            Paths.REVOKED_CERTIFICATE,
+            CHANGE_LINK_HINT.RevokedCertificateNumber
+          )
         )
       )
     }
@@ -342,7 +358,7 @@ const _getItemSummary = async (request, itemType) => {
         _getSummaryListRow(
           'Applied before',
           hasAppliedBefore ? Options.YES : Options.NO,
-          _getChangeItems(Paths.APPLIED_BEFORE, CHANGE_LINK_HINT.WhereMade)
+          _getChangeItems(Paths.APPLIED_BEFORE, CHANGE_LINK_HINT.AppliedBefore)
         )
       )
     }
@@ -359,7 +375,7 @@ const _getItemSummary = async (request, itemType) => {
           previousApplicationNumber,
           _getChangeItems(
             Paths.PREVIOUS_APPLICATION_NUMBER,
-            CHANGE_LINK_HINT.WhereMade
+            CHANGE_LINK_HINT.PreviousApplicationNumber
           )
         )
       )
@@ -890,16 +906,21 @@ const _getChangeItems = (href, visuallyHiddenText) => [
 ]
 
 const CHANGE_LINK_HINT = {
+  AleadyCertified: 'whether the item has a certificate',
+  AppliedBefore: 'whether an application has been made before',
   BusinessName: 'business name',
+  DistinguishingFeatures: 'any distinguishing features',
   ExemptionType: 'type of exemption',
   ItemAge: 'your proof of age',
+  IvoryType: 'type of ivory',
   IvoryVolme: 'your proof that item has less than [##PERCENTAGE##]% ivory',
   OwnerAddress: 'owner’s address',
   OwnerEmail: 'owner’s email',
   OwnerName: 'owner’s name',
-  SellingOnBehalfOf: 'who owns the item',
+  PreviousApplicationNumber: 'previous application number',
+  RevokedCertificateNumber: 'revoked certificate number',
   SaleIntention: 'what owner intends to do',
-  DistinguishingFeatures: 'any distinguishing features',
+  SellingOnBehalfOf: 'who owns the item',
   WhatIsItem: 'your description of the item',
   WhenMade: 'when it was made',
   WhereIsIvory: 'where the ivory is',
@@ -909,14 +930,14 @@ const CHANGE_LINK_HINT = {
   WhyRmi: 'reason why item is of outstandingly high value',
   WorkForABusiness: 'if you work for a business',
   YourAddress: 'your address',
-  YourFiles: 'your files',
   YourEmail: 'your email',
+  YourFiles: 'your files',
   YourName: 'your name',
   YourPhotos: 'your photos'
 }
 
 const BEFORE_1975 =
-  'any replacement ivory was taken from an elephant before 1 January 1975'
+  "any replacement ivory was taken from the item's ivory type before 1 January 1975"
 const COMPLETE_AND_CORRECT =
   'the information you’ve provided is complete and correct'
 
