@@ -1,10 +1,12 @@
 'use strict'
 
 const TestHelper = require('../../utils/test-helper')
-const { ItemType } = require('../../../server/utils/constants')
+const { ItemType, Species } = require('../../../server/utils/constants')
 
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
+
+const { RedisKeys } = require('../../../server/utils/constants')
 
 describe('/eligibility-checker/taken-from-species route', () => {
   let server
@@ -40,8 +42,6 @@ describe('/eligibility-checker/taken-from-species route', () => {
   })
 
   describe('GET', () => {
-    const species = 'elephant'
-
     const getOptions = {
       method: 'GET',
       url
@@ -63,7 +63,7 @@ describe('/eligibility-checker/taken-from-species route', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        `Was the replacement ivory taken from the ${species} on or after 1 January 1975?`
+        `Was the replacement ivory taken from the ${mockSpecies.toLowerCase()} on or after 1 January 1975?`
       )
     })
 
@@ -99,7 +99,6 @@ describe('/eligibility-checker/taken-from-species route', () => {
 
   describe('POST', () => {
     let postOptions
-    const species = 'elephant'
 
     beforeEach(() => {
       postOptions = {
@@ -160,15 +159,25 @@ describe('/eligibility-checker/taken-from-species route', () => {
           response,
           'takenFromSpecies',
           'takenFromSpecies-error',
-          `You must tell us whether the replacement ivory was taken from the ${species} on or after 1 January 1975`
+          `You must tell us whether the replacement ivory was taken from the ${mockSpecies.toLowerCase()} on or after 1 January 1975`
         )
       })
     })
   })
 })
 
+const mockSpecies = Species.HIPPOPOTAMUS
+
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  RedisService.get = jest.fn((request, redisKey) => {
+    const mockDataMap = {
+      [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+      [RedisKeys.WHAT_SPECIES]: mockSpecies
+    }
+    return mockDataMap[redisKey]
+  })
 }
 
 const _checkSelectedRadioAction = async (

@@ -1,5 +1,8 @@
 'use strict'
 
+jest.mock('../../../server/services/redis.service')
+const RedisService = require('../../../server/services/redis.service')
+
 const TestHelper = require('../../utils/test-helper')
 
 describe('/eligibility-checker/cannot-trade route', () => {
@@ -136,7 +139,7 @@ describe('/eligibility-checker/cannot-trade route', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Any replacement ivory in your item must have been taken from the elephant before 1 January 1975.'
+        `Any replacement ivory in your item must have been taken from the ${species} before 1 January 1975.`
       )
     })
   })
@@ -188,6 +191,9 @@ const _checkPostAction = async (postOptions, server, nextUrl) => {
   expect(response.headers.location).toEqual(nextUrl)
 }
 
+const species = 'walrus'
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  RedisService.get = jest.fn().mockResolvedValue(species)
 }
