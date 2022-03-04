@@ -36,7 +36,17 @@ const checkForFileSizeError = async (request, redisKey) => {
   return errors
 }
 
+const waitingForUpload = (h, view, context) => {
+  console.log('waiting for upload')
+  return h.view(view, {
+    ...context,
+    uploading: true
+  })
+    .code(205)
+}
+
 module.exports = {
   checkForDuplicates,
-  checkForFileSizeError
+  checkForFileSizeError,
+  waitingForUpload
 }

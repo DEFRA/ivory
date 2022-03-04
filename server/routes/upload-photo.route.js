@@ -13,7 +13,7 @@ const AntimalwareService = require('../services/antimalware.service')
 const config = require('../utils/config')
 const { Paths, RedisKeys, Views, Analytics, UploadPhoto } = require('../utils/constants')
 const { buildErrorSummary } = require('../utils/validation')
-const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
+const { checkForDuplicates, checkForFileSizeError, waitingForUpload } = require('../utils/upload')
 
 const handlers = {
   get: async (request, h) => {
@@ -63,6 +63,8 @@ const handlers = {
         })
         .code(400)
     }
+
+    await waitingForUpload(h, Views.UPLOAD_PHOTO, context)
 
     try {
       const isInfected = await AntimalwareService.scan(

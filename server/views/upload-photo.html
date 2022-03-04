@@ -9,6 +9,7 @@
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
+      <link href="{{ assetPath }}/stylesheets/ispinner.prefixed.css" rel="stylesheet" />
 
       {% call govukFieldset({
           attributes: {
@@ -66,6 +67,21 @@
           text: "Continue"
         })
       }}
+
+      {% if uploading %}
+        <!-- style: large -->
+        <p>IT SHOULD BE SHOWING A SPINNER</p>
+        <div class="ispinner ispinner-large">
+          <div class="ispinner-blade"></div>
+          <div class="ispinner-blade"></div>
+          <div class="ispinner-blade"></div>
+          <div class="ispinner-blade"></div>
+          <div class="ispinner-blade"></div>
+          <div class="ispinner-blade"></div>
+          <div class="ispinner-blade"></div>
+          <div class="ispinner-blade"></div>
+        </div>
+      {% endif %}
 
       {% if hideHelpText %}
         <p class="govuk-body">
