@@ -45,7 +45,7 @@ describe('/make-payment route', () => {
       url
     }
 
-    beforeEach(async () => {
+    beforeEach(() => {
       const response = {
         payment_id: paymentId,
         _links: {

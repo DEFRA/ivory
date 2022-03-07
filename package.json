@@ -1,6 +1,6 @@
 {
   "name": "ivory",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "Digital service to support the Ivory Act",
   "main": "index.js",
   "scripts": {
@@ -9,9 +9,8 @@
     "build": "bin/build",
     "debug": "nodemon --inspect index.js",
     "lint": "standard",
-    "unit-test": "npx jest --detectOpenHandles --forceExit --verbose",
-    "test": "npm run lint && npm run unit-test",
-    "postinstall": "npm run build"
+    "unit-test": "npx jest --verbose",
+    "test": "npm run lint && npm run unit-test"
   },
   "author": "Department for Environment, Food & Rural Affairs",
   "license": "SEE LICENSE IN LICENSE",
@@ -27,7 +26,6 @@
     "node": "16.x"
   },
   "dependencies": {
-    "@airbrake/node": "^2.1.7",
     "@azure/identity": "^2.0.3",
     "@azure/storage-blob": "^12.8.0",
     "@defra/hapi-gapi": "^1.2.1",
@@ -40,11 +38,11 @@
     "applicationinsights": "^2.2.1",
     "bcrypt": "^5.0.1",
     "blipp": "^4.0.2",
-    "clamscan": "^2.0.1",
+    "clamscan": "^2.0.3",
     "disinfect": "^1.1.0",
     "dotenv": "^15.0.0",
-    "govuk-frontend": "^4.0.0",
-    "hapi-pino": "8.5.0",
+    "govuk-frontend": "^4.0.1",
+    "hapi-pino": "9.1.2",
     "hapi-redis2": "^3.0.1",
     "joi": "^17.6.0",
     "moment": "^2.29.1",
@@ -53,16 +51,17 @@
     "notifications-node-client": "^5.1.1",
     "nunjucks": "3.2.3",
     "pdf-lib": "^1.17.1",
+    "pino-pretty": "^7.5.1",
     "postcode-validator": "^3.5.3",
     "randomstring": "^1.2.2",
-    "sharp": "^0.29.3",
+    "sharp": "^0.30.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "jest": "^27.4.7",
+    "jest": "^27.5.1",
     "jest-junit": "^13.0.0",
     "jsdom": "^19.0.0",
-    "nock": "^13.2.2",
+    "nock": "^13.2.4",
     "standard": "^16.0.4"
   },
   "standard": {

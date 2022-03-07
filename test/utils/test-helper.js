@@ -33,7 +33,6 @@ module.exports = class TestHelper {
 
   static createServer () {
     jest.mock('@defra/hapi-gapi')
-    jest.mock('@airbrake/node')
 
     return createServer()
   }
@@ -43,7 +42,7 @@ module.exports = class TestHelper {
    * @param response - The HTTP response object containing the document
    * @returns A JSDOM document object containing HTML content
    */
-  static async getDocument (response) {
+  static getDocument (response) {
     return response && response.payload
       ? new JSDOM(response.payload).window.document
       : null
@@ -252,7 +251,7 @@ module.exports = class TestHelper {
    * @param expectedFieldValidationMessage - The expected field alidation error message
    * @param isUsingHrefs - Flag to indicate if summary panel field errors use hyperlnks to the error field
    */
-  static async checkValidationError (
+  static checkValidationError (
     response,
     fieldAnchor,
     fieldErrorId,
@@ -261,7 +260,7 @@ module.exports = class TestHelper {
     summaryHeading = DEFAULT_VALIDATION_SUMMARY_HEADING,
     isUsingHrefs = true
   ) {
-    const document = await TestHelper.getDocument(response)
+    const document = TestHelper.getDocument(response)
 
     // Error summary heading
     let element = document.querySelector('#error-summary-title')

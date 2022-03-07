@@ -21,7 +21,11 @@ First install the dependencies & build the application using:
 
 `$ npm install`
 
-If installing on a Windows machine you may encounter an error when running `$ npm install` relating to your OS not being able to run the Bash scripts which are part of the installation. Should you have this problem first ensure that you have installed [Git for Windows](https://gitforwindows.org). Then run the command `$ npm config set script-shell %userprofile%\cmder\vendor\git-for-windows\bin\bash` followed by `$ npm install`.
+followed by:
+
+`$ npm run build` - This runs the build tasks, which currently are just building the CSS. This needs to be run on the initial install, if updates are made to the Sass, or if the "govuk-frontend" is updated.
+
+If installing on a Windows machine you may encounter an error when running `$ npm run build` relating to your OS not being able to run the Bash scripts which are part of the installation. Should you have this problem first ensure that you have installed [Git for Windows](https://gitforwindows.org). Then run the command `$ npm config set script-shell %userprofile%\cmder\vendor\git-for-windows\bin\bash` followed by `$ npm run build`.
 
 Now the application is ready to run:
 
@@ -75,11 +79,7 @@ Plugins live in the `server/plugins` directory.
 
 ## Logging
 
-The [good](https://github.com/hapijs/good) and [good-console](https://github.com/hapijs/good-console) plugins are included and configured in `server/plugins/logging`
-
-The logging plugin is only registered in when `NODE_ENV=development`.
-
-Error logging for production should use errbit.
+Logging is carried out using [hapi-pino](https://github.com/pinojs/hapi-pino#readme) and [Application Insights](https://github.com/microsoft/ApplicationInsights-node.js#readme).
 
 ## Views
 
@@ -189,8 +189,6 @@ The default values will be used if the environment variables are missing or comm
 | PAYMENT_AMOUNT_BAND_A                                        | Amount charged in pence                             |   yes    |                       |                       Any integer                       |
 | PAYMENT_AMOUNT_BAND_B                                        | Amount charged in pence                             |   yes    |                       |                       Any integer                       |
 | GOOGLE_ANALYTICS_ID                                          | GA Tracking ID                                      |    no    | UA-YYYYYY-YY          |             A Google Analytics Tracking ID              |
-| AIRBRAKE_HOST                                                | Airbrake host                                       |    no    |                       |                  https://some-url.com                   |
-| AIRBRAKE_PROJECT_KEY                                         | Airbrake project key                                |    no    |                       |                       Any string                        |
 | APPINSIGHTS_INSTRUMENTATIONKEY                               | Application Insights connection string              |    no    |                       |                                                         |
 | USE_BASIC_AUTH                                               | Enable basic authentication                         |    no    | false                 |                       true,false                        |
 | CLAMSCAN_BINARIES                                            | Location of the binary                              |    no    | /usr/bin/             |                                                         |

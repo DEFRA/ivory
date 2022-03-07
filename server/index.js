@@ -1,17 +1,37 @@
 'use strict'
 
-const applicationinsights = require('applicationinsights')
-const hapi = require('@hapi/hapi')
-const Bcrypt = require('bcrypt')
-
 const config = require('./utils/config')
-const { options } = require('./utils/cookie-config')
 const {
   APPINSIGHTS_CLOUDROLE,
   DEFRA_IVORY_SESSION_KEY,
   HOME_URL,
   Paths
 } = require('./utils/constants')
+
+// This AI config has to be at the top of the file for it to negate a loss in telemetry
+if (config.appInsightsInstrumentationKey && !process.env.UNIT_TEST) {
+  const applicationinsights = require('applicationinsights')
+
+  applicationinsights
+    .setup(config.appInsightsInstrumentationKey)
+    .setAutoCollectPerformance(true, true)
+    .setAutoCollectConsole(true, true)
+
+  applicationinsights.defaultClient.config.enableInternalDebugLogging = true
+  applicationinsights.defaultClient.config.enableInternalWarningLogging = true
+  applicationinsights.defaultClient.context.tags[
+    applicationinsights.defaultClient.context.keys.cloudRole
+  ] = APPINSIGHTS_CLOUDROLE
+
+  applicationinsights.start()
+} else if (!process.env.UNIT_TEST) {
+  console.log('Application Insights is disabled')
+}
+
+const hapi = require('@hapi/hapi')
+const Bcrypt = require('bcrypt')
+
+const { options } = require('./utils/cookie-config')
 
 const CookieService = require('./services/cookie.service')
 
@@ -23,8 +43,6 @@ const users = {
 }
 
 const createServer = async () => {
-  _initialiseAppInsights()
-
   const server = hapi.server({
     port: config.servicePort,
     routes: {
@@ -60,19 +78,6 @@ const validate = async (request, username, password) => {
   return { isValid, credentials }
 }
 
-const _initialiseAppInsights = () => {
-  if (config.appInsightsInstrumentationKey) {
-    applicationinsights.setup(config.appInsightsInstrumentationKey).start()
-    const cloudRoleTag =
-      applicationinsights.defaultClient.context.keys.cloudRole
-    applicationinsights.defaultClient.context.tags[
-      cloudRoleTag
-    ] = APPINSIGHTS_CLOUDROLE
-  } else {
-    console.log('Application Insights is disabled')
-  }
-}
-
 const _registerPlugins = async server => {
   if (config.useBasicAuth) {
     await server.register(require('@hapi/basic'))
@@ -80,7 +85,6 @@ const _registerPlugins = async server => {
     server.auth.default('simple')
   }
 
-  await server.register(require('./plugins/airbrake.plugin'))
   await server.register(require('./plugins/blipp.plugin'))
   await server.register(require('./plugins/disinfect.plugin'))
   await server.register(require('./plugins/error-pages.plugin'))

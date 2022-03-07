@@ -109,7 +109,7 @@ describe('/privacy-notice', () => {
       const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Dealing in exempted Ivory items privacy notice'
+        'Dealing in exempted ivory items privacy notice'
       )
     })
 
