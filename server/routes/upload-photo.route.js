@@ -17,7 +17,6 @@ const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
 
 const handlers = {
   get: async (request, h) => {
-    console.log('getting the upload photo')
     const context = await _getContext(request)
 
     const uploadData = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
