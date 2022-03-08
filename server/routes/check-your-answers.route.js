@@ -229,7 +229,7 @@ const _getExemptionReasonSummary = async (
           _getChangeItems(Paths.WHY_IS_ITEM_RMI, CHANGE_LINK_HINT.WhyRmi)
         )
       )
-    } else {
+    } else if (!(await RedisHelper.isPortraitMiniature(request, itemType))) {
       exemptionReasonSummary.push(
         _getSummaryListRow(
           `Proof it has less than ${ivoryVolumePercentage}% ivory`,

@@ -65,6 +65,22 @@ module.exports = class RedisHelper {
   }
 
   /**
+   * Returns a boolean to indicate whether or not the application is for a portrait miniature exemption type.
+   * @param {*} request The HTTP request object.
+   * @param {*} itemType Optional item type - if not provided then the value is looked up in the Redis cache instead.
+   * @returns True if the application is a portrait miniature exemption type, otherwise false.
+   */
+  static async isPortraitMiniature (request, itemType = null) {
+    if (!itemType) {
+      itemType = await RedisService.get(
+        request,
+        RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT
+      )
+    }
+    return itemType === ItemType.MINIATURE
+  }
+
+  /**
    * Returns a boolean to indicate whether or not the item is owned by the applicant (i.e. this is NOT a 3rd party application).
    * @param {*} request The HTTP request object.
    * @returns True if the item is owned by the applicant, otherwise false.
