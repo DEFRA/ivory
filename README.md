@@ -200,3 +200,4 @@ The default values will be used if the environment variables are missing or comm
 | PERFORMANCE_TEST_MODE                                        | Flag to put the service into performance test mode  |   yes    | false                 |                                                         |
 | AZURE_STORAGE_ACCOUNT                                        | The name of the blob storage account to use         |   yes    |                       |                                                         |
 | AZURE_STORAGE_ACCOUNT_KEY                                    | The key to use to access the blob storage account   |   yes    |                       |                                                         |
+| AZURE_STORAGE_ACCOUNT_URL                                    | The URL to use to access the blob storage account   |   yes    |                       |                                                         |

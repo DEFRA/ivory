@@ -88,7 +88,7 @@ module.exports = class AzureBlobService {
     )
 
     blobServiceClient = new BlobServiceClient(
-      `https://${config.azureStorageAccount}.blob.core.windows.net`,
+      config.azureStorageAccountUrl,
       sharedKeyCredential
     )
 
