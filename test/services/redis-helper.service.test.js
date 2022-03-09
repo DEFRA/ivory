@@ -151,6 +151,28 @@ describe('RedisHelper service', () => {
     })
   })
 
+  describe('isPortraitMiniature method', () => {
+    it('should return true if the item is: PORTRAIT MINIATURE)', async () => {
+      RedisService.get = jest.fn().mockResolvedValue(ItemType.MINIATURE)
+
+      expect(RedisService.get).toBeCalledTimes(0)
+      const value = await RedisHelper.isPortraitMiniature()
+
+      expect(RedisService.get).toBeCalledTimes(1)
+      expect(value).toBeTruthy()
+    })
+
+    it('should return false if the item is NOT: PORTRAIT MINIATURE)', async () => {
+      RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)
+
+      expect(RedisService.get).toBeCalledTimes(0)
+      const value = await RedisHelper.isPortraitMiniature()
+
+      expect(RedisService.get).toBeCalledTimes(1)
+      expect(value).toBeFalsy()
+    })
+  })
+
   describe('isOwnedByApplicant method', () => {
     it('should return true if the item is owned by the applicant', async () => {
       RedisService.get = jest.fn().mockResolvedValue(Options.YES)

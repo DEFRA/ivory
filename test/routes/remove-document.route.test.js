@@ -2,6 +2,11 @@
 
 const TestHelper = require('../utils/test-helper')
 
+const { AzureContainer } = require('../../server/utils/constants')
+
+jest.mock('../../server/services/azure-blob.service')
+const AzureBlobService = require('../../server/services/azure-blob.service')
+
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
@@ -52,17 +57,20 @@ describe('/remove-document route', () => {
         )
 
         expect(RedisService.get).toBeCalledTimes(1)
-
         expect(RedisService.get).toBeCalledWith(expect.any(Object), redisKey)
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledWith(
+          AzureContainer.SupportingEvidence,
+          mockBlobName
+        )
 
+        expect(RedisService.set).toBeCalledTimes(1)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKey,
           JSON.stringify({
             files: [],
-            fileData: [],
             fileSizes: []
           })
         )
@@ -90,17 +98,20 @@ describe('/remove-document route', () => {
         )
 
         expect(RedisService.get).toBeCalledTimes(1)
-
         expect(RedisService.get).toBeCalledWith(expect.any(Object), redisKey)
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledWith(
+          AzureContainer.SupportingEvidence,
+          mockBlobName
+        )
 
+        expect(RedisService.set).toBeCalledTimes(1)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKey,
           JSON.stringify({
             files: mockDataSixPhotos.files.slice(0),
-            fileData: mockDataSixPhotos.fileData.slice(0),
             fileSizes: mockDataSixPhotos.fileSizes.slice(0)
           })
         )
@@ -113,23 +124,19 @@ describe('/remove-document route', () => {
 
 const mockData = {
   files: ['1.pdf'],
-  fileData: ['file-data'],
   fileSizes: [100]
 }
 
 const mockDataSixPhotos = {
   files: ['1.pdf', '2.pdf', '3.pdf', '4.pdf', '5.pdf', '6.pdf'],
-  fileData: [
-    'file-data-1',
-    'file-data-2',
-    'file-data-3',
-    'file-data-4',
-    'file-data-5',
-    'file-data-6'
-  ],
   fileSizes: [100, 200, 300, 400, 500, 600]
 }
 
+const mockBlobName = 'MOCK_BLOB_NAME'
+
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  AzureBlobService.getBlobName = jest.fn().mockReturnValue(mockBlobName)
+  AzureBlobService.delete = jest.fn()
 }

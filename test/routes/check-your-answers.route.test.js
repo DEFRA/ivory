@@ -451,6 +451,46 @@ describe('/check-your-answers route', () => {
       })
     })
 
+    describe('GET: Page sections for ItemType = MINIATURE', () => {
+      beforeEach(async () => {
+        _createMocks(ItemType.MINIATURE, true, false)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the correct "Exemption Reason" summary section', () => {
+        _checkSubheading(
+          document,
+          elementIds.subHeadings.exemptionReason,
+          'Why item qualifies for exemption'
+        )
+
+        _checkSummary(document, elementIds.summaries.exemptionReason)
+
+        _checkSummaryKeys(
+          document,
+          elementIds.summaries.exemptionReason,
+          'Proof of item’s age'
+        )
+
+        _checkSummaryValues(document, elementIds.summaries.exemptionReason, [
+          'It has a stamp, serial number or signature to prove its ageI have a dated receipt showing when it was bought or repairedI have a dated publication that shows or describes the itemIt’s been in the family since before 1918I have written verification from a relevant expertI am an expert, and it’s my professional opinionIvory age reason',
+          mockIvoryVolume.otherReason,
+          ivoryIntegral
+        ])
+
+        _checkSummaryChangeLinks(
+          document,
+          elementIds.summaries.exemptionReason,
+          [
+            'Change your proof of age',
+            'Change your proof that item has less than 10% ivory',
+            'Change reason why all ivory is integral to item'
+          ],
+          [Paths.IVORY_AGE, Paths.IVORY_VOLUME, Paths.IVORY_INTEGRAL]
+        )
+      })
+    })
+
     describe('GET: Page sections for "Owner’s details"', () => {
       it('should have the correct "Owner’s details" summary section - owned by applicant', async () => {
         _createMocks(ItemType.TEN_PERCENT)
@@ -1076,14 +1116,6 @@ const mockItemDescriptionWithoutOptionalValues = {
 
 const mockPhotos = {
   files: ['1.png', '2.jpeg', '3.png', '4.jpeg', '5.png', '6.png'],
-  fileData: [
-    'file-data',
-    'file-data',
-    'file-data',
-    'file-data',
-    'file-data',
-    'file-data'
-  ],
   fileSizes: [100, 200, 300, 400, 500, 600],
   thumbnails: [
     '1-thumbnail.png',
@@ -1131,14 +1163,6 @@ const mockDocuments = {
     'document4.pdf',
     'document5.pdf',
     'document6.pdf'
-  ],
-  fileData: [
-    'document1',
-    'document2',
-    'document3',
-    'document4',
-    'document5',
-    'document6'
   ],
   fileSizes: [100, 200, 300, 400, 500, 600]
 }

@@ -30,6 +30,11 @@ const Analytics = {
   }
 }
 
+const AzureContainer = {
+  Images: 'images',
+  SupportingEvidence: 'supporting-evidence'
+}
+
 const CharacterLimits = {
   Input: 4000,
   Textarea: 100000
@@ -448,6 +453,7 @@ module.exports = Object.freeze({
   AgeExemptionReasons,
   AlreadyCertifiedOptions,
   Analytics,
+  AzureContainer,
   APPINSIGHTS_CLOUDROLE: 'IvoryFrontEnd',
   BehalfOfBusinessOptions,
   BehalfOfNotBusinessOptions,

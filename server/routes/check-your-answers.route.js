@@ -148,7 +148,6 @@ const _getDocumentSummary = async request => {
   if (!uploadDocuments) {
     uploadDocuments = {
       files: [],
-      fileData: [],
       fileSizes: []
     }
   }
@@ -230,7 +229,7 @@ const _getExemptionReasonSummary = async (
           _getChangeItems(Paths.WHY_IS_ITEM_RMI, CHANGE_LINK_HINT.WhyRmi)
         )
       )
-    } else {
+    } else if (!(await RedisHelper.isPortraitMiniature(request, itemType))) {
       exemptionReasonSummary.push(
         _getSummaryListRow(
           `Proof it has less than ${ivoryVolumePercentage}% ivory`,
@@ -829,7 +828,6 @@ const _getPhotoSummary = async request => {
   if (!uploadPhotos) {
     uploadPhotos = {
       files: [],
-      fileData: [],
       fileSizes: [],
       thumbnails: [],
       thumbnailData: []

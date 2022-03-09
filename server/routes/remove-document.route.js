@@ -3,22 +3,29 @@
 const Hoek = require('@hapi/hoek')
 
 const AnalyticsService = require('../services/analytics.service')
+const AzureBlobService = require('../services/azure-blob.service')
 const RedisService = require('../services/redis.service')
 
-const { Paths, RedisKeys, Analytics } = require('../utils/constants')
+const {
+  Analytics,
+  AzureContainer,
+  Paths,
+  RedisKeys
+} = require('../utils/constants')
 
 const handlers = {
   get: async (request, h) => {
+    const index = parseInt(Hoek.escapeHtml(request.params.index)) - 1
+
     const uploadData = await RedisService.get(
       request,
       RedisKeys.UPLOAD_DOCUMENT
     )
 
+    await _removeSupportingEvidenceBlob(request, uploadData, index)
+
     for (const array in uploadData) {
-      uploadData[array].splice(
-        parseInt(Hoek.escapeHtml(request.params.index)) - 1,
-        1
-      )
+      uploadData[array].splice(index, 1)
     }
 
     await RedisService.set(
@@ -36,6 +43,19 @@ const handlers = {
       ? h.redirect(Paths.YOUR_DOCUMENTS)
       : h.redirect(Paths.UPLOAD_DOCUMENT)
   }
+}
+
+/**
+ * Removes supporting evidence file from blob storage
+ */
+const _removeSupportingEvidenceBlob = (request, uploadData, index) => {
+  const blobName = AzureBlobService.getBlobName(
+    request,
+    RedisKeys.UPLOAD_DOCUMENT,
+    uploadData.files[index]
+  )
+
+  return AzureBlobService.delete(AzureContainer.SupportingEvidence, blobName)
 }
 
 module.exports = [

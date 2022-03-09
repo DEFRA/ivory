@@ -1,19 +1,23 @@
 'use strict'
 
 const AnalyticsService = require('../services/analytics.service')
+const AzureBlobService = require('../services/azure-blob.service')
 const ODataService = require('../services/odata.service')
 const RedisService = require('../services/redis.service')
 const PaymentService = require('../services/payment.service')
 const RedisHelper = require('../services/redis-helper.service')
 
 const {
+  Analytics,
+  AzureContainer,
+  DEFRA_IVORY_SESSION_KEY,
   ItemType,
   Options,
   Paths,
   PaymentResult,
-  RedisKeys,
-  Analytics
+  RedisKeys
 } = require('../utils/constants')
+
 const { DataVerseFieldName } = require('../utils/constants')
 const {
   AgeExemptionReasonLookup,
@@ -89,15 +93,29 @@ const _updateRecord = async (request, entity, isSection2) => {
 }
 
 const _updateRecordAttachments = async (request, entity) => {
-  const supportingInformation = await RedisService.get(
+  const supportingEvidence = await RedisService.get(
     request,
     RedisKeys.UPLOAD_DOCUMENT
   )
 
-  if (supportingInformation) {
+  if (
+    supportingEvidence &&
+    supportingEvidence.files &&
+    supportingEvidence.files.length
+  ) {
+    supportingEvidence.fileData = []
+
+    for (let index = 0; index < supportingEvidence.files.length; index++) {
+      supportingEvidence.fileData[index] = await _getSupportingEvidenceBlob(
+        request,
+        supportingEvidence,
+        index
+      )
+    }
+
     ODataService.updateRecordAttachments(
       entity[DataVerseFieldName.SECTION_2_CASE_ID],
-      supportingInformation
+      supportingEvidence
     )
   }
 }
@@ -405,7 +423,9 @@ const _getInitialPhoto = async request => {
 
   return {
     [DataVerseFieldName.PHOTO_1]:
-      photos && photos.files && photos.files.length ? photos.fileData[0] : null
+      photos && photos.files && photos.files.length
+        ? await _getPhotoBlob(request, photos, 0)
+        : null
   }
 }
 
@@ -414,12 +434,53 @@ const _getAdditionalPhotos = async request => {
 
   const additionalPhotos = {}
   if (photos && photos.files && photos.files.length > 1) {
-    for (let index = 2; index <= photos.fileData.length; index++) {
-      additionalPhotos[`cre2c_photo${index}`] = photos.fileData[index - 1]
+    for (let index = 1; index < photos.files.length; index++) {
+      additionalPhotos[`cre2c_photo${index + 1}`] = await _getPhotoBlob(
+        request,
+        photos,
+        index
+      )
     }
   }
 
   return additionalPhotos
+}
+
+/**
+ * Gets an image file from blob storage and converts it into a base64 string
+ * @param {*} request
+ * @param {*} photos
+ * @param {*} index
+ * @returns
+ */
+const _getPhotoBlob = async (request, photos, index) => {
+  const blobName = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${RedisKeys.UPLOAD_PHOTO}.${photos.thumbnails[index]}`
+
+  const blob = await AzureBlobService.get(AzureContainer.Images, blobName)
+
+  return blob.toString('base64')
+}
+
+/**
+ * Gets a file from blob storage and converts it into a base64 string
+ * @param {*} request
+ * @param {*} supportingEvidence
+ * @param {*} index
+ * @returns
+ */
+const _getSupportingEvidenceBlob = async (
+  request,
+  supportingEvidence,
+  index
+) => {
+  const blobName = `${request.state[DEFRA_IVORY_SESSION_KEY]}.${RedisKeys.UPLOAD_DOCUMENT}.${supportingEvidence.files[index]}`
+
+  const blob = await AzureBlobService.get(
+    AzureContainer.SupportingEvidence,
+    blobName
+  )
+
+  return blob.toString('base64')
 }
 
 const _getAlreadyCertifiedCode = value => AlreadyCertifiedLookup[value]

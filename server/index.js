@@ -19,7 +19,9 @@ if (config.appInsightsInstrumentationKey && !process.env.UNIT_TEST) {
 
   applicationinsights.defaultClient.config.enableInternalDebugLogging = true
   applicationinsights.defaultClient.config.enableInternalWarningLogging = true
-  applicationinsights.defaultClient.context.tags[applicationinsights.defaultClient.context.keys.cloudRole] = APPINSIGHTS_CLOUDROLE
+  applicationinsights.defaultClient.context.tags[
+    applicationinsights.defaultClient.context.keys.cloudRole
+  ] = APPINSIGHTS_CLOUDROLE
 
   applicationinsights.start()
 } else if (!process.env.UNIT_TEST) {

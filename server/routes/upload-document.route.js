@@ -5,11 +5,19 @@ const path = require('path')
 const { PDFDocument } = require('pdf-lib')
 
 const AnalyticsService = require('../services/analytics.service')
-const RedisService = require('../services/redis.service')
 const AntimalwareService = require('../services/antimalware.service')
+const AzureBlobService = require('../services/azure-blob.service')
+const RedisService = require('../services/redis.service')
 
 const config = require('../utils/config')
-const { Paths, RedisKeys, Views, Analytics, UploadDocument } = require('../utils/constants')
+const {
+  Analytics,
+  AzureContainer,
+  Paths,
+  RedisKeys,
+  UploadDocument,
+  Views
+} = require('../utils/constants')
 const { buildErrorSummary } = require('../utils/validation')
 const { checkForDuplicates, checkForFileSizeError } = require('../utils/upload')
 
@@ -48,20 +56,22 @@ const handlers = {
 
     const uploadData = context.uploadData
     let buffer
+    let file
 
     const errors = _validateForm(payload, uploadData)
 
     if (!errors.length) {
-      buffer = await _checkForVirus(
-        request,
-        payload,
-        filename,
-        uploadData,
-        errors
-      )
+      await _checkForVirus(request, payload, filename, uploadData, errors)
     }
 
     if (!errors.length) {
+      file = await fs.promises.readFile(payload.files.path)
+
+      uploadData.files.push(filename)
+      uploadData.fileSizes.push(payload.files.bytes)
+
+      buffer = Buffer.from(file)
+
       if (filename.toUpperCase().endsWith(UploadDocument.PDF_EXTENSION)) {
         await _checkPdfEncryption(buffer, errors)
       }
@@ -86,6 +96,18 @@ const handlers = {
         RedisKeys.UPLOAD_DOCUMENT,
         JSON.stringify(uploadData)
       )
+
+      const blobName = AzureBlobService.getBlobName(
+        request,
+        RedisKeys.UPLOAD_DOCUMENT,
+        filename
+      )
+
+      await AzureBlobService.set(
+        AzureContainer.SupportingEvidence,
+        blobName,
+        file
+      )
     }
 
     AnalyticsService.sendEvent(request, {
@@ -107,7 +129,6 @@ const _getContext = async request => {
   if (!uploadData) {
     uploadData = {
       files: [],
-      fileData: [],
       fileSizes: []
     }
   }
@@ -187,18 +208,7 @@ const _checkForVirus = async (
     filename
   )
 
-  if (!isInfected) {
-    const file = await fs.promises.readFile(payload.files.path)
-
-    uploadData.files.push(filename)
-    uploadData.fileSizes.push(payload.files.bytes)
-
-    const buffer = Buffer.from(file)
-    const base64 = buffer.toString('base64')
-    uploadData.fileData.push(base64)
-
-    return buffer
-  } else {
+  if (isInfected) {
     errors.push({
       name: 'files',
       text: 'The file could not be uploaded - try a different one'

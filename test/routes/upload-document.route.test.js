@@ -148,7 +148,6 @@ describe('/upload-document route', () => {
       beforeEach(async () => {
         const mockData = {
           files: ['document1.pdf', 'document2.doc'],
-          fileData: [],
           fileSizes: [100, 200]
         }
         RedisService.get = jest.fn().mockResolvedValue(mockData)
@@ -421,7 +420,6 @@ describe('/upload-document route', () => {
 
       const mockData = {
         files: ['document1.pdf'],
-        fileData: [],
         fileSizes: [100]
       }
       RedisService.get = jest.fn().mockReturnValue(mockData)
@@ -457,7 +455,6 @@ const _createMocks = () => {
 
   const mockData = {
     files: [],
-    fileData: [],
     fileSizes: [100, 200],
     thumbnails: [],
     thumbnailData: []

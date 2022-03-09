@@ -2,6 +2,11 @@
 
 const TestHelper = require('../utils/test-helper')
 
+const { AzureContainer } = require('../../server/utils/constants')
+
+jest.mock('../../server/services/azure-blob.service')
+const AzureBlobService = require('../../server/services/azure-blob.service')
+
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
@@ -44,6 +49,8 @@ describe('/remove-photo route', () => {
         expect(RedisService.get).toBeCalledTimes(0)
         expect(RedisService.set).toBeCalledTimes(0)
 
+        expect(AzureBlobService.delete).toBeCalledTimes(0)
+
         const response = await TestHelper.submitGetRequest(
           server,
           getOptions,
@@ -52,17 +59,20 @@ describe('/remove-photo route', () => {
         )
 
         expect(RedisService.get).toBeCalledTimes(1)
-
         expect(RedisService.get).toBeCalledWith(expect.any(Object), redisKey)
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledWith(
+          AzureContainer.Images,
+          mockBlobName
+        )
 
+        expect(RedisService.set).toBeCalledTimes(1)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKey,
           JSON.stringify({
             files: [],
-            fileData: [],
             fileSizes: [],
             thumbnails: [],
             thumbnailData: []
@@ -92,17 +102,20 @@ describe('/remove-photo route', () => {
         )
 
         expect(RedisService.get).toBeCalledTimes(1)
-
         expect(RedisService.get).toBeCalledWith(expect.any(Object), redisKey)
 
-        expect(RedisService.set).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledTimes(1)
+        expect(AzureBlobService.delete).toBeCalledWith(
+          AzureContainer.Images,
+          mockBlobName
+        )
 
+        expect(RedisService.set).toBeCalledTimes(1)
         expect(RedisService.set).toBeCalledWith(
           expect.any(Object),
           redisKey,
           JSON.stringify({
             files: mockDataSixPhotos.files.slice(0),
-            fileData: mockDataSixPhotos.fileData.slice(0),
             fileSizes: mockDataSixPhotos.fileSizes.slice(0),
             thumbnails: mockDataSixPhotos.thumbnails.slice(0),
             thumbnailData: mockDataSixPhotos.thumbnailData.slice(0)
@@ -117,7 +130,6 @@ describe('/remove-photo route', () => {
 
 const mockData = {
   files: ['1.png'],
-  fileData: ['file-data'],
   fileSizes: [100],
   thumbnails: ['1-thumbnail.png'],
   thumbnailData: ['thumbnail-data']
@@ -125,14 +137,6 @@ const mockData = {
 
 const mockDataSixPhotos = {
   files: ['1.png', '2.jpeg', '3.png', '4.jpeg', '5.png', '6.png'],
-  fileData: [
-    'file-data-1',
-    'file-data-2',
-    'file-data-3',
-    'file-data-4',
-    'file-data-5',
-    'file-data-6'
-  ],
   fileSizes: [100, 200, 300, 400, 500, 600],
   thumbnails: [
     '1-thumbnail.png',
@@ -152,6 +156,11 @@ const mockDataSixPhotos = {
   ]
 }
 
+const mockBlobName = 'MOCK_BLOB_NAME'
+
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  AzureBlobService.getBlobName = jest.fn().mockReturnValue(mockBlobName)
+  AzureBlobService.delete = jest.fn()
 }
