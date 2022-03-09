@@ -39,7 +39,7 @@
           </span>
         {% endif %}
 
-        {% if not uploading %}
+        <div id="notUploading1" style="display:block">
           <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload photo</h2>
 
           <p id="helpText5" class="govuk-body">The photo must be:</p>
@@ -57,12 +57,12 @@
             name: "files",
             errorMessage: fieldErrors['files']
           }) }}
-        {% endif %}
+        </div>
 
-        {% if uploading %}
+        <div id="uploading1" style="display:none">
           <h2 id="helpTextSubHeading" class="govuk-heading-m">Uploading photo</h2>
 
-          <p id="helpText5" class="govuk-body">Your image is being processed<br>Please wait...</p>
+          <p id="helpText5" class="govuk-body">Your photo is being processed<br>Please wait...</p>
 
           <!-- style: large -->
           <div class="ispinner ispinner-large">
@@ -76,26 +76,58 @@
             <div class="ispinner-blade"></div>
           </div>
           <br>
-        {% endif %}
+
+          {{ govukButton({
+              disabled: true,
+              attributes: {
+                id: "hiddenContinue"
+              },
+              text: "Continue"
+            })
+          }}
+        </div>
 
       {% endcall %}
 
-      {{ govukButton({
-          preventDoubleClick: true,
-          disabled: uploading,
-          attributes: {
-            id: "continue"
-          },
-          text: "Continue"
-        })
-      }}
+      <div id="notUploading2" style="display:block">
+        {{ govukButton({
+            preventDoubleClick: true,
+            disabled: uploading,
+            attributes: {
+              id: "continue",
+              onclick: "toggle_visibility()"
+            },
+            text: "Continue"
+          })
+        }}
 
-      {% if hideHelpText %}
-        <p class="govuk-body">
-          <a id="cancel" class="govuk-link" href="{{ fileListUrl }}">Cancel and return to ‘Your photos’</a>
-        </p>
-      {% endif %}
+        {% if hideHelpText %}
+          <p class="govuk-body">
+            <a id="cancel" class="govuk-link" href="{{ fileListUrl }}">Cancel and return to ‘Your photos’</a>
+          </p>
+        {% endif %}
+      </div>
 
     </div>
   </div>
+
+  <script type="text/javascript">
+    async function toggle_visibility() {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      let x = document.getElementById("notUploading1");
+      let y = document.getElementById("uploading1");
+      let z = document.getElementById("notUploading2");
+      hideEm(x)
+      hideEm(y)
+      hideEm(z)
+    function hideEm(x) {
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+  }
+  </script>
+
 {% endblock %}
