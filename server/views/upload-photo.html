@@ -39,6 +39,7 @@
           </span>
         {% endif %}
 
+        {% if not uploading %}
           <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload photo</h2>
 
           <p id="helpText5" class="govuk-body">The photo must be:</p>
@@ -48,40 +49,46 @@
             <li>smaller than {{ maximumFileSize }}MB</li>
           </ul>
 
-        {{ govukFileUpload({
-          attributes: {
-            accept: accept
-          },
-          id: "files",
-          name: "files",
-          errorMessage: fieldErrors['files']
-        }) }}
+          {{ govukFileUpload({
+            attributes: {
+              accept: accept
+            },
+            id: "files",
+            name: "files",
+            errorMessage: fieldErrors['files']
+          }) }}
+        {% endif %}
+
+        {% if uploading %}
+          <h2 id="helpTextSubHeading" class="govuk-heading-m">Uploading photo</h2>
+
+          <p id="helpText5" class="govuk-body">Your image is being processed<br>Please wait...</p>
+
+          <!-- style: large -->
+          <div class="ispinner ispinner-large">
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+          </div>
+          <br>
+        {% endif %}
 
       {% endcall %}
 
       {{ govukButton({
           preventDoubleClick: true,
+          disabled: uploading,
           attributes: {
             id: "continue"
           },
           text: "Continue"
         })
       }}
-
-      {% if uploading %}
-        <!-- style: large -->
-        <p>IT SHOULD BE SHOWING A SPINNER</p>
-        <div class="ispinner ispinner-large">
-          <div class="ispinner-blade"></div>
-          <div class="ispinner-blade"></div>
-          <div class="ispinner-blade"></div>
-          <div class="ispinner-blade"></div>
-          <div class="ispinner-blade"></div>
-          <div class="ispinner-blade"></div>
-          <div class="ispinner-blade"></div>
-          <div class="ispinner-blade"></div>
-        </div>
-      {% endif %}
 
       {% if hideHelpText %}
         <p class="govuk-body">
