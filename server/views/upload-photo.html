@@ -92,7 +92,6 @@
       <div id="notUploading2" style="display:block">
         {{ govukButton({
             preventDoubleClick: true,
-            disabled: uploading,
             attributes: {
               id: "continue",
               onclick: "toggle_visibility(['notUploading1', 'uploading1', 'notUploading2'])"
@@ -113,7 +112,6 @@
 
   <script type="text/javascript">
     async function toggle_visibility(elementIds) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
       elementIds.forEach(item => {
         let x = document.getElementById(item);
         if (x.style.display === "none") {
