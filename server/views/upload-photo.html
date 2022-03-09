@@ -95,7 +95,7 @@
             disabled: uploading,
             attributes: {
               id: "continue",
-              onclick: "toggle_visibility()"
+              onclick: "toggle_visibility(['notUploading1', 'uploading1', 'notUploading2'])"
             },
             text: "Continue"
           })
@@ -112,22 +112,17 @@
   </div>
 
   <script type="text/javascript">
-    async function toggle_visibility() {
+    async function toggle_visibility(elementIds) {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      let x = document.getElementById("notUploading1");
-      let y = document.getElementById("uploading1");
-      let z = document.getElementById("notUploading2");
-      hideEm(x)
-      hideEm(y)
-      hideEm(z)
-    function hideEm(x) {
-      if (x.style.display === "none") {
-        x.style.display = "block";
-      } else {
-        x.style.display = "none";
-      }
+      elementIds.forEach(item => {
+        let x = document.getElementById(item);
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      })
     }
-  }
   </script>
 
 {% endblock %}
