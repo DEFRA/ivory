@@ -77,7 +77,7 @@
       "afterAll"
     ],
     "ignore": [
-      "/back-office/**/*.js"
+      "**/public/js/"
     ]
   }
 }

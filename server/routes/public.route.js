@@ -19,6 +19,7 @@ module.exports = [
           os.tmpdir(),
           'server/public/static',
           'server/public/build',
+          'server/public/js',
           'node_modules/govuk-frontend/govuk/assets',
           'node_modules/ispinner.css'
         ]
