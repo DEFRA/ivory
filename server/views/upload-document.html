@@ -6,6 +6,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block formContent %}
+  <link href="{{ assetPath }}/ispinner.prefixed.css" rel="stylesheet" />
+  <script type="text/javascript" src="{{ assetPath }}/toggleVisibility.js"></script>
 
   <div class="govuk-grid-row">
 
@@ -35,6 +37,7 @@
           </span>
         {% endif %}
           
+        <div id="notUploading1" style="display:block">
           <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload file</h2>
 
           <p id="helpText2" class="govuk-body">Files must be:</p>
@@ -46,31 +49,54 @@
             <li>smaller than {{ maximumFileSize }}MB</li>
           </ul>
 
-        {{ govukFileUpload({
-          attributes: {
-            accept: accept
-          },
-          id: "files",
-          name: "files",
-          errorMessage: fieldErrors['files']
-        }) }}
+          {{ govukFileUpload({
+            attributes: {
+              accept: accept
+            },
+            id: "files",
+            name: "files",
+            errorMessage: fieldErrors['files']
+          }) }}
+        </div>
+
+        <div id="uploading1" style="display:none">
+          <h2 id="uploadingHelpTextSubHeading" class="govuk-heading-m">Uploading file</h2>
+
+          <p id="uploadingHelpText" class="govuk-body">Your file is being processed<br>Please wait...</p>
+
+          <!-- style: large -->
+          <div class="ispinner ispinner-large">
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+          </div>
+          <br>
+        </div>
 
       {% endcall %}
 
-      {{ govukButton({
-          preventDoubleClick: true,
-          attributes: {
-            id: "continue"
-          },
-          text: "Continue"
-        })
-      }}
+      <div id="notUploading2" style="display:block">
+        {{ govukButton({
+            preventDoubleClick: true,
+            attributes: {
+              id: "continue",
+              onclick: "toggleVisibility(['notUploading1', 'uploading1', 'notUploading2'])"
+            },
+            text: "Continue"
+          })
+        }}
 
-      {% if hideHelpText %}
-        <p class="govuk-body">
-          <a id="cancel" class="govuk-link" href="{{ fileListUrl }}">Cancel and return to ‘Your supporting evidence‘</a>
-        </p>
-      {% endif %}
+        {% if hideHelpText %}
+          <p class="govuk-body">
+            <a id="cancel" class="govuk-link" href="{{ fileListUrl }}">Cancel and return to ‘Your supporting evidence‘</a>
+          </p>
+        {% endif %}
+      </div>
 
     </div>
   </div>
