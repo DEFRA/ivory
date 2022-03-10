@@ -9,7 +9,7 @@
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
-      <link href="{{ assetPath }}/stylesheets/ispinner.prefixed.css" rel="stylesheet" />
+      <link href="{{ assetPath }}/ispinner.prefixed.css" rel="stylesheet" />
 
       {% call govukFieldset({
           attributes: {
@@ -85,7 +85,7 @@
             preventDoubleClick: true,
             attributes: {
               id: "continue",
-              onclick: "toggle_visibility(['notUploading1', 'uploading1', 'notUploading2'])"
+              onclick: "toggleVisibility(['notUploading1', 'uploading1', 'notUploading2'])"
             },
             text: "Continue"
           })
@@ -102,7 +102,7 @@
   </div>
 
   <script type="text/javascript">
-    function toggle_visibility(elementIds) {
+    function toggleVisibility(elementIds) {
       elementIds.forEach(item => {
         let x = document.getElementById(item);
         if (x.style.display === "none") {

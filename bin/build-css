@@ -3,5 +3,3 @@
 node-sass --output-style=expanded \
   --output=server/public/build/stylesheets \
   client/sass
-
-cp node_modules/ispinner.css/ispinner.prefixed.css server/public/build/stylesheets
