@@ -37,7 +37,7 @@
           </span>
         {% endif %}
           
-        <div id="notUploading1" style="display:block">
+        <div id="notUploading1" class="govuk-!-display-block">
           <h2 id="helpTextSubHeading" class="govuk-heading-m">Upload file</h2>
 
           <p id="helpText2" class="govuk-body">Files must be:</p>
@@ -59,28 +59,22 @@
           }) }}
         </div>
 
-        <div id="uploading1" style="display:none">
+        <div id="uploading1" class="govuk-!-display-none">
           <h2 id="uploadingHelpTextSubHeading" class="govuk-heading-m">Uploading file</h2>
 
           <p id="uploadingHelpText" class="govuk-body">Your file is being processed<br>Please wait...</p>
 
-          <!-- style: large -->
           <div class="ispinner ispinner-large">
-            <div class="ispinner-blade"></div>
-            <div class="ispinner-blade"></div>
-            <div class="ispinner-blade"></div>
-            <div class="ispinner-blade"></div>
-            <div class="ispinner-blade"></div>
-            <div class="ispinner-blade"></div>
-            <div class="ispinner-blade"></div>
-            <div class="ispinner-blade"></div>
+            {% for i in range(0, 8) %}
+              <div class="ispinner-blade"></div>
+            {% endfor %}
           </div>
           <br>
         </div>
 
       {% endcall %}
 
-      <div id="notUploading2" style="display:block">
+      <div id="notUploading2" class="govuk-!-display-block">
         {{ govukButton({
             preventDoubleClick: true,
             attributes: {

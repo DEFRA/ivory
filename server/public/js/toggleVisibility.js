@@ -1,10 +1,10 @@
 function toggleVisibility(elementIds) {
   elementIds.forEach(item => {
     let x = document.getElementById(item);
-    if (x.style.display === "none") {
-      x.style.display = "block";
+    if (x.className === "govuk-!-display-none") {
+      x.className = "govuk-!-display-block";
     } else {
-      x.style.display = "none";
+      x.className = "govuk-!-display-none";
     }
   })
 }
