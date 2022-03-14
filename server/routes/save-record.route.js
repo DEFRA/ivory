@@ -276,6 +276,8 @@ const _getOwnerAndApplicantDetails = async request => {
       ? _getPostcode(ownerAddress, ownerAddressInternational)
       : null,
     [DataVerseFieldName.APPLICANT_NAME]: applicantContactDetails.fullName,
+    [DataVerseFieldName.APPLICANT_BUSINESS_NAME]:
+      applicantContactDetails.businessName,
     [DataVerseFieldName.APPLICANT_EMAIL]: applicantContactDetails.emailAddress,
     [DataVerseFieldName.APPLICANT_ADDRESS]: _formatAddress(
       applicantAddress,

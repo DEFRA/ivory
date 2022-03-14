@@ -91,6 +91,7 @@ const Capacities = {
 const DataVerseFieldName = {
   ALREADY_HAS_CERTIFICATE: 'cre2c_alreadyhascertificate',
   APPLICANT_ADDRESS: 'cre2c_applicantaddress',
+  APPLICANT_BUSINESS_NAME: 'cre2c_applicantbusinessname',
   APPLICANT_EMAIL: 'cre2c_applicantemail',
   APPLICANT_NAME: 'cre2c_applicantname',
   APPLICANT_POSTCODE: 'cre2c_applicantpostcode',
