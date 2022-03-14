@@ -109,6 +109,7 @@ const DataVerseFieldName = {
   EXEMPTION_CATEGORY: 'cre2c_exemptioncategory',
   EXEMPTION_TYPE: 'cre2c_exemptiontype',
   INTENTION: 'cre2c_intention',
+  GROUP_REGISTRATION: 'cre2c_groupregistration',
   HAS_DISTINGUISHING_FEATURES: 'cre2c_hasuniquefeatures',
   ITEM_SUMMARY: 'cre2c_itemsummary',
   MANUALLY_CREATED: 'cre2c_manuallycreated',

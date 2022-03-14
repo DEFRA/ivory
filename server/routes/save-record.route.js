@@ -176,6 +176,7 @@ const _createSection10Body = async (request, itemType, itemDescription) => {
   ])
 
   return {
+    [DataVerseFieldName.GROUP_REGISTRATION]: false,
     ...(await _getCommonFields(request, itemDescription)),
     [DataVerseFieldName.SUBMISSION_REFERENCE]: submissionReference,
     [DataVerseFieldName.EXEMPTION_TYPE]: _getExemptionCategoryCode(itemType),
