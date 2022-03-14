@@ -172,7 +172,7 @@ describe('Redis service', () => {
 
     it('should set a value in Redis with correct expiry (TTL)', async () => {
       const redisValue = 'some_value'
-      const redisTtlSeconds = 86400
+      const redisTtlSeconds = 7200
 
       expect(mockRequest.redis.client.setex).toBeCalledTimes(0)
 

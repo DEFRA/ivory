@@ -94,7 +94,7 @@ const _getContext = () => {
   return {
     pageTitle: 'Does your item contain elephant ivory?',
     helpText:
-      'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state in some way.',
+      'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state.',
     items: getStandardOptions(),
     guidanceUrl: Urls.GOV_UK_TOP_OF_MAIN
   }

@@ -80,7 +80,7 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state in some way.'
+        'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state.'
       )
     })
 
@@ -96,7 +96,7 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
       const element = document.querySelector(`#${elementIds.helpText2}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Elephant ivory is the most common type of ivory. However it can be extremely difficult to tell the difference between:'
+        'Elephant ivory is the most common type of ivory. However it can be extremely difficult to tell the difference between elephant ivory and:'
       )
     })
 
@@ -138,7 +138,7 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
       const element = document.querySelector(`#${elementIds.helpText4}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'If you are not sure what type of ivory about the item you want to sell or buy contains, you should speak to consult an expert first. An expert might be such as an antiques dealer or auctioneer who specialises in ivory.'
+        'If you are not sure what type of ivory the item you want to sell or buy contains, you should speak to an expert first. An expert might be an antiques dealer or auctioneer who specialises in ivory.'
       )
     })
 
