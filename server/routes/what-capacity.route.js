@@ -92,10 +92,6 @@ const _getOptions = whatCapacity => {
     }
   })
 
-  // items[0].hint = {
-  //   text: 'For example, an antiques dealer or auction house selling the item'
-  // }
-
   return items
 }
 
