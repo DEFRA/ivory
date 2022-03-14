@@ -42,7 +42,7 @@ const schema = joi.object().keys({
   addressLookupUrl: joi.string().default(defaultUrl),
   addressLookupPassphrase: joi.string(),
   addressLookupPfxCert: joi.string(),
-  cookieTimeout: joi.number().default(7200000),
+  cookieTimeout: joi.number(),
   cookieValidationPassword: joi
     .string()
     .default('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),

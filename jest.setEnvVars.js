@@ -1,2 +1,2 @@
 process.env.UNIT_TEST = true
-process.env.COOKIET_TIMEOUT = 7200000
+process.env.COOKIE_TIMEOUT = 7200000
