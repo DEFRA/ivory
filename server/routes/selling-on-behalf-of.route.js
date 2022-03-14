@@ -2,7 +2,6 @@
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
-const RedisHelper = require('../services/redis-helper.service')
 
 const {
   BehalfOfBusinessOptions,
@@ -80,12 +79,8 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  const isSection2 = await RedisHelper.isSection2(request)
-
   return {
-    pageTitle: `Who are you completing this ${
-      isSection2 ? 'application' : 'registration'
-    } on behalf of?`,
+    pageTitle: 'Who is the owner of the item?',
     items: await _getOptions(request)
   }
 }
@@ -125,7 +120,7 @@ const _validateForm = payload => {
   if (Validators.empty(payload.sellingOnBehalfOf)) {
     errors.push({
       name: 'sellingOnBehalfOf',
-      text: 'Tell us who you are selling or hiring out the item on behalf of'
+      text: 'Tell us who is the owner of the item'
     })
   }
   return errors

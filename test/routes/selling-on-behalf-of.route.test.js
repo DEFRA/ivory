@@ -5,7 +5,7 @@ const TestHelper = require('../utils/test-helper')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-const { ItemType, RedisKeys } = require('../../server/utils/constants')
+const { RedisKeys } = require('../../server/utils/constants')
 
 describe('/selling-on-behalf-of route', () => {
   let server
@@ -16,6 +16,7 @@ describe('/selling-on-behalf-of route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
+    helpText: 'helpText',
     sellingOnBehalfOf: 'sellingOnBehalfOf',
     sellingOnBehalfOf2: 'sellingOnBehalfOf-2',
     sellingOnBehalfOf3: 'sellingOnBehalfOf-3',
@@ -64,7 +65,15 @@ describe('/selling-on-behalf-of route', () => {
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Who are you completing this registration on behalf of?'
+          'Who is the owner of the item?'
+        )
+      })
+
+      it('should have the correct help text', () => {
+        const element = document.querySelector(`#${elementIds.helpText}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'You should only select ‘other’ if there is no owner for the item. For example the item is part of a deceased’s estate.'
         )
       })
 
@@ -118,7 +127,7 @@ describe('/selling-on-behalf-of route', () => {
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Who are you completing this application on behalf of?'
+          'Who is the owner of the item?'
         )
       })
     })
@@ -144,7 +153,7 @@ describe('/selling-on-behalf-of route', () => {
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Who are you completing this registration on behalf of?'
+          'Who is the owner of the item?'
         )
       })
 
@@ -191,7 +200,7 @@ describe('/selling-on-behalf-of route', () => {
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Who are you completing this application on behalf of?'
+          'Who is the owner of the item?'
         )
       })
     })
@@ -308,7 +317,7 @@ describe('/selling-on-behalf-of route', () => {
           response,
           'sellingOnBehalfOf',
           'sellingOnBehalfOf-error',
-          'Tell us who you are selling or hiring out the item on behalf of'
+          'Tell us who is the owner of the item'
         )
       })
     })
@@ -319,9 +328,6 @@ const _createMocks = (worksForAbusiness, isSection2 = false) => {
   TestHelper.createMocks()
 
   const mockData = {
-    [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: isSection2
-      ? ItemType.HIGH_VALUE
-      : ItemType.MUSICAL,
     [RedisKeys.WORK_FOR_A_BUSINESS]: worksForAbusiness,
     [RedisKeys.SELLING_ON_BEHALF_OF]: ''
   }
