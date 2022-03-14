@@ -356,6 +356,9 @@ const _getNewOwnerDetails = async request => {
     [DataVerseFieldName.PREVIOUS_APPLICANT_NAME]:
       existingRecord[DataVerseFieldName.APPLICANT_NAME],
 
+    [DataVerseFieldName.PREVIOUS_APPLICANT_BUSINESS_NAME]:
+      existingRecord[DataVerseFieldName.APPLICANT_BUSINESS_NAME],
+
     [DataVerseFieldName.PREVIOUS_APPLICANT_EMAIL]:
       existingRecord[DataVerseFieldName.APPLICANT_EMAIL],
 

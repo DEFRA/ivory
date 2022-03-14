@@ -137,6 +137,7 @@ const DataVerseFieldName = {
   PREVIOUS_APPLICANT_ADDRESS: 'cre2c_previousapplicantaddress',
   PREVIOUS_APPLICANT_EMAIL: 'cre2c_previousapplicantemail',
   PREVIOUS_APPLICANT_NAME: 'cre2c_previousapplicantname',
+  PREVIOUS_APPLICANT_BUSINESS_NAME: 'cre2c_previousapplicantbusinessname',
   PREVIOUS_APPLICANT_POSTCODE: 'cre2c_previousapplicantpostcode',
   PREVIOUS_APPLICATION_NUMBER: 'cre2c_previousapplicationnumber',
   PREVIOUS_CAPACITY_OTHER: 'cre2c_previouscapacityother',
