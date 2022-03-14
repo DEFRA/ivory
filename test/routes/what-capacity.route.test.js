@@ -6,10 +6,6 @@ const { ItemType } = require('../../server/utils/constants')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-const CharacterLimits = require('../mock-data/character-limits')
-
-const other = 'Other'
-
 describe('/what-capacity route', () => {
   let server
   const url = '/what-capacity'
@@ -20,8 +16,6 @@ describe('/what-capacity route', () => {
     whatCapacity: 'whatCapacity',
     whatCapacity2: 'whatCapacity-2',
     whatCapacity3: 'whatCapacity-3',
-    whatCapacity4: 'whatCapacity-4',
-    otherCapacity: 'otherCapacity',
     continue: 'continue'
   }
 
@@ -86,39 +80,23 @@ describe('/what-capacity route', () => {
       TestHelper.checkRadioOption(
         document,
         elementIds.whatCapacity,
-        'Agent',
-        'Agent',
-        false,
-        'For example, an antiques dealer or auction house selling the item'
+        'Executor or administrator',
+        'Executor or administrator',
+        false
       )
 
       TestHelper.checkRadioOption(
         document,
         elementIds.whatCapacity2,
-        'Executor or administrator',
-        'Executor or administrator'
+        'Trustee or similar',
+        'Trustee or similar'
       )
 
       TestHelper.checkRadioOption(
         document,
         elementIds.whatCapacity3,
-        'Trustee',
-        'Trustee'
-      )
-
-      TestHelper.checkRadioOption(
-        document,
-        elementIds.whatCapacity4,
-        other,
-        other
-      )
-    })
-
-    it('should have the other detail form field', () => {
-      TestHelper.checkFormField(
-        document,
-        elementIds.otherCapacity,
-        'Give details'
+        'Agent or business acting on behalf of either of the above',
+        'Agent or business acting on behalf of either of the above'
       )
     })
   })
@@ -135,10 +113,6 @@ describe('/what-capacity route', () => {
     })
 
     describe('Success', () => {
-      it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
-        await _checkSelectedRadioAction(postOptions, server, 'Agent', nextUrl)
-      })
-
       it('should store the value in Redis and progress to the next route when the second option has been selected', async () => {
         await _checkSelectedRadioAction(
           postOptions,
@@ -149,17 +123,20 @@ describe('/what-capacity route', () => {
       })
 
       it('should store the value in Redis and progress to the next route when the third option has been selected', async () => {
-        await _checkSelectedRadioAction(postOptions, server, 'Trustee', nextUrl)
-      })
-
-      it('should store the value in Redis and progress to the next route when the fourth option has been selected & Other text added', async () => {
-        postOptions.payload.otherCapacity = 'some text'
         await _checkSelectedRadioAction(
           postOptions,
           server,
-          other,
-          nextUrl,
-          'some text'
+          'Trustee or similar',
+          nextUrl
+        )
+      })
+
+      it('should store the value in Redis and progress to the next route when the first option has been selected', async () => {
+        await _checkSelectedRadioAction(
+          postOptions,
+          server,
+          'Agent or business acting on behalf of either of the above',
+          nextUrl
         )
       })
     })
@@ -179,39 +156,6 @@ describe('/what-capacity route', () => {
           'Tell us in what capacity you are making this declaration'
         )
       })
-
-      it('should display a validation error message if the user selects other and leaves text area empty', async () => {
-        postOptions.payload.whatCapacity = other
-        const response = await TestHelper.submitPostRequest(
-          server,
-          postOptions,
-          400
-        )
-        await TestHelper.checkValidationError(
-          response,
-          'otherCapacity',
-          'otherCapacity-error',
-          'Tell us in what capacity you are making this declaration'
-        )
-      })
-
-      it('should display a validation error message if the other text area > 4000 chars', async () => {
-        postOptions.payload = {
-          whatCapacity: other,
-          otherCapacity: `${CharacterLimits.fourThousandCharacters}X`
-        }
-        const response = await TestHelper.submitPostRequest(
-          server,
-          postOptions,
-          400
-        )
-        await TestHelper.checkValidationError(
-          response,
-          'otherCapacity',
-          'otherCapacity-error',
-          'Enter no more than 4,000 characters'
-        )
-      })
     })
   })
 })
@@ -224,8 +168,7 @@ const _checkSelectedRadioAction = async (
   postOptions,
   server,
   selectedOption,
-  nextUrl,
-  otherCapacity = ''
+  nextUrl
 ) => {
   const redisKey = 'what-capacity'
   postOptions.payload.whatCapacity = selectedOption
@@ -235,9 +178,6 @@ const _checkSelectedRadioAction = async (
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
   const expectedRedisValue = {}
-  if (otherCapacity) {
-    expectedRedisValue.otherCapacity = otherCapacity
-  }
   expectedRedisValue.whatCapacity = selectedOption
 
   expect(RedisService.set).toBeCalledTimes(1)

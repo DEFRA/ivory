@@ -10,31 +10,6 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      {% set otherHtml %}
-        {{ govukInput({
-            label: {
-              text: "Give details"
-            },
-            classes: "govuk-!-width-one-third",
-            id: "otherCapacity",
-            name: "otherCapacity",
-            value: otherCapacity,
-            errorMessage: fieldErrors['otherCapacity']
-          }) }}
-      {% endset -%}
-
-      {% set otherItem = {
-        text: otherOption.text,
-        value: otherOption.value,
-        checked: otherOption.checked,
-        conditional: {
-          html: otherHtml
-        }
-      }
-      %}
-
-      {% set items = (items.push(otherItem), items) %}
-
       {% call govukFieldset({
           attributes: {
             id: "pageTitle"

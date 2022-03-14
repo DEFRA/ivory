@@ -20,9 +20,11 @@ const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const YOUR_EMAIL = 'Your email'
 const YOUR_ADDRESS = 'Your address'
-const WORK_FOR_A_BUSINESS = 'Work for a business'
-const SELLING_ON_BEHALF_OF = 'Selling on behalf of'
+const WORK_FOR_A_BUSINESS = 'Completing the service'
+const SELLING_ON_BEHALF_OF = 'Who’s the owner?'
 const BUSINESS_NAME = 'Business name'
+const AS_A_BUSINESS = 'As a business'
+const AS_AN_INDIVIDUAL = 'As an individual'
 
 const handlers = {
   get: async (request, h) => {
@@ -312,7 +314,10 @@ const _getItemSummary = async (request, itemType) => {
       _getSummaryListRow(
         'Already has a certificate',
         alreadyCertified.alreadyCertified,
-        _getChangeItems(Paths.ALREADY_CERTIFIED, CHANGE_LINK_HINT.WhereMade)
+        _getChangeItems(
+          Paths.ALREADY_CERTIFIED,
+          CHANGE_LINK_HINT.AleadyCertified
+        )
       )
     )
 
@@ -321,7 +326,10 @@ const _getItemSummary = async (request, itemType) => {
         _getSummaryListRow(
           'Certificate number',
           alreadyCertified.certificateNumber,
-          _getChangeItems(Paths.ALREADY_CERTIFIED, CHANGE_LINK_HINT.WhereMade)
+          _getChangeItems(
+            Paths.ALREADY_CERTIFIED,
+            CHANGE_LINK_HINT.AleadyCertified
+          )
         )
       )
     }
@@ -331,7 +339,10 @@ const _getItemSummary = async (request, itemType) => {
         _getSummaryListRow(
           'Revoked certificate number',
           revokedCertificateNumber,
-          _getChangeItems(Paths.REVOKED_CERTIFICATE, CHANGE_LINK_HINT.WhereMade)
+          _getChangeItems(
+            Paths.REVOKED_CERTIFICATE,
+            CHANGE_LINK_HINT.RevokedCertificateNumber
+          )
         )
       )
     }
@@ -341,7 +352,7 @@ const _getItemSummary = async (request, itemType) => {
         _getSummaryListRow(
           'Applied before',
           hasAppliedBefore ? Options.YES : Options.NO,
-          _getChangeItems(Paths.APPLIED_BEFORE, CHANGE_LINK_HINT.WhereMade)
+          _getChangeItems(Paths.APPLIED_BEFORE, CHANGE_LINK_HINT.AppliedBefore)
         )
       )
     }
@@ -358,7 +369,7 @@ const _getItemSummary = async (request, itemType) => {
           previousApplicationNumber,
           _getChangeItems(
             Paths.PREVIOUS_APPLICATION_NUMBER,
-            CHANGE_LINK_HINT.WhereMade
+            CHANGE_LINK_HINT.PreviousApplicationNumber
           )
         )
       )
@@ -424,6 +435,10 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
     RedisKeys.WORK_FOR_A_BUSINESS
   )
 
+  const workForABusinessFormatted = workForABusiness
+    ? AS_A_BUSINESS
+    : AS_AN_INDIVIDUAL
+
   const capacity = _formatCapacity(
     await RedisService.get(request, RedisKeys.WHAT_CAPACITY)
   )
@@ -461,7 +476,7 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
     if (sellingOnBehalfOf === 'The business I work for') {
       await _getOwnerSummaryApplicantBusiness(
         ownerSummary,
-        workForABusiness,
+        workForABusinessFormatted,
         sellingOnBehalfOf,
         applicantContactDetails,
         applicantAddress
@@ -469,7 +484,7 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
     } else if (sellingOnBehalfOf === 'Other') {
       await _getOwnerSummaryApplicantOther(
         ownerSummary,
-        workForABusiness,
+        workForABusinessFormatted,
         sellingOnBehalfOf,
         capacity,
         applicantContactDetails,
@@ -478,7 +493,7 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
     } else {
       await _getOwnerSummaryApplicantDefault(
         ownerSummary,
-        workForABusiness,
+        workForABusinessFormatted,
         sellingOnBehalfOf,
         ownerContactDetails,
         ownerAddress,
@@ -506,10 +521,6 @@ const _formatCapacity = whatCapacity => {
   let capacity
   if (whatCapacity && whatCapacity.whatCapacity) {
     capacity = whatCapacity.whatCapacity
-
-    if (capacity === 'Other') {
-      capacity += ` - ${whatCapacity.otherCapacity}`
-    }
   }
 
   return capacity
@@ -557,7 +568,7 @@ const _getOwnerSummaryOwnedByApplicant = async (
 
 const _getOwnerSummaryApplicantBusiness = async (
   ownerSummary,
-  workForABusiness,
+  workForABusinessFormatted,
   sellingOnBehalfOf,
   applicantContactDetails,
   applicantAddress
@@ -565,7 +576,7 @@ const _getOwnerSummaryApplicantBusiness = async (
   ownerSummary.push(
     _getSummaryListRow(
       WORK_FOR_A_BUSINESS,
-      workForABusiness,
+      workForABusinessFormatted,
       _getChangeItems(
         Paths.WORK_FOR_A_BUSINESS,
         CHANGE_LINK_HINT.WorkForABusiness
@@ -595,7 +606,7 @@ const _getOwnerSummaryApplicantBusiness = async (
     )
   )
 
-  if (workForABusiness === Options.YES) {
+  if (workForABusinessFormatted === 'As a business') {
     ownerSummary.push(
       _getSummaryListRow(
         BUSINESS_NAME,
@@ -634,7 +645,7 @@ const _getOwnerSummaryApplicantBusiness = async (
 
 const _getOwnerSummaryApplicantOther = async (
   ownerSummary,
-  workForABusiness,
+  workForABusinessFormatted,
   sellingOnBehalfOf,
   capacity,
   applicantContactDetails,
@@ -643,7 +654,7 @@ const _getOwnerSummaryApplicantOther = async (
   ownerSummary.push(
     _getSummaryListRow(
       WORK_FOR_A_BUSINESS,
-      workForABusiness,
+      workForABusinessFormatted,
       _getChangeItems(
         Paths.WORK_FOR_A_BUSINESS,
         CHANGE_LINK_HINT.WorkForABusiness
@@ -681,7 +692,7 @@ const _getOwnerSummaryApplicantOther = async (
     )
   )
 
-  if (workForABusiness === Options.YES) {
+  if (workForABusinessFormatted === 'As a business') {
     ownerSummary.push(
       _getSummaryListRow(
         BUSINESS_NAME,
@@ -720,7 +731,7 @@ const _getOwnerSummaryApplicantOther = async (
 
 const _getOwnerSummaryApplicantDefault = async (
   ownerSummary,
-  workForABusiness,
+  workForABusinessFormatted,
   sellingOnBehalfOf,
   ownerContactDetails,
   ownerAddress,
@@ -730,7 +741,7 @@ const _getOwnerSummaryApplicantDefault = async (
   ownerSummary.push(
     _getSummaryListRow(
       WORK_FOR_A_BUSINESS,
-      workForABusiness,
+      workForABusinessFormatted,
       _getChangeItems(
         Paths.WORK_FOR_A_BUSINESS,
         CHANGE_LINK_HINT.WorkForABusiness
@@ -785,7 +796,7 @@ const _getOwnerSummaryApplicantDefault = async (
     )
   )
 
-  if (workForABusiness === Options.YES) {
+  if (workForABusinessFormatted === 'As a business') {
     ownerSummary.push(
       _getSummaryListRow(
         BUSINESS_NAME,
@@ -888,16 +899,20 @@ const _getChangeItems = (href, visuallyHiddenText) => [
 ]
 
 const CHANGE_LINK_HINT = {
+  AleadyCertified: 'whether the item has a certificate',
+  AppliedBefore: 'whether an application has been made before',
   BusinessName: 'business name',
+  DistinguishingFeatures: 'any distinguishing features',
   ExemptionType: 'type of exemption',
   ItemAge: 'your proof of age',
   IvoryVolme: 'your proof that item has less than [##PERCENTAGE##]% ivory',
   OwnerAddress: 'owner’s address',
   OwnerEmail: 'owner’s email',
   OwnerName: 'owner’s name',
-  SellingOnBehalfOf: 'who owns the item',
+  PreviousApplicationNumber: 'previous application number',
+  RevokedCertificateNumber: 'revoked certificate number',
   SaleIntention: 'what owner intends to do',
-  DistinguishingFeatures: 'any distinguishing features',
+  SellingOnBehalfOf: 'who owns the item',
   WhatIsItem: 'your description of the item',
   WhenMade: 'when it was made',
   WhereIsIvory: 'where the ivory is',
@@ -905,10 +920,10 @@ const CHANGE_LINK_HINT = {
   WhoOwnsTheItem: 'who owns the item',
   WhyIvoryIntegral: 'reason why all ivory is integral to item',
   WhyRmi: 'reason why item is of outstandingly high value',
-  WorkForABusiness: 'if you work for a business',
+  WorkForABusiness: 'the capacity you’re completing the service',
   YourAddress: 'your address',
-  YourFiles: 'your files',
   YourEmail: 'your email',
+  YourFiles: 'your files',
   YourName: 'your name',
   YourPhotos: 'your photos'
 }

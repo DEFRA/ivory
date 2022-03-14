@@ -260,7 +260,6 @@ const _getOwnerAndApplicantDetails = async request => {
   ])
 
   const capacity = capacityResponse ? capacityResponse.whatCapacity : null
-  const capacityOther = capacityResponse ? capacityResponse.otherCapacity : null
 
   return {
     [DataVerseFieldName.OWNED_BY_APPLICANT]: isOwnedByApplicant,
@@ -295,8 +294,7 @@ const _getOwnerAndApplicantDetails = async request => {
       sellingOnBehalfOf
     ),
 
-    [DataVerseFieldName.CAPACITY]: _getCapacityCode(capacity),
-    [DataVerseFieldName.CAPACITY_OTHER]: capacityOther
+    [DataVerseFieldName.CAPACITY]: _getCapacityCode(capacity)
   }
 }
 
@@ -381,9 +379,6 @@ const _getNewOwnerDetails = async request => {
 
     [DataVerseFieldName.PREVIOUS_CAPACITY]:
       existingRecord[DataVerseFieldName.CAPACITY],
-
-    [DataVerseFieldName.PREVIOUS_CAPACITY_OTHER]:
-      existingRecord[DataVerseFieldName.CAPACITY_OTHER],
 
     ...ownerAndApplicantDetails
   }

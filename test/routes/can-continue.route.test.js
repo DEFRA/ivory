@@ -167,7 +167,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.'
+            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 2 hours to complete the service.'
           )
         })
 
@@ -296,7 +296,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.'
+            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 2 hours to complete the service.'
           )
         })
 
@@ -420,7 +420,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.'
+            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 2 hours to complete the service.'
           )
         })
 
@@ -537,7 +537,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.'
+            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 2 hours to complete the service.'
           )
         })
 
@@ -654,7 +654,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.'
+            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 2 hours to complete the service.'
           )
         })
 
@@ -772,7 +772,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.'
+            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 2 hours to complete the service.'
           )
         })
 
@@ -881,7 +881,7 @@ describe('/can-continue route', () => {
           )
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 24 hours to complete the service.'
+            'You can stop half-way through and come back later. We’ll delete your answers if you close your browser or take more than 2 hours to complete the service.'
           )
         })
 

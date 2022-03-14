@@ -2,6 +2,7 @@
 
 const AnalyticsService = require('../services/analytics.service')
 const RedisService = require('../services/redis.service')
+const RedisHelper = require('../services/redis-helper.service')
 
 const {
   Options,
@@ -24,7 +25,7 @@ const handlers = {
   post: async (request, h) => {
     const context = await _getContext(request)
     const payload = request.payload
-    const errors = _validateForm(payload)
+    const errors = _validateForm(context, payload)
 
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
@@ -44,7 +45,7 @@ const handlers = {
     await RedisService.set(
       request,
       RedisKeys.WORK_FOR_A_BUSINESS,
-      payload.workForABusiness
+      payload.workForABusiness === Options.YES
     )
 
     AnalyticsService.sendEvent(request, {
@@ -63,31 +64,36 @@ const _getContext = async request => {
     RedisKeys.WORK_FOR_A_BUSINESS
   )
 
+  const isSection2 = await RedisHelper.isSection2(request)
+
   return {
-    pageTitle:
-      'Do you work for a business that is intending to sell or hire out the item?',
+    isSection2,
+    pageTitle: `In what capacity are you completing this ${
+      isSection2 ? 'application' : 'registration'
+    }?`,
     items: [
       {
-        value: 'Yes',
-        text: 'Yes',
-        checked: workForABusiness === Options.YES
+        value: Options.YES,
+        text: 'As a business',
+        checked: workForABusiness
       },
       {
-        value: 'No',
-        text: 'No',
-        checked: workForABusiness === Options.NO
+        value: Options.NO,
+        text: 'As an individual',
+        checked: workForABusiness !== null && !workForABusiness
       }
     ]
   }
 }
 
-const _validateForm = payload => {
+const _validateForm = (context, payload) => {
   const errors = []
   if (Validators.empty(payload.workForABusiness)) {
     errors.push({
       name: 'workForABusiness',
-      text:
-        'Tell us whether you work for a business who is selling or hiring out the item'
+      text: `Tell us in what capacity you are completing this ${
+        context.isSection2 ? 'application' : 'registration'
+      }`
     })
   }
   return errors

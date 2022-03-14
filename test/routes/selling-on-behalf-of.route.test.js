@@ -5,7 +5,7 @@ const TestHelper = require('../utils/test-helper')
 jest.mock('../../server/services/redis.service')
 const RedisService = require('../../server/services/redis.service')
 
-const { ItemType, RedisKeys, Options } = require('../../server/utils/constants')
+const { ItemType, RedisKeys } = require('../../server/utils/constants')
 
 describe('/selling-on-behalf-of route', () => {
   let server
@@ -322,9 +322,7 @@ const _createMocks = (worksForAbusiness, isSection2 = false) => {
     [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: isSection2
       ? ItemType.HIGH_VALUE
       : ItemType.MUSICAL,
-    [RedisKeys.WORK_FOR_A_BUSINESS]: worksForAbusiness
-      ? Options.YES
-      : Options.NO,
+    [RedisKeys.WORK_FOR_A_BUSINESS]: worksForAbusiness,
     [RedisKeys.SELLING_ON_BEHALF_OF]: ''
   }
 

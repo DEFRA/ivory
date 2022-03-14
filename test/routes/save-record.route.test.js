@@ -190,6 +190,8 @@ describe('/save-record route', () => {
               'EXISTING_OWNER_POSTCODE',
             [DataVerseFieldName.PREVIOUS_APPLICANT_NAME]:
               'EXISTING_APPLICANT_NAME',
+            [DataVerseFieldName.APPLICANT_BUSINESS_NAME]: undefined,
+            [DataVerseFieldName.PREVIOUS_APPLICANT_BUSINESS_NAME]: undefined,
             [DataVerseFieldName.PREVIOUS_APPLICANT_EMAIL]:
               'EXISTING_APPLICANT_EMAIL',
             [DataVerseFieldName.PREVIOUS_APPLICANT_ADDRESS]:
@@ -200,7 +202,6 @@ describe('/save-record route', () => {
             [DataVerseFieldName.PREVIOUS_WORK_FOR_A_BUSINESS]: undefined,
             [DataVerseFieldName.PREVIOUS_SELLING_ON_BEHALF_OF]: undefined,
             [DataVerseFieldName.PREVIOUS_CAPACITY]: undefined,
-            [DataVerseFieldName.PREVIOUS_CAPACITY_OTHER]: undefined,
             [DataVerseFieldName.OWNED_BY_APPLICANT]: false,
             [DataVerseFieldName.OWNER_NAME]: undefined,
             [DataVerseFieldName.OWNER_EMAIL]: 'OWNER_EMAIL_ADDRESS',
@@ -213,8 +214,7 @@ describe('/save-record route', () => {
             [DataVerseFieldName.APPLICANT_POSTCODE]: 'AP1 1AB',
             [DataVerseFieldName.WORK_FOR_A_BUSINESS]: false,
             [DataVerseFieldName.SELLING_ON_BEHALF_OF]: 881990005,
-            [DataVerseFieldName.CAPACITY]: 881990003,
-            [DataVerseFieldName.CAPACITY_OTHER]: 'Some other capacity',
+            [DataVerseFieldName.CAPACITY]: undefined,
             [DataVerseFieldName.ALREADY_HAS_CERTIFICATE]: 881990000,
             [DataVerseFieldName.APPLIED_BEFORE]: false,
             [DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER]: undefined,
@@ -335,8 +335,7 @@ const section10RedisMockDataMap = {
   [RedisKeys.APPLICANT_ADDRESS]:
     '123 APPLICANT STREET, APPLICANT TOWN, AP1 1AB',
   [RedisKeys.WHAT_CAPACITY]: {
-    whatCapacity: 'Other',
-    otherCapacity: 'Some other capacity'
+    whatCapacity: 'Other'
   },
   [RedisKeys.WORK_FOR_A_BUSINESS]: true,
   [RedisKeys.SELLING_ON_BEHALF_OF]: 'Other'
@@ -369,8 +368,7 @@ const section2RedisMockDataMap = {
   [RedisKeys.UPLOAD_DOCUMENT]: mockFileAttachmentData,
   [RedisKeys.WHY_IS_ITEM_RMI]: 'RMI_REASON',
   [RedisKeys.WHAT_CAPACITY]: {
-    whatCapacity: 'Other',
-    otherCapacity: 'Some other capacity'
+    whatCapacity: 'Other'
   },
   [RedisKeys.WORK_FOR_A_BUSINESS]: true,
   [RedisKeys.SELLING_ON_BEHALF_OF]: 'Other'
@@ -403,8 +401,7 @@ const section2ResaleRedisMockDataMap = {
   [RedisKeys.UPLOAD_DOCUMENT]: mockFileAttachmentData,
   [RedisKeys.WHY_IS_ITEM_RMI]: 'RMI_REASON',
   [RedisKeys.WHAT_CAPACITY]: {
-    whatCapacity: 'Other',
-    otherCapacity: 'Some other capacity'
+    whatCapacity: 'Other'
   },
   [RedisKeys.WORK_FOR_A_BUSINESS]: true,
   [RedisKeys.SELLING_ON_BEHALF_OF]: 'Other',

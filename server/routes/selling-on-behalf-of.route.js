@@ -9,13 +9,7 @@ const {
   BehalfOfNotBusinessOptions
 } = require('../utils/constants')
 
-const {
-  Options,
-  Paths,
-  Views,
-  RedisKeys,
-  Analytics
-} = require('../utils/constants')
+const { Paths, Views, RedisKeys, Analytics } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
@@ -123,7 +117,7 @@ const _getOptions = async request => {
     option => _buildOption(option)
   )
 
-  return workForABusiness === Options.YES ? businessOptions : notBusinessOptions
+  return workForABusiness ? businessOptions : notBusinessOptions
 }
 
 const _validateForm = payload => {

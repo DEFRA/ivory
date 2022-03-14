@@ -5,16 +5,13 @@ const RedisService = require('../services/redis.service')
 
 const {
   Capacities,
-  CharacterLimits,
   Paths,
   RedisKeys,
   Views,
   Analytics
 } = require('../utils/constants')
-const { formatNumberWithCommas } = require('../utils/general')
-const { buildErrorSummary, Validators } = require('../utils/validation')
 
-const otherCapacity = 'Other'
+const { buildErrorSummary, Validators } = require('../utils/validation')
 
 const handlers = {
   get: async (request, h) => {
@@ -45,17 +42,9 @@ const handlers = {
         .code(400)
     }
 
-    if (payload.whatCapacity !== otherCapacity) {
-      delete payload.otherCapacity
-    }
-
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.MAIN_QUESTIONS,
-      action: `${Analytics.Action.SELECTED} ${payload.whatCapacity}${
-        payload.whatCapacity === otherCapacity
-          ? ' - ' + payload.otherCapacity
-          : ''
-      }`,
+      action: `${Analytics.Action.SELECTED} ${payload.whatCapacity}`,
       label: context.pageTitle
     })
 
@@ -80,16 +69,10 @@ const _getContext = async request => {
   const whatCapacity = payload ? payload.whatCapacity : null
 
   const options = _getOptions(whatCapacity)
-  const otherOption = options.pop()
 
   return {
-    otherOption,
     pageTitle: 'In what capacity are you making this declaration?',
-    items: options,
-    otherCapacity:
-      payload && payload.whatCapacity === Capacities.OTHER
-        ? payload.otherCapacity
-        : null
+    items: options
   }
 }
 
@@ -109,9 +92,9 @@ const _getOptions = whatCapacity => {
     }
   })
 
-  items[0].hint = {
-    text: 'For example, an antiques dealer or auction house selling the item'
-  }
+  // items[0].hint = {
+  //   text: 'For example, an antiques dealer or auction house selling the item'
+  // }
 
   return items
 }
@@ -126,24 +109,6 @@ const _validateForm = payload => {
       name: 'whatCapacity',
       text: errorMessage
     })
-  }
-
-  if (payload.whatCapacity === otherCapacity) {
-    if (Validators.empty(payload.otherCapacity)) {
-      errors.push({
-        name: 'otherCapacity',
-        text: errorMessage
-      })
-    }
-
-    if (Validators.maxLength(payload.otherCapacity, CharacterLimits.Input)) {
-      errors.push({
-        name: 'otherCapacity',
-        text: `Enter no more than ${formatNumberWithCommas(
-          CharacterLimits.Input
-        )} characters`
-      })
-    }
   }
 
   return errors
