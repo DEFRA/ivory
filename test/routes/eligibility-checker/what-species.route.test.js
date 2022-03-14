@@ -9,7 +9,7 @@ const TestHelper = require('../../utils/test-helper')
 describe('/eligibility-checker/what-species route', () => {
   let server
   const url = '/eligibility-checker/what-species'
-  const nextUrl = '/what-type-of-item-is-it'
+  const nextUrl = '/eligibility-checker/selling-to-museum'
 
   const elementIds = {
     pageTitle: 'pageTitle',
