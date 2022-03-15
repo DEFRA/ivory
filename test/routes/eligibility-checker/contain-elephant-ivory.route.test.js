@@ -7,7 +7,11 @@ jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
 const TestHelper = require('../../utils/test-helper')
-const { Options, RedisKeys } = require('../../../server/utils/constants')
+const {
+  Options,
+  RedisKeys,
+  Species
+} = require('../../../server/utils/constants')
 
 describe('/eligibility-checker/contain-elephant-ivory route', () => {
   let server
@@ -252,23 +256,16 @@ const _checkSelectedRadioAction = async (
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
-  expect(RedisService.set).toBeCalledTimes(
-    selectedOption === Options.NO ? 4 : 3
-  )
-
-  expect(RedisService.set).toBeCalledWith(
-    expect.any(Object),
-    RedisKeys.CONTAIN_ELEPHANT_IVORY,
-    selectedOption
-  )
-
-  if (selectedOption === Options.NO) {
-    expect(RedisService.set).toBeCalledWith(
-      expect.any(Object),
-      RedisKeys.ARE_YOU_A_MUSEUM,
-      false
-    )
+  let expectedNumberOfCalls
+  if (selectedOption === Options.YES) {
+    expectedNumberOfCalls = 4
+  } else if (selectedOption === Options.NO) {
+    expectedNumberOfCalls = 4
+  } else {
+    expectedNumberOfCalls = 3
   }
+
+  expect(RedisService.set).toBeCalledTimes(expectedNumberOfCalls)
 
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
@@ -281,6 +278,26 @@ const _checkSelectedRadioAction = async (
     RedisKeys.USED_CHECKER,
     true
   )
+
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    RedisKeys.CONTAIN_ELEPHANT_IVORY,
+    selectedOption
+  )
+
+  if (selectedOption === Options.YES) {
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      RedisKeys.WHAT_SPECIES,
+      Species.ELEPHANT
+    )
+  } else if (selectedOption === Options.NO) {
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      RedisKeys.ARE_YOU_A_MUSEUM,
+      false
+    )
+  }
 
   expect(response.headers.location).toEqual(nextUrl)
 }

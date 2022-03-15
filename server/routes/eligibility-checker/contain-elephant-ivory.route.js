@@ -8,6 +8,7 @@ const {
   Options,
   Paths,
   RedisKeys,
+  Species,
   Urls,
   Views
 } = require('../../utils/constants')
@@ -52,6 +53,8 @@ const handlers = {
       payload.containElephantIvory
     )
 
+    await RedisService.set(request, RedisKeys.USED_CHECKER, true)
+
     if (payload.containElephantIvory === Options.NO) {
       await RedisService.set(request, RedisKeys.ARE_YOU_A_MUSEUM, false)
     }
@@ -71,8 +74,6 @@ const handlers = {
       )
     }
 
-    await RedisService.set(request, RedisKeys.USED_CHECKER, true)
-
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.containElephantIvory}`,
@@ -81,6 +82,11 @@ const handlers = {
 
     switch (payload.containElephantIvory) {
       case Options.YES:
+        await RedisService.set(
+          request,
+          RedisKeys.WHAT_SPECIES,
+          Species.ELEPHANT
+        )
         return h.redirect(Paths.SELLING_TO_MUSEUM)
       case Options.NO:
         return h.redirect(Paths.WHAT_SPECIES)
