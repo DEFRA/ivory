@@ -5,11 +5,12 @@ const RedisService = require('../services/redis.service')
 const RedisHelper = require('../services/redis-helper.service')
 
 const {
+  Analytics,
+  BusinessOrIndividual,
   Options,
   Paths,
-  Views,
   RedisKeys,
-  Analytics
+  Views
 } = require('../utils/constants')
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
@@ -74,12 +75,12 @@ const _getContext = async request => {
     items: [
       {
         value: Options.YES,
-        text: 'As a business',
+        text: BusinessOrIndividual.AS_A_BUSINESS,
         checked: workForABusiness
       },
       {
         value: Options.NO,
-        text: 'As an individual',
+        text: BusinessOrIndividual.AS_AN_INDIVIDUAL,
         checked: workForABusiness !== null && !workForABusiness
       }
     ]

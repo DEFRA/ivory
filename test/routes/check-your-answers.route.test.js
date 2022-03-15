@@ -4,6 +4,7 @@ const TestHelper = require('../utils/test-helper')
 const {
   AlreadyCertifiedOptions,
   BehalfOfBusinessOptions,
+  BusinessOrIndividual,
   ItemType,
   Options,
   Paths,
@@ -577,7 +578,7 @@ describe('/check-your-answers route', () => {
 
         _checkSummaryValues(document, elementIds.summaries.owner, [
           Options.NO,
-          AS_A_BUSINESS,
+          BusinessOrIndividual.AS_A_BUSINESS,
           BehalfOfBusinessOptions.BUSINESS_I_WORK_FOR,
           mockApplicantContactDetails.fullName,
           mockApplicantContactDetails.businessName,
@@ -639,7 +640,7 @@ describe('/check-your-answers route', () => {
 
         _checkSummaryValues(document, elementIds.summaries.owner, [
           Options.NO,
-          AS_A_BUSINESS,
+          BusinessOrIndividual.AS_A_BUSINESS,
           BehalfOfBusinessOptions.OTHER,
           'Other',
           mockApplicantContactDetails.fullName,
@@ -706,7 +707,7 @@ describe('/check-your-answers route', () => {
 
         _checkSummaryValues(document, elementIds.summaries.owner, [
           Options.NO,
-          AS_A_BUSINESS,
+          BusinessOrIndividual.AS_A_BUSINESS,
           BehalfOfBusinessOptions.AN_INDIVIDUAL,
           mockOwnerContactDetails.fullName,
           mockOwnerContactDetails.emailAddress,
@@ -1112,8 +1113,6 @@ describe('/check-your-answers route', () => {
 const KEY_CLASS = 'govuk-summary-list__key'
 const VALUE_CLASS = 'govuk-summary-list__value'
 const LINK_CLASS = 'govuk-link'
-
-const AS_A_BUSINESS = 'As a business'
 
 const mockItemDescription = {
   whatIsItem: 'Chest of drawers',

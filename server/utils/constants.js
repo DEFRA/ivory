@@ -81,6 +81,11 @@ const BehalfOfNotBusinessOptions = {
   OTHER: 'Other'
 }
 
+const BusinessOrIndividual = {
+  AS_A_BUSINESS: 'As a business',
+  AS_AN_INDIVIDUAL: 'As an individual'
+}
+
 const Capacities = {
   EXECUTOR_ADMINISTRATOR: 'Executor or administrator',
   TRUSTEE: 'Trustee or similar',
@@ -457,6 +462,7 @@ module.exports = Object.freeze({
   APPINSIGHTS_CLOUDROLE: 'IvoryFrontEnd',
   BehalfOfBusinessOptions,
   BehalfOfNotBusinessOptions,
+  BusinessOrIndividual,
   Capacities,
   CharacterLimits,
   DataVerseFieldName,

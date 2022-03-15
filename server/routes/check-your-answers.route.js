@@ -7,13 +7,14 @@ const RedisHelper = require('../services/redis-helper.service')
 const RedisService = require('../services/redis.service')
 
 const {
+  AlreadyCertifiedOptions,
   Analytics,
+  BusinessOrIndividual,
   ItemType,
   Options,
   Paths,
   RedisKeys,
-  Views,
-  AlreadyCertifiedOptions
+  Views
 } = require('../utils/constants')
 const { getIvoryVolumePercentage } = require('../utils/general')
 const { buildErrorSummary, Validators } = require('../utils/validation')
@@ -23,8 +24,6 @@ const YOUR_ADDRESS = 'Your address'
 const WORK_FOR_A_BUSINESS = 'Completing the service'
 const SELLING_ON_BEHALF_OF = 'Who’s the owner?'
 const BUSINESS_NAME = 'Business name'
-const AS_A_BUSINESS = 'As a business'
-const AS_AN_INDIVIDUAL = 'As an individual'
 
 const handlers = {
   get: async (request, h) => {
@@ -436,8 +435,8 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
   )
 
   const workForABusinessFormatted = workForABusiness
-    ? AS_A_BUSINESS
-    : AS_AN_INDIVIDUAL
+    ? BusinessOrIndividual.AS_A_BUSINESS
+    : BusinessOrIndividual.AS_AN_INDIVIDUAL
 
   const capacity = _formatCapacity(
     await RedisService.get(request, RedisKeys.WHAT_CAPACITY)
@@ -606,7 +605,7 @@ const _getOwnerSummaryApplicantBusiness = async (
     )
   )
 
-  if (workForABusinessFormatted === 'As a business') {
+  if (workForABusinessFormatted === BusinessOrIndividual.AS_A_BUSINESS) {
     ownerSummary.push(
       _getSummaryListRow(
         BUSINESS_NAME,
@@ -692,7 +691,7 @@ const _getOwnerSummaryApplicantOther = async (
     )
   )
 
-  if (workForABusinessFormatted === 'As a business') {
+  if (workForABusinessFormatted === BusinessOrIndividual.AS_A_BUSINESS) {
     ownerSummary.push(
       _getSummaryListRow(
         BUSINESS_NAME,
@@ -796,7 +795,7 @@ const _getOwnerSummaryApplicantDefault = async (
     )
   )
 
-  if (workForABusinessFormatted === 'As a business') {
+  if (workForABusinessFormatted === BusinessOrIndividual.AS_A_BUSINESS) {
     ownerSummary.push(
       _getSummaryListRow(
         BUSINESS_NAME,
