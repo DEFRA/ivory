@@ -213,7 +213,7 @@ describe('/save-record route', () => {
             [DataVerseFieldName.APPLICANT_ADDRESS]:
               '123 APPLICANT STREET, APPLICANT TOWN',
             [DataVerseFieldName.APPLICANT_POSTCODE]: 'AP1 1AB',
-            [DataVerseFieldName.WORK_FOR_A_BUSINESS]: false,
+            [DataVerseFieldName.WORK_FOR_A_BUSINESS]: true,
             [DataVerseFieldName.SELLING_ON_BEHALF_OF]: 881990005,
             [DataVerseFieldName.CAPACITY]: undefined,
             [DataVerseFieldName.ALREADY_HAS_CERTIFICATE]: 881990000,

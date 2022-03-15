@@ -289,7 +289,7 @@ const _getOwnerAndApplicantDetails = async request => {
       applicantAddressInternational
     ),
 
-    [DataVerseFieldName.WORK_FOR_A_BUSINESS]: workForABusiness === Options.YES,
+    [DataVerseFieldName.WORK_FOR_A_BUSINESS]: workForABusiness,
 
     [DataVerseFieldName.SELLING_ON_BEHALF_OF]: _getSellingOnBehalfOfCode(
       sellingOnBehalfOf
