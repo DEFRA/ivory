@@ -230,7 +230,8 @@ const _getCommonFields = async (request, itemDescription) => {
     [DataVerseFieldName.INTENTION]: _getIntentionCategoryCode(intentionForItem),
     ...(await _getInitialPhoto(request)),
     ...(await _getOwnerAndApplicantDetails(request)),
-    [DataVerseFieldName.MANUALLY_CREATED]: false
+    [DataVerseFieldName.MANUALLY_CREATED]: false,
+    [DataVerseFieldName.HAS_PREVIOUS_OWNER]: false
   }
 }
 
@@ -334,6 +335,7 @@ const _getNewOwnerDetails = async request => {
   return {
     [DataVerseFieldName.SECTION_2_CASE_ID]:
       existingRecord[DataVerseFieldName.SECTION_2_CASE_ID],
+    [DataVerseFieldName.HAS_PREVIOUS_OWNER]: true,
 
     // Owner details
 

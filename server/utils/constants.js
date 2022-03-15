@@ -114,6 +114,7 @@ const DataVerseFieldName = {
   INTENTION: 'cre2c_intention',
   GROUP_REGISTRATION: 'cre2c_groupregistration',
   HAS_DISTINGUISHING_FEATURES: 'cre2c_hasuniquefeatures',
+  HAS_PREVIOUS_OWNER: 'cre2c_haspreviousowner',
   ITEM_SUMMARY: 'cre2c_itemsummary',
   MANUALLY_CREATED: 'cre2c_manuallycreated',
   NAME: 'cre2c_name',
