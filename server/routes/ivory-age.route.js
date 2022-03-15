@@ -88,13 +88,11 @@ const _getContext = async request => {
   const options = await _getCheckboxes(payload, itemType)
   const otherCheckbox = options.pop()
 
-  const items = options.map(option => {
-    return {
-      value: option.label,
-      text: option.label,
-      checked: option.checked
-    }
-  })
+  const items = options.map(option => ({
+    text: option.label,
+    value: option.label,
+    checked: option.checked
+  }))
 
   return {
     itemType,

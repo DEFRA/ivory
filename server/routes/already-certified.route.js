@@ -133,13 +133,11 @@ const _getOptions = alreadyCertified => {
     }
   })
 
-  const items = options.map(option => {
-    return {
-      text: option.label,
-      value: option.label,
-      checked: option.checked
-    }
-  })
+  const items = options.map(option => ({
+    text: option.label,
+    value: option.label,
+    checked: option.checked
+  }))
 
   items[2].hint = {
     text: "The certificate has been cancelled or 'revoked'"

@@ -309,14 +309,16 @@ const _getItemSummary = async (request, itemType) => {
 
     const hasAppliedBefore = await RedisHelper.hasAppliedBefore(request)
 
+    const alreadyCertiedChangeItems = _getChangeItems(
+      Paths.ALREADY_CERTIFIED,
+      CHANGE_LINK_HINT.AleadyCertified
+    )
+
     itemSummary.push(
       _getSummaryListRow(
         'Already has a certificate',
         alreadyCertified.alreadyCertified,
-        _getChangeItems(
-          Paths.ALREADY_CERTIFIED,
-          CHANGE_LINK_HINT.AleadyCertified
-        )
+        alreadyCertiedChangeItems
       )
     )
 
@@ -325,10 +327,7 @@ const _getItemSummary = async (request, itemType) => {
         _getSummaryListRow(
           'Certificate number',
           alreadyCertified.certificateNumber,
-          _getChangeItems(
-            Paths.ALREADY_CERTIFIED,
-            CHANGE_LINK_HINT.AleadyCertified
-          )
+          alreadyCertiedChangeItems
         )
       )
     }
@@ -429,15 +428,6 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
     RedisKeys.SELLING_ON_BEHALF_OF
   )
 
-  const workForABusiness = await RedisService.get(
-    request,
-    RedisKeys.WORK_FOR_A_BUSINESS
-  )
-
-  const workForABusinessFormatted = workForABusiness
-    ? BusinessOrIndividual.AS_A_BUSINESS
-    : BusinessOrIndividual.AS_AN_INDIVIDUAL
-
   const capacity = _formatCapacity(
     await RedisService.get(request, RedisKeys.WHAT_CAPACITY)
   )
@@ -472,6 +462,15 @@ const _getOwnerSummary = async (request, isOwnedByApplicant) => {
       ownerAddress
     )
   } else {
+    const workForABusiness = await RedisService.get(
+      request,
+      RedisKeys.WORK_FOR_A_BUSINESS
+    )
+
+    const workForABusinessFormatted = workForABusiness
+      ? BusinessOrIndividual.AS_A_BUSINESS
+      : BusinessOrIndividual.AS_AN_INDIVIDUAL
+
     if (sellingOnBehalfOf === 'The business I work for') {
       await _getOwnerSummaryApplicantBusiness(
         ownerSummary,
