@@ -73,7 +73,7 @@ describe('/selling-on-behalf-of route', () => {
         const element = document.querySelector(`#${elementIds.helpText}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'You should only select ‘other’ if there is no owner for the item. For example the item is part of a deceased’s estate.'
+          'You should only select ‘other’ if the item has no owner. For example, the item is part of a deceased’s estate.'
         )
       })
 
