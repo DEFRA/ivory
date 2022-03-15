@@ -84,13 +84,11 @@ const _getOptions = whatCapacity => {
     }
   })
 
-  const items = options.map(option => ({
+  return options.map(option => ({
     text: option.label,
     value: option.label,
     checked: option.checked
   }))
-
-  return items
 }
 
 const _validateForm = payload => {
