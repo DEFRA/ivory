@@ -42,7 +42,7 @@ describe('/user-details/applicant/address-international route', () => {
 
     describe('Not working for a business', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('An individual')
+        RedisService.get = jest.fn().mockResolvedValue(false)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -81,7 +81,7 @@ describe('/user-details/applicant/address-international route', () => {
 
     describe('Working for a business', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('An individual')
+        RedisService.get = jest.fn().mockResolvedValue(false)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -113,7 +113,7 @@ describe('/user-details/applicant/address-international route', () => {
 
     describe('Success', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('No')
+        RedisService.get = jest.fn().mockResolvedValue(false)
       })
 
       it('should store the address in Redis and progress to the next route when the address is entered by the search', async () => {

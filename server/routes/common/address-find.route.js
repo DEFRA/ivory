@@ -6,14 +6,13 @@ const RedisService = require('../../services/redis.service')
 
 const {
   AddressType,
+  Analytics,
   BehalfOfBusinessOptions,
   BehalfOfNotBusinessOptions,
   CharacterLimits,
   Paths,
   RedisKeys,
-  Views,
-  Options,
-  Analytics
+  Views
 } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { formatNumberWithCommas } = require('../../utils/general')
@@ -115,9 +114,10 @@ const _getContext = async (request, addressType) => {
   let pageTitle
 
   if (addressType === AddressType.APPLICANT) {
-    const workForABusiness =
-      (await RedisService.get(request, RedisKeys.WORK_FOR_A_BUSINESS)) ===
-      Options.YES
+    const workForABusiness = await RedisService.get(
+      request,
+      RedisKeys.WORK_FOR_A_BUSINESS
+    )
 
     pageTitle = workForABusiness
       ? "What's the address of the business you work for?"

@@ -57,7 +57,7 @@ describe('/user-details/applicant/address-find route', () => {
 
     describe('Not working for a business', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('No')
+        RedisService.get = jest.fn().mockResolvedValue(false)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -111,7 +111,7 @@ describe('/user-details/applicant/address-find route', () => {
 
     describe('Working for a business', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('Yes')
+        RedisService.get = jest.fn().mockResolvedValue(true)
 
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
@@ -141,7 +141,7 @@ describe('/user-details/applicant/address-find route', () => {
 
     describe('Success', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('No')
+        RedisService.get = jest.fn().mockResolvedValue(false)
       })
 
       it('should store the query terms and address array in Redis and progress to the next route when a single address is returned by the search', async () => {
@@ -239,7 +239,7 @@ describe('/user-details/applicant/address-find route', () => {
 
     describe('Failure', () => {
       beforeEach(() => {
-        RedisService.get = jest.fn().mockResolvedValue('Yes')
+        RedisService.get = jest.fn().mockResolvedValue(true)
       })
 
       it('should display a validation error message if the user does not enter the postcode', async () => {

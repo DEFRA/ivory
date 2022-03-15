@@ -48,7 +48,7 @@ describe('user-details/applicant/contact-details route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce('No')
+          .mockResolvedValueOnce(false)
           .mockResolvedValueOnce({})
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -108,7 +108,7 @@ describe('user-details/applicant/contact-details route', () => {
       beforeEach(async () => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce('Yes')
+          .mockResolvedValueOnce(true)
           .mockResolvedValueOnce({})
 
         document = await TestHelper.submitGetRequest(server, getOptions)
@@ -139,7 +139,7 @@ describe('user-details/applicant/contact-details route', () => {
       beforeEach(() => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce('Yes')
+          .mockResolvedValueOnce(true)
           .mockResolvedValueOnce({})
       })
 
@@ -174,7 +174,7 @@ describe('user-details/applicant/contact-details route', () => {
       beforeEach(() => {
         RedisService.get = jest
           .fn()
-          .mockResolvedValueOnce('Yes')
+          .mockResolvedValueOnce(true)
           .mockResolvedValueOnce({})
       })
 

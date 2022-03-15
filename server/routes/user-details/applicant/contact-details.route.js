@@ -75,9 +75,10 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  const workForABusiness =
-    (await RedisService.get(request, RedisKeys.WORK_FOR_A_BUSINESS)) ===
-    Options.YES
+  const workForABusiness = await RedisService.get(
+    request,
+    RedisKeys.WORK_FOR_A_BUSINESS
+  )
 
   const contactDetails = await RedisService.get(
     request,

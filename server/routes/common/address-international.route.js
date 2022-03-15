@@ -118,9 +118,10 @@ const _getContext = async (request, addressType) => {
   let pageTitle
 
   if (addressType === AddressType.APPLICANT) {
-    const workForABusiness =
-      (await RedisService.get(request, RedisKeys.WORK_FOR_A_BUSINESS)) ===
-      Options.YES
+    const workForABusiness = await RedisService.get(
+      request,
+      RedisKeys.WORK_FOR_A_BUSINESS
+    )
 
     pageTitle = workForABusiness
       ? 'Enter the address of the business'
