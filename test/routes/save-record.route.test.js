@@ -202,6 +202,7 @@ describe('/save-record route', () => {
             [DataVerseFieldName.PREVIOUS_WORK_FOR_A_BUSINESS]: undefined,
             [DataVerseFieldName.PREVIOUS_SELLING_ON_BEHALF_OF]: undefined,
             [DataVerseFieldName.PREVIOUS_CAPACITY]: undefined,
+            [DataVerseFieldName.HAS_PREVIOUS_OWNER]: true,
             [DataVerseFieldName.OWNED_BY_APPLICANT]: false,
             [DataVerseFieldName.OWNER_NAME]: undefined,
             [DataVerseFieldName.OWNER_EMAIL]: 'OWNER_EMAIL_ADDRESS',
