@@ -95,10 +95,13 @@ const _getPdf = async entity => {
   field.setText(_formatField(entity, DataVerseFieldName.NAME))
 
   field = form.getTextField(FormFields.OWNER_NAME)
-  field.setText(_formatField(entity, DataVerseFieldName.OWNER_NAME))
+  field.setText(
+    _formatField(entity, DataVerseFieldName.OWNER_NAME, NOTHING_ENTERED)
+  )
 
   field = form.getTextField(FormFields.OWNER_ADDRESS)
-  const ownerAddress = entity[DataVerseFieldName.OWNER_ADDRESS]
+  const ownerAddress =
+    entity[DataVerseFieldName.OWNER_ADDRESS] || NOTHING_ENTERED
   const ownerPostcode = entity[DataVerseFieldName.OWNER_POSTCODE]
   field.setText(_formatAddress(ownerAddress, ownerPostcode))
 

@@ -1,9 +1,16 @@
 'use strict'
 
 const AnalyticsService = require('../../services/analytics.service')
+const RedisService = require('../../services/redis.service')
 const RedisHelper = require('../../services/redis-helper.service')
 
-const { Analytics, Options, Paths, Views } = require('../../utils/constants')
+const {
+  Analytics,
+  Options,
+  Paths,
+  RedisKeys,
+  Views
+} = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
@@ -46,6 +53,12 @@ const handlers = {
       case Options.YES:
         return h.redirect(Paths.CANNOT_TRADE)
       case Options.NO:
+        RedisService.set(
+          request,
+          RedisKeys.ALREADY_CERTIFIED,
+          JSON.stringify({ alreadyCertified: Options.NO })
+        )
+
         return h.redirect(
           (await RedisHelper.isSection2(request))
             ? Paths.APPLIED_BEFORE
