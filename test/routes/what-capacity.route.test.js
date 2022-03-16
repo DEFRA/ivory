@@ -66,7 +66,7 @@ describe('/what-capacity route', () => {
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'In what capacity are you making this declaration?'
+        'For an item that has no owner, in what capacity are you making this declaration?'
       )
     })
 

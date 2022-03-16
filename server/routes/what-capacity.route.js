@@ -71,7 +71,8 @@ const _getContext = async request => {
   const options = _getOptions(whatCapacity)
 
   return {
-    pageTitle: 'In what capacity are you making this declaration?',
+    pageTitle:
+      'For an item that has no owner, in what capacity are you making this declaration?',
     items: options
   }
 }
