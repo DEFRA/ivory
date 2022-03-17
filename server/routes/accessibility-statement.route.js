@@ -4,7 +4,7 @@ const config = require('../utils/config')
 const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
-  get: (request, h) => {
+  get: (_request, h) => {
     const context = _getContext()
 
     return h.view(Views.ACCESSIBILITY_STATEMENT, {
