@@ -3,7 +3,7 @@
 const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
-  get: (request, h) => {
+  get: (_request, h) => {
     const context = _getContext()
 
     return h.view(Views.PRIVACY_NOTICE, {

@@ -61,7 +61,7 @@ const handlers = {
     const errors = _validateForm(payload, uploadData)
 
     if (!errors.length) {
-      await _checkForVirus(request, payload, filename, uploadData, errors)
+      await _checkForVirus(request, payload, filename, errors)
     }
 
     if (!errors.length) {
@@ -199,7 +199,6 @@ const _checkForVirus = async (
   request,
   payload,
   filename,
-  uploadData,
   errors
 ) => {
   const isInfected = await AntimalwareService.scan(

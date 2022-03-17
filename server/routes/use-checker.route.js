@@ -3,7 +3,7 @@
 const { HOME_URL, Paths } = require('../utils/constants')
 
 const handlers = {
-  get: async (request, h) => {
+  get: async (_request, h) => {
     return h.redirect(`${HOME_URL}?useChecker=true`)
   }
 }

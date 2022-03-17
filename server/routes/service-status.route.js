@@ -10,7 +10,7 @@ const config = require('../utils/config')
 const DATE_FORMAT_DMY_WITH_HMS = 'DD/MM/YYYY HH:mm:ss'
 
 const handlers = {
-  get: async (request, h) => {
+  get: async (_request, h) => {
     return h.view(Views.SERVICE_STATUS, {
       pageTitle: 'Service status',
       data: {
