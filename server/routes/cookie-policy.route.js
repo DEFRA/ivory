@@ -6,7 +6,7 @@ const config = require('../utils/config')
 const sessionTimeoutInHours = config.cookieTimeout / 1000 / 3600
 
 const handlers = {
-  get: async (request, h) => {
+  get: async (_request, h) => {
     const context = _getContext()
 
     return h.view(Views.COOKIE_POLICY, {
