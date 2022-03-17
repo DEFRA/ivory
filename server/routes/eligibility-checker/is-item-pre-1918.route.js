@@ -14,7 +14,7 @@ const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
-  get: (request, h) => {
+  get: (_request, h) => {
     const context = _getContext()
 
     return h.view(Views.IS_ITEM_PRE_1918, {
