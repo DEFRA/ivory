@@ -21,14 +21,15 @@ const {
 const { DataVerseFieldName } = require('../utils/constants')
 const {
   AgeExemptionReasonLookup,
+  AlreadyCertifiedLookup,
+  CapacityLookup,
   ExemptionTypeLookup,
   IntentionLookup,
   IvoryIntegralLookup,
   IvoryVolumeLookup,
-  Status,
   SellingOnBehalfOfLookup,
-  CapacityLookup,
-  AlreadyCertifiedLookup
+  SpeciesLookup,
+  Status
 } = require('../services/dataverse-choice-lookups')
 
 const handlers = {
@@ -204,12 +205,14 @@ const _getCommonFields = async (request, itemDescription) => {
     ivoryAge,
     submissionDate,
     paymentId,
-    intentionForItem
+    intentionForItem,
+    whatSpecies
   ] = await Promise.all([
     RedisService.get(request, RedisKeys.IVORY_AGE),
     RedisService.get(request, RedisKeys.SUBMISSION_DATE),
     RedisService.get(request, RedisKeys.PAYMENT_ID),
-    RedisService.get(request, RedisKeys.INTENTION_FOR_ITEM)
+    RedisService.get(request, RedisKeys.INTENTION_FOR_ITEM),
+    RedisService.get(request, RedisKeys.WHAT_SPECIES)
   ])
 
   return {
@@ -220,6 +223,7 @@ const _getCommonFields = async (request, itemDescription) => {
     [DataVerseFieldName.STATUS]: Status.Logged,
     [DataVerseFieldName.SUBMISSION_DATE]: submissionDate,
     [DataVerseFieldName.PAYMENT_REFERENCE]: paymentId,
+    [DataVerseFieldName.SPECIES]: _getSpeciesCode(whatSpecies),
     [DataVerseFieldName.WHY_AGE_EXEMPT]: _getAgeExemptionReasonCodes(ivoryAge),
     [DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON]: ivoryAge
       ? ivoryAge.otherReason
@@ -513,3 +517,5 @@ const _getIvoryIntegralReasonCode = value => IvoryIntegralLookup[value]
 const _getCapacityCode = value => CapacityLookup[value]
 
 const _getSellingOnBehalfOfCode = value => SellingOnBehalfOfLookup[value]
+
+const _getSpeciesCode = value => SpeciesLookup[value]

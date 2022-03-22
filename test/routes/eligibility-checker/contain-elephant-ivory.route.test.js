@@ -7,13 +7,17 @@ jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
 const TestHelper = require('../../utils/test-helper')
-const { Options, RedisKeys } = require('../../../server/utils/constants')
+const {
+  Options,
+  RedisKeys,
+  Species
+} = require('../../../server/utils/constants')
 
 describe('/eligibility-checker/contain-elephant-ivory route', () => {
   let server
   const url = '/eligibility-checker/contain-elephant-ivory'
   const nextUrlSellingToMuseum = '/eligibility-checker/selling-to-museum'
-  const nextUrlDoNotNeedService = '/eligibility-checker/do-not-need-service'
+  const nextUrlWhatSpecies = '/eligibility-checker/what-species'
   const nextUrlCannotContinue = '/eligibility-checker/cannot-continue'
 
   const elementIds = {
@@ -21,10 +25,12 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
     helpText: 'helpText',
     helpText2: 'helpText2',
     helpText3: 'helpText3',
+    helpText4: 'helpText4',
     helpTextList: 'helpTextList',
     containElephantIvory: 'containElephantIvory',
     containElephantIvory2: 'containElephantIvory-2',
     containElephantIvory3: 'containElephantIvory-3',
+    guidance: 'guidance',
     continue: 'continue'
   }
 
@@ -78,29 +84,8 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state in some way.'
+        'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state.'
       )
-    })
-
-    it('should have the correct help text 2', () => {
-      const element = document.querySelector(`#${elementIds.helpText2}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'It can be extremely difficult to tell the difference between:'
-      )
-    })
-
-    it('should have the correct help text 3', () => {
-      const element = document.querySelector(`#${elementIds.helpText3}`)
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        'If you are not sure about the item you want to sell or buy, you should consult an expert first, such as an antiques dealer or auctioneer who specialises in ivory.'
-      )
-    })
-
-    it('should have a help text list', () => {
-      const element = document.querySelector(`#${elementIds.helpTextList}`)
-      expect(element).toBeTruthy()
     })
 
     it('should have the correct summary text title', () => {
@@ -111,9 +96,54 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
       )
     })
 
-    it('should have some summary text details', () => {
-      const element = document.querySelector('.govuk-details__text')
+    it('should have the correct help text 2', () => {
+      const element = document.querySelector(`#${elementIds.helpText2}`)
       expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'Elephant ivory is the most common type of ivory. However it can be extremely difficult to tell the difference between elephant ivory and:'
+      )
+    })
+
+    it('should display the correct help text list items', () => {
+      let element = document.querySelector(
+        `#${elementIds.helpTextList} > li:nth-child(1)`
+      )
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'other types of ivory, such as walrus'
+      )
+
+      element = document.querySelector(
+        `#${elementIds.helpTextList} > li:nth-child(2)`
+      )
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'fake ivory, such as ivorine'
+      )
+
+      element = document.querySelector(
+        `#${elementIds.helpTextList} > li:nth-child(3)`
+      )
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'certain types of animal bone'
+      )
+    })
+
+    it('should have the correct help text 3', () => {
+      const element = document.querySelector(`#${elementIds.helpText3}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'There are methods available that can help determine the species of ivory, such as using ‘Schregar lines’, but these methods are often destructive to ivory. The Convention on International Trade in Endangered species of Wild Fauna and Flora (CITES) has guidance on identifying ivory (opens in a new tab)'
+      )
+    })
+
+    it('should have the correct help text 4', () => {
+      const element = document.querySelector(`#${elementIds.helpText4}`)
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'If you are not sure what type of ivory the item you want to sell or buy contains, you should speak to an expert first. An expert might be an antiques dealer or auctioneer who specialises in ivory.'
+      )
     })
 
     it('should have the correct radio buttons', () => {
@@ -136,6 +166,15 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
         elementIds.containElephantIvory3,
         'I don’t know',
         'I don’t know'
+      )
+    })
+
+    it('should have the correct "guidance" link', () => {
+      const element = document.querySelector(`#${elementIds.guidance}`)
+      TestHelper.checkLink(
+        element,
+        'guidance on identifying ivory (opens in a new tab)',
+        'https://www.gov.uk/guidance/dealing-in-items-containing-ivory-or-made-of-ivory'
       )
     })
 
@@ -172,7 +211,7 @@ describe('/eligibility-checker/contain-elephant-ivory route', () => {
           postOptions,
           server,
           'No',
-          nextUrlDoNotNeedService
+          nextUrlWhatSpecies
         )
       })
 
@@ -217,23 +256,16 @@ const _checkSelectedRadioAction = async (
 
   const response = await TestHelper.submitPostRequest(server, postOptions)
 
-  expect(RedisService.set).toBeCalledTimes(
-    selectedOption === Options.NO ? 4 : 3
-  )
-
-  expect(RedisService.set).toBeCalledWith(
-    expect.any(Object),
-    RedisKeys.CONTAIN_ELEPHANT_IVORY,
-    selectedOption
-  )
-
-  if (selectedOption === Options.NO) {
-    expect(RedisService.set).toBeCalledWith(
-      expect.any(Object),
-      RedisKeys.ARE_YOU_A_MUSEUM,
-      false
-    )
+  let expectedNumberOfCalls
+  if (selectedOption === Options.YES) {
+    expectedNumberOfCalls = 4
+  } else if (selectedOption === Options.NO) {
+    expectedNumberOfCalls = 4
+  } else {
+    expectedNumberOfCalls = 3
   }
+
+  expect(RedisService.set).toBeCalledTimes(expectedNumberOfCalls)
 
   expect(RedisService.set).toBeCalledWith(
     expect.any(Object),
@@ -246,6 +278,26 @@ const _checkSelectedRadioAction = async (
     RedisKeys.USED_CHECKER,
     true
   )
+
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    RedisKeys.CONTAIN_ELEPHANT_IVORY,
+    selectedOption
+  )
+
+  if (selectedOption === Options.YES) {
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      RedisKeys.WHAT_SPECIES,
+      Species.ELEPHANT
+    )
+  } else if (selectedOption === Options.NO) {
+    expect(RedisService.set).toBeCalledWith(
+      expect.any(Object),
+      RedisKeys.ARE_YOU_A_MUSEUM,
+      false
+    )
+  }
 
   expect(response.headers.location).toEqual(nextUrl)
 }

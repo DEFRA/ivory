@@ -1,5 +1,8 @@
 'use strict'
 
+jest.mock('../../../server/services/redis.service')
+const RedisService = require('../../../server/services/redis.service')
+
 const TestHelper = require('../../utils/test-helper')
 
 describe('/eligibility-checker/cannot-trade route', () => {
@@ -119,12 +122,12 @@ describe('/eligibility-checker/cannot-trade route', () => {
     })
   })
 
-  describe('GET when referred by /eligibility-checker/taken-from-elephant', () => {
+  describe('GET when referred by /eligibility-checker/taken-from-species', () => {
     const getOptions = {
       method: 'GET',
       url,
       headers: {
-        referer: '/eligibility-checker/taken-from-elephant'
+        referer: '/eligibility-checker/taken-from-species'
       }
     }
 
@@ -132,11 +135,11 @@ describe('/eligibility-checker/cannot-trade route', () => {
       document = await TestHelper.submitGetRequest(server, getOptions)
     })
 
-    it('should have the correct help text when referrer is /eligibility-checker/taken-from-elephant', () => {
+    it('should have the correct help text when referrer is /eligibility-checker/taken-from-species', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Any replacement ivory in your item must have been taken from an elephant before 1 January 1975.'
+        `Any replacement ivory in your item must have been taken from the ${species} before 1 January 1975.`
       )
     })
   })
@@ -188,6 +191,9 @@ const _checkPostAction = async (postOptions, server, nextUrl) => {
   expect(response.headers.location).toEqual(nextUrl)
 }
 
+const species = 'walrus'
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  RedisService.get = jest.fn().mockResolvedValue(species)
 }

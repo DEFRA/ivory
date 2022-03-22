@@ -1,0 +1,59 @@
+{% extends 'form-layout.html' %}
+
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      {% call govukFieldset({
+          attributes: {
+            id: "pageTitle"
+          },
+          legend: {
+            text: pageTitle,
+            classes: "govuk-fieldset__legend--l",
+            isPageHeading: true
+          }
+      }) %}
+
+        <p class="govuk-body" id="helpText">Any ivory in your item must be ‘worked’ ivory. Worked ivory means it has been carved or significantly altered from its original state.</p>
+
+        {% set html %}
+          <p class="govuk-body" id="summaryPara1">It can be extremely difficult to tell the difference between different types of ivory, fake ivory such as ivorine and certain types of animal bone.</p>
+
+          <p class="govuk-body" id="summaryPara2">There are methods available that can help determine the species of ivory, such as using ‘Schregar lines’, but these methods are often destructive to ivory. The Convention on International Trade in Endangered species of Wild Fauna and Flora (CITES) has <a href="{{ guidanceUrl }}" id="guidance" target="_blank" rel="noopener noreferrer">guidance on identifying ivory (opens in a new tab)</a>.</p>
+
+          <p class="govuk-body" id="summaryPara3">If you are not sure what type of ivory the item you want to sell or buy contains, you should speak to an expert first. An expert might be an antiques dealer or auctioneer who specialises in ivory.</p>
+        {% endset %}
+
+        {{ govukDetails({
+          id: "needMoreHelp",
+          summaryText: "How to identify different types of ivory",
+          html: html
+        }) }}
+
+        {{ govukRadios({
+          idPrefix: "whatSpecies",
+          name: "whatSpecies",
+          errorMessage: fieldErrors['whatSpecies'],
+          items: items
+        }) }}
+
+      {% endcall %}
+
+      {{ govukButton({
+          attributes: {
+            id: "callToAction"
+          },
+          text: "Confirm and submit"
+        })
+      }}
+
+    </div>
+  </div>
+{% endblock %}

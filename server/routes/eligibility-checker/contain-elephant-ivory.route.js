@@ -4,11 +4,13 @@ const AnalyticsService = require('../../services/analytics.service')
 const RedisService = require('../../services/redis.service')
 
 const {
+  Analytics,
   Options,
   Paths,
   RedisKeys,
-  Views,
-  Analytics
+  Species,
+  Urls,
+  Views
 } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
 const {
@@ -51,6 +53,8 @@ const handlers = {
       payload.containElephantIvory
     )
 
+    await RedisService.set(request, RedisKeys.USED_CHECKER, true)
+
     if (payload.containElephantIvory === Options.NO) {
       await RedisService.set(request, RedisKeys.ARE_YOU_A_MUSEUM, false)
     }
@@ -70,8 +74,6 @@ const handlers = {
       )
     }
 
-    await RedisService.set(request, RedisKeys.USED_CHECKER, true)
-
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
       action: `${Analytics.Action.SELECTED} ${payload.containElephantIvory}`,
@@ -80,9 +82,14 @@ const handlers = {
 
     switch (payload.containElephantIvory) {
       case Options.YES:
+        await RedisService.set(
+          request,
+          RedisKeys.WHAT_SPECIES,
+          Species.ELEPHANT
+        )
         return h.redirect(Paths.SELLING_TO_MUSEUM)
       case Options.NO:
-        return h.redirect(Paths.DO_NOT_NEED_SERVICE)
+        return h.redirect(Paths.WHAT_SPECIES)
       default:
         return h.redirect(Paths.CANNOT_CONTINUE)
     }
@@ -93,8 +100,9 @@ const _getContext = () => {
   return {
     pageTitle: 'Does your item contain elephant ivory?',
     helpText:
-      'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state in some way.',
-    items: getStandardOptions()
+      'Any ivory in your item must be ‘worked’ ivory. This means it has been carved or significantly altered from its original raw state.',
+    items: getStandardOptions(),
+    guidanceUrl: Urls.GOV_UK_TOP_OF_MAIN
   }
 }
 

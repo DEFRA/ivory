@@ -15,18 +15,18 @@ const { buildErrorSummary, Validators } = require('../../utils/validation')
 const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
-  get: (_request, h) => {
-    const context = _getContext()
+  get: async (request, h) => {
+    const context = await _getContext(request)
 
-    return h.view(Views.TAKEN_FROM_ELEPHANT, {
+    return h.view(Views.TAKEN_FROM_SPECIES, {
       ...context
     })
   },
 
   post: async (request, h) => {
-    const context = _getContext()
+    const context = await _getContext(request)
     const payload = request.payload
-    const errors = _validateForm(payload)
+    const errors = _validateForm(payload, context)
 
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
@@ -36,7 +36,7 @@ const handlers = {
       })
 
       return h
-        .view(Views.TAKEN_FROM_ELEPHANT, {
+        .view(Views.TAKEN_FROM_SPECIES, {
           ...context,
           ...buildErrorSummary(errors)
         })
@@ -45,11 +45,11 @@ const handlers = {
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
-      action: `${Analytics.Action.SELECTED} ${payload.takenFromElephant}`,
+      action: `${Analytics.Action.SELECTED} ${payload.takenFromSpecies}`,
       label: context.pageTitle
     })
 
-    switch (payload.takenFromElephant) {
+    switch (payload.takenFromSpecies) {
       case Options.YES:
         return h.redirect(Paths.CANNOT_TRADE)
       case Options.NO:
@@ -70,21 +70,22 @@ const handlers = {
   }
 }
 
-const _getContext = () => {
+const _getContext = async request => {
+  const species = (await RedisHelper.getSpecies(request)).toLowerCase()
+
   return {
-    pageTitle:
-      'Was the replacement ivory taken from an elephant on or after 1 January 1975?',
-    items: getStandardOptions()
+    pageTitle: `Was the replacement ivory taken from the ${species} on or after 1 January 1975?`,
+    items: getStandardOptions(),
+    species
   }
 }
 
-const _validateForm = payload => {
+const _validateForm = (payload, context) => {
   const errors = []
-  if (Validators.empty(payload.takenFromElephant)) {
+  if (Validators.empty(payload.takenFromSpecies)) {
     errors.push({
-      name: 'takenFromElephant',
-      text:
-        'You must tell us whether the replacement ivory was taken from an elephant on or after 1 January 1975'
+      name: 'takenFromSpecies',
+      text: `You must tell us whether the replacement ivory was taken from the ${context.species} on or after 1 January 1975`
     })
   }
   return errors
@@ -93,12 +94,12 @@ const _validateForm = payload => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.TAKEN_FROM_ELEPHANT}`,
+    path: `${Paths.TAKEN_FROM_SPECIES}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.TAKEN_FROM_ELEPHANT}`,
+    path: `${Paths.TAKEN_FROM_SPECIES}`,
     handler: handlers.post
   }
 ]

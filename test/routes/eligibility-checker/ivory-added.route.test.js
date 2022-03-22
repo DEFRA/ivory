@@ -10,7 +10,7 @@ describe('/eligibility-checker/ivory-added route', () => {
   let server
   const url = '/eligibility-checker/ivory-added'
   const nextUrlAppliedBefore = '/applied-before'
-  const nextUrlTakeFromElephant = '/eligibility-checker/taken-from-elephant'
+  const nextUrlTakeFromSpecies = '/eligibility-checker/taken-from-species'
   const nextUrlCanContinue = '/can-continue'
   const nextUrlCannotContinue = '/eligibility-checker/cannot-continue'
 
@@ -102,7 +102,7 @@ describe('/eligibility-checker/ivory-added route', () => {
           postOptions,
           server,
           'Yes',
-          nextUrlTakeFromElephant
+          nextUrlTakeFromSpecies
         )
       })
 

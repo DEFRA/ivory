@@ -12,7 +12,7 @@ const { RedisKeys } = require('../../../server/utils/constants')
 describe('/eligibility-checker/how-certain route', () => {
   let server
   const url = '/eligibility-checker/how-certain'
-  const nextUrlTypeOfItem = '/what-type-of-item-is-it'
+  const nextUrlWhatSpeciesExpert = '/what-species-expert'
   const nextUrlContainElephantIvory =
     '/eligibility-checker/contain-elephant-ivory'
 
@@ -23,7 +23,7 @@ describe('/eligibility-checker/how-certain route', () => {
     howCertain2: 'howCertain-2',
     continue: 'continue'
   }
-  const serviceName = 'Declare elephant ivory you intend to sell or hire out'
+  const serviceName = 'Declare ivory you intend to sell or hire out'
 
   let document
 
@@ -133,7 +133,7 @@ describe('/eligibility-checker/how-certain route', () => {
           postOptions,
           server,
           'Completely',
-          nextUrlTypeOfItem,
+          nextUrlWhatSpeciesExpert,
           false
         )
       })
@@ -161,7 +161,7 @@ describe('/eligibility-checker/how-certain route', () => {
           response,
           'howCertain',
           'howCertain-error',
-          'Tell us how certain you are that your item will qualify for exemption from the ban on dealing in ivory?'
+          'Tell us how certain you are that your item will qualify for exemption from the ban on dealing in ivory'
         )
       })
     })

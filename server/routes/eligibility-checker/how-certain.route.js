@@ -72,7 +72,7 @@ const handlers = {
 
     return h.redirect(
       payload.howCertain === completelyCertain
-        ? Paths.WHAT_TYPE_OF_ITEM_IS_IT
+        ? Paths.WHAT_SPECIES_EXPERT
         : Paths.CONTAIN_ELEPHANT_IVORY
     )
   }
@@ -93,7 +93,7 @@ const _validateForm = payload => {
     errors.push({
       name: 'howCertain',
       text:
-        'Tell us how certain you are that your item will qualify for exemption from the ban on dealing in ivory?'
+        'Tell us how certain you are that your item will qualify for exemption from the ban on dealing in ivory'
     })
   }
   return errors

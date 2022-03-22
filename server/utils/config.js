@@ -19,9 +19,6 @@ const schema = joi.object().keys({
     .default(envs[0]),
   serviceHost: joi.string(),
   servicePort: joi.number().default(3000),
-  serviceName: joi
-    .string()
-    .default('Declare elephant ivory you intend to sell or hire out'),
   logLevel: joi.string().default('warn'),
   requestTimeout: joi.number(),
   maximumFileSize: joi.number().default(10),
@@ -77,7 +74,6 @@ const config = {
   env: process.env.NODE_ENV,
   serviceHost: process.env.SERVICE_HOST,
   servicePort: process.env.SERVICE_PORT,
-  serviceName: process.env.SERVICE_NAME,
   logLevel: process.env.LOG_LEVEL,
   requestTimeout: process.env.REQUEST_TIMEOUT,
   maximumFileSize: process.env.PHOTO_UPLOAD_PHOTO_MAX_MB,
