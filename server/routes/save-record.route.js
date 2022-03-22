@@ -328,12 +328,7 @@ const _getPreviousSubmission = async request => {
 }
 
 const _getConsentToShare = async request => {
-  const consentToShare = await RedisService.get(
-    request,
-    RedisKeys.SHARE_DETAILS_OF_ITEM
-  )
-
-  return consentToShare
+  return RedisService.get(request, RedisKeys.SHARE_DETAILS_OF_ITEM)
 }
 
 const _getNewOwnerDetails = async request => {
