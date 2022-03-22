@@ -264,7 +264,14 @@ const _getExemptionReasonSummary = async (
 }
 
 const _getItemSummary = async (request, itemType) => {
+  const whatSpecies = await RedisService.get(request, RedisKeys.WHAT_SPECIES)
+
   const itemSummary = [
+    _getSummaryListRow(
+      'Ivory type',
+      whatSpecies,
+      _getChangeItems(Paths.WHAT_SPECIES_EXPERT, CHANGE_LINK_HINT.IvoryType)
+    ),
     _getSummaryListRow(
       'Type of exemption',
       itemType,
@@ -903,6 +910,7 @@ const CHANGE_LINK_HINT = {
   DistinguishingFeatures: 'any distinguishing features',
   ExemptionType: 'type of exemption',
   ItemAge: 'your proof of age',
+  IvoryType: 'type of ivory',
   IvoryVolme: 'your proof that item has less than [##PERCENTAGE##]% ivory',
   OwnerAddress: 'owner’s address',
   OwnerEmail: 'owner’s email',
@@ -927,7 +935,7 @@ const CHANGE_LINK_HINT = {
 }
 
 const BEFORE_1975 =
-  'any replacement ivory was taken from an elephant before 1 January 1975'
+  "any replacement ivory was taken from the item's ivory type before 1 January 1975"
 const COMPLETE_AND_CORRECT =
   'the information you’ve provided is complete and correct'
 

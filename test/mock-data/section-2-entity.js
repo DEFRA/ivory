@@ -10,6 +10,7 @@ const entity = {
   statecode: 0,
   cre2c_ownedbyapplicant: false,
   cre2c_status: 881990000,
+  cre2c_species: 881990004,
   cre2c_photo5id: '3b31854c-3957-ec11-8f8f-000d3ad5b2ab',
   cre2c_previousapplicantaddress: '123, Some Street\nSome Town',
   cre2c_certificatekey:

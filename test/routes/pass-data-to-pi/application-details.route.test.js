@@ -213,12 +213,14 @@ describe('/pass-data-to-pi/application-details route', () => {
         _checkSummary(document, elementIds.summaries.item)
 
         _checkSummaryKeys(document, elementIds.summaries.item, [
+          'Ivory type',
           'Type of exemption',
           'Already has a certificate',
           'Revoked certificate number'
         ])
 
         _checkSummaryValues(document, elementIds.summaries.item, [
+          'Sperm whale',
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
           'It used to',
           REVOKED_CERTIFICATE_NUMBER
@@ -239,12 +241,14 @@ describe('/pass-data-to-pi/application-details route', () => {
         _checkSummary(document, elementIds.summaries.item)
 
         _checkSummaryKeys(document, elementIds.summaries.item, [
+          'Ivory type',
           'Type of exemption',
           'Already has a certificate',
           'Applied before'
         ])
 
         _checkSummaryValues(document, elementIds.summaries.item, [
+          'Sperm whale',
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
           'No',
           'No'
@@ -265,6 +269,7 @@ describe('/pass-data-to-pi/application-details route', () => {
         _checkSummary(document, elementIds.summaries.item)
 
         _checkSummaryKeys(document, elementIds.summaries.item, [
+          'Ivory type',
           'Type of exemption',
           'Already has a certificate',
           'Applied before',
@@ -272,6 +277,7 @@ describe('/pass-data-to-pi/application-details route', () => {
         ])
 
         _checkSummaryValues(document, elementIds.summaries.item, [
+          'Sperm whale',
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
           'No',
           'Yes',

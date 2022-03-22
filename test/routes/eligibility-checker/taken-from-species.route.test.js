@@ -1,23 +1,25 @@
 'use strict'
 
 const TestHelper = require('../../utils/test-helper')
-const { ItemType } = require('../../../server/utils/constants')
+const { ItemType, Species } = require('../../../server/utils/constants')
 
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
-describe('/eligibility-checker/taken-from-elephant route', () => {
+const { RedisKeys } = require('../../../server/utils/constants')
+
+describe('/eligibility-checker/taken-from-species route', () => {
   let server
-  const url = '/eligibility-checker/taken-from-elephant'
+  const url = '/eligibility-checker/taken-from-species'
   const nextUrlAppliedBefore = '/applied-before'
   const nextUrlCannotTrade = '/eligibility-checker/cannot-trade'
   const nextUrlCanContinue = '/can-continue'
   const nextUrlCannotContinue = '/eligibility-checker/cannot-continue'
 
   const elementIds = {
-    takenFromElephant: 'takenFromElephant',
-    takenFromElephant2: 'takenFromElephant-2',
-    takenFromElephant3: 'takenFromElephant-3',
+    takenFromSpecies: 'takenFromSpecies',
+    takenFromSpecies2: 'takenFromSpecies-2',
+    takenFromSpecies3: 'takenFromSpecies-3',
     continue: 'continue'
   }
 
@@ -61,28 +63,28 @@ describe('/eligibility-checker/taken-from-elephant route', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Was the replacement ivory taken from an elephant on or after 1 January 1975?'
+        `Was the replacement ivory taken from the ${mockSpecies.toLowerCase()} on or after 1 January 1975?`
       )
     })
 
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
-        elementIds.takenFromElephant,
+        elementIds.takenFromSpecies,
         'Yes',
         'Yes'
       )
 
       TestHelper.checkRadioOption(
         document,
-        elementIds.takenFromElephant2,
+        elementIds.takenFromSpecies2,
         'No',
         'No'
       )
 
       TestHelper.checkRadioOption(
         document,
-        elementIds.takenFromElephant3,
+        elementIds.takenFromSpecies3,
         'I don’t know',
         'I don’t know'
       )
@@ -147,7 +149,7 @@ describe('/eligibility-checker/taken-from-elephant route', () => {
 
     describe('Failure', () => {
       it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.takenFromElephant = ''
+        postOptions.payload.takenFromSpecies = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -155,17 +157,27 @@ describe('/eligibility-checker/taken-from-elephant route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'takenFromElephant',
-          'takenFromElephant-error',
-          'You must tell us whether the replacement ivory was taken from an elephant on or after 1 January 1975'
+          'takenFromSpecies',
+          'takenFromSpecies-error',
+          `You must tell us whether the replacement ivory was taken from the ${mockSpecies.toLowerCase()} on or after 1 January 1975`
         )
       })
     })
   })
 })
 
+const mockSpecies = Species.HIPPOPOTAMUS
+
 const _createMocks = () => {
   TestHelper.createMocks()
+
+  RedisService.get = jest.fn((request, redisKey) => {
+    const mockDataMap = {
+      [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: ItemType.HIGH_VALUE,
+      [RedisKeys.WHAT_SPECIES]: mockSpecies
+    }
+    return mockDataMap[redisKey]
+  })
 }
 
 const _checkSelectedRadioAction = async (
@@ -175,7 +187,7 @@ const _checkSelectedRadioAction = async (
   nextUrl,
   isSection2 = false
 ) => {
-  postOptions.payload.takenFromElephant = selectedOption
+  postOptions.payload.takenFromSpecies = selectedOption
 
   if (isSection2) {
     RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)

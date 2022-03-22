@@ -21,28 +21,26 @@
           }
       }) %}
 
-        <p class="govuk-body" id="introPara">Unless your item is to be sold or hired out to a qualifying museum, any replacement ivory must have been taken from the item's ivory type before 1975 and added only for the purpose of restoring the item.</p>
-
         {{ govukRadios({
-          idPrefix: "whatTypeOfItemIsIt",
-          name: "whatTypeOfItemIsIt",
-          errorMessage: fieldErrors['whatTypeOfItemIsIt'],
+          idPrefix: "whatSpecies",
+          name: "whatSpecies",
+          errorMessage: fieldErrors['whatSpecies'],
           items: items
         }) }}
 
         {{ govukDetails({
           id: "needMoreHelp",
-          summaryText: "I need more help to work this out",
-          html: 'Use our eligibility checker to <a id="eligibilityChecker" href="' + linkUrl + '" class="govuk-link">check if you can sell or hire out your item</a>.'
+          summaryText: "I'm not sure what species my item contains",
+          html: 'Use our <a id="eligibilityChecker" href="' + eligibilityCheckerUrl + '" class="govuk-link">eligibility checker</a> or <a id="guidance" href="' + guidanceUrl + '" class="govuk-link">read our guidance</a> on how to identify different species of ivory.'
         }) }}
 
       {% endcall %}
 
       {{ govukButton({
           attributes: {
-            id: "continue"
+            id: "callToAction"
           },
-          text: "Continue"
+          text: "Confirm and submit"
         })
       }}
 

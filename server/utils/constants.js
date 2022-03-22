@@ -156,6 +156,7 @@ const DataVerseFieldName = {
   SECTION_10_CASE_ID: 'cre2c_ivorysection10caseid',
   SECTION_2_CASE_ID: 'cre2c_ivorysection2caseid',
   SELLING_ON_BEHALF_OF: 'cre2c_sellingonbehalfof',
+  SPECIES: 'cre2c_species',
   STATUS: 'cre2c_status',
   SUBMISSION_DATE: 'cre2c_submissiondate',
   SUBMISSION_REFERENCE: 'cre2c_submissionreference',
@@ -305,13 +306,15 @@ const Paths = {
   SERVICE_UNAVAILABLE: '/errors/service-unavailable',
   SESSION_TIMED_OUT: '/errors/session-timed-out',
   SHARE_DETAILS_OF_ITEM: '/share-details-of-item',
-  TAKEN_FROM_ELEPHANT: '/eligibility-checker/taken-from-elephant',
+  TAKEN_FROM_SPECIES: '/eligibility-checker/taken-from-species',
   UPLOAD_DOCUMENT: '/upload-document',
   UPLOAD_PHOTO: '/upload-photo',
   UPLOAD_TIMEOUT: '/errors/upload-timeout',
   USE_CHECKER: '/use-checker',
   WHAT_CAPACITY: '/what-capacity',
   WANT_TO_ADD_DOCUMENTS: '/want-to-add-documents',
+  WHAT_SPECIES: '/eligibility-checker/what-species',
+  WHAT_SPECIES_EXPERT: '/what-species-expert',
   WHAT_TYPE_OF_ITEM_IS_IT: '/what-type-of-item-is-it',
   WHO_OWNS_ITEM: '/who-owns-the-item',
   WHY_IS_ITEM_RMI: '/why-is-item-rmi',
@@ -371,12 +374,14 @@ const Views = {
   SERVICE_UNAVAILABLE: 'errors/service-unavailable',
   SESSION_TIMED_OUT: 'errors/session-timed-out',
   SHARE_DETAILS_OF_ITEM: 'share-details-of-item',
-  TAKEN_FROM_ELEPHANT: 'eligibility-checker/taken-from-elephant',
+  TAKEN_FROM_SPECIES: 'eligibility-checker/taken-from-species',
   UPLOAD_DOCUMENT: 'upload-document',
   UPLOAD_PHOTO: 'upload-photo',
   UPLOAD_TIMEOUT: 'errors/upload-timeout',
   WANT_TO_ADD_DOCUMENTS: 'want-to-add-documents',
   WHAT_CAPACITY: 'what-capacity',
+  WHAT_SPECIES: 'eligibility-checker/what-species',
+  WHAT_SPECIES_EXPERT: 'what-species-expert',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHO_OWNS_ITEM: 'who-owns-the-item',
   WHY_IS_ITEM_RMI: 'why-is-item-rmi',
@@ -421,11 +426,21 @@ const RedisKeys = {
   UPLOAD_PHOTO: 'upload-photo',
   USED_CHECKER: 'used-checker',
   WHAT_CAPACITY: 'what-capacity',
+  WHAT_SPECIES: 'what-species',
   WHAT_TYPE_OF_ITEM_IS_IT: 'what-type-of-item-is-it',
   WHY_IS_ITEM_RMI: 'why-is-item-rmi',
   WORK_FOR_A_BUSINESS: 'work-for-a-business',
   YOUR_DOCUMENTS: 'your-documents',
   YOUR_PHOTOS: 'your-photos'
+}
+
+const Species = {
+  ELEPHANT: 'Elephant',
+  HIPPOPOTAMUS: 'Hippopotamus',
+  KILLER_WHALE: 'Killer whale',
+  NARWHAL: 'Narwhal',
+  SPERM_WHALE: 'Sperm whale',
+  WALRUS: 'Walrus'
 }
 
 const StatusCodes = {
@@ -477,10 +492,12 @@ module.exports = Object.freeze({
   Paths,
   PaymentResult,
   RedisKeys,
+  Species,
   StatusCodes,
   UploadDocument,
   UploadPhoto,
   Urls,
   Views,
-  DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession'
+  DEFRA_IVORY_SESSION_KEY: 'DefraIvorySession',
+  SERVICE_NAME: 'Declare ivory you intend to sell or hire out'
 })

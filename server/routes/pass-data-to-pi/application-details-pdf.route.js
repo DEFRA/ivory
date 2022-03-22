@@ -20,6 +20,10 @@ const {
   AgeExemptionReasonReverseLookup
 } = require('../../services/dataverse-choice-lookups')
 
+const {
+  SpeciesReverseLookup
+} = require('../../services/dataverse-choice-lookups')
+
 const formPdfBytes = fs.readFileSync(
   './server/public/static/ivory-application-download-template.pdf'
 )
@@ -33,6 +37,7 @@ const FormFields = {
   EXEMPTION_TYPE: 'Type of exemption',
   IVORY_APPLICATION: 'Ivory application',
   IVORY_LOCATION: 'Where is it',
+  IVORY_TYPE: 'Ivory type',
   OWNER_ADDRESS: 'Owner address',
   OWNER_NAME: 'Owner name',
   PREVIOUS_APPLICATION_NUMBER: 'Previous app number',
@@ -136,6 +141,9 @@ const _getPdf = async entity => {
 
   field = form.getTextField(FormFields.WHAT_IS_IT)
   field.setText(_formatField(entity, DataVerseFieldName.ITEM_SUMMARY))
+
+  field = form.getTextField(FormFields.IVORY_TYPE)
+  field.setText(SpeciesReverseLookup[entity[DataVerseFieldName.SPECIES]])
 
   field = form.getTextField(FormFields.IVORY_LOCATION)
   field.setText(_formatField(entity, DataVerseFieldName.WHERE_IS_THE_IVORY))

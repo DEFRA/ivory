@@ -24,17 +24,24 @@
       
         <p id="helpText">{{ helpText }}</p>
 
+        {% set html %}
+          <p id="helpText2">Elephant ivory is the most common type of ivory. However it can be extremely difficult to tell the difference between elephant ivory and:</p>
+          
+          <ul id="helpTextList" class="govuk-list govuk-list--bullet">
+            <li>other types of ivory, such as walrus</li>
+            <li>fake ivory, such as ivorine</li>
+            <li>certain types of animal bone</li>
+          </ul>
+
+          <p id="helpText3">There are methods available that can help determine the species of ivory, such as using ‘Schregar lines’, but these methods are often destructive to ivory. The Convention on International Trade in Endangered species of Wild Fauna and Flora (CITES) has <a href="{{ guidanceUrl }}" id="guidance" target="_blank" rel="noopener noreferrer">guidance on identifying ivory (opens in a new tab)</a></p>
+
+          <p id="helpText4">If you are not sure what type of ivory the item you want to sell or buy contains, you should speak to an expert first. An expert might be an antiques dealer or auctioneer who specialises in ivory.</p>
+        {% endset %}
+
         {{ govukDetails({
           id: "howDoIKnow",
           summaryText: "How do I know if my ivory is elephant ivory?",
-          html: '<p id="helpText2">It can be extremely difficult to tell the difference between:</p>
-                <ul id="helpTextList" class="govuk-list govuk-list--bullet">
-                  <li>elephant ivory</li>
-                  <li>other types of ivory, such as walrus</li>
-                  <li>fake ivory, such as ivorine</li>
-                  <li>certain types of animal bone</li>
-                </ul>
-                <p id="helpText3">If you are not sure about the item you want to sell or buy, you should consult an expert first, such as an antiques dealer or auctioneer who specialises in ivory.</p>'
+          html: html
         }) }}
 
         {{ govukRadios({

@@ -8,7 +8,8 @@ const {
   ItemType,
   Options,
   Paths,
-  RedisKeys
+  RedisKeys,
+  Species
 } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
@@ -125,6 +126,7 @@ describe('/check-your-answers route', () => {
         _checkSummary(document, elementIds.summaries.item)
 
         _checkSummaryKeys(document, elementIds.summaries.item, [
+          'Ivory type',
           'Type of exemption',
           'Already has a certificate',
           'Revoked certificate number',
@@ -132,6 +134,7 @@ describe('/check-your-answers route', () => {
         ])
 
         _checkSummaryValues(document, elementIds.summaries.item, [
+          'Hippopotamus',
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
           'No',
           '',
@@ -142,12 +145,14 @@ describe('/check-your-answers route', () => {
           document,
           elementIds.summaries.item,
           [
+            'Change type of ivory',
             'Change type of exemption',
             'Change whether the item has a certificate',
             'Change revoked certificate number',
             'Change whether an application has been made before'
           ],
           [
+            Paths.WHAT_SPECIES_EXPERT,
             Paths.WHAT_TYPE_OF_ITEM_IS_IT,
             Paths.ALREADY_CERTIFIED,
             Paths.REVOKED_CERTIFICATE,
@@ -833,7 +838,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'any replacement ivory was taken from an elephant before 1 January 1975'
+            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion4}`)
@@ -857,7 +862,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion4}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'any replacement ivory was taken from an elephant before 1 January 1975'
+            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion5}`)
@@ -887,7 +892,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'any replacement ivory was taken from an elephant before 1 January 1975'
+            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion4}`)
@@ -929,7 +934,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'any replacement ivory was taken from an elephant before 1 January 1975'
+            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion3}`)
@@ -1209,6 +1214,7 @@ const _createMocks = (
 
   RedisService.get = jest.fn((request, redisKey) => {
     const mockDataMap = {
+      [RedisKeys.WHAT_SPECIES]: Species.HIPPOPOTAMUS,
       [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: itemType,
       [RedisKeys.DESCRIBE_THE_ITEM]: includeOptionalItemDetails
         ? mockItemDescription

@@ -219,7 +219,8 @@ describe('/save-record route', () => {
             [DataVerseFieldName.ALREADY_HAS_CERTIFICATE]: 881990000,
             [DataVerseFieldName.APPLIED_BEFORE]: false,
             [DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER]: undefined,
-            [DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER]: undefined
+            [DataVerseFieldName.REVOKED_CERTIFICATE_NUMBER]: undefined,
+            [DataVerseFieldName.CONSENT_TO_SHARE_INFORMATION]: true
           }
         )
 
@@ -372,7 +373,8 @@ const section2RedisMockDataMap = {
     whatCapacity: 'Other'
   },
   [RedisKeys.WORK_FOR_A_BUSINESS]: true,
-  [RedisKeys.SELLING_ON_BEHALF_OF]: 'Other'
+  [RedisKeys.SELLING_ON_BEHALF_OF]: 'Other',
+  [RedisKeys.SHARE_DETAILS_OF_ITEM]: Options.YES
 }
 
 const section2ResaleRedisMockDataMap = {
@@ -417,5 +419,6 @@ const section2ResaleRedisMockDataMap = {
     [DataVerseFieldName.APPLICANT_EMAIL]: 'EXISTING_APPLICANT_EMAIL',
     [DataVerseFieldName.APPLICANT_ADDRESS]: 'EXISTING_APPLICANT_ADDRESS',
     [DataVerseFieldName.APPLICANT_POSTCODE]: 'EXISTING_APPLICANT_POSTCODE'
-  }
+  },
+  [RedisKeys.SHARE_DETAILS_OF_ITEM]: Options.YES
 }

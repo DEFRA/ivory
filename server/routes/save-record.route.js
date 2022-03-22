@@ -21,14 +21,15 @@ const {
 const { DataVerseFieldName } = require('../utils/constants')
 const {
   AgeExemptionReasonLookup,
+  AlreadyCertifiedLookup,
+  CapacityLookup,
   ExemptionTypeLookup,
   IntentionLookup,
   IvoryIntegralLookup,
   IvoryVolumeLookup,
-  Status,
   SellingOnBehalfOfLookup,
-  CapacityLookup,
-  AlreadyCertifiedLookup
+  SpeciesLookup,
+  Status
 } = require('../services/dataverse-choice-lookups')
 
 const handlers = {
@@ -125,6 +126,9 @@ const _resellRecord = async request => {
 
   Object.assign(updateBody, await _getPreviousSubmission(request))
 
+  updateBody[DataVerseFieldName.CONSENT_TO_SHARE_INFORMATION] =
+    (await _getConsentToShare(request)) === Options.YES
+
   return ODataService.updateRecord(
     updateBody[DataVerseFieldName.SECTION_2_CASE_ID],
     updateBody
@@ -201,12 +205,14 @@ const _getCommonFields = async (request, itemDescription) => {
     ivoryAge,
     submissionDate,
     paymentId,
-    intentionForItem
+    intentionForItem,
+    whatSpecies
   ] = await Promise.all([
     RedisService.get(request, RedisKeys.IVORY_AGE),
     RedisService.get(request, RedisKeys.SUBMISSION_DATE),
     RedisService.get(request, RedisKeys.PAYMENT_ID),
-    RedisService.get(request, RedisKeys.INTENTION_FOR_ITEM)
+    RedisService.get(request, RedisKeys.INTENTION_FOR_ITEM),
+    RedisService.get(request, RedisKeys.WHAT_SPECIES)
   ])
 
   return {
@@ -217,6 +223,7 @@ const _getCommonFields = async (request, itemDescription) => {
     [DataVerseFieldName.STATUS]: Status.Logged,
     [DataVerseFieldName.SUBMISSION_DATE]: submissionDate,
     [DataVerseFieldName.PAYMENT_REFERENCE]: paymentId,
+    [DataVerseFieldName.SPECIES]: _getSpeciesCode(whatSpecies),
     [DataVerseFieldName.WHY_AGE_EXEMPT]: _getAgeExemptionReasonCodes(ivoryAge),
     [DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON]: ivoryAge
       ? ivoryAge.otherReason
@@ -322,6 +329,10 @@ const _getPreviousSubmission = async request => {
     [DataVerseFieldName.APPLIED_BEFORE]: appliedBefore === Options.YES,
     [DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER]: previousApplicationNumber
   }
+}
+
+const _getConsentToShare = async request => {
+  return RedisService.get(request, RedisKeys.SHARE_DETAILS_OF_ITEM)
 }
 
 const _getNewOwnerDetails = async request => {
@@ -506,3 +517,5 @@ const _getIvoryIntegralReasonCode = value => IvoryIntegralLookup[value]
 const _getCapacityCode = value => CapacityLookup[value]
 
 const _getSellingOnBehalfOfCode = value => SellingOnBehalfOfLookup[value]
+
+const _getSpeciesCode = value => SpeciesLookup[value]
