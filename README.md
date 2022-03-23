@@ -148,6 +148,15 @@ See the `/test` folder for more information.
 
 It's defined as a build task and can be run using `npm run lint`.
 
+## Antivirus scanning
+
+[Clamscan Virus Scanning Utility](https://www.npmjs.com/package/clamscan) is used to check uploaded files for malicious content.
+
+Upon deployment as part of the Docker Image build, ClamAV is installed within the Image & the virus definitions updated (see ***Dockerfile***).
+Once the container is built it is started with the ***bin/startContainer*** bash script. This script starts the ***freshclam daemon*** which keeps the virus definitions up to date; followed by the ***clamd daemon*** which is the memory resident scanner. If the clamd daemon isn't used the performance is negativly effected with scans taking much longer to complete.
+
+Some issues were found when trying to set up ClamAV in a local development environment on a Mac. There is some additional information on how these issues can be resolved in the ***.env.example*** by modifying a few environemnt variables.
+
 # Environment variables
 
 The default values will be used if the environment variables are missing or commented out.
