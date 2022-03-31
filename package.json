@@ -1,6 +1,6 @@
 {
   "name": "ivory",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Digital service to support the Ivory Act",
   "main": "index.js",
   "scripts": {
@@ -38,11 +38,11 @@
     "applicationinsights": "^2.2.2",
     "bcrypt": "^5.0.1",
     "blipp": "^4.0.2",
-    "clamscan": "^2.1.0",
+    "clamscan": "^2.1.2",
     "disinfect": "^1.1.0",
     "dotenv": "^16.0.0",
     "govuk-frontend": "^4.0.1",
-    "hapi-pino": "9.2.0",
+    "hapi-pino": "9.3.0",
     "hapi-redis2": "^3.0.1",
     "ispinner.css": "^3.1.1",
     "joi": "^17.6.0",
@@ -52,8 +52,8 @@
     "notifications-node-client": "^5.1.1",
     "nunjucks": "3.2.3",
     "pdf-lib": "^1.17.1",
-    "pino-pretty": "^7.5.4",
-    "postcode-validator": "^3.5.3",
+    "pino-pretty": "^7.6.0",
+    "postcode-validator": "^3.6.6",
     "randomstring": "^1.2.2",
     "sharp": "^0.30.3",
     "uuid": "^8.3.2"
