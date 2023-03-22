@@ -33,7 +33,7 @@ describe('Address service', () => {
       expect(results.length).toEqual(1)
     })
 
-    it('should call the API multiple times to return all addresses if the page size is smaller than the total number of results', async () => {
+    it('should call the API multiple times to return all addresses if the page size is no more than the total number of results', async () => {
       const pageSize = 10
       const results = await AddressService.addressSearch(
         '',
