@@ -133,11 +133,11 @@ const _validateWhatIsItem = (payload, errors) => {
       name: 'whatIsItem',
       text: 'You must tell us what the item is'
     })
-  } else if (Validators.maxLength(payload.whatIsItem, CharacterLimits.Input)) {
+  } else if (Validators.maxLength(payload.whatIsItem, CharacterLimits.WhatIsTheItem)) {
     errors.push({
       name: 'whatIsItem',
       text: `You must use fewer than ${formatNumberWithCommas(
-        CharacterLimits.Input
+        CharacterLimits.WhatIsTheItem
       )} characters to tell us what the item is`
     })
   }
@@ -178,12 +178,12 @@ const _validateDistinguishingFeatures = (payload, errors) => {
       text: 'You must give details about the item’s distinguishing features'
     })
   } else if (
-    Validators.maxLength(payload.distinguishingFeatures, CharacterLimits.Input)
+    Validators.maxLength(payload.distinguishingFeatures, CharacterLimits.DistinguishingFeatures)
   ) {
     errors.push({
       name: 'distinguishingFeatures',
       text: `You must use fewer than ${formatNumberWithCommas(
-        CharacterLimits.Input
+        CharacterLimits.DistinguishingFeatures
       )} characters to describe any distinguishing features`
     })
   }

@@ -302,7 +302,7 @@ describe('/describe-the-item route', () => {
 
       it('should display a validation error message if "What is the item?" is too long', async () => {
         postOptions.payload = {
-          whatIsItem: `${CharacterLimits.fourThousandCharacters}X`,
+          whatIsItem: `${CharacterLimits.twoHundredCharacters}X`,
           whereIsIvory: 'SOME_VALUE_2',
           hasDistinguishingFeatures: Options.YES,
           distinguishingFeatures: 'SOME_VALUE_3'
@@ -311,7 +311,7 @@ describe('/describe-the-item route', () => {
           postOptions,
           server,
           elementIds.whatIsItem,
-          'You must use fewer than 4,000 characters to tell us what the item is'
+          'You must use fewer than 128 characters to tell us what the item is'
         )
       })
 
@@ -387,13 +387,13 @@ describe('/describe-the-item route', () => {
           whatIsItem: 'SOME_VALUE_1',
           whereIsIvory: 'SOME_VALUE_2',
           hasDistinguishingFeatures: Options.YES,
-          distinguishingFeatures: `${CharacterLimits.fourThousandCharacters}X`
+          distinguishingFeatures: `${CharacterLimits.threeHundredCharacters}X`
         }
         await TestHelper.checkFormFieldValidation(
           postOptions,
           server,
           elementIds.distinguishingFeatures,
-          'You must use fewer than 4,000 characters to describe any distinguishing features'
+          'You must use fewer than 243 characters to describe any distinguishing features'
         )
       })
 

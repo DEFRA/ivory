@@ -37,6 +37,8 @@ const AzureContainer = {
 
 const CharacterLimits = {
   Input: 4000,
+  WhatIsTheItem: 128,
+  DistinguishingFeatures: 243,
   Textarea: 100000
 }
 
