@@ -136,7 +136,7 @@ const _validateWhatIsItem = (payload, errors) => {
   } else if (Validators.maxLength(payload.whatIsItem, CharacterLimits.WhatIsTheItem)) {
     errors.push({
       name: 'whatIsItem',
-      text: `You must use fewer than ${formatNumberWithCommas(
+      text: `You must use no more than ${formatNumberWithCommas(
         CharacterLimits.WhatIsTheItem
       )} characters to tell us what the item is`
     })
@@ -182,7 +182,7 @@ const _validateDistinguishingFeatures = (payload, errors) => {
   ) {
     errors.push({
       name: 'distinguishingFeatures',
-      text: `You must use fewer than ${formatNumberWithCommas(
+      text: `You must use no more than ${formatNumberWithCommas(
         CharacterLimits.DistinguishingFeatures
       )} characters to describe any distinguishing features`
     })

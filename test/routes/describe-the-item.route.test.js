@@ -311,7 +311,7 @@ describe('/describe-the-item route', () => {
           postOptions,
           server,
           elementIds.whatIsItem,
-          'You must use fewer than 128 characters to tell us what the item is'
+          'You must use no more than 128 characters to tell us what the item is'
         )
       })
 
@@ -393,7 +393,7 @@ describe('/describe-the-item route', () => {
           postOptions,
           server,
           elementIds.distinguishingFeatures,
-          'You must use fewer than 243 characters to describe any distinguishing features'
+          'You must use no more than 243 characters to describe any distinguishing features'
         )
       })
 
