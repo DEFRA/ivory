@@ -722,7 +722,8 @@ const _createSection2RedisMock = (
 const _createSection10RedisMock = (
   isOwnedByApplicant,
   hasOwnerEmail = true,
-  itemType = ItemType.MUSICAL
+  itemType = ItemType.MUSICAL,
+  itemDescription = 'sword'
 ) => {
   redisMockDataMap[RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT] = itemType
   redisMockDataMap[RedisKeys.OWNED_BY_APPLICANT] = isOwnedByApplicant
@@ -737,6 +738,8 @@ const _createSection10RedisMock = (
       ? mockOwnerContactDetails
       : null
   }
+
+  redisMockDataMap[RedisKeys.DESCRIBE_THE_ITEM] = itemDescription
 
   RedisService.get = jest.fn((request, redisKey) => {
     return redisMockDataMap[redisKey]

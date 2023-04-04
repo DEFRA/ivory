@@ -77,6 +77,11 @@ const _getContext = async (request, itemType, ownedByApplicant) => {
     RedisKeys.APPLICANT_CONTACT_DETAILS
   )
 
+  const itemDescription = await RedisService.get(
+    request,
+    RedisKeys.DESCRIBE_THE_ITEM
+  )
+
   const alreadyCertified = isSection2
     ? await RedisService.get(request, RedisKeys.ALREADY_CERTIFIED)
     : null
@@ -91,6 +96,7 @@ const _getContext = async (request, itemType, ownedByApplicant) => {
     isAlreadyCertified,
     ownerContactDetails,
     applicantContactDetails,
+    itemDescription,
     submissionReference,
     certificateNumber,
     applicantEmail: applicantContactDetails
@@ -288,7 +294,8 @@ const _sendSection10ApplicantEmail = context => {
     submissionReference: context.submissionReference,
     fullName: context.applicantContactDetails.fullName,
     exemptionType: context.itemType,
-    isMuseum: context.itemType === ItemType.MUSEUM
+    isMuseum: context.itemType === ItemType.MUSEUM,
+    whatIsItem: context.itemDescription.whatIsItem
   }
 
   _sendEmail(templateId, recipientEmail, payload)
@@ -302,8 +309,8 @@ const _sendSection10OwnerEmail = context => {
     fullName:
       context.ownerContactDetails.fullName ||
       context.ownerContactDetails.businessName,
-
-    exemptionType: context.itemType
+    exemptionType: context.itemType,
+    whatIsItem: context.itemDescription.whatIsItem
   }
 
   _sendEmail(templateId, recipientEmail, payload)
