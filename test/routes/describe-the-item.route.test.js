@@ -119,7 +119,7 @@ describe('/describe-the-item route', () => {
           document,
           elementIds.whereIsIvory,
           'Where is the ivory on it?',
-          "For example, 'scabbard has ivory inlay', 'chest has ivory knobs'No more than 128 characters, so that it will fit on your certificate.",
+          "For example, 'scabbard has ivory inlay', 'chest has ivory knobs'",
           itemDescription.whereIsIvory
         )
       })
@@ -153,7 +153,7 @@ describe('/describe-the-item route', () => {
           document,
           elementIds.distinguishingFeatures,
           'Give details',
-          null,
+          'No more than 243 characters, so that it will fit on your certificate.',
           itemDescription.distinguishingFeatures
         )
 
