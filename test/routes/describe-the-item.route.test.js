@@ -109,7 +109,7 @@ describe('/describe-the-item route', () => {
           document,
           elementIds.whatIsItem,
           'What is the item?',
-          "For example, 'sword', 'chest of drawers'",
+          "For example, 'sword', 'chest of drawers'No more than 128 characters, so that it will fit on your certificate.",
           itemDescription.whatIsItem
         )
       })
@@ -119,7 +119,7 @@ describe('/describe-the-item route', () => {
           document,
           elementIds.whereIsIvory,
           'Where is the ivory on it?',
-          "For example, 'scabbard has ivory inlay', 'chest has ivory knobs'",
+          "For example, 'scabbard has ivory inlay', 'chest has ivory knobs'No more than 128 characters, so that it will fit on your certificate.",
           itemDescription.whereIsIvory
         )
       })
