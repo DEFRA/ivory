@@ -4,6 +4,8 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
 
 {% block formContent %}
 
@@ -22,7 +24,8 @@
           }
       }) %}
 
-      {{ govukInput({
+
+      {{ govukCharacterCount({
           label: {
             html: '<span class="govuk-!-font-weight-bold">What is the item?</span>'
           },
@@ -32,6 +35,7 @@
           id: "whatIsItem",
           name: "whatIsItem",
           value: whatIsItem,
+          maxlength: 128,
           errorMessage: fieldErrors['whatIsItem']
       }) }}
 
@@ -49,10 +53,11 @@
       }) }}
 
       {% set detailHtml %}
-        {{ govukInput({
+        {{ govukCharacterCount({
           id: "distinguishingFeatures",
           name: "distinguishingFeatures",
           type: "distinguishingFeatures",
+          maxlength: 243,
           label: {
             text: "Give details"
           },
