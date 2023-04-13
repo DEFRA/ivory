@@ -428,6 +428,10 @@ const _getInitialPhoto = async request => {
     [DataVerseFieldName.PHOTO_1]:
       photos && photos.files && photos.files.length
         ? await _getPhotoBlob(request, photos, 0)
+        : null,
+    [DataVerseFieldName.PHOTO_1_URL]:
+      photos && photos.urls && photos.urls.length
+        ? photos.urls[0]
         : null
   }
 }
@@ -443,6 +447,7 @@ const _getAdditionalPhotos = async request => {
         photos,
         index
       )
+      additionalPhotos[`cre2c_photo${index + 1}url`] = photos.urls[index]
     }
   }
 

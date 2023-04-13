@@ -75,6 +75,14 @@ describe('/save-record route', () => {
 
         expect(ODataService.createRecord).toBeCalledTimes(1)
         expect(ODataService.updateRecord).toBeCalledTimes(1)
+        expect(ODataService.updateRecord).toBeCalledWith(
+          'THE_SECTION_10_CASE_ID',
+          {
+            cre2c_photo2: '',
+            cre2c_photo2url: 'http://azure.blob/image2.jpg'
+          },
+          false
+        )
 
         expect(response.headers.location).toEqual(nextUrl)
       })
@@ -128,8 +136,15 @@ describe('/save-record route', () => {
 
         expect(ODataService.createRecord).toBeCalledTimes(1)
         expect(ODataService.updateRecord).toBeCalledTimes(1)
+        expect(ODataService.updateRecord).toBeCalledWith(
+          'THE_SECTION_2_CASE_ID',
+          {
+            cre2c_photo2: '',
+            cre2c_photo2url: 'http://azure.blob/image2.jpg'
+          },
+          true
+        )
         expect(ODataService.updateRecordAttachments).toBeCalledTimes(1)
-
         expect(response.headers.location).toEqual(nextUrl)
       })
 
@@ -308,7 +323,8 @@ const mockImageUploadData = {
   files: ['lamp1.png', 'lamp2.png'],
   fileSizes: [100, 200],
   thumbnails: ['lamp1-thumbnail.png', 'lamp2-thumbnail.png'],
-  thumbnailData: ['lamp-thumbnail-data1', 'lamp-thumbnail-data2']
+  thumbnailData: ['lamp-thumbnail-data1', 'lamp-thumbnail-data2'],
+  urls: ['http://azure.blob/image1.jpg', 'http://azure.blob/image2.jpg']
 }
 
 const section10RedisMockDataMap = {

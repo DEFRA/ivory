@@ -107,7 +107,8 @@ const handlers = {
           thumbnailFilename
         )
 
-        await AzureBlobService.set(AzureContainer.Images, blobName, file)
+        const result = await AzureBlobService.set(AzureContainer.Images, blobName, file)
+        uploadData.urls.push(result._response.request.url)
 
         await RedisService.set(
           request,
@@ -171,7 +172,8 @@ const _getContext = async request => {
       files: [],
       fileSizes: [],
       thumbnails: [],
-      thumbnailData: []
+      thumbnailData: [],
+      urls: []
     }
   }
 
