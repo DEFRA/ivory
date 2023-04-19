@@ -53,7 +53,7 @@ const handlers = {
       } else {
         const entity = await _createRecord(request, itemType, isSection2)
 
-        await _updateRecord(request, entity, isSection2)
+        await _updatePhotoAttachments(request, entity, isSection2)
 
         if (isSection2) {
           await _updateRecordAttachments(request, entity)
@@ -83,15 +83,6 @@ const _createRecord = async (request, itemType, isSection2) => {
   return ODataService.createRecord(body, isSection2)
 }
 
-const _updateRecord = async (request, entity, isSection2) => {
-  const updateBody = await _getAdditionalPhotos(request)
-  const id = isSection2
-    ? entity[DataVerseFieldName.SECTION_2_CASE_ID]
-    : entity[DataVerseFieldName.SECTION_10_CASE_ID]
-
-  return ODataService.updateRecord(id, updateBody, isSection2)
-}
-
 const _updateRecordAttachments = async (request, entity) => {
   const supportingEvidence = await RedisService.get(
     request,
@@ -113,10 +104,34 @@ const _updateRecordAttachments = async (request, entity) => {
       )
     }
 
-    ODataService.updateRecordAttachments(
+    await ODataService.updateRecordAttachments(
       entity[DataVerseFieldName.SECTION_2_CASE_ID],
       supportingEvidence
     )
+  }
+}
+
+const _updatePhotoAttachments = async (request, entity, isSection2) => {
+  const attachedPhotos = await RedisService.get(
+    request,
+    RedisKeys.UPLOAD_PHOTO
+  )
+
+  if (
+    attachedPhotos &&
+    attachedPhotos.files &&
+    attachedPhotos.files.length
+  ) {
+    attachedPhotos.fileData = []
+
+    for (let index = 0; index < attachedPhotos.files.length; index++) {
+      attachedPhotos.fileData[index] = await _getPhotoBlob(
+        request,
+        attachedPhotos,
+        index
+      )
+    }
+    await ODataService.updatePhotos(isSection2, entity, attachedPhotos)
   }
 }
 
@@ -194,6 +209,17 @@ const _createSection10Body = async (request, itemType, itemDescription) => {
   }
 }
 
+const _getPhotoUrls = async (request) => {
+  const photos = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
+  const photoUrls = {}
+  if (photos && photos.files && photos.files.length > 1) {
+    for (let index = 0; index < photos.files.length; index++) {
+      photoUrls[`cre2c_photo${index + 1}url`] = photos.urls[index]
+    }
+  }
+  return photoUrls
+}
+
 const _getCommonFields = async (request, itemDescription) => {
   const now = new Date().toISOString()
 
@@ -228,7 +254,7 @@ const _getCommonFields = async (request, itemDescription) => {
     [DataVerseFieldName.DISTINGUISHING_FEATURES]:
       itemDescription.distinguishingFeatures,
     [DataVerseFieldName.INTENTION]: _getIntentionCategoryCode(intentionForItem),
-    ...(await _getInitialPhoto(request)),
+    ...(await _getPhotoUrls(request)),
     ...(await _getOwnerAndApplicantDetails(request)),
     [DataVerseFieldName.MANUALLY_CREATED]: false,
     [DataVerseFieldName.HAS_PREVIOUS_OWNER]: false
@@ -419,39 +445,6 @@ const _getPostcode = (address, isInternationalAddress) => {
   }
 
   return postcode
-}
-
-const _getInitialPhoto = async request => {
-  const photos = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
-
-  return {
-    [DataVerseFieldName.PHOTO_1]:
-      photos && photos.files && photos.files.length
-        ? await _getPhotoBlob(request, photos, 0)
-        : null,
-    [DataVerseFieldName.PHOTO_1_URL]:
-      photos && photos.urls && photos.urls.length
-        ? photos.urls[0]
-        : null
-  }
-}
-
-const _getAdditionalPhotos = async request => {
-  const photos = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
-
-  const additionalPhotos = {}
-  if (photos && photos.files && photos.files.length > 1) {
-    for (let index = 1; index < photos.files.length; index++) {
-      additionalPhotos[`cre2c_photo${index + 1}`] = await _getPhotoBlob(
-        request,
-        photos,
-        index
-      )
-      additionalPhotos[`cre2c_photo${index + 1}url`] = photos.urls[index]
-    }
-  }
-
-  return additionalPhotos
 }
 
 /**

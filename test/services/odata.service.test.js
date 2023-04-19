@@ -12,6 +12,7 @@ const { DownloadReason } = require('../../server/utils/constants')
 describe('OData service', () => {
   beforeEach(() => {
     _createMocks()
+    console.log = jest.fn()
   })
 
   afterEach(() => {
@@ -96,6 +97,37 @@ describe('OData service', () => {
     })
   })
 
+  describe('updatePhotoAttachments method', () => {
+    it('should add photo attachments to a Section 2 record', async () => {
+      const photoRecords = {
+        files: ['ivory1.jpg', 'ivory2.jpg'],
+        fileSizes: [100, 200],
+        fileData: [Buffer.from([]), Buffer.from([])]
+      }
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)
+
+      await ODataService.updatePhotos(true, mockSection2Entity, photoRecords)
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
+    })
+
+    it('should add photo attachments to a Section 10 record', async () => {
+      const photoRecords = {
+        files: ['ivory1.jpg', 'ivory2.jpg'],
+        fileSizes: [100, 200],
+        fileData: [Buffer.from([]), Buffer.from([])]
+      }
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)
+
+      await ODataService.updatePhotos(false, mockSection10Entity, photoRecords)
+
+      expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
+      expect(console.log.mock.calls[2]).toContain('All Photos Patched successfully.')
+    })
+  })
+
   describe('updateRecordAttachments method', () => {
     it('should add file attachments to a Section 2 record', async () => {
       const id = mockSection2Entity.cre2c_ivorysection2caseid
@@ -111,6 +143,7 @@ describe('OData service', () => {
       await ODataService.updateRecordAttachments(id, supportingInformation)
 
       expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
+      expect(console.log.mock.calls[2]).toContain('All supporting documents patched successfully.')
     })
   })
 
@@ -274,6 +307,22 @@ const _createMocks = () => {
     .reply(204)
     .patch(
       `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(SECTION_2_CASE_ID)/cre2c_supportingevidence2`
+    )
+    .reply(204)
+    .patch(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(SECTION_2_CASE_ID)/cre2c_photo1`
+    )
+    .reply(204)
+    .patch(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(SECTION_2_CASE_ID)/cre2c_photo2`
+    )
+    .reply(204)
+    .patch(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection10cases(SECTION_10_CASE_ID)/cre2c_photo1`
+    )
+    .reply(204)
+    .patch(
+      `/${config.dataverseApiEndpoint}/cre2c_ivorysection10cases(SECTION_10_CASE_ID)/cre2c_photo2`
     )
     .reply(204)
     .get(
