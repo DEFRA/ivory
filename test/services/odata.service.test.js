@@ -12,7 +12,6 @@ const { DownloadReason } = require('../../server/utils/constants')
 describe('OData service', () => {
   beforeEach(() => {
     _createMocks()
-    console.log = jest.fn()
   })
 
   afterEach(() => {
@@ -124,7 +123,6 @@ describe('OData service', () => {
       await ODataService.updatePhotos(false, mockSection10Entity, photoRecords)
 
       expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
-      expect(console.log.mock.calls[2]).toContain('All Photos Patched successfully.')
     })
   })
 
@@ -143,7 +141,6 @@ describe('OData service', () => {
       await ODataService.updateRecordAttachments(id, supportingInformation)
 
       expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(1)
-      expect(console.log.mock.calls[2]).toContain('All supporting documents patched successfully.')
     })
   })
 

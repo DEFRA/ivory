@@ -217,8 +217,6 @@ module.exports = class ODataService {
 
     _setContentLength(headers, body)
 
-    console.log(`Patching URL: [${url}]`)
-
     const response = await fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(body),
@@ -257,19 +255,13 @@ module.exports = class ODataService {
 
       const body = Buffer.from(photoRecords.fileData[i], 'base64')
 
-      console.log(`Patching URL: [${url}]`)
-
       patchCommands.push(fetch(url, {
         method: 'PATCH',
         headers,
         body
       }))
     }
-    await Promise.all(patchCommands).then(() => {
-      console.log('All Photos Patched successfully.')
-    }).catch((error) => {
-      console.log('Error occurred while patching photos', error)
-    })
+    await Promise.all(patchCommands)
   }
 
   static async updateRecordAttachments (id, supportingInformation) {
@@ -292,19 +284,13 @@ module.exports = class ODataService {
 
       const body = Buffer.from(supportingInformation.fileData[i], 'base64')
 
-      console.log(`Patching URL: [${url}]`)
-
       patchCommands.push(fetch(url, {
         method: 'PATCH',
         headers,
         body
       }))
     }
-    await Promise.all(patchCommands).then(() => {
-      console.log('All supporting documents patched successfully.')
-    }).catch((error) => {
-      console.log('Error occurred while patching supporting documents', error)
-    })
+    await Promise.all(patchCommands)
   }
 }
 
