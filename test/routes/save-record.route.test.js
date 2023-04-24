@@ -187,6 +187,28 @@ describe('/save-record route', () => {
         expect(response.headers.location).toEqual(nextUrl)
       })
 
+      it('should save the supporting document urls in the data verse and redirect to the service complete page', async () => {
+        PaymentService.lookupPayment = jest
+          .fn()
+          .mockResolvedValue({ state: { status: 'success' } })
+
+        expect(ODataService.createRecord).toBeCalledTimes(0)
+
+        const response = await TestHelper.submitGetRequest(
+          server,
+          getOptions,
+          302,
+          false
+        )
+
+        expect(ODataService.createRecord).toBeCalledTimes(1)
+        expect(ODataService.createRecord).toHaveBeenCalledWith(expect.objectContaining({
+          cre2c_supportingevidence1url: 'http://azure.blob/supporting_doc1.pdf',
+          cre2c_supportingevidence2url: 'http://azure.blob/supporting_doc2.pdf'
+        }), true)
+        expect(response.headers.location).toEqual(nextUrl)
+      })
+
       it('should NOT save the record in the dataverse when the payment has failed and redirect to the service complete page', async () => {
         PaymentService.lookupPayment = jest
           .fn()
@@ -355,7 +377,8 @@ const mockApplicantData = {
 
 const mockFileAttachmentData = {
   files: ['document1.pdf', 'document2.pdf'],
-  fileSizes: [100, 200]
+  fileSizes: [100, 200],
+  urls: ['http://azure.blob/supporting_doc1.pdf', 'http://azure.blob/supporting_doc2.pdf']
 }
 
 const mockImageUploadData = {
