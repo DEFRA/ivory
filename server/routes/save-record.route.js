@@ -220,6 +220,17 @@ const _getPhotoUrls = async (request) => {
   return photoUrls
 }
 
+const _getSupportingDocumentUrls = async (request) => {
+  const supportingDocuments = await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
+  const supportingDocsUrls = {}
+  if (supportingDocuments && supportingDocuments.files && supportingDocuments.files.length > 1) {
+    for (let index = 0; index < supportingDocuments.files.length; index++) {
+      supportingDocsUrls[`cre2c_supportingevidence${index + 1}url`] = supportingDocuments.urls[index]
+    }
+  }
+  return supportingDocsUrls
+}
+
 const _getCommonFields = async (request, itemDescription) => {
   const now = new Date().toISOString()
 
@@ -255,6 +266,7 @@ const _getCommonFields = async (request, itemDescription) => {
       itemDescription.distinguishingFeatures,
     [DataVerseFieldName.INTENTION]: _getIntentionCategoryCode(intentionForItem),
     ...(await _getPhotoUrls(request)),
+    ...(await _getSupportingDocumentUrls(request)),
     ...(await _getOwnerAndApplicantDetails(request)),
     [DataVerseFieldName.MANUALLY_CREATED]: false,
     [DataVerseFieldName.HAS_PREVIOUS_OWNER]: false
