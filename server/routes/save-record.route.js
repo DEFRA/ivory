@@ -209,7 +209,7 @@ const _createSection10Body = async (request, itemType, itemDescription) => {
   }
 }
 
-const _getPhotoUrls = async (request) => {
+const _getPhotoUrls = async request => {
   const photos = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
   const photoUrls = {}
   if (photos && photos.files && photos.files.length > 0) {
