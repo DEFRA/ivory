@@ -21,6 +21,7 @@ const ODataService = require('../../server/services/odata.service')
 
 jest.mock('../../server/services/payment.service')
 const PaymentService = require('../../server/services/payment.service')
+const expect = require('expect')
 
 describe('/save-record route', () => {
   let server
@@ -83,6 +84,29 @@ describe('/save-record route', () => {
         expect(response.headers.location).toEqual(nextUrl)
       })
 
+      it('should save the photo urls in the data verse on createRecord() and redirect to the service complete page', async () => {
+        PaymentService.lookupPayment = jest
+          .fn()
+          .mockResolvedValue({ state: { status: 'success' } })
+
+        expect(ODataService.createRecord).toBeCalledTimes(0)
+
+        const response = await TestHelper.submitGetRequest(
+          server,
+          getOptions,
+          302,
+          false
+        )
+
+        expect(ODataService.createRecord).toBeCalledTimes(1)
+        expect(ODataService.createRecord).toHaveBeenCalledWith(expect.objectContaining({
+          cre2c_photo1url: 'http://azure.blob/image1.jpg',
+          cre2c_photo2url: 'http://azure.blob/image2.jpg'
+        }), false)
+
+        expect(response.headers.location).toEqual(nextUrl)
+      })
+
       it('should NOT save the record in the dataverse when the payment has failed and redirect to the service complete page', async () => {
         PaymentService.lookupPayment = jest
           .fn()
@@ -138,6 +162,28 @@ describe('/save-record route', () => {
           mockImageUploadData
         )
         expect(ODataService.updateRecordAttachments).toBeCalledTimes(1)
+        expect(response.headers.location).toEqual(nextUrl)
+      })
+
+      it('should save the photo urls in the data verse and redirect to the service complete page', async () => {
+        PaymentService.lookupPayment = jest
+          .fn()
+          .mockResolvedValue({ state: { status: 'success' } })
+
+        expect(ODataService.createRecord).toBeCalledTimes(0)
+
+        const response = await TestHelper.submitGetRequest(
+          server,
+          getOptions,
+          302,
+          false
+        )
+
+        expect(ODataService.createRecord).toBeCalledTimes(1)
+        expect(ODataService.createRecord).toHaveBeenCalledWith(expect.objectContaining({
+          cre2c_photo1url: 'http://azure.blob/image1.jpg',
+          cre2c_photo2url: 'http://azure.blob/image2.jpg'
+        }), true)
         expect(response.headers.location).toEqual(nextUrl)
       })
 

@@ -212,7 +212,7 @@ const _createSection10Body = async (request, itemType, itemDescription) => {
 const _getPhotoUrls = async (request) => {
   const photos = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
   const photoUrls = {}
-  if (photos && photos.files && photos.files.length > 1) {
+  if (photos && photos.files && photos.files.length > 0) {
     for (let index = 0; index < photos.files.length; index++) {
       photoUrls[`cre2c_photo${index + 1}url`] = photos.urls[index]
     }
