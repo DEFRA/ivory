@@ -203,8 +203,8 @@ describe('/save-record route', () => {
 
         expect(ODataService.createRecord).toBeCalledTimes(1)
         expect(ODataService.createRecord).toHaveBeenCalledWith(expect.objectContaining({
-          cre2c_supportingevidence1url: 'http://azure.blob/supporting_doc1.pdf',
-          cre2c_supportingevidence2url: 'http://azure.blob/supporting_doc2.pdf'
+          cre2c_document1url: 'http://azure.blob/supporting_doc1.pdf',
+          cre2c_document2url: 'http://azure.blob/supporting_doc2.pdf'
         }), true)
         expect(response.headers.location).toEqual(nextUrl)
       })

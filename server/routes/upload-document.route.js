@@ -91,22 +91,22 @@ const handlers = {
         })
         .code(400)
     } else {
-      await RedisService.set(
-        request,
-        RedisKeys.UPLOAD_DOCUMENT,
-        JSON.stringify(uploadData)
-      )
-
       const blobName = AzureBlobService.getBlobName(
         request,
         RedisKeys.UPLOAD_DOCUMENT,
         filename
       )
 
-      await AzureBlobService.set(
+      const result = await AzureBlobService.set(
         AzureContainer.SupportingEvidence,
         blobName,
         file
+      )
+      uploadData.urls.push(result._response.request.url)
+      await RedisService.set(
+        request,
+        RedisKeys.UPLOAD_DOCUMENT,
+        JSON.stringify(uploadData)
       )
     }
 
@@ -129,7 +129,8 @@ const _getContext = async request => {
   if (!uploadData) {
     uploadData = {
       files: [],
-      fileSizes: []
+      fileSizes: [],
+      urls: []
     }
   }
 

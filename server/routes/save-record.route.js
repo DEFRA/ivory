@@ -225,7 +225,7 @@ const _getSupportingDocumentUrls = async request => {
   const supportingDocUrls = {}
   if (supportingDocs && supportingDocs.files && supportingDocs.files.length > 0) {
     for (let index = 0; index < supportingDocs.files.length; index++) {
-      supportingDocUrls[`cre2c_supportingevidence${index + 1}url`] = supportingDocs.urls[index]
+      supportingDocUrls[`cre2c_document${index + 1}url`] = supportingDocs.urls[index]
     }
   }
   return supportingDocUrls
