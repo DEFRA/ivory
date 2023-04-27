@@ -881,7 +881,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'the surface area of ivory on the miniature is less than 320 square centimetres'
+            'the surface area of ivory on the miniature is no more than 320 square centimetres'
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion3}`)

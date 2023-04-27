@@ -977,7 +977,7 @@ const LEGAL_ASSERTIONS = {
   ],
   [ItemType.MINIATURE]: [
     'the portrait miniature was made before 1918',
-    'the surface area of ivory on the miniature is less than 320 square centimetres',
+    'the surface area of ivory on the miniature is no more than 320 square centimetres',
     BEFORE_1975,
     COMPLETE_AND_CORRECT
   ],
