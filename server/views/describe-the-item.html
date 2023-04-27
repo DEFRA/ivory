@@ -4,6 +4,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
 {% block formContent %}
 
@@ -22,7 +23,7 @@
           }
       }) %}
 
-      {{ govukInput({
+      {{ govukCharacterCount({
           label: {
             html: '<span class="govuk-!-font-weight-bold">What is the item?</span>'
           },
@@ -30,6 +31,7 @@
             html: "For example, 'sword', 'chest of drawers'<br>No more than 128 characters, so that it will fit on your certificate."
           },
           id: "whatIsItem",
+          maxlength: 128,
           name: "whatIsItem",
           value: whatIsItem,
           errorMessage: fieldErrors['whatIsItem']
@@ -49,8 +51,9 @@
       }) }}
 
       {% set detailHtml %}
-        {{ govukInput({
+        {{ govukCharacterCount({
           id: "distinguishingFeatures",
+          maxlength: 243,
           name: "distinguishingFeatures",
           type: "distinguishingFeatures",
           label: {
