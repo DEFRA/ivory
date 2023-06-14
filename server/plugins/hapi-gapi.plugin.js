@@ -10,7 +10,8 @@ module.exports = {
     propertySettings: [
       {
         id: config.googleAnalyticsId,
-        hitTypes: ['pageview', 'event']
+        key: config.googleAnalyticsApiSecret,
+        hitTypes: ['page_view']
       }
     ],
     // Would normally use the request object to retrieve the proper session identifier
