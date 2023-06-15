@@ -50,7 +50,7 @@
     "node-fetch": "^2.6.7",
     "node-sass": "^7.0.1",
     "notifications-node-client": "^5.1.1",
-    "nunjucks": "3.2.3",
+    "nunjucks": "3.2.4",
     "pdf-lib": "^1.17.1",
     "pino-pretty": "^7.6.0",
     "postcode-validator": "^3.6.6",
