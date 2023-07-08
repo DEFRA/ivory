@@ -48,7 +48,7 @@
     "joi": "^17.6.0",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.7",
-    "node-sass": "^7.0.1",
+    "node-sass": "^9.0.0",
     "notifications-node-client": "^5.1.1",
     "nunjucks": "3.2.3",
     "pdf-lib": "^1.17.1",
