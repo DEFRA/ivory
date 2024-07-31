@@ -12,21 +12,21 @@ const {
   Views
 } = require('../../utils/constants')
 const { buildErrorSummary, Validators } = require('../../utils/validation')
-const { getStandardOptions, getSpeciesString } = require('../../utils/general')
+const { getStandardOptions } = require('../../utils/general')
 
 const handlers = {
-  get: async (request, h) => {
-    const context = await _getContext(request)
+  get: (_request, h) => {
+    const context = _getContext()
 
-    return h.view(Views.TAKEN_FROM_SPECIES, {
+    return h.view(Views.TAKEN_FROM_ELEPHANT, {
       ...context
     })
   },
 
   post: async (request, h) => {
-    const context = await _getContext(request)
+    const context = _getContext()
     const payload = request.payload
-    const errors = _validateForm(payload, context)
+    const errors = _validateForm(payload)
 
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
@@ -36,7 +36,7 @@ const handlers = {
       })
 
       return h
-        .view(Views.TAKEN_FROM_SPECIES, {
+        .view(Views.TAKEN_FROM_ELEPHANT, {
           ...context,
           ...buildErrorSummary(errors)
         })
@@ -45,11 +45,11 @@ const handlers = {
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.ELIGIBILITY_CHECKER,
-      action: `${Analytics.Action.SELECTED} ${payload.takenFromSpecies}`,
+      action: `${Analytics.Action.SELECTED} ${payload.takenFromElephant}`,
       label: context.pageTitle
     })
 
-    switch (payload.takenFromSpecies) {
+    switch (payload.takenFromElephant) {
       case Options.YES:
         return h.redirect(Paths.CANNOT_TRADE)
       case Options.NO:
@@ -70,26 +70,21 @@ const handlers = {
   }
 }
 
-const _getContext = async request => {
-  const speciesValue = (await RedisHelper.getSpecies(request)).toLowerCase()
-
-  const speciesString = getSpeciesString(speciesValue)
-
+const _getContext = () => {
   return {
-    pageTitle: `Was the replacement ivory taken from the ${speciesString} on or after 1 January 1975?`,
-    items: getStandardOptions(),
-    species: speciesString
+    pageTitle:
+      'Was the replacement ivory taken from an elephant on or after 1 January 1975?',
+    items: getStandardOptions()
   }
 }
 
-const _validateForm = (payload, context) => {
+const _validateForm = payload => {
   const errors = []
-  if (Validators.empty(payload.takenFromSpecies)) {
-    const speciesString = getSpeciesString(context.species)
-
+  if (Validators.empty(payload.takenFromElephant)) {
     errors.push({
-      name: 'takenFromSpecies',
-      text: `You must tell us whether the replacement ivory was taken from the ${speciesString} on or after 1 January 1975`
+      name: 'takenFromElephant',
+      text:
+        'You must tell us whether the replacement ivory was taken from an elephant on or after 1 January 1975'
     })
   }
   return errors
@@ -98,12 +93,12 @@ const _validateForm = (payload, context) => {
 module.exports = [
   {
     method: 'GET',
-    path: `${Paths.TAKEN_FROM_SPECIES}`,
+    path: `${Paths.TAKEN_FROM_ELEPHANT}`,
     handler: handlers.get
   },
   {
     method: 'POST',
-    path: `${Paths.TAKEN_FROM_SPECIES}`,
+    path: `${Paths.TAKEN_FROM_ELEPHANT}`,
     handler: handlers.post
   }
 ]
