@@ -838,7 +838,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'any replacement ivory that is from a listed species was taken from its source before 1 January 1975'
+            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion4}`)
@@ -862,7 +862,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion4}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'any replacement ivory that is from a listed species was taken from its source before 1 January 1975'
+            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion5}`)
@@ -892,7 +892,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'any replacement ivory that is from a listed species was taken from its source before 1 January 1975'
+            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion4}`)
@@ -934,7 +934,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            'any replacement ivory that is from a listed species was taken from its source before 1 January 1975'
+            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion3}`)

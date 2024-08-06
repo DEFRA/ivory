@@ -100,6 +100,19 @@ describe('/eligibility-checker/less-than-10-ivory route', () => {
       )
     })
 
+    it('should have the correct summary text title', () => {
+      const element = document.querySelector('.govuk-details__summary-text')
+      expect(element).toBeTruthy()
+      expect(TestHelper.getTextContent(element)).toEqual(
+        'What kinds of item have less than 10% ivory?'
+      )
+    })
+
+    it('should have some summary text details', () => {
+      const element = document.querySelector('.govuk-details__text')
+      expect(element).toBeTruthy()
+    })
+
     it('should have the correct radio buttons', () => {
       TestHelper.checkRadioOption(
         document,
