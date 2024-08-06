@@ -21,15 +21,14 @@ const {
 const { DataVerseFieldName } = require('../utils/constants')
 const {
   AgeExemptionReasonLookup,
-  AlreadyCertifiedLookup,
-  CapacityLookup,
   ExemptionTypeLookup,
   IntentionLookup,
   IvoryIntegralLookup,
   IvoryVolumeLookup,
+  Status,
   SellingOnBehalfOfLookup,
-  SpeciesLookup,
-  Status
+  CapacityLookup,
+  AlreadyCertifiedLookup
 } = require('../services/dataverse-choice-lookups')
 
 const handlers = {
@@ -118,7 +117,11 @@ const _updatePhotoAttachments = async (request, entity, isSection2) => {
     RedisKeys.UPLOAD_PHOTO
   )
 
-  if (attachedPhotos?.files?.length) {
+  if (
+    attachedPhotos &&
+    attachedPhotos.files &&
+    attachedPhotos.files.length
+  ) {
     attachedPhotos.fileData = []
 
     for (let index = 0; index < attachedPhotos.files.length; index++) {
@@ -136,9 +139,6 @@ const _resellRecord = async request => {
   const updateBody = await _getNewOwnerDetails(request)
 
   Object.assign(updateBody, await _getPreviousSubmission(request))
-
-  updateBody[DataVerseFieldName.CONSENT_TO_SHARE_INFORMATION] =
-    (await _getConsentToShare(request)) === Options.YES
 
   return ODataService.updateRecord(
     updateBody[DataVerseFieldName.SECTION_2_CASE_ID],
@@ -212,7 +212,7 @@ const _createSection10Body = async (request, itemType, itemDescription) => {
 const _getPhotoUrls = async request => {
   const photos = await RedisService.get(request, RedisKeys.UPLOAD_PHOTO)
   const photoUrls = {}
-  if (photos?.files?.length > 0) {
+  if (photos && photos.files && photos.files.length > 0) {
     for (let index = 0; index < photos.files.length; index++) {
       photoUrls[`cre2c_photo${index + 1}url`] = photos.urls[index]
     }
@@ -223,7 +223,7 @@ const _getPhotoUrls = async request => {
 const _getSupportingDocumentUrls = async request => {
   const supportingDocs = await RedisService.get(request, RedisKeys.UPLOAD_DOCUMENT)
   const supportingDocUrls = {}
-  if (supportingDocs?.files?.length > 0) {
+  if (supportingDocs && supportingDocs.files && supportingDocs.files.length > 0) {
     for (let index = 0; index < supportingDocs.files.length; index++) {
       supportingDocUrls[`cre2c_document${index + 1}url`] = supportingDocs.urls[index]
     }
@@ -238,14 +238,12 @@ const _getCommonFields = async (request, itemDescription) => {
     ivoryAge,
     submissionDate,
     paymentId,
-    intentionForItem,
-    whatSpecies
+    intentionForItem
   ] = await Promise.all([
     RedisService.get(request, RedisKeys.IVORY_AGE),
     RedisService.get(request, RedisKeys.SUBMISSION_DATE),
     RedisService.get(request, RedisKeys.PAYMENT_ID),
-    RedisService.get(request, RedisKeys.INTENTION_FOR_ITEM),
-    RedisService.get(request, RedisKeys.WHAT_SPECIES)
+    RedisService.get(request, RedisKeys.INTENTION_FOR_ITEM)
   ])
 
   return {
@@ -256,7 +254,6 @@ const _getCommonFields = async (request, itemDescription) => {
     [DataVerseFieldName.STATUS]: Status.Logged,
     [DataVerseFieldName.SUBMISSION_DATE]: submissionDate,
     [DataVerseFieldName.PAYMENT_REFERENCE]: paymentId,
-    [DataVerseFieldName.SPECIES]: _getSpeciesCode(whatSpecies),
     [DataVerseFieldName.WHY_AGE_EXEMPT]: _getAgeExemptionReasonCodes(ivoryAge),
     [DataVerseFieldName.WHY_AGE_EXEMPT_OTHER_REASON]: ivoryAge
       ? ivoryAge.otherReason
@@ -363,10 +360,6 @@ const _getPreviousSubmission = async request => {
     [DataVerseFieldName.APPLIED_BEFORE]: appliedBefore === Options.YES,
     [DataVerseFieldName.PREVIOUS_APPLICATION_NUMBER]: previousApplicationNumber
   }
-}
-
-const _getConsentToShare = async request => {
-  return RedisService.get(request, RedisKeys.SHARE_DETAILS_OF_ITEM)
 }
 
 const _getNewOwnerDetails = async request => {
@@ -523,5 +516,3 @@ const _getIvoryIntegralReasonCode = value => IvoryIntegralLookup[value]
 const _getCapacityCode = value => CapacityLookup[value]
 
 const _getSellingOnBehalfOfCode = value => SellingOnBehalfOfLookup[value]
-
-const _getSpeciesCode = value => SpeciesLookup[value]

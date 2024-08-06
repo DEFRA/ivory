@@ -17,8 +17,7 @@ const {
   AgeExemptionReasonLookup,
   AgeExemptionReasonReverseLookup,
   AlreadyCertifiedLookup,
-  AlreadyCertifiedReverseLookup,
-  SpeciesReverseLookup
+  AlreadyCertifiedReverseLookup
 } = require('../../services/dataverse-choice-lookups')
 
 const NONE = 'None'
@@ -145,10 +144,7 @@ const _getExemptionReasonSummary = entity => {
 }
 
 const _getItemSummary = entity => {
-  const species = SpeciesReverseLookup[entity[DataVerseFieldName.SPECIES]]
-
   const itemSummary = [
-    _getSummaryListRow('Ivory type', species),
     _getSummaryListRow('Type of exemption', ItemType.HIGH_VALUE)
   ]
 

@@ -1,14 +1,12 @@
 'use strict'
 
 const AnalyticsService = require('../../services/analytics.service')
-const RedisHelper = require('../../services/redis-helper.service')
 
 const { Paths, Views, Urls, Analytics } = require('../../utils/constants')
-const { getSpeciesString } = require('../../utils/general')
 
 const handlers = {
   get: async (request, h) => {
-    const context = await _getContext(request)
+    const context = _getContext(request)
 
     AnalyticsService.sendEvent(request, {
       category: Analytics.Category.SERVICE_COMPLETE,
@@ -32,19 +30,16 @@ const handlers = {
   }
 }
 
-const _getContext = async request => {
+const _getContext = request => {
   const referringUrl = request.headers.referer
 
   const pageTitle = 'You are not allowed to sell or hire out your item'
 
-  if (referringUrl.includes(Paths.TAKEN_FROM_SPECIES)) {
-    const speciesValue = (await RedisHelper.getSpecies(request)).toLowerCase()
-
-    const speciesString = getSpeciesString(speciesValue)
-
+  if (referringUrl.includes(Paths.TAKEN_FROM_ELEPHANT)) {
     return {
       pageTitle,
-      helpText: `Any replacement ivory in your item must have been taken from the ${speciesString} before 1 January 1975.`
+      helpText:
+        'Any replacement ivory in your item must have been taken from an elephant before 1 January 1975.'
     }
   } else if (referringUrl.includes(Paths.MADE_BEFORE_1947)) {
     return {

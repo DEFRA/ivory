@@ -138,7 +138,7 @@ describe('/describe-the-item route', () => {
         )
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'Tell us what ivory your item’s made of or contains, including if it’s more than one species, as well as any other distinguishing features. For example, ‘handle has a carved image of a soldier’, or ‘one of the feet is cracked’.'
+          "For example, 'handle has a carved image of a soldier', 'one of the feet is cracked'"
         )
 
         TestHelper.checkRadioOption(

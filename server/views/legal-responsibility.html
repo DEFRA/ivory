@@ -23,12 +23,7 @@
         {% endfor %}
 
         <div class="govuk-inset-text" style="border-left: 10px solid white">
-          <p id="callOutText1">You must contact APHA to amend your registration or certificate if you later find out information you have given about the item is wrong or incomplete.</p>
-          <p id="callOutText2">APHA may cancel your registration, or revoke your exemption certificate if:</p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li id="callOutText3">it believes your item is no longer eligible</li>
-            <li id="callOutText4">the information you’ve given about the item is wrong or incomplete, including if the item is proven to not be made of or contain ivory, and you do not tell us</li>
-          </ul>
+          <p id="callOutText">{{ callOutText }}</p>
         </div>
 
         {{ govukButton({

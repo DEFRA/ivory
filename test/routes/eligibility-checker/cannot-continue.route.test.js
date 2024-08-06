@@ -1,7 +1,10 @@
 'use strict'
 
 jest.mock('../../../server/services/redis.service')
+const RedisService = require('../../../server/services/redis.service')
 const TestHelper = require('../../utils/test-helper')
+
+const { Options } = require('../../../server/utils/constants')
 
 describe('/eligibility-checker/cannot-continue route', () => {
   let server
@@ -99,6 +102,63 @@ describe('/eligibility-checker/cannot-continue route', () => {
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
           'Finish and return to GOV.UK'
+        )
+      })
+    })
+
+    describe('GET: Contains Ivory - Yes', () => {
+      beforeEach(async () => {
+        RedisService.get = jest.fn().mockResolvedValue(Options.YES)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the correct help text', () => {
+        let element = document.querySelector(`#${elementIds.helpText1a}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'To use this service, you must know for sure whether your item qualifies for exemption.'
+        )
+
+        element = document.querySelector(`#${elementIds.helpText1b}`)
+        expect(element).toBeFalsy()
+      })
+    })
+
+    describe('GET: Contains Ivory - No', () => {
+      beforeEach(async () => {
+        RedisService.get = jest.fn().mockResolvedValue(Options.No)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the correct help text', () => {
+        let element = document.querySelector(`#${elementIds.helpText1a}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'To use this service, you must know for sure whether your item qualifies for exemption.'
+        )
+
+        element = document.querySelector(`#${elementIds.helpText1b}`)
+        expect(element).toBeFalsy()
+      })
+    })
+
+    describe('GET: Contains Ivory - Unknown', () => {
+      beforeEach(async () => {
+        RedisService.get = jest.fn().mockResolvedValue(Options.I_DONT_KNOW)
+        document = await TestHelper.submitGetRequest(server, getOptions)
+      })
+
+      it('should have the correct help text', () => {
+        let element = document.querySelector(`#${elementIds.helpText1a}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'To use this service, you must know for sure whether your item contains elephant ivory.'
+        )
+
+        element = document.querySelector(`#${elementIds.helpText1b}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'If you’re uncertain about your item and you choose to declare it anyway, we’ll assume it does contain elephant ivory.'
         )
       })
     })

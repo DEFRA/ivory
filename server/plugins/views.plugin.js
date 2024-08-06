@@ -41,8 +41,8 @@ module.exports = {
       assetPath: '/assets',
       govUkHome: constants.Urls.GOV_UK_HOME,
       serviceNameUrl: constants.Urls.GOV_UK_SERVICE_HOME,
-      serviceName: constants.SERVICE_NAME,
-      pageTitle: `${constants.SERVICE_NAME} - GOV.UK`,
+      serviceName: config.serviceName,
+      pageTitle: `${config.serviceName} - GOV.UK`,
       analyticsAccount: analyticsAccount
     }
   }

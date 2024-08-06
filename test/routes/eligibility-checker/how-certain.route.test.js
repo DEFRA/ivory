@@ -12,8 +12,9 @@ const { RedisKeys } = require('../../../server/utils/constants')
 describe('/eligibility-checker/how-certain route', () => {
   let server
   const url = '/eligibility-checker/how-certain'
-  const nextUrlWhatSpeciesExpert = '/eligibility-checker/selling-to-museum'
-  const nextUrlWhatSpecies = '/eligibility-checker/selling-to-museum'
+  const nextUrlTypeOfItem = '/what-type-of-item-is-it'
+  const nextUrlContainElephantIvory =
+    '/eligibility-checker/contain-elephant-ivory'
 
   const elementIds = {
     help1: 'help1',
@@ -22,7 +23,7 @@ describe('/eligibility-checker/how-certain route', () => {
     howCertain2: 'howCertain-2',
     continue: 'continue'
   }
-  const serviceName = 'Declare ivory you intend to sell or hire out'
+  const serviceName = 'Declare elephant ivory you intend to sell or hire out'
 
   let document
 
@@ -64,7 +65,7 @@ describe('/eligibility-checker/how-certain route', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Do you know which exemption you want to register or apply for?'
+        'How certain are you that your item will qualify for exemption from the ban on dealing in ivory?'
       )
     })
 
@@ -80,7 +81,7 @@ describe('/eligibility-checker/how-certain route', () => {
       const element = document.querySelector(`#${elementIds.help1}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'If you know the exemption you need you can continue to either:'
+        'To use this service, you must be completely certain.'
       )
     })
 
@@ -88,7 +89,7 @@ describe('/eligibility-checker/how-certain route', () => {
       const element = document.querySelector(`#${elementIds.help2}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'If you’re not sure which exemption you need, you can answer a series of questions to help you find out.'
+        'If you’re still unsure, we can help you decide.'
       )
     })
 
@@ -96,15 +97,15 @@ describe('/eligibility-checker/how-certain route', () => {
       TestHelper.checkRadioOption(
         document,
         elementIds.howCertain,
-        'Yes, I know which exemption I need',
-        'Yes, I know which exemption I need'
+        'Completely',
+        'Completely'
       )
 
       TestHelper.checkRadioOption(
         document,
         elementIds.howCertain2,
-        'I need help to find out',
-        'I need help to find out'
+        'I’d like some help to work this out',
+        'I’d like some help to work this out'
       )
     })
 
@@ -132,7 +133,7 @@ describe('/eligibility-checker/how-certain route', () => {
           postOptions,
           server,
           'Completely',
-          nextUrlWhatSpeciesExpert,
+          nextUrlTypeOfItem,
           false
         )
       })
@@ -142,7 +143,7 @@ describe('/eligibility-checker/how-certain route', () => {
           postOptions,
           server,
           'I’d like some help to work this out',
-          nextUrlWhatSpecies,
+          nextUrlContainElephantIvory,
           true
         )
       })
@@ -160,7 +161,7 @@ describe('/eligibility-checker/how-certain route', () => {
           response,
           'howCertain',
           'howCertain-error',
-          'Tell us how certain you are that your item will qualify for exemption from the ban on dealing in ivory'
+          'Tell us how certain you are that your item will qualify for exemption from the ban on dealing in ivory?'
         )
       })
     })
@@ -195,6 +196,12 @@ const _checkSelectedRadioAction = async (
     expect.any(Object),
     RedisKeys.SUBMISSION_REFERENCE,
     submissionReference
+  )
+
+  expect(RedisService.set).toBeCalledWith(
+    expect.any(Object),
+    'used-checker',
+    expectedRedisValue
   )
 
   expect(response.headers.location).toEqual(nextUrl)

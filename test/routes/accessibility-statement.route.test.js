@@ -85,7 +85,7 @@ describe('/accessibility-statement', () => {
       const element = document.querySelector(`#${elementIds.pageTitle}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Accessibility statement for the Ivory Act 2018, ‘Declare ivory you intend to sell or hire out’'
+        'Accessibility statement for the Ivory Act 2018, ‘Declare elephant ivory you intend to sell or hire out’'
       )
     })
 

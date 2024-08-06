@@ -78,6 +78,10 @@ const _getContext = async request => {
     ]
   }
 
+  context.callOutText = isSection2
+    ? 'Dealing that relies on inaccurate information on the certificate may be a criminal offence. Anyone involved could be subject to a fine of up to £250,000, or 5 years imprisonment.'
+    : 'If we later find out that any of the information you have given is incorrect, your registration may be cancelled. The applicant or owner may be subject to a fine of up to £250,000 or 5 years imprisonment.'
+
   return context
 }
 

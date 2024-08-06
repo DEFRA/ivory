@@ -1,6 +1,7 @@
 'use strict'
 
-const { Paths, Views, SERVICE_NAME } = require('../utils/constants')
+const config = require('../utils/config')
+const { Paths, Views } = require('../utils/constants')
 
 const handlers = {
   get: (_request, h) => {
@@ -22,7 +23,7 @@ module.exports = [
 
 const _getContext = () => {
   return {
-    pageTitle: `Accessibility statement for the Ivory Act 2018, ‘${SERVICE_NAME}’`,
-    serviceName: SERVICE_NAME
+    pageTitle: `Accessibility statement for the Ivory Act 2018, ‘${config.serviceName}’`,
+    serviceName: config.serviceName
   }
 }
