@@ -70,12 +70,17 @@ describe('/eligibility-checker/selling-to-museum route', () => {
       const element = document.querySelector(`#${elementIds.helpText}`)
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'The museum buying or hiring the item must be accredited by or on behalf of one of the following:'
+        'The museum must be a member of the International Council of Museums, or accredited by or on behalf of one of the following:'
       )
     })
 
     it('should have a help text list', () => {
       const element = document.querySelector(`#${elementIds.helpTextList}`)
+      expect(element).toBeTruthy()
+    })
+
+    it('should have the more information link', () => {
+      const element = document.querySelector(`#${elementIds.moreInfoLink}`)
       expect(element).toBeTruthy()
     })
 

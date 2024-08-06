@@ -1,8 +1,10 @@
 'use strict'
 
 const AnalyticsService = require('../../services/analytics.service')
+const RedisHelper = require('../../services/redis-helper.service')
 
 const { Paths, Views, Urls, Analytics } = require('../../utils/constants')
+const { getSpeciesString } = require('../../utils/general')
 
 const handlers = {
   get: async (request, h) => {
@@ -36,9 +38,13 @@ const _getContext = async request => {
   const pageTitle = 'You are not allowed to sell or hire out your item'
 
   if (referringUrl.includes(Paths.TAKEN_FROM_SPECIES)) {
+    const speciesValue = (await RedisHelper.getSpecies(request)).toLowerCase()
+
+    const speciesString = getSpeciesString(speciesValue)
+
     return {
       pageTitle,
-      helpText: 'Any replacement ivory in your item must have been taken from a listed species before 1 January 1975'
+      helpText: `Any replacement ivory in your item must have been taken from the ${speciesString} before 1 January 1975.`
     }
   } else if (referringUrl.includes(Paths.MADE_BEFORE_1947)) {
     return {
