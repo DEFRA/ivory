@@ -5,14 +5,12 @@ const RedisService = require('../../services/redis.service')
 
 const {
   Analytics,
+  Options,
   Paths,
   RedisKeys,
-  Species,
   Urls,
   Views
 } = require('../../utils/constants')
-
-const noneOfTheseOption = 'None of these'
 
 const handlers = {
   get: async (request, h) => {
@@ -43,18 +41,16 @@ const handlers = {
 }
 
 const _getContext = async request => {
-  const species = await RedisService.get(request, RedisKeys.WHAT_SPECIES)
-  const hasSpecies = species && species !== noneOfTheseOption
-
   const isMuseum = await RedisService.get(request, RedisKeys.ARE_YOU_A_MUSEUM)
 
-  const speciesList = Object.values(Species).map(item => item.toLowerCase())
+  const notContainingIvory =
+    (await RedisService.get(request, RedisKeys.CONTAIN_ELEPHANT_IVORY)) ===
+    Options.NO
 
   return {
     pageTitle: 'You don’t need to tell us about this item',
-    hasSpecies,
-    speciesList,
-    isMuseum
+    isMuseum,
+    notContainingIvory
   }
 }
 

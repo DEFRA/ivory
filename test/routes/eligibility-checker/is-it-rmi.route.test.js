@@ -76,22 +76,22 @@ describe('/eligibility-checker/is-it-rmi route', () => {
       )
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Does your item have very high artistic, cultural or historical value?'
+        'Does your item have outstandingly high artistic, cultural or historical value?'
       )
     })
 
     it('should have the correct initial help text', () => {
       _checkElement(document, elementIds.para3, 'The item must be:')
 
-      _checkElement(document, elementIds.bullet1, 'made before 1918')
+      _checkElement(document, elementIds.bullet1, 'rare')
 
       _checkElement(
         document,
         elementIds.bullet2,
-        'rare'
+        'an important example of its type'
       )
 
-      _checkElement(document, elementIds.bullet3, 'an important example of its type')
+      _checkElement(document, elementIds.bullet3, 'or both of the above')
     })
 
     it('should have the correct summary details', () => {

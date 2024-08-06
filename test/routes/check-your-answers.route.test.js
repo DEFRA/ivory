@@ -8,8 +8,7 @@ const {
   ItemType,
   Options,
   Paths,
-  RedisKeys,
-  Species
+  RedisKeys
 } = require('../../server/utils/constants')
 
 jest.mock('../../server/services/redis.service')
@@ -126,7 +125,6 @@ describe('/check-your-answers route', () => {
         _checkSummary(document, elementIds.summaries.item)
 
         _checkSummaryKeys(document, elementIds.summaries.item, [
-          'Ivory type',
           'Type of exemption',
           'Already has a certificate',
           'Revoked certificate number',
@@ -134,7 +132,6 @@ describe('/check-your-answers route', () => {
         ])
 
         _checkSummaryValues(document, elementIds.summaries.item, [
-          'Hippopotamus',
           'Item made before 1918 that has outstandingly high artistic, cultural or historical value',
           'No',
           '',
@@ -145,14 +142,12 @@ describe('/check-your-answers route', () => {
           document,
           elementIds.summaries.item,
           [
-            'Change type of ivory',
             'Change type of exemption',
             'Change whether the item has a certificate',
             'Change revoked certificate number',
             'Change whether an application has been made before'
           ],
           [
-            Paths.WHAT_SPECIES_EXPERT,
             Paths.WHAT_TYPE_OF_ITEM_IS_IT,
             Paths.ALREADY_CERTIFIED,
             Paths.REVOKED_CERTIFICATE,
@@ -838,7 +833,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
+            'any replacement ivory was taken from an elephant before 1 January 1975'
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion4}`)
@@ -862,7 +857,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion4}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
+            'any replacement ivory was taken from an elephant before 1 January 1975'
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion5}`)
@@ -892,7 +887,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion3}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
+            'any replacement ivory was taken from an elephant before 1 January 1975'
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion4}`)
@@ -934,7 +929,7 @@ describe('/check-your-answers route', () => {
           element = document.querySelector(`#${elementIds.legalAssertion2}`)
           expect(element).toBeTruthy()
           expect(TestHelper.getTextContent(element)).toEqual(
-            "any replacement ivory was taken from the item's ivory type before 1 January 1975"
+            'any replacement ivory was taken from an elephant before 1 January 1975'
           )
 
           element = document.querySelector(`#${elementIds.legalAssertion3}`)
@@ -1323,51 +1318,6 @@ const applicantAddress = 'APPLICANT_ADDRESS'
 
 const saleIntention = 'Sell it'
 
-const _getDefaultMocks = (itemType,
-  includeOptionalItemDetails = true,
-  ownedByApplicant = true,
-  sellingOnBehalfOf = null,
-  isAlreadyCertified = false
-) => {
-  return {
-    [RedisKeys.WHAT_SPECIES]: Species.HIPPOPOTAMUS,
-    [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: itemType,
-    [RedisKeys.DESCRIBE_THE_ITEM]: includeOptionalItemDetails
-      ? mockItemDescription
-      : mockItemDescriptionWithoutOptionalValues,
-    [RedisKeys.UPLOAD_PHOTO]: mockPhotos,
-    [RedisKeys.WHY_IS_ITEM_RMI]: whyRmi,
-    [RedisKeys.IVORY_VOLUME]: mockIvoryVolume,
-    [RedisKeys.IVORY_INTEGRAL]: ivoryIntegral,
-    [RedisKeys.IVORY_AGE]: mockIvoryAge,
-    [RedisKeys.UPLOAD_DOCUMENT]: mockDocuments,
-    [RedisKeys.OWNED_BY_APPLICANT]: ownedByApplicant
-      ? Options.YES
-      : Options.NO,
-    [RedisKeys.OWNER_CONTACT_DETAILS]: mockOwnerContactDetails,
-    [RedisKeys.APPLICANT_CONTACT_DETAILS]: ownedByApplicant
-      ? mockOwnerContactDetails
-      : mockApplicantContactDetails,
-    [RedisKeys.OWNER_ADDRESS]: ownerAddress,
-    [RedisKeys.APPLICANT_ADDRESS]: applicantAddress,
-    [RedisKeys.INTENTION_FOR_ITEM]: saleIntention,
-    [RedisKeys.WHAT_CAPACITY]: {
-      whatCapacity: 'Other'
-    },
-    [RedisKeys.WORK_FOR_A_BUSINESS]: true,
-    [RedisKeys.SELLING_ON_BEHALF_OF]: sellingOnBehalfOf,
-    [RedisKeys.PREVIOUS_APPLICATION_NUMBER]: '',
-    [RedisKeys.ALREADY_CERTIFIED]: {
-      alreadyCertified: isAlreadyCertified
-        ? AlreadyCertifiedOptions.YES
-        : AlreadyCertifiedOptions.NO
-    },
-    [RedisKeys.REVOKED_CERTIFICATE]: '',
-    [RedisKeys.APPLIED_BEFORE]: '',
-    [RedisKeys.PREVIOUS_APPLICATION_NUMBER]: ''
-  }
-}
-
 const _createMocks = (
   itemType,
   includeOptionalItemDetails = true,
@@ -1377,16 +1327,43 @@ const _createMocks = (
 ) => {
   TestHelper.createMocks()
 
-  const defaultMocks = _getDefaultMocks(
-    itemType,
-    includeOptionalItemDetails,
-    ownedByApplicant,
-    sellingOnBehalfOf,
-    isAlreadyCertified
-  )
-
   RedisService.get = jest.fn((request, redisKey) => {
-    const mockDataMap = { ...defaultMocks }
+    const mockDataMap = {
+      [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: itemType,
+      [RedisKeys.DESCRIBE_THE_ITEM]: includeOptionalItemDetails
+        ? mockItemDescription
+        : mockItemDescriptionWithoutOptionalValues,
+      [RedisKeys.UPLOAD_PHOTO]: mockPhotos,
+      [RedisKeys.WHY_IS_ITEM_RMI]: whyRmi,
+      [RedisKeys.IVORY_VOLUME]: mockIvoryVolume,
+      [RedisKeys.IVORY_INTEGRAL]: ivoryIntegral,
+      [RedisKeys.IVORY_AGE]: mockIvoryAge,
+      [RedisKeys.UPLOAD_DOCUMENT]: mockDocuments,
+      [RedisKeys.OWNED_BY_APPLICANT]: ownedByApplicant
+        ? Options.YES
+        : Options.NO,
+      [RedisKeys.OWNER_CONTACT_DETAILS]: mockOwnerContactDetails,
+      [RedisKeys.APPLICANT_CONTACT_DETAILS]: ownedByApplicant
+        ? mockOwnerContactDetails
+        : mockApplicantContactDetails,
+      [RedisKeys.OWNER_ADDRESS]: ownerAddress,
+      [RedisKeys.APPLICANT_ADDRESS]: applicantAddress,
+      [RedisKeys.INTENTION_FOR_ITEM]: saleIntention,
+      [RedisKeys.WHAT_CAPACITY]: {
+        whatCapacity: 'Other'
+      },
+      [RedisKeys.WORK_FOR_A_BUSINESS]: true,
+      [RedisKeys.SELLING_ON_BEHALF_OF]: sellingOnBehalfOf,
+      [RedisKeys.PREVIOUS_APPLICATION_NUMBER]: '',
+      [RedisKeys.ALREADY_CERTIFIED]: {
+        alreadyCertified: isAlreadyCertified
+          ? AlreadyCertifiedOptions.YES
+          : AlreadyCertifiedOptions.NO
+      },
+      [RedisKeys.REVOKED_CERTIFICATE]: '',
+      [RedisKeys.APPLIED_BEFORE]: '',
+      [RedisKeys.PREVIOUS_APPLICATION_NUMBER]: ''
+    }
 
     return mockDataMap[redisKey]
   })
@@ -1404,9 +1381,7 @@ const _createEmptyMocks = () => {
 const _createMocksForDescription = (itemType) => {
   TestHelper.createMocks()
   RedisService.get = jest.fn((request, redisKey) => {
-    const defaultMocks = _getDefaultMocks(itemType)
     const mockDataMap = {
-      ...defaultMocks,
       [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: itemType,
       [RedisKeys.DESCRIBE_THE_ITEM]: null
     }
@@ -1418,9 +1393,7 @@ const _createMocksForPhotos = (itemType,
   includeOptionalItemDetails = true) => {
   TestHelper.createMocks()
   RedisService.get = jest.fn((request, redisKey) => {
-    const defaultMocks = _getDefaultMocks(itemType, includeOptionalItemDetails)
     const mockDataMap = {
-      ...defaultMocks,
       [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: itemType,
       [RedisKeys.DESCRIBE_THE_ITEM]: includeOptionalItemDetails
         ? mockItemDescription
@@ -1435,9 +1408,7 @@ const _createMocksForSaleIntentionSummary = (itemType,
   includeOptionalItemDetails = true, ownedByApplicant = true) => {
   TestHelper.createMocks()
   RedisService.get = jest.fn((request, redisKey) => {
-    const defaultMocks = _getDefaultMocks(itemType, includeOptionalItemDetails, ownedByApplicant)
     const mockDataMap = {
-      ...defaultMocks,
       [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: itemType,
       [RedisKeys.DESCRIBE_THE_ITEM]: includeOptionalItemDetails
         ? mockItemDescription
@@ -1461,9 +1432,7 @@ const _createMocksForLegalAssertions = (itemType,
   includeOptionalItemDetails = true, ownedByApplicant = true) => {
   TestHelper.createMocks()
   RedisService.get = jest.fn((request, redisKey) => {
-    const defaultMocks = _getDefaultMocks(itemType, includeOptionalItemDetails, ownedByApplicant)
     const mockDataMap = {
-      ...defaultMocks,
       [RedisKeys.WHAT_TYPE_OF_ITEM_IS_IT]: itemType,
       [RedisKeys.DESCRIBE_THE_ITEM]: includeOptionalItemDetails
         ? mockItemDescription

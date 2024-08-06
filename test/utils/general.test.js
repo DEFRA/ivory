@@ -5,8 +5,7 @@ const RandomString = require('randomstring')
 
 const {
   convertToCommaSeparatedTitleCase,
-  generateSubmissionReference,
-  getSpeciesString
+  generateSubmissionReference
 } = require('../../server/utils/general')
 
 describe('General utils', () => {
@@ -38,20 +37,6 @@ describe('General utils', () => {
       RandomString.generate = jest.fn().mockReturnValue(submissionReference)
 
       expect(generateSubmissionReference()).toEqual(submissionReference)
-    })
-  })
-
-  describe('getSpeciesString method', () => {
-    it('should return species name in lower case if one is passed that is part of the species list', () => {
-      expect(getSpeciesString('Elephant')).toEqual('elephant')
-      expect(getSpeciesString('Hippopotamus')).toEqual('hippopotamus')
-      expect(getSpeciesString('Killer whale')).toEqual('killer whale')
-      expect(getSpeciesString('Narwhal')).toEqual('narwhal')
-      expect(getSpeciesString('Sperm whale')).toEqual('sperm whale')
-    })
-
-    it('should return the word "species" if the species is not part of the species list', () => {
-      expect(getSpeciesString('Two or more species')).toEqual('species')
     })
   })
 })

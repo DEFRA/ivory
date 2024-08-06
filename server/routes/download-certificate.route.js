@@ -5,15 +5,11 @@ const { degrees, PDFDocument, rgb, StandardFonts } = require('pdf-lib')
 const moment = require('moment')
 
 const ODataService = require('../services/odata.service')
-
 const {
   DataVerseFieldName,
   DownloadReason,
   Paths
 } = require('../utils/constants')
-
-const { SpeciesReverseLookup } = require('../services/dataverse-choice-lookups')
-
 const { isPngImage } = require('../utils/general')
 
 const NONE = 'None'
@@ -73,12 +69,6 @@ const _getPdf = async entity => {
   const typeOfItemField = form.getTextField('Type of item')
   typeOfItemField.setText(_formatField(entity, DataVerseFieldName.ITEM_SUMMARY))
   typeOfItemField.defaultUpdateAppearances(timesRomanFont)
-
-  const ivoryTypeField = form.getTextField('Ivory type')
-  ivoryTypeField.setText(
-    SpeciesReverseLookup[entity[DataVerseFieldName.SPECIES]]
-  )
-  ivoryTypeField.defaultUpdateAppearances(timesRomanFont)
 
   const ivoryLocationField = form.getTextField('Ivory location')
   ivoryLocationField.setText(

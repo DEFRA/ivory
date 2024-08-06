@@ -12,7 +12,6 @@ describe('Eligibility checker - do not need service route', () => {
 
   const elementIds = {
     pageTitle: 'pageTitle',
-    speciesList: 'speciesList',
     finish: 'finish',
     para1: 'para1',
     para2: 'para2'
@@ -72,9 +71,9 @@ describe('Eligibility checker - do not need service route', () => {
       })
     })
 
-    describe('GET: Dynamic content, no species selected', () => {
+    describe('GET: Dynamic content, not elephant ivory', () => {
       beforeEach(async () => {
-        RedisService.get = jest.fn().mockResolvedValue('None of these')
+        RedisService.get = jest.fn().mockResolvedValue('No')
         document = await TestHelper.submitGetRequest(server, getOptions)
       })
 
@@ -82,40 +81,8 @@ describe('Eligibility checker - do not need service route', () => {
         const element = document.querySelector(`#${elementIds.para1}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'You only need to tell us if you are intending to sell or hire out an item that contains ivory from:'
+          'You only need to tell us if you are intending to sell or hire out an item that contains elephant ivory.'
         )
-      })
-
-      it('should display the correct species list', () => {
-        let element = document.querySelector(
-          `#${elementIds.speciesList} > li:nth-child(1)`
-        )
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('elephant')
-
-        element = document.querySelector(
-          `#${elementIds.speciesList} > li:nth-child(2)`
-        )
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('hippopotamus')
-
-        element = document.querySelector(
-          `#${elementIds.speciesList} > li:nth-child(3)`
-        )
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('killer whale')
-
-        element = document.querySelector(
-          `#${elementIds.speciesList} > li:nth-child(4)`
-        )
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('narwhal')
-
-        element = document.querySelector(
-          `#${elementIds.speciesList} > li:nth-child(5)`
-        )
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual('sperm whale')
       })
     })
 

@@ -64,7 +64,7 @@ const _getContext = async request => {
   return {
     pageTitle: 'What is your ivory item?',
     items: await _getOptions(request),
-    linkUrl: Paths.SELLING_TO_MUSEUM
+    linkUrl: Paths.CONTAIN_ELEPHANT_IVORY
   }
 }
 
@@ -92,13 +92,13 @@ const _addHints = async options => {
     '',
     'The ivory must be integral to the item.',
     '',
-    'If you’re selling or hiring out items to a qualifying museum your item must be ‘worked’ ivory. This means the ivory has been significantly altered from its natural raw state. For example, it’s been used to make a piece of jewellery or musical instrument. <br/><br/>You do not need an exemption if you’re a qualifying museum selling or hiring out an item to another qualifying museum.',
+    'This cannot be raw (‘unworked’) ivory. You don’t need to tell us if you are a qualifying museum that’s selling or hiring out an ivory item to another qualifying museum.',
     ''
   ]
 
   for (let index = 0; index < options.length; index++) {
     options[index].hint = {
-      html: hints[index]
+      text: hints[index]
     }
   }
 }

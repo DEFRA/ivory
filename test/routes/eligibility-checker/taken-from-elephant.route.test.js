@@ -6,18 +6,18 @@ const { ItemType } = require('../../../server/utils/constants')
 jest.mock('../../../server/services/redis.service')
 const RedisService = require('../../../server/services/redis.service')
 
-describe('/eligibility-checker/ivory-added route', () => {
+describe('/eligibility-checker/taken-from-elephant route', () => {
   let server
-  const url = '/eligibility-checker/ivory-added'
+  const url = '/eligibility-checker/taken-from-elephant'
   const nextUrlAppliedBefore = '/applied-before'
-  const nextUrlTakeFromElephant = '/eligibility-checker/taken-from-elephant'
+  const nextUrlCannotTrade = '/eligibility-checker/cannot-trade'
   const nextUrlCanContinue = '/can-continue'
   const nextUrlCannotContinue = '/eligibility-checker/cannot-continue'
 
   const elementIds = {
-    ivoryAdded: 'ivoryAdded',
-    ivoryAdded2: 'ivoryAdded-2',
-    ivoryAdded3: 'ivoryAdded-3',
+    takenFromElephant: 'takenFromElephant',
+    takenFromElephant2: 'takenFromElephant-2',
+    takenFromElephant3: 'takenFromElephant-3',
     continue: 'continue'
   }
 
@@ -61,18 +61,28 @@ describe('/eligibility-checker/ivory-added route', () => {
       const element = document.querySelector('.govuk-fieldset__legend')
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
-        'Has any ivory been added since 1 January 1975 to restore the item to its original state?'
+        'Was the replacement ivory taken from an elephant on or after 1 January 1975?'
       )
     })
 
     it('should have the correct radio buttons', () => {
-      TestHelper.checkRadioOption(document, elementIds.ivoryAdded, 'Yes', 'Yes')
-
-      TestHelper.checkRadioOption(document, elementIds.ivoryAdded2, 'No', 'No')
+      TestHelper.checkRadioOption(
+        document,
+        elementIds.takenFromElephant,
+        'Yes',
+        'Yes'
+      )
 
       TestHelper.checkRadioOption(
         document,
-        elementIds.ivoryAdded3,
+        elementIds.takenFromElephant2,
+        'No',
+        'No'
+      )
+
+      TestHelper.checkRadioOption(
+        document,
+        elementIds.takenFromElephant3,
         'I don’t know',
         'I don’t know'
       )
@@ -102,7 +112,7 @@ describe('/eligibility-checker/ivory-added route', () => {
           postOptions,
           server,
           'Yes',
-          nextUrlTakeFromElephant
+          nextUrlCannotTrade
         )
       })
 
@@ -137,7 +147,7 @@ describe('/eligibility-checker/ivory-added route', () => {
 
     describe('Failure', () => {
       it('should display a validation error message if the user does not select an item', async () => {
-        postOptions.payload.ivoryAdded = ''
+        postOptions.payload.takenFromElephant = ''
         const response = await TestHelper.submitPostRequest(
           server,
           postOptions,
@@ -145,9 +155,9 @@ describe('/eligibility-checker/ivory-added route', () => {
         )
         await TestHelper.checkValidationError(
           response,
-          'ivoryAdded',
-          'ivoryAdded-error',
-          'You must tell us if any ivory has been added to the item since 1 January 1975'
+          'takenFromElephant',
+          'takenFromElephant-error',
+          'You must tell us whether the replacement ivory was taken from an elephant on or after 1 January 1975'
         )
       })
     })
@@ -165,7 +175,7 @@ const _checkSelectedRadioAction = async (
   nextUrl,
   isSection2 = false
 ) => {
-  postOptions.payload.ivoryAdded = selectedOption
+  postOptions.payload.takenFromElephant = selectedOption
 
   if (isSection2) {
     RedisService.get = jest.fn().mockResolvedValue(ItemType.HIGH_VALUE)

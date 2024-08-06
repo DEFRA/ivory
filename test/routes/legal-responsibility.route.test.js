@@ -18,10 +18,7 @@ describe('/legal-responsibility route', () => {
     helpTextPara1: 'helpTextPara-1',
     helpTextPara2: 'helpTextPara-2',
     helpTextPara3: 'helpTextPara-3',
-    callOutText1: 'callOutText1',
-    callOutText2: 'callOutText2',
-    callOutText3: 'callOutText3',
-    callOutText4: 'callOutText4',
+    callOutText: 'callOutText',
     cancelLink: 'cancelLink',
     continue: 'continue'
   }
@@ -101,28 +98,10 @@ describe('/legal-responsibility route', () => {
       })
 
       it('should have the correct call out text', () => {
-        let element = document.querySelector(`#${elementIds.callOutText1}`)
+        const element = document.querySelector(`#${elementIds.callOutText}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'You must contact APHA to amend your registration or certificate if you later find out information you have given about the item is wrong or incomplete.'
-        )
-
-        element = document.querySelector(`#${elementIds.callOutText2}`)
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'APHA may cancel your registration, or revoke your exemption certificate if:'
-        )
-
-        element = document.querySelector(`#${elementIds.callOutText3}`)
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'it believes your item is no longer eligible'
-        )
-
-        element = document.querySelector(`#${elementIds.callOutText4}`)
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'the information you’ve given about the item is wrong or incomplete, including if the item is proven to not be made of or contain ivory, and you do not tell us'
+          'If we later find out that any of the information you have given is incorrect, your registration may be cancelled. The applicant or owner may be subject to a fine of up to £250,000 or 5 years imprisonment.'
         )
       })
 
@@ -174,6 +153,14 @@ describe('/legal-responsibility route', () => {
           "If we later find out that the information you’ve given is not accurate, the exemption certificate may be cancelled or 'revoked'."
         )
       })
+
+      it('should have the correct call out text', () => {
+        const element = document.querySelector(`#${elementIds.callOutText}`)
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(
+          'Dealing that relies on inaccurate information on the certificate may be a criminal offence. Anyone involved could be subject to a fine of up to £250,000, or 5 years imprisonment.'
+        )
+      })
     })
 
     describe('GET: Has the correct details when it is a section 2 (high value) item - already certified', () => {
@@ -219,28 +206,10 @@ describe('/legal-responsibility route', () => {
       })
 
       it('should have the correct call out text', () => {
-        let element = document.querySelector(`#${elementIds.callOutText1}`)
+        const element = document.querySelector(`#${elementIds.callOutText}`)
         expect(element).toBeTruthy()
         expect(TestHelper.getTextContent(element)).toEqual(
-          'You must contact APHA to amend your registration or certificate if you later find out information you have given about the item is wrong or incomplete.'
-        )
-
-        element = document.querySelector(`#${elementIds.callOutText2}`)
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'APHA may cancel your registration, or revoke your exemption certificate if:'
-        )
-
-        element = document.querySelector(`#${elementIds.callOutText3}`)
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'it believes your item is no longer eligible'
-        )
-
-        element = document.querySelector(`#${elementIds.callOutText4}`)
-        expect(element).toBeTruthy()
-        expect(TestHelper.getTextContent(element)).toEqual(
-          'the information you’ve given about the item is wrong or incomplete, including if the item is proven to not be made of or contain ivory, and you do not tell us'
+          'Dealing that relies on inaccurate information on the certificate may be a criminal offence. Anyone involved could be subject to a fine of up to £250,000, or 5 years imprisonment.'
         )
       })
     })

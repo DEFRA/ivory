@@ -8,7 +8,7 @@ const { buildErrorSummary, Validators } = require('../../utils/validation')
 
 const { generateSubmissionReference } = require('../../utils/general')
 
-const completelyCertain = 'Yes, I know which exemption I need'
+const completelyCertain = 'Completely'
 
 const handlers = {
   get: (request, h) => {
@@ -73,7 +73,7 @@ const handlers = {
     return h.redirect(
       payload.howCertain === completelyCertain
         ? Paths.WHAT_TYPE_OF_ITEM_IS_IT
-        : Paths.SELLING_TO_MUSEUM
+        : Paths.CONTAIN_ELEPHANT_IVORY
     )
   }
 }
@@ -82,7 +82,7 @@ const _getContext = request => {
   const hideBanner = request.state.CookieBanner
   return {
     pageTitle:
-      'Do you know which exemption you want to register or apply for?',
+      'How certain are you that your item will qualify for exemption from the ban on dealing in ivory?',
     hideBanner
   }
 }
@@ -93,7 +93,7 @@ const _validateForm = payload => {
     errors.push({
       name: 'howCertain',
       text:
-        'Tell us how certain you are that your item will qualify for exemption from the ban on dealing in ivory'
+        'Tell us how certain you are that your item will qualify for exemption from the ban on dealing in ivory?'
     })
   }
   return errors

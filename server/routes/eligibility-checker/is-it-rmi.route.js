@@ -66,7 +66,7 @@ const handlers = {
 const _getContext = () => {
   return {
     pageTitle:
-      'Does your item have very high artistic, cultural or historical value?',
+      'Does your item have outstandingly high artistic, cultural or historical value?',
     helpText:
       'The item must be a rare and socially significant example of its type.',
     callOutText:

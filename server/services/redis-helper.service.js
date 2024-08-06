@@ -3,10 +3,10 @@
 const RedisService = require('./redis.service')
 
 const {
-  AlreadyCertifiedOptions,
   ItemType,
   Options,
-  RedisKeys
+  RedisKeys,
+  AlreadyCertifiedOptions
 } = require('../utils/constants')
 
 module.exports = class RedisHelper {
@@ -149,14 +149,5 @@ module.exports = class RedisHelper {
     }
 
     return revokedCertificateNumber !== null
-  }
-
-  /**
-   * Looks up the species type in the Redis cache.
-   * @param {*} request The HTTP request object.
-   * @returns The species.
-   */
-  static async getSpecies (request) {
-    return RedisService.get(request, RedisKeys.WHAT_SPECIES)
   }
 }

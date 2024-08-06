@@ -51,7 +51,7 @@ const handlers = {
 
     switch (payload.ivoryAdded) {
       case Options.YES:
-        return h.redirect(Paths.TAKEN_FROM_SPECIES)
+        return h.redirect(Paths.TAKEN_FROM_ELEPHANT)
 
       case Options.NO:
         RedisService.set(

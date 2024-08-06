@@ -12,16 +12,18 @@ const {
 
 const handlers = {
   get: async (request, h) => {
+    const useChecker = request.query.useChecker
+
     const sessionCookie = CookieService.getSessionCookie(request, false)
 
     if (sessionCookie) {
-      await RedisService.deleteSessionData(request)
+      RedisService.deleteSessionData(request)
     }
     _setCookieSessionId(h)
 
-    const redirectUrl = Paths.WHAT_SPECIES_EXPERT + (request.query.useChecker ? '?useChecker=true' : '')
-
-    return h.redirect(redirectUrl)
+    return useChecker
+      ? h.redirect(Paths.CONTAIN_ELEPHANT_IVORY)
+      : h.redirect(Paths.HOW_CERTAIN)
   }
 }
 

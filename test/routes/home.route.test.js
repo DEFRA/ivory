@@ -11,8 +11,8 @@ const TestHelper = require('../utils/test-helper')
 describe('/ route', () => {
   let server
   const url = '/'
-  const nextUrl = '/what-species-expert'
-  const nextUrlUseChecker = '/what-species-expert?useChecker=true'
+  const nextUrl = '/eligibility-checker/how-certain'
+  const nextUrlUseChecker = '/eligibility-checker/contain-elephant-ivory'
 
   beforeAll(async () => {
     server = await TestHelper.createServer()
