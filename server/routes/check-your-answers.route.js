@@ -965,7 +965,7 @@ const CHANGE_LINK_HINT = {
 }
 
 const BEFORE_1975 =
-  'any replacement ivory that is from a listed species was taken from its source before 1 January 1975'
+  "any replacement ivory was taken from the item's ivory type before 1 January 1975"
 const COMPLETE_AND_CORRECT =
   'the information you’ve provided is complete and correct'
 
