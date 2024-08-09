@@ -210,3 +210,29 @@ The default values will be used if the environment variables are missing or comm
 | AZURE_STORAGE_ACCOUNT                                        | The name of the blob storage account to use         |   yes    |                       |                                                         |
 | AZURE_STORAGE_ACCOUNT_KEY                                    | The key to use to access the blob storage account   |   yes    |                       |                                                         |
 | AZURE_STORAGE_ACCOUNT_URL                                    | The URL to use to access the blob storage account   |   yes    |                       |                                                         |
+
+# Environments and deployment
+
+### Sandbox
+
+https://ivy-web-snd.azure.defra.cloud/
+
+Merging changes into `develop` will run the pipeline to deploy to this environment automatically.
+
+### Test
+https://ivy-web-tst.azure.defra.cloud/
+
+Merging changes into `develop` will run the pipeline to deploy to this environment automatically
+
+### Pre-production
+
+https://ivy-web-pre.azure.defra.cloud/
+
+Ensure changes are merged into `master` and contact CCoE to perform the deployment to pre-production. You can find more details about deployment in the Ivory Service Runbook, which is currently stored in this project's sharepoint.
+
+### Production
+
+https://apply-deal-ivory.service.gov.uk/
+
+Ensure changes are merged into `master` and contact CCoE to perform the deployment to production. You can find more details about deployment in the Ivory Service Runbook, which is currently stored in this project's sharepoint.
+
