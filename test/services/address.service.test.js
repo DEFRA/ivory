@@ -47,6 +47,16 @@ describe('Address service', () => {
       )
       expect(results.length).toEqual(11)
     })
+
+    it('should return an empty list when no results are returned', async () => {
+      const results = await AddressService.addressSearch('', 'XX99 9XX')
+      expect(results.length).toEqual(0)
+    })
+
+    it('should return an empty list when the lookup fails', async () => {
+      const results = await AddressService.addressSearch('', 'ERROR')
+      expect(results.length).toEqual(0)
+    })
   })
 
   describe('addressSearch method using v2 API', () => {
@@ -110,6 +120,18 @@ const _createMocks = () => {
       '/ws/rest/DEFRA/v1/address/postcodes?postcode=TQ12 5JE&offset=10&maxresults=10'
     )
     .reply(200, next1Result)
+
+  nock(`${config.addressLookupUrl}`)
+    .get(
+      '/ws/rest/DEFRA/v1/address/postcodes?postcode=XX99 9XX&offset=0&maxresults=100'
+    )
+    .reply(200, noResult)
+
+  nock(`${config.addressLookupUrl}`)
+    .get(
+      '/ws/rest/DEFRA/v1/address/postcodes?postcode=ERROR&offset=0&maxresults=100'
+    )
+    .reply(400, noResult)
 }
 
 const _createMocksV2 = () => {
@@ -152,6 +174,12 @@ const next1Result = {
     totalresults: multipleAddresses.length
   },
   results: multipleAddresses.slice(10, multipleAddresses.length)
+}
+
+const noResult = {
+  header: {
+    totalresults: 0
+  }
 }
 
 const searchResultsV2 = {

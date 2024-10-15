@@ -7,3 +7,4 @@ lcov.info
 test-output
 *.pfx
 /.idea/
+.vscode/settings.json

@@ -14,6 +14,8 @@ const PAGE_SIZE = 100
 const POSTCODE_SEARCH_ENDPOINT = '/ws/rest/DEFRA/v1/address/postcodes'
 const POSTCODE_SEARCH_ENDPOINT_V2 = '/api/address-lookup/v2.1/addresses'
 
+const SUCCESS_STATUS = 200
+
 const addressV2ToV1FieldMap = {
   addressLine: 'AddressLine',
   buildingNumber: 'BuildingNumber',
@@ -55,9 +57,9 @@ module.exports = class AddressService {
       pageSize
     )
 
-    let searchResults = json && json.results ? json.results : []
+    let searchResults = json?.results ?? []
 
-    if (json && json.header && json.header.totalresults) {
+    if (json?.header?.totalresults) {
       while (searchResults.length < parseInt(json.header.totalresults)) {
         pageNumber++
         const additionalJson = await queryFunctionToUse(
@@ -65,8 +67,7 @@ module.exports = class AddressService {
           pageNumber,
           pageSize
         )
-        const additionalSearchResults =
-          additionalJson && additionalJson.results ? additionalJson.results : []
+        const additionalSearchResults = additionalJson?.results ?? []
 
         searchResults = searchResults.concat(additionalSearchResults)
       }
@@ -116,7 +117,7 @@ module.exports = class AddressService {
     console.log(`Fetching URL: [${urlWithQueryString}]`)
     const response = await fetch(urlWithQueryString, fetchOptions)
 
-    return response.status === 200 ? response.json() : []
+    return response.status === SUCCESS_STATUS ? response.json() : []
   }
 }
 
@@ -247,4 +248,4 @@ const _getCertificate = () => {
  * @param {*} value The value to check
  * @returns True if the value is numeric, otherwise false
  */
-const _isNumeric = value => value && value.match(/^[0-9]*$/g)
+const _isNumeric = value => value?.match(/^\d*$/g)
