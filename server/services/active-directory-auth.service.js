@@ -6,6 +6,19 @@ const config = require('../utils/config')
 
 module.exports = class ActiveDirectoryAuthService {
   static async getToken () {
+    // Retaining for backwards compatibility of code, the getToken function gets a token for the Dataverse
+    return this.getTokenForDataverse()
+  }
+
+  static async getTokenForDataverse () {
+    return this._getTokenForResource(config.dataverseResource)
+  }
+
+  static async getTokenForAddressLookup () {
+    return this._getTokenForResource(config.addressLookupResource)
+  }
+
+  static async _getTokenForResource (resource) {
     return new Promise((resolve, reject) => {
       const authorityHostUrl = config.dataverseAuthorityHostUrl
       const tenant = config.dataverseTenant
@@ -17,9 +30,6 @@ module.exports = class ActiveDirectoryAuthService {
 
       // Secret generated for app. Read this environment constiable.
       const clientSecret = config.dataverseClientSecret
-
-      // URI that identifies the resource for which the token is valid
-      const resource = config.dataverseResource
 
       const AuthenticationContext = AdalNode.AuthenticationContext
       const context = new AuthenticationContext(authorityUrl)

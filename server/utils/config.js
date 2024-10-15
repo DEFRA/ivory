@@ -39,7 +39,13 @@ const schema = joi.object().keys({
     .bool()
     .valid(true, false)
     .default(false),
+  addressLookupUseV2: joi
+    .bool()
+    .valid(true, false)
+    .default(false),
+  addressLookupResource: joi.string(),
   addressLookupUrl: joi.string().default(defaultUrl),
+  addressLookupUrlV2: joi.string().default(defaultUrl),
   addressLookupPassphrase: joi.string(),
   addressLookupPfxCert: joi.string(),
   cookieTimeout: joi.number(),
@@ -92,7 +98,10 @@ const config = {
   dataverseApiEndpoint: process.env.DATAVERSE_API_ENDPOINT,
   redisUseTls: process.env.REDIS_USE_TLS,
   addressLookupEnabled: process.env.ADDRESS_LOOKUP_ENABLED,
+  addressLookupUseV2: process.env.ADDRESS_LOOKUP_USE_V2,
+  addressLookupResource: process.env.ADDRESS_LOOKUP_RESOURCE,
   addressLookupUrl: process.env.ADDRESS_LOOKUP_URL,
+  addressLookupUrlV2: process.env.ADDRESS_LOOKUP_URL_V2,
   addressLookupPassphrase: process.env.ADDRESS_LOOKUP_PASSPHRASE,
   addressLookupPfxCert: process.env.ADDRESS_LOOKUP_PFX_CERT,
   cookieTimeout: process.env.COOKIE_TIMEOUT,
