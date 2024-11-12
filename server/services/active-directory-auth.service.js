@@ -52,7 +52,7 @@ module.exports = class ActiveDirectoryAuthService {
                   tokenResponse
                 )}`
               )
-              console.error(err.message)
+              console.error(error.message)
               reject(error)
             }
           }
