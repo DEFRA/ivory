@@ -15,6 +15,8 @@ const {
 
 const { buildErrorSummary, Validators } = require('../utils/validation')
 
+const COOKIE_TTL_DAYS = 365 // 1 year, three times out of four
+
 const handlers = {
   get: async (request, h) => {
     const context = await _getContext(request)
@@ -34,6 +36,17 @@ const handlers = {
     const context = await _getContext(request)
     const payload = request.payload
     const errors = _validateForm(payload)
+
+    if (payload.cookies) {
+      h.state('CookieBanner', 'Hidden', {
+        ttl: 24 * 60 * 60 * 1000 * COOKIE_TTL_DAYS,
+        path: '/'
+      })
+      return h.view(Views.WHAT_SPECIES_EXPERT, {
+        ...context,
+        hideBanner: true
+      })
+    }
 
     if (errors.length) {
       AnalyticsService.sendEvent(request, {

@@ -4,6 +4,38 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
+
+{% block bodyStart %}
+  {% set html %}
+    <p class="govuk-body">By continuing to the next page, you are agreeing to us using essential cookies to make this service work</p>
+  {% endset %}
+
+  <form method="POST">
+    {{ govukCookieBanner({
+      ariaLabel: "Cookies on " + serviceName,
+      hidden: hideBanner,
+      messages: [
+        {
+          headingText: "Cookies on " + serviceName,
+          html: html,
+          actions: [
+            {
+              text: "Hide",
+              type: "submit",
+              name: "cookies",
+              value: true
+            },
+            {
+              text: "View cookies",
+              href: "/cookie-policy"
+            }
+          ]
+        }
+      ]
+    }) }}
+  </form>
+{% endblock %}
 
 {% block formContent %}
   <div class="govuk-grid-row">

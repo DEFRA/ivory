@@ -6,6 +6,8 @@ const { RedisKeys } = require('../../server/utils/constants')
 
 const TestHelper = require('../utils/test-helper')
 
+const serviceName = 'Declare ivory you intend to sell or hire out'
+
 describe('/what-species-expert route', () => {
   let server
   const url = '/what-species-expert'
@@ -85,6 +87,12 @@ describe('/what-species-expert route', () => {
         TestHelper.checkBackLink(document)
       })
 
+      it('should have the correct cookie banner heading', () => {
+        const element = document.querySelector('.govuk-cookie-banner__heading')
+        expect(element).toBeTruthy()
+        expect(TestHelper.getTextContent(element)).toEqual(`Cookies on ${serviceName}`)
+      })
+
       it('should have the correct page heading', () => {
         const element = document.querySelector(
           `#${elementIds.pageTitle} > legend > h1`
@@ -156,6 +164,16 @@ describe('/what-species-expert route', () => {
     })
 
     describe('Success', () => {
+      describe('cookie banner hides correctly', () => {
+        it('should set the CookieBanner state', async () => {
+          const expectedResponseCode = 200
+          postOptions.payload.cookies = true
+          const response = await TestHelper.submitPostRequest(server, postOptions, expectedResponseCode)
+          expect(response.headers['set-cookie']).toBeDefined()
+          expect(response.headers['set-cookie'][0]).toContain('CookieBanner')
+        })
+      })
+
       describe('useChecker is set to true', () => {
         // Mock redis get to return true
         beforeEach(() => {
@@ -234,7 +252,7 @@ describe('/what-species-expert route', () => {
           postOptions,
           400
         )
-        await TestHelper.checkValidationError(
+        TestHelper.checkValidationError(
           response,
           'whatSpecies',
           'whatSpecies-error',

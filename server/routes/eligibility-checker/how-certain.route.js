@@ -24,17 +24,6 @@ const handlers = {
     const payload = request.payload
     const errors = _validateForm(payload)
 
-    if (payload.cookies) {
-      h.state('CookieBanner', 'Hidden', {
-        ttl: 24 * 60 * 60 * 1000 * 365, // 1 year
-        path: '/'
-      })
-      return h.view(Views.HOW_CERTAIN, {
-        ...context,
-        hideBanner: true
-      })
-    }
-
     if (errors.length) {
       AnalyticsService.sendEvent(request, {
         category: Analytics.Category.ERROR,

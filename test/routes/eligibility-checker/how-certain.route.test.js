@@ -22,7 +22,6 @@ describe('/eligibility-checker/how-certain route', () => {
     howCertain2: 'howCertain-2',
     continue: 'continue'
   }
-  const serviceName = 'Declare ivory you intend to sell or hire out'
 
   let document
 
@@ -65,14 +64,6 @@ describe('/eligibility-checker/how-certain route', () => {
       expect(element).toBeTruthy()
       expect(TestHelper.getTextContent(element)).toEqual(
         'Do you know which exemption you want to register or apply for?'
-      )
-    })
-
-    it('should have the correct cookie banner heading', () => {
-      const element = document.querySelector('.govuk-cookie-banner__heading')
-      expect(element).toBeTruthy()
-      expect(TestHelper.getTextContent(element)).toEqual(
-        `Cookies on ${serviceName}`
       )
     })
 
@@ -156,7 +147,7 @@ describe('/eligibility-checker/how-certain route', () => {
           postOptions,
           400
         )
-        await TestHelper.checkValidationError(
+        TestHelper.checkValidationError(
           response,
           'howCertain',
           'howCertain-error',
