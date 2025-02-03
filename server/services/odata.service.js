@@ -64,9 +64,7 @@ module.exports = class ODataService {
       )
     }
 
-    return matchingRecords && matchingRecords.value
-      ? matchingRecords.value
-      : null
+    return matchingRecords?.value ?? null
   }
 
   static async createRecord (body, isSection2) {
@@ -249,7 +247,6 @@ module.exports = class ODataService {
         'OData-Version': ODATA_VERSION_NUMBER,
         'OData-MaxVersion': ODATA_VERSION_NUMBER,
         [AUTHORIZATION]: `Bearer ${token}`,
-        [PREFER]: PREFER_REPRESENTATION,
         [CONTENT_TYPE]: ContentTypes.APPLICATION_OCTET_STREAM
       }
 
@@ -261,7 +258,13 @@ module.exports = class ODataService {
         body
       }))
     }
-    await Promise.all(patchCommands)
+
+    const responses = await Promise.all(patchCommands)
+    for (const response of responses) {
+      if (!response.ok) {
+        console.error(await response.json())
+      }
+    }
   }
 
   static async updateRecordAttachments (id, supportingInformation) {
@@ -277,7 +280,6 @@ module.exports = class ODataService {
         'OData-Version': ODATA_VERSION_NUMBER,
         'OData-MaxVersion': ODATA_VERSION_NUMBER,
         [AUTHORIZATION]: `Bearer ${token}`,
-        [PREFER]: PREFER_REPRESENTATION,
         [CONTENT_TYPE]: ContentTypes.APPLICATION_OCTET_STREAM,
         'x-ms-file-name': supportingInformation.files[i]
       }
@@ -290,7 +292,13 @@ module.exports = class ODataService {
         body
       }))
     }
-    await Promise.all(patchCommands)
+
+    const responses = await Promise.all(patchCommands)
+    for (const response of responses) {
+      if (!response.ok) {
+        console.error(await response.json())
+      }
+    }
   }
 }
 
