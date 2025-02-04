@@ -67,12 +67,9 @@ const handlers = {
   }
 }
 
-const _getContext = request => {
-  const hideBanner = request.state.CookieBanner
+const _getContext = _request => {
   return {
-    pageTitle:
-      'Do you know which exemption you want to register or apply for?',
-    hideBanner
+    pageTitle: 'Do you know which exemption you want to register or apply for?'
   }
 }
 

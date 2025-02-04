@@ -86,11 +86,13 @@ const handlers = {
 }
 
 const _getContext = async request => {
+  const hideBanner = request.state.CookieBanner
   return {
     pageTitle: 'Does your item contain ivory from a listed species?',
     speciesItems: await _getSpeciesItems(request),
     items: await _getOptions(request),
-    guidanceUrl: Urls.GOV_UK_TOP_OF_MAIN
+    guidanceUrl: Urls.GOV_UK_TOP_OF_MAIN,
+    hideBanner
   }
 }
 
