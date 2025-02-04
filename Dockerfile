@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:22
 
 LABEL author="Department for Environment, Food & Rural Affairs"
 
@@ -7,7 +7,7 @@ ENV PORT=3000
 
 RUN apt-get update && \
   apt-get upgrade -y && \
-  apt-get install -y bash clamav clamav-base clamav-daemon clamav-freshclam libclamav9
+  apt-get install -y bash clamav clamav-base clamav-daemon clamav-freshclam libclamav11
 
 # Create this directory or the clamd daemon will throw the error: "Could not create socket directory: /var/run/clamav: Permission denied"
 RUN mkdir /var/run/clamav && \
