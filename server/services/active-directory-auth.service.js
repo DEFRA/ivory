@@ -1,6 +1,6 @@
 'use strict'
 
-const AdalNode = require('adal-node')
+const msal = require('@azure/msal-node')
 
 const config = require('../utils/config')
 
@@ -19,45 +19,30 @@ module.exports = class ActiveDirectoryAuthService {
   }
 
   static async _getTokenForResource (resource) {
-    return new Promise((resolve, reject) => {
-      const authorityHostUrl = config.dataverseAuthorityHostUrl
-      const tenant = config.dataverseTenant
+    const msalConfig = {
+      auth: {
+        clientId: config.dataverseClientId,
+        authority: `${config.dataverseAuthorityHostUrl}/${config.dataverseTenant}`,
+        clientSecret: config.dataverseClientSecret
+      }
+    }
 
-      const authorityUrl = `${authorityHostUrl}/${tenant}`
+    const cca = new msal.ConfidentialClientApplication(msalConfig)
 
-      // Application Id of app registered under AAD
-      const clientId = config.dataverseClientId
+    const clientCredentialRequest = {
+      scopes: [resource + '/.default']
+    }
 
-      // Secret generated for app. Read this environment constiable.
-      const clientSecret = config.dataverseClientSecret
-
-      const AuthenticationContext = AdalNode.AuthenticationContext
-      const context = new AuthenticationContext(authorityUrl)
-
-      context.acquireTokenWithClientCredentials(
-        resource,
-        clientId,
-        clientSecret,
-        (err, tokenResponse) => {
-          if (err) {
-            console.error(err.message)
-            reject(err)
-          } else {
-            const token = tokenResponse.accessToken
-            if (token) {
-              resolve(token)
-            } else {
-              const error = new Error(
-                `Error obtaining Active Directory auth token: ${JSON.stringify(
-                  tokenResponse
-                )}`
-              )
-              console.error(error.message)
-              reject(error)
-            }
-          }
-        }
-      )
-    })
+    try {
+      const tokenResponse = await cca.acquireTokenByClientCredential(clientCredentialRequest)
+      const token = tokenResponse.accessToken
+      if (!token) {
+        throw new Error(`Error obtaining Active Directory auth token: ${JSON.stringify(tokenResponse)}`)
+      }
+      return token
+    } catch (err) {
+      console.error(err.message)
+      throw err
+    }
   }
 }
