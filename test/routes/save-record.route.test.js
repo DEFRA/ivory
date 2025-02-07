@@ -21,7 +21,6 @@ const ODataService = require('../../server/services/odata.service')
 
 jest.mock('../../server/services/payment.service')
 const PaymentService = require('../../server/services/payment.service')
-const expect = require('expect')
 
 describe('/save-record route', () => {
   let server
