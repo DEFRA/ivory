@@ -48,7 +48,7 @@
     "moment": "^2.30.1",
     "node-fetch": "^2.7.0",
     "notifications-node-client": "^8.2.1",
-    "nunjucks": "3.2.3",
+    "nunjucks": "^3.2.4",
     "pdf-lib": "^1.17.1",
     "postcode-validator": "^3.10.2",
     "randomstring": "^1.3.1",
