@@ -47,7 +47,7 @@
     "joi": "^17.13.3",
     "moment": "^2.30.1",
     "node-fetch": "^2.7.0",
-    "notifications-node-client": "^5.2.3",
+    "notifications-node-client": "^8.2.1",
     "nunjucks": "3.2.3",
     "pdf-lib": "^1.17.1",
     "postcode-validator": "^3.10.2",
