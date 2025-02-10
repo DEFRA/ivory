@@ -43,7 +43,7 @@ module.exports = {
       serviceNameUrl: constants.Urls.GOV_UK_SERVICE_HOME,
       serviceName: constants.SERVICE_NAME,
       pageTitle: `${constants.SERVICE_NAME} - GOV.UK`,
-      analyticsAccount: analyticsAccount
+      analyticsAccount
     }
   }
 }

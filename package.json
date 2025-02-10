@@ -61,7 +61,7 @@
     "jest-junit": "^16.0.0",
     "jsdom": "^26.0.0",
     "nock": "^14.0.1",
-    "standard": "^16.0.4"
+    "standard": "^17.1.2"
   },
   "standard": {
     "globals": [

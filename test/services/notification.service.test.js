@@ -29,7 +29,7 @@ describe('Address service', () => {
         {
           fullName: recipientName,
           exemptionType: ItemType.MUSICAL,
-          submissionReference: submissionReference
+          submissionReference
         }
       )
 
@@ -42,7 +42,7 @@ describe('Address service', () => {
           personalisation: {
             exemptionType: ItemType.MUSICAL,
             fullName: recipientName,
-            submissionReference: submissionReference
+            submissionReference
           },
           reference: expect.any(String),
           emailReplyToId: null

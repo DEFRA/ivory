@@ -57,7 +57,7 @@ const _createMocks = () => {
 }
 
 const mockPayment = {
-  amount: amount,
+  amount,
   description: 'Musical instrument made before 1975 with less than 20% ivory',
   reference,
   language: 'en',
@@ -74,7 +74,7 @@ const mockPayment = {
 }
 
 const mockPaymentResultSuccess = {
-  amount: amount,
+  amount,
   description,
   reference,
   language: 'en',

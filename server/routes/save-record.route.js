@@ -510,8 +510,8 @@ const _getExemptionCategoryCode = value => ExemptionTypeLookup[value]
 const _getAgeExemptionReasonCodes = ivoryAgeReasons =>
   ivoryAgeReasons && ivoryAgeReasons.ivoryAge
     ? ivoryAgeReasons.ivoryAge
-        .map(ivoryAgeReason => AgeExemptionReasonLookup[ivoryAgeReason])
-        .join(',')
+      .map(ivoryAgeReason => AgeExemptionReasonLookup[ivoryAgeReason])
+      .join(',')
     : null
 
 const _getIntentionCategoryCode = value => IntentionLookup[value]

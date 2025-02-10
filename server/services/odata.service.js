@@ -323,19 +323,19 @@ const _setContentLength = (headers, body) => {
 const _replaceUnsafeCharacters = certificateNumber => {
   return certificateNumber
     ? certificateNumber
-        .replaceAll('%', '%25')
-        .replaceAll('+', '%2B')
-        .replaceAll('&', '%26')
-        .replaceAll('#', '%23')
-        .replaceAll('|', '%7C')
-        .replaceAll('<', '%3C')
-        .replaceAll('>', '%3E')
-        .replaceAll('^', '%5E')
-        .replaceAll('\\', '%5C')
-        .replaceAll('{', '%7B')
-        .replaceAll('}', '%7D')
-        .replaceAll('[', '%5B')
-        .replaceAll(']', '%5D')
-        .replaceAll("'", "''")
+      .replaceAll('%', '%25')
+      .replaceAll('+', '%2B')
+      .replaceAll('&', '%26')
+      .replaceAll('#', '%23')
+      .replaceAll('|', '%7C')
+      .replaceAll('<', '%3C')
+      .replaceAll('>', '%3E')
+      .replaceAll('^', '%5E')
+      .replaceAll('\\', '%5C')
+      .replaceAll('{', '%7B')
+      .replaceAll('}', '%7D')
+      .replaceAll('[', '%5B')
+      .replaceAll(']', '%5D')
+      .replaceAll("'", "''")
     : ''
 }

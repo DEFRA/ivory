@@ -215,8 +215,8 @@ const _getExemptionReasonSummary = async (
   const ivoryAgeFormatted =
     ivoryAge && ivoryAge.ivoryAge
       ? ivoryAge.ivoryAge.map(
-          (reason, index) => `<li id="ivoryAgeReason${index}">${reason}</li>`
-        )
+        (reason, index) => `<li id="ivoryAgeReason${index}">${reason}</li>`
+      )
       : []
 
   const ivoryAgeList = `<ul>${ivoryAgeFormatted.join('')}</ul>`
