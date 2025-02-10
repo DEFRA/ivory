@@ -12,6 +12,13 @@ module.exports = [
   },
   {
     method: 'GET',
+    path: '/favicon.ico',
+    handler: {
+      file: 'node_modules/govuk-frontend/govuk/assets/images/favicon.ico'
+    }
+  },
+  {
+    method: 'GET',
     path: '/assets/{path*}',
     handler: {
       directory: {
