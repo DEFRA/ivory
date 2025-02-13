@@ -220,7 +220,7 @@ describe('OData service', () => {
         .patch(`/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(${mockSection2Entity.cre2c_ivorysection2caseid})/cre2c_photo1`)
         .reply(400, { error: 'Bad Request' })
         .patch(`/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(${mockSection2Entity.cre2c_ivorysection2caseid})/cre2c_photo2`)
-        .reply(200)
+        .reply(204)
 
       await expect(ODataService.updatePhotos(true, mockSection2Entity, photoRecords)).resolves.not.toThrow()
     })
@@ -231,15 +231,17 @@ describe('OData service', () => {
       const id = mockSection2Entity.cre2c_ivorysection2caseid
 
       const supportingInformation = {
-        files: ['document1.pdf', 'document2.pdf'],
-        fileSizes: [100, 200],
-        fileData: [Buffer.from([]), Buffer.from([])]
+        files: ['document1.pdf', 'document2.pdf', 'document3.pdf'],
+        fileSizes: [100, 200, 300],
+        fileData: [Buffer.from([]), Buffer.from([]), Buffer.from([])]
       }
 
       nock(`${config.dataverseResource}`)
         .patch(`/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(${id})/cre2c_supportingevidence1`)
         .reply(204)
         .patch(`/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(${id})/cre2c_supportingevidence2`)
+        .reply(204)
+        .patch(`/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(${id})/cre2c_supportingevidence3`)
         .reply(204)
 
       expect(ActiveDirectoryAuthService.getToken).toBeCalledTimes(0)
@@ -253,18 +255,18 @@ describe('OData service', () => {
       const id = mockSection2Entity.cre2c_ivorysection2caseid
 
       const supportingInformation = {
-        files: ['document1.pdf', 'document2.pdf', 'document2.pdf'],
+        files: ['document1.pdf', 'document2.pdf', 'document3.pdf'],
         fileSizes: [100, 200, 300],
         fileData: [Buffer.from([]), Buffer.from([]), Buffer.from([])]
       }
 
       nock(`${config.dataverseResource}`)
         .patch(`/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(${id})/cre2c_supportingevidence1`)
-        .reply(200)
+        .reply(204)
         .patch(`/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(${id})/cre2c_supportingevidence2`)
         .reply(400, { error: 'Bad Request' })
         .patch(`/${config.dataverseApiEndpoint}/cre2c_ivorysection2cases(${id})/cre2c_supportingevidence3`)
-        .reply(200)
+        .reply(204)
 
       await expect(ODataService.updateRecordAttachments(id, supportingInformation)).resolves.not.toThrow()
     })
