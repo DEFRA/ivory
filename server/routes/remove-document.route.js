@@ -24,8 +24,8 @@ const handlers = {
 
     await _removeSupportingEvidenceBlob(request, uploadData, index)
 
-    for (const array in uploadData) {
-      uploadData[array].splice(index, 1)
+    for (const array of Object.values(uploadData)) {
+      array.splice(index, 1)
     }
 
     await RedisService.set(
